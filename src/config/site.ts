@@ -16,7 +16,7 @@ export const site = {
   /** Add real destinations only. Empty entries are not rendered. */
   social: [] as { label: string; href: string }[],
   seo: {
-    title: "Aurel One — Premium earphones, built to explore how you learn",
+    title: "Aurel One — Premium earphones, engineered for the way you learn",
     description:
       "Premium wired earphones combining exceptional sound with gentle, non-invasive ear stimulation and research-stage sensing. In development. Join early access.",
   },
@@ -41,34 +41,34 @@ export const heroVariants: Record<HeroVariant["id"], HeroVariant> = {
   learn: {
     id: "learn",
     hypothesis: "A. Learning and memory",
-    eyebrow: "Now in development",
-    headline: ["What if your earphones", "helped you learn?"],
+    eyebrow: "Introducing Aurel One",
+    headline: ["Earphones engineered", "for the way you learn."],
     subhead:
-      "Premium wired earphones with gentle, non-invasive ear stimulation built in. Developed to find out whether the pair you already study in can help you learn and remember more.",
+      "Premium wired sound, with gentle ear stimulation built into the earpiece. Designed for the hours you spend studying, and for finding out how much more your earphones can do.",
     primaryCta: "Join early access",
-    secondaryCta: "See how it works",
+    secondaryCta: "Explore the technology",
   },
   // B. Focus and deep work
   focus: {
     id: "focus",
     hypothesis: "B. Focus and deep work",
-    eyebrow: "Now in development",
-    headline: ["Earphones for", "your deepest work."],
+    eyebrow: "Introducing Aurel One",
+    headline: ["Built for", "your deepest work."],
     subhead:
-      "Exceptional sound and serious isolation for long sessions, with integrated non-invasive neurostimulation being developed to explore what else your earphones could do for demanding work.",
+      "Exceptional sound and serious passive isolation for long sessions, with non-invasive ear stimulation built in. Designed for the work that needs all of you.",
     primaryCta: "Join early access",
-    secondaryCta: "See how it works",
+    secondaryCta: "Explore the technology",
   },
   // C. Premium audio meets neuroscience
   audio: {
     id: "audio",
     hypothesis: "C. Premium audio meets neuroscience",
-    eyebrow: "Now in development",
-    headline: ["Extraordinary sound.", "With a mind of its own."],
+    eyebrow: "Introducing Aurel One",
+    headline: ["Extraordinary sound.", "Engineered for the mind."],
     subhead:
-      "A pair of premium wired earphones you'll love listening to, with integrated non-invasive neurotechnology being developed to explore new possibilities for learning and deep work.",
+      "A pair of premium wired earphones you will love listening to, with integrated neurotechnology that reaches beyond what you hear.",
     primaryCta: "Join early access",
-    secondaryCta: "See how it works",
+    secondaryCta: "Explore the technology",
   },
 };
 
