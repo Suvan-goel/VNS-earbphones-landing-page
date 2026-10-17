@@ -21,7 +21,7 @@ export function Exploded({ className = "" }: { className?: string }) {
   const p = "ex";
   const marker = (n: number, x: number, y: number) => (
     <g key={n}>
-      <circle cx={x} cy={y} r="13" fill="var(--color-bone)" />
+      <circle cx={x} cy={y} r="13" fill="var(--color-ivory)" />
       <text
         x={x}
         y={y + 4}
@@ -29,7 +29,7 @@ export function Exploded({ className = "" }: { className?: string }) {
         fontFamily="var(--font-mono), ui-monospace, monospace"
         fontSize="11"
         fontWeight="500"
-        fill="var(--color-ink)"
+        fill="#141414"
       >
         {n}
       </text>

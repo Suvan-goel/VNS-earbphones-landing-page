@@ -1,4 +1,4 @@
-import { Container, Eyebrow } from "../ui";
+import { Container, SectionHead } from "../ui";
 
 const principles = [
   {
@@ -25,47 +25,42 @@ const roadmap = [
 
 export function Research() {
   return (
-    <section id="research" aria-labelledby="research-title" className="bg-bone py-28 sm:py-36 lg:py-44">
+    <section id="research" aria-labelledby="research-title" className="section scroll-mt-10">
       <Container>
-        <Eyebrow className="reveal text-mute">The research question</Eyebrow>
-        <h2 id="research-title" className="reveal display mt-6 max-w-5xl text-[clamp(2.5rem,6.4vw,5.4rem)] text-balance">
-          Not just feeling sharper. <span className="text-ink/35">Finding out whether it actually works.</span>
-        </h2>
-        <p className="reveal mt-10 max-w-2xl text-lg leading-relaxed text-ink/70">
-          Plenty of products promise focus. We&rsquo;d rather measure it. Published research on taVNS and cognition is intriguing but mixed,
-          and nobody has yet shown what our device can do. Rigorous testing is how we&rsquo;ll find out.
-        </p>
+        <SectionHead eyebrow="07 / Research" id="research-title" lines={["Not just feeling sharper.", "Finding out whether it actually works."]} className="!max-w-[60rem]">
+          <p>
+            Plenty of products promise focus. We&rsquo;d rather measure it. Published research on taVNS and cognition is intriguing but
+            mixed, and nobody has yet shown what our device can do. Rigorous testing is how we&rsquo;ll find out.
+          </p>
+        </SectionHead>
 
-        <div className="mt-16 grid gap-10 border-t border-ink/15 pt-10 md:grid-cols-3">
+        <div className="mt-16 grid gap-4 md:grid-cols-3">
           {principles.map((p, i) => (
-            <div key={p.t} className="reveal" style={{ ["--d" as string]: `${i * 90}ms` }}>
-              <h3 className="font-display text-2xl tracking-tight">{p.t}</h3>
-              <p className="mt-3 leading-relaxed text-ink/60">{p.s}</p>
+            <div key={p.t} className="reveal panel p-7 sm:p-8" style={{ ["--d" as string]: `${i * 90}ms` }}>
+              <h3 className="text-[1.375rem] font-normal tracking-[-0.035em] text-ivory">{p.t}</h3>
+              <p className="mt-3 leading-relaxed text-muted">{p.s}</p>
             </div>
           ))}
         </div>
 
-        <div className="reveal mt-24 rounded-[2rem] bg-ink p-7 text-bone sm:p-10">
+        <div className="reveal panel mt-6 p-7 sm:p-10">
           <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-baseline">
-            <h3 className="font-display text-2xl tracking-tight">The road from here</h3>
-            <p className="text-sm text-bone/45">Planned path. Sequence and timing will change as we learn.</p>
+            <h3 className="text-[1.375rem] font-normal tracking-[-0.035em] text-ivory">The road from here</h3>
+            <p className="text-sm text-faint">Planned path. Sequence and timing will change as we learn.</p>
           </div>
           <ol className="mt-10 grid gap-6 sm:grid-cols-5 sm:gap-4">
             {roadmap.map((r) => (
               <li key={r.n} className="relative sm:pt-8">
+                <span aria-hidden="true" className={`absolute left-0 top-0 hidden h-px w-full sm:block ${r.now ? "bg-rose" : "bg-[var(--line-strong)]"}`} />
                 <span
                   aria-hidden="true"
-                  className={`absolute left-0 top-0 hidden h-px w-full sm:block ${r.now ? "bg-accent" : "bg-white/15"}`}
-                />
-                <span
-                  aria-hidden="true"
-                  className={`absolute -top-[5px] left-0 hidden size-[11px] rounded-full sm:block ${r.now ? "bg-accent ring-4 ring-accent/20" : "border border-white/25 bg-ink"}`}
+                  className={`absolute -top-[5px] left-0 hidden size-[11px] rounded-full sm:block ${r.now ? "bg-rose ring-4 ring-rose/20" : "border border-[var(--line-strong)] bg-surface"}`}
                 />
                 <div className="flex gap-4 sm:block">
-                  <span className={`font-mono text-sm ${r.now ? "text-accent" : "text-bone/40"}`}>{r.n}</span>
+                  <span className={`text-sm tabular-nums ${r.now ? "text-rose" : "text-faint"}`}>{r.n}</span>
                   <div className="sm:mt-3">
-                    <p className={`text-[0.97rem] leading-snug ${r.now ? "text-bone" : "text-bone/60"}`}>{r.t}</p>
-                    {r.now && <p className="eyebrow mt-2 !text-[0.6rem] text-accent">We are here</p>}
+                    <p className={`text-[0.97rem] leading-snug ${r.now ? "text-ivory" : "text-muted"}`}>{r.t}</p>
+                    {r.now && <p className="eyebrow mt-2 !text-[0.625rem]">We are here</p>}
                   </div>
                 </div>
               </li>

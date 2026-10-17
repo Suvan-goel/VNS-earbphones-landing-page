@@ -8,7 +8,7 @@ const links = [
   { href: "#sound", label: "Sound" },
   { href: "#technology", label: "Technology" },
   { href: "#research", label: "Research" },
-  { href: "#faq", label: "FAQ" },
+  { href: "#faq", label: "Questions" },
 ];
 
 export function Nav({ cta }: { cta: string }) {
@@ -32,32 +32,25 @@ export function Nav({ cta }: { cta: string }) {
   return (
     <header
       data-scrolled={scrolled || open}
-      className="fixed inset-x-0 top-0 z-40 text-bone transition-[background-color,backdrop-filter,border-color] duration-500 data-[scrolled=true]:border-b data-[scrolled=true]:border-white/[0.06] data-[scrolled=true]:bg-ink/75 data-[scrolled=true]:backdrop-blur-xl"
+      className="fade-in fixed inset-x-0 top-0 z-40 transition-[background-color,backdrop-filter] duration-500 data-[scrolled=true]:bg-black/40 data-[scrolled=true]:backdrop-blur-xl"
     >
-      <nav aria-label="Primary" className="mx-auto flex h-16 max-w-[1280px] items-center justify-between px-5 sm:px-8 lg:px-12">
-        <a href="#top" className="flex items-center gap-2" aria-label={`${site.brand}, back to top`}>
+      <nav aria-label="Primary" className="mx-auto flex max-w-[1330px] items-center justify-between px-5 py-4 sm:px-8 sm:py-6 lg:px-12">
+        <a href="#top" aria-label={`${site.brand}, back to top`}>
           <Wordmark />
         </a>
-        <ul className="hidden items-center gap-8 text-[0.85rem] text-bone/70 md:flex">
-          {links.map((l) => (
-            <li key={l.href}>
-              <a href={l.href} className="transition-colors hover:text-bone">
-                {l.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-        <div className="flex items-center gap-2">
-          <a
-            href="#early-access"
-            data-cta="nav"
-            className="inline-flex h-9 items-center rounded-full bg-bone px-4 text-[0.82rem] font-medium text-ink transition-colors hover:bg-white"
-          >
-            {cta}
-          </a>
+        <div className="flex items-center gap-[22px] rounded-full border border-[var(--line)] bg-black/45 py-[5px] pr-[5px] pl-[22px] text-sm backdrop-blur-[18px]">
+          <ul className="hidden items-center gap-[22px] md:flex">
+            {links.map((l) => (
+              <li key={l.href}>
+                <a href={l.href} className="text-ivory transition-colors hover:text-[#faf7f0]">
+                  {l.label}
+                </a>
+              </li>
+            ))}
+          </ul>
           <button
             type="button"
-            className="inline-flex size-9 items-center justify-center rounded-full border border-white/15 md:hidden"
+            className="-mr-2 inline-flex h-9 items-center text-ivory md:hidden"
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={open ? "Close menu" : "Open menu"}
@@ -68,13 +61,20 @@ export function Nav({ cta }: { cta: string }) {
               <span className={`absolute left-0 h-px w-4 bg-current transition-transform duration-300 ${open ? "top-1 -rotate-45" : "top-2.5"}`} />
             </span>
           </button>
+          <a
+            href="#early-access"
+            data-cta="nav"
+            className="inline-flex items-center rounded-full bg-ivory px-[18px] py-[9px] text-sm font-medium text-[#141414] transition-colors hover:bg-[#faf7f0]"
+          >
+            {cta}
+          </a>
         </div>
       </nav>
-      <div id="mobile-menu" hidden={!open} className="border-t border-white/[0.06] md:hidden">
-        <ul className="mx-auto flex max-w-[1280px] flex-col px-5 py-3 sm:px-8">
+      <div id="mobile-menu" hidden={!open} className="md:hidden">
+        <ul className="mx-auto flex max-w-[1330px] flex-col px-5 pb-5 sm:px-8">
           {links.map((l) => (
             <li key={l.href}>
-              <a href={l.href} onClick={() => setOpen(false)} className="block py-3 text-lg tracking-tight text-bone/85">
+              <a href={l.href} onClick={() => setOpen(false)} className="block py-3 text-2xl tracking-[-0.03em] text-ivory">
                 {l.label}
               </a>
             </li>

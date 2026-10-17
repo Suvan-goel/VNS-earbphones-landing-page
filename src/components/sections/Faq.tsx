@@ -1,5 +1,5 @@
 import { site } from "@/config/site";
-import { Container, Eyebrow } from "../ui";
+import { Container, Eyebrow, Headline } from "../ui";
 
 const P = site.product;
 
@@ -63,34 +63,32 @@ export const faqs: { id: string; q: string; a: string }[] = [
 
 export function Faq() {
   return (
-    <section id="faq" aria-labelledby="faq-title" className="bg-bone py-28 sm:py-36">
+    <section id="faq" aria-labelledby="faq-title" className="section scroll-mt-10">
       <Container className="grid gap-12 lg:grid-cols-12">
         <div className="lg:col-span-4">
-          <Eyebrow className="reveal text-mute">FAQ</Eyebrow>
-          <h2 id="faq-title" className="reveal display mt-6 text-[clamp(2.2rem,4.4vw,3.6rem)]">
-            Questions, answered straight.
-          </h2>
-          <p className="reveal mt-6 text-ink/60">
+          <Eyebrow className="reveal">09 / Questions</Eyebrow>
+          <Headline id="faq-title" lines={["Questions,", "answered straight."]} className="reveal mt-5 text-[clamp(2.25rem,4vw,3.25rem)]" />
+          <p className="reveal mt-6 text-muted">
             Something else on your mind?{" "}
-            <a href={`mailto:${site.contactEmail}`} className="text-ink underline underline-offset-4">
+            <a href={`mailto:${site.contactEmail}`} className="text-ivory underline decoration-[var(--line-strong)] underline-offset-4 hover:decoration-ivory">
               Ask us
             </a>
             .
           </p>
         </div>
-        <div className="lg:col-span-8">
+        <div className="space-y-3 lg:col-span-8">
           {faqs.map((f) => (
-            <details key={f.id} data-faq={f.id} className="group border-t border-ink/15 last:border-b">
-              <summary className="flex cursor-pointer items-center justify-between gap-6 py-6 text-left text-lg font-medium tracking-tight transition-colors hover:text-ink/70 sm:text-xl">
+            <details key={f.id} data-faq={f.id} className="group panel !rounded-[22px] px-6 transition-colors open:bg-surface sm:px-7">
+              <summary className="flex cursor-pointer items-center justify-between gap-6 py-5 text-left text-[1.0625rem] font-normal tracking-[-0.02em] text-ivory transition-colors hover:text-ivory-soft sm:text-lg">
                 {f.q}
-                <span className="faq-icon relative size-4 shrink-0 transition-transform duration-500 ease-out-expo" aria-hidden="true">
+                <span className="faq-icon relative size-4 shrink-0 text-rose transition-transform duration-500 ease-out-expo" aria-hidden="true">
                   <span className="absolute left-0 top-1/2 h-px w-4 bg-current" />
                   <span className="absolute left-1/2 top-0 h-4 w-px bg-current" />
                 </span>
               </summary>
               <div className="faq-body">
                 <div className="overflow-hidden">
-                  <p className="max-w-2xl pb-7 leading-relaxed text-ink/65">{f.a}</p>
+                  <p className="max-w-2xl pb-6 leading-relaxed text-muted">{f.a}</p>
                 </div>
               </div>
             </details>

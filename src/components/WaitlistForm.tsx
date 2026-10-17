@@ -88,10 +88,10 @@ export function WaitlistForm({ mode, variant, cta }: { mode: Mode; variant: stri
 
   if (phase.k === "duplicate") {
     return (
-      <div ref={statusRef} tabIndex={-1} className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 outline-none sm:p-8" role="status">
-        <p className="eyebrow text-bone/50">Already on the list</p>
-        <p className="mt-3 font-display text-2xl tracking-tight text-bone">You&rsquo;re already signed up with that email.</p>
-        <p className="mt-2 text-bone/60">No need to do anything else. We&rsquo;ll be in touch as {site.product} develops.</p>
+      <div ref={statusRef} tabIndex={-1} className="rounded-3xl border border-[var(--line)] bg-black/20 p-6 outline-none sm:p-8" role="status">
+        <p className="eyebrow">Already on the list</p>
+        <p className="mt-3 text-2xl font-normal tracking-[-0.035em] text-ivory">You&rsquo;re already signed up with that email.</p>
+        <p className="mt-2 text-muted">No need to do anything else. We&rsquo;ll be in touch as {site.product} develops.</p>
       </div>
     );
   }
@@ -101,14 +101,14 @@ export function WaitlistForm({ mode, variant, cta }: { mode: Mode; variant: stri
 
   return (
     <form onSubmit={onSubmit} noValidate aria-describedby={phase.k === "error" ? errId : undefined}>
-      <p className="mb-5 px-1 text-sm text-bone/50 sm:px-4">No payment. No commitment. Just your email.</p>
+      <p className="mb-5 px-1 text-sm text-muted sm:px-4">No payment. No commitment. Just your email.</p>
       {mode === "demo" && <DemoNotice />}
       <label htmlFor={`${id}-email`} className="sr-only">
         Email address
       </label>
       <div
-        className={`flex flex-col gap-2 rounded-[1.75rem] border bg-white/[0.04] p-2 transition-colors focus-within:border-white/35 sm:flex-row sm:items-center sm:rounded-full ${
-          invalid ? "border-accent/70" : "border-white/15"
+        className={`flex flex-col gap-2 rounded-[1.75rem] border bg-black/25 p-2 transition-colors focus-within:border-ivory/40 sm:flex-row sm:items-center sm:rounded-full ${
+          invalid ? "border-rose/70" : "border-[var(--line-strong)]"
         }`}
       >
         <input
@@ -127,16 +127,16 @@ export function WaitlistForm({ mode, variant, cta }: { mode: Mode; variant: stri
           onBlur={() => email && setTouched(true)}
           aria-invalid={invalid || undefined}
           disabled={busy}
-          className="h-12 min-w-0 flex-1 bg-transparent px-4 text-[1.02rem] text-bone placeholder:text-bone/35 focus:outline-none disabled:opacity-60"
+          className="h-12 min-w-0 flex-1 bg-transparent px-4 text-[1.02rem] text-ivory placeholder:text-faint/70 focus:outline-none disabled:opacity-60"
         />
         <button
           type="submit"
           disabled={busy}
-          className="relative inline-flex h-12 items-center justify-center gap-2 rounded-full bg-bone px-6 text-[0.95rem] font-medium text-ink transition-colors hover:bg-white disabled:cursor-progress"
+          className="relative inline-flex h-12 items-center justify-center gap-2 rounded-full bg-ivory px-6 text-[0.95rem] font-medium text-[#141414] transition-colors hover:bg-[#fffaf0] disabled:cursor-progress"
         >
           {busy ? (
             <>
-              <span className="size-4 animate-spin rounded-full border-2 border-ink/25 border-t-ink" aria-hidden="true" />
+              <span className="size-4 animate-spin rounded-full border-2 border-[#141414]/25 border-t-[#141414]" aria-hidden="true" />
               Joining…
             </>
           ) : (
@@ -155,13 +155,13 @@ export function WaitlistForm({ mode, variant, cta }: { mode: Mode; variant: stri
 
       <div className="mt-3 min-h-6 px-4" aria-live="polite">
         {phase.k === "error" && (
-          <p id={errId} ref={statusRef} tabIndex={-1} className="text-sm text-[#ff8a5c] outline-none">
+          <p id={errId} ref={statusRef} tabIndex={-1} className="text-sm text-[#f0a58c] outline-none">
             {phase.message}
           </p>
         )}
       </div>
 
-      <label className="mt-2 flex cursor-pointer items-start gap-3 px-4 text-sm leading-relaxed text-bone/60">
+      <label className="mt-2 flex cursor-pointer items-start gap-3 px-4 text-sm leading-relaxed text-muted">
         <input
           type="checkbox"
           checked={researchOptIn}
@@ -170,9 +170,9 @@ export function WaitlistForm({ mode, variant, cta }: { mode: Mode; variant: stri
         />
         <span>Optional: invite me to prototype testing and research studies.</span>
       </label>
-      <p className="mt-3 px-4 text-xs leading-relaxed text-bone/40">
+      <p className="mt-3 px-4 text-xs leading-relaxed text-faint">
         We&rsquo;ll email you development updates and availability news. Unsubscribe any time. See our{" "}
-        <a href="/privacy" className="underline underline-offset-2 hover:text-bone/70">
+        <a href="/privacy" className="underline underline-offset-2 hover:text-ivory-soft">
           privacy notice
         </a>
         .
@@ -183,10 +183,10 @@ export function WaitlistForm({ mode, variant, cta }: { mode: Mode; variant: stri
 
 function DemoNotice() {
   return (
-    <p className="mb-4 flex items-start gap-2 rounded-2xl border border-dashed border-white/20 px-4 py-3 text-[0.8rem] leading-relaxed text-bone/60">
-      <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true" />
+    <p className="mb-4 flex items-start gap-2 rounded-2xl border border-dashed border-[var(--line-strong)] px-4 py-3 text-[0.8rem] leading-relaxed text-muted">
+      <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-rose" aria-hidden="true" />
       <span>
-        <strong className="font-medium text-bone/85">Demonstration mode.</strong> No backend is connected, so emails entered here
+        <strong className="font-medium text-ivory-soft">Demonstration mode.</strong> No backend is connected, so emails entered here
         are not saved.
       </span>
     </p>
@@ -196,11 +196,11 @@ function DemoNotice() {
 function Confirmation({ demo }: { demo: boolean }) {
   return (
     <div role="status" className="mb-8">
-      <p className="eyebrow text-bone/50">{demo ? "Demonstration mode" : "You’re on the list"}</p>
-      <p className="mt-3 font-display text-3xl tracking-tight text-bone sm:text-4xl">
+      <p className="eyebrow">{demo ? "Demonstration mode" : "You’re on the list"}</p>
+      <p className="mt-3 text-3xl font-normal tracking-[-0.04em] text-ivory sm:text-4xl">
         {demo ? "Form works. Nothing was saved." : "Welcome to early access."}
       </p>
-      <p className="mt-3 max-w-lg text-bone/60">
+      <p className="mt-3 max-w-lg text-muted">
         {demo
           ? "No backend is connected yet, so your email was not stored. Connect Supabase to start collecting signups. You can still try the optional survey below."
           : "We’ll be in touch with updates as we build. One more thing, if you have a moment:"}
@@ -259,11 +259,11 @@ function Survey({ token, demo }: { token: string | null; demo: boolean }) {
 
   if (state === "saved" || state === "demo" || state === "skipped") {
     return (
-      <div role="status" className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 sm:p-8">
-        <p className="font-display text-2xl tracking-tight text-bone">
+      <div role="status" className="rounded-3xl border border-[var(--line)] bg-black/20 p-6 sm:p-8">
+        <p className="text-2xl font-normal tracking-[-0.035em] text-ivory">
           {state === "saved" ? "Thank you. That genuinely helps." : state === "demo" ? "Survey complete (not saved)." : "No problem."}
         </p>
-        <p className="mt-2 text-bone/60">
+        <p className="mt-2 text-muted">
           {state === "saved"
             ? "Your answers are stored with your signup and will directly shape what we build first."
             : state === "demo"
@@ -278,9 +278,9 @@ function Survey({ token, demo }: { token: string | null; demo: boolean }) {
 
   const q = step === "concern" ? null : survey[step];
   return (
-    <div ref={panel} className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 sm:p-8">
+    <div ref={panel} className="rounded-3xl border border-[var(--line)] bg-black/20 p-6 sm:p-8">
       <div className="flex items-center justify-between gap-4">
-        <p className="eyebrow text-bone/50">
+        <p className="eyebrow">
           Optional · {i + 1} of {steps.length}
         </p>
         <button
@@ -289,24 +289,24 @@ function Survey({ token, demo }: { token: string | null; demo: boolean }) {
             track("survey_skipped", { at_step: step });
             setState("skipped");
           }}
-          className="text-sm text-bone/50 underline-offset-4 hover:text-bone hover:underline"
+          className="text-sm text-muted underline-offset-4 hover:text-ivory hover:underline"
         >
           Skip survey
         </button>
       </div>
-      <div className="mt-4 h-px w-full bg-white/10">
-        <div className="h-px bg-accent transition-[width] duration-500 ease-out-expo" style={{ width: `${((i + 1) / steps.length) * 100}%` }} />
+      <div className="mt-4 h-px w-full bg-[var(--line)]">
+        <div className="h-px bg-rose transition-[width] duration-500 ease-out-expo" style={{ width: `${((i + 1) / steps.length) * 100}%` }} />
       </div>
 
       {q ? (
         <fieldset className="mt-6" key={step}>
-          <legend className="font-display text-xl leading-snug tracking-tight text-bone sm:text-2xl">{q.question}</legend>
-          {step === "price" && <p className="mt-2 text-sm text-bone/50">For research only. No price has been set.</p>}
+          <legend className="text-xl font-normal leading-snug tracking-[-0.03em] text-ivory sm:text-2xl">{q.question}</legend>
+          {step === "price" && <p className="mt-2 text-sm text-muted">For research only. No price has been set.</p>}
           <div className="mt-5 flex flex-wrap gap-2">
             {q.options.map((o) => (
               <label key={o.value} className="chip relative cursor-pointer">
                 <input type="radio" name={step} value={o.value} checked={answers[step] === o.value} onChange={() => choose(step, o.value)} />
-                <span className="inline-flex min-h-11 items-center rounded-full border border-white/15 px-4 text-[0.92rem] text-bone/85 hover:border-white/40">
+                <span className="inline-flex min-h-11 items-center rounded-full border border-[var(--line-strong)] px-4 text-[0.92rem] text-ivory-soft hover:border-ivory/40">
                   {o.label}
                 </span>
               </label>
@@ -315,7 +315,7 @@ function Survey({ token, demo }: { token: string | null; demo: boolean }) {
         </fieldset>
       ) : (
         <div className="mt-6">
-          <label htmlFor="survey-concern" className="font-display text-xl leading-snug tracking-tight text-bone sm:text-2xl">
+          <label htmlFor="survey-concern" className="text-xl font-normal leading-snug tracking-[-0.03em] text-ivory sm:text-2xl">
             {survey.concern.question}
           </label>
           <textarea
@@ -325,7 +325,7 @@ function Survey({ token, demo }: { token: string | null; demo: boolean }) {
             placeholder={survey.concern.placeholder}
             value={answers.concern ?? ""}
             onChange={(e) => setAnswers((a) => ({ ...a, concern: e.target.value }))}
-            className="mt-4 w-full resize-none rounded-2xl border border-white/15 bg-transparent p-4 text-bone placeholder:text-bone/30 focus:border-white/35 focus:outline-none"
+            className="mt-4 w-full resize-none rounded-2xl border border-[var(--line-strong)] bg-transparent p-4 text-ivory placeholder:text-faint/70 focus:border-ivory/40 focus:outline-none"
           />
         </div>
       )}
@@ -335,7 +335,7 @@ function Survey({ token, demo }: { token: string | null; demo: boolean }) {
           type="button"
           onClick={() => setI((n) => Math.max(0, n - 1))}
           disabled={i === 0}
-          className="text-sm text-bone/50 hover:text-bone disabled:invisible"
+          className="text-sm text-muted hover:text-ivory disabled:invisible"
         >
           Back
         </button>
@@ -344,18 +344,18 @@ function Survey({ token, demo }: { token: string | null; demo: boolean }) {
             type="button"
             onClick={send}
             disabled={state === "sending"}
-            className="inline-flex h-11 items-center rounded-full bg-bone px-5 text-sm font-medium text-ink hover:bg-white disabled:cursor-progress disabled:opacity-70"
+            className="inline-flex h-11 items-center rounded-full bg-ivory px-5 text-sm font-medium text-[#141414] hover:bg-[#fffaf0] disabled:cursor-progress disabled:opacity-70"
           >
             {state === "sending" ? "Sending…" : "Send answers"}
           </button>
         ) : (
-          <button type="button" onClick={() => setI((n) => n + 1)} className="text-sm text-bone/50 hover:text-bone">
+          <button type="button" onClick={() => setI((n) => n + 1)} className="text-sm text-muted hover:text-ivory">
             {answers[step] ? "Next" : "Skip question"}
           </button>
         )}
       </div>
       {state === "error" && (
-        <p role="alert" className="mt-3 text-sm text-[#ff8a5c]">
+        <p role="alert" className="mt-3 text-sm text-[#f0a58c]">
           {error}
         </p>
       )}

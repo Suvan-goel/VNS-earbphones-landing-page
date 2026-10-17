@@ -30,17 +30,17 @@ export function ConsentBanner() {
     <div
       role="region"
       aria-label="Analytics preferences"
-      className="fixed inset-x-3 bottom-3 z-50 mx-auto max-w-md rounded-2xl border border-white/10 bg-ink-2/95 p-4 text-bone shadow-2xl backdrop-blur-md sm:left-auto sm:right-5 sm:bottom-5 sm:mx-0"
+      className="fixed inset-x-3 bottom-3 z-50 mx-auto max-w-md rounded-2xl border border-[var(--line)] bg-[#151515]/90 p-4 text-ivory shadow-2xl backdrop-blur-md sm:left-auto sm:right-5 sm:bottom-5 sm:mx-0"
     >
-      <p className="text-sm leading-relaxed text-bone/80">
+      <p className="text-sm leading-relaxed text-ivory-soft">
         We&rsquo;d like to use cookie-free, privacy-friendly analytics to learn which parts of this page resonate. No advertising, no
         cross-site tracking. <a href="/privacy" className="underline underline-offset-2">Privacy</a>
       </p>
       <div className="mt-3 flex gap-2">
-        <button onClick={() => choose("granted")} className="h-9 rounded-full bg-bone px-4 text-sm font-medium text-ink hover:bg-white">
+        <button onClick={() => choose("granted")} className="h-9 rounded-full bg-ivory px-4 text-sm font-medium text-[#141414] hover:bg-[#fffaf0]">
           Allow
         </button>
-        <button onClick={() => choose("denied")} className="h-9 rounded-full border border-white/20 px-4 text-sm text-bone/80 hover:border-white/40">
+        <button onClick={() => choose("denied")} className="h-9 rounded-full border border-[var(--line-strong)] px-4 text-sm text-ivory-soft hover:border-ivory/40">
           No thanks
         </button>
       </div>

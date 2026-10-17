@@ -10,25 +10,25 @@ export const contentType = "image/png";
 export default async function OgImage() {
   const { renderToStaticMarkup } = await import("react-dom/server");
   const svg = renderToStaticMarkup(<HeroPair p="og" />)
-    .replace(/var\(--accent\)/g, "#ff5a1f")
+    .replace(/var\(--accent\)/g, "#cfa28e")
     .replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ');
   const src = `data:image/svg+xml;base64,${Buffer.from(svg).toString("base64")}`;
   const v = heroVariants[defaultVariant];
 
   return new ImageResponse(
     (
-      <div style={{ width: "100%", height: "100%", display: "flex", background: "#0e0f11", color: "#f3f1ec", padding: 64 }}>
+      <div style={{ width: "100%", height: "100%", display: "flex", background: "#141516", color: "#eeeae1", padding: 64 }}>
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", width: 560 }}>
           <div style={{ display: "flex", alignItems: "center", fontSize: 34, letterSpacing: -1 }}>
             {site.brand.toLowerCase()}
-            <div style={{ width: 11, height: 11, borderRadius: 11, background: "#ff5a1f", marginLeft: 6, marginTop: 8 }} />
+            <div style={{ width: 11, height: 11, borderRadius: 11, background: "#cfa28e", marginLeft: 6, marginTop: 8 }} />
           </div>
           <div style={{ display: "flex", flexDirection: "column", fontSize: 62, lineHeight: 1.02, letterSpacing: -2.5 }}>
             {v.headline.map((l) => (
               <span key={l}>{l}</span>
             ))}
           </div>
-          <div style={{ fontSize: 20, color: "rgba(243,241,236,0.55)", letterSpacing: 2, textTransform: "uppercase" }}>
+          <div style={{ fontSize: 20, color: "rgba(238,234,225,0.6)", letterSpacing: 2, textTransform: "uppercase" }}>
             Concept in development · Join early access
           </div>
         </div>

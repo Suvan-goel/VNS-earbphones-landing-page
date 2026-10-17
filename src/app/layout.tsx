@@ -1,16 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Inter_Tight, JetBrains_Mono } from "next/font/google";
+import { Geist } from "next/font/google";
 import { site } from "@/config/site";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
-const interTight = Inter_Tight({
-  subsets: ["latin"],
-  variable: "--font-display-face",
-  weight: ["400", "500", "600"],
-  display: "swap",
-});
-const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono-face", weight: ["400", "500"], display: "swap" });
+const geist = Geist({ subsets: ["latin"], variable: "--font-geist", weight: ["400", "500", "600"], display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -33,14 +26,14 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0e0f11",
+  themeColor: "#000000",
   width: "device-width",
   initialScale: 1,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${interTight.variable} ${mono.variable} no-js`}>
+    <html lang="en" suppressHydrationWarning className={`${geist.variable} no-js`}>
       <head>
         {/* Remove the no-js fallback as early as possible so reveals can animate. */}
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.remove('no-js')" }} />
