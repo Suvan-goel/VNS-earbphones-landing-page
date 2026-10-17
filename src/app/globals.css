@@ -326,3 +326,25 @@ details[open] .faq-body {
 .section {
   padding-block: clamp(6rem, 12vw, 10rem);
 }
+
+/* Statement text that brightens word by word as it scrolls into view */
+@supports (animation-timeline: view()) {
+  .scrub .w {
+    animation: scrub linear both;
+    animation-timeline: view();
+    animation-range: entry 30% cover 42%;
+  }
+  @keyframes scrub {
+    from {
+      color: #eeeae12e;
+    }
+    to {
+      color: var(--color-ivory);
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scrub .w {
+    animation: none !important;
+  }
+}
