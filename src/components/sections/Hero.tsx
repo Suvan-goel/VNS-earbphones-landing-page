@@ -1,12 +1,11 @@
 import type { HeroVariant } from "@/config/site";
-import { site } from "@/config/site";
 import { ConceptCaption, Container, CtaButton, SecondaryButton } from "../ui";
 import { HeroPair } from "../visuals/HeroPair";
 
 const specs = [
-  { k: "Audio", v: "Wired, in-ear", note: "Tuned for music first" },
-  { k: "Stimulation", v: "Integrated taVNS", note: "Non-invasive, you control it" },
-  { k: "Control", v: "Inline module", note: "Compact earpieces" },
+  { k: "Audio", v: "Wired, in-ear", note: "Music first" },
+  { k: "Stimulation", v: "Integrated taVNS", note: "Non-invasive" },
+  { k: "Control", v: "Inline module", note: "On the cable" },
   { k: "Sensing", v: "Ear-EEG and PPG", note: "Research stage" },
 ];
 
@@ -68,11 +67,7 @@ export function Hero({ v }: { v: HeroVariant }) {
           ))}
         </dl>
         <div className="hero-in mt-5 flex max-w-[60rem] flex-col items-center gap-1 sm:flex-row sm:gap-3" style={{ ["--d" as string]: "800ms" }}>
-          <ConceptCaption className="sm:whitespace-nowrap">Concept render. Industrial design in development.</ConceptCaption>
-          <span aria-hidden="true" className="hidden size-1 rounded-full bg-faint/60 sm:block" />
-          <p className="text-[0.8125rem] leading-relaxed text-faint sm:whitespace-nowrap">
-            {site.product} is in development. Effects on learning are being studied, not yet proven.
-          </p>
+          <ConceptCaption>Concept render. In development. Benefits for learning are under study, not yet proven.</ConceptCaption>
         </div>
       </Container>
     </section>

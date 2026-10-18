@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { site, survey } from "@/config/site";
+import { survey } from "@/config/site";
 import { getAttribution, track } from "@/lib/analytics";
 
 type Mode = "supabase" | "file" | "demo";
@@ -91,7 +91,7 @@ export function WaitlistForm({ mode, variant, cta }: { mode: Mode; variant: stri
       <div ref={statusRef} tabIndex={-1} className="rounded-3xl border border-[var(--line)] bg-black/20 p-6 outline-none sm:p-8" role="status">
         <p className="eyebrow">Already on the list</p>
         <p className="mt-3 text-2xl font-normal tracking-[-0.035em] text-ivory">You&rsquo;re already signed up with that email.</p>
-        <p className="mt-2 text-muted">No need to do anything else. We&rsquo;ll be in touch as {site.product} develops.</p>
+        <p className="mt-2 text-muted">Nothing more to do. We&rsquo;ll be in touch.</p>
       </div>
     );
   }
@@ -101,7 +101,7 @@ export function WaitlistForm({ mode, variant, cta }: { mode: Mode; variant: stri
 
   return (
     <form onSubmit={onSubmit} noValidate aria-describedby={phase.k === "error" ? errId : undefined}>
-      <p className="mb-5 px-1 text-sm text-muted sm:px-4">No payment. No commitment. Just your email.</p>
+      <p className="mb-5 px-1 text-sm text-muted sm:px-4">Just your email. No commitment.</p>
       {mode === "demo" && <DemoNotice />}
       <label htmlFor={`${id}-email`} className="sr-only">
         Email address
@@ -168,10 +168,10 @@ export function WaitlistForm({ mode, variant, cta }: { mode: Mode; variant: stri
           onChange={(e) => setResearchOptIn(e.target.checked)}
           className="mt-1 size-4 shrink-0 accent-[var(--accent)]"
         />
-        <span>Optional: invite me to prototype testing and research studies.</span>
+        <span>Invite me to prototype testing and studies.</span>
       </label>
       <p className="mt-3 px-4 text-xs leading-relaxed text-faint">
-        We&rsquo;ll email you development updates and availability news. Unsubscribe any time. See our{" "}
+        Occasional updates. Unsubscribe any time. See our{" "}
         <a href="/privacy" className="underline underline-offset-2 hover:text-ivory-soft">
           privacy notice
         </a>
@@ -203,7 +203,7 @@ function Confirmation({ demo }: { demo: boolean }) {
       <p className="mt-3 max-w-lg text-muted">
         {demo
           ? "No backend is connected yet, so your email was not stored. Connect Supabase to start collecting signups. You can still try the optional survey below."
-          : "We’ll be in touch with updates as we build. One more thing, if you have a moment:"}
+          : "One more thing, if you have a moment:"}
       </p>
     </div>
   );
@@ -265,12 +265,12 @@ function Survey({ token, demo }: { token: string | null; demo: boolean }) {
         </p>
         <p className="mt-2 text-muted">
           {state === "saved"
-            ? "Your answers are stored with your signup and will directly shape what we build first."
+            ? "Your answers shape what we build first."
             : state === "demo"
               ? "In demonstration mode answers are discarded. With a backend connected they are stored against the signup."
               : demo
                 ? "Nothing was saved in demonstration mode."
-                : "You’re still on the list. We’ll be in touch."}
+                : "You’re on the list."}
         </p>
       </div>
     );

@@ -3,7 +3,7 @@ import { ConceptCaption, Container, CtaButton, Eyebrow, Headline } from "../ui";
 import { Earpiece, EarpieceDefs } from "../visuals/Earpiece";
 
 const statement =
-  "You already put them in to think. Before the exam, before the hard problem, before the chapter you’ve read three times. Earphones are the first thing we reach for when we need our minds at their best. Until now, all they could change was what you hear.";
+  "You already put them in to think. Before the exam. Before the hard problem. Until now, all they could change was what you hear.";
 
 export function Opportunity() {
   return (
@@ -19,7 +19,7 @@ export function Opportunity() {
           ))}
         </h2>
         <p className="reveal mt-10 max-w-[38rem] text-[1.0625rem] leading-relaxed text-ivory-soft sm:text-lg">
-          {site.product} is designed to do more, without a headband or a new routine.
+          {site.product} is built to do more. No headband. No new routine.
         </p>
       </Container>
     </section>
@@ -27,10 +27,10 @@ export function Opportunity() {
 }
 
 const soundPoints = [
-  { t: "Tuned for music first", s: "A dedicated acoustic system and a clean wired signal path, tuned for the music you love." },
-  { t: "Comfortable for hours", s: "An anatomical shell and soft, replaceable tips, designed for long study and work sessions." },
-  { t: "Quiet by design", s: "A deep, secure fit for strong passive isolation, so the room falls away." },
-  { t: "Familiar and discreet", s: "Looks and wears like a premium pair of in-ear monitors. Plug in and listen." },
+  { t: "Music first", s: "A dedicated driver and a clean wired signal path." },
+  { t: "Comfortable for hours", s: "Anatomical shell. Soft, replaceable tips." },
+  { t: "Quiet by design", s: "A deep, secure fit that shuts the room out." },
+  { t: "Familiar and discreet", s: "Wears like a premium in-ear monitor." },
 ];
 
 function SoundPoint({ p, side, i }: { p: (typeof soundPoints)[number]; side: "left" | "right"; i: number }) {
@@ -54,8 +54,8 @@ export function Sound() {
           <Eyebrow className="reveal">02 / Sound</Eyebrow>
           <Headline id="sound-title" lines={["Earphones first.", "Uncompromisingly."]} className="reveal mt-5 text-[clamp(2.5rem,5.4vw,4.75rem)]" />
           <p className="reveal mt-6 max-w-[38rem] text-[1.0625rem] leading-relaxed text-ivory-soft sm:text-lg">
-            If it isn&rsquo;t a pair you love listening to, nothing else matters. The technology earns its place inside a genuinely
-            excellent set of earphones, never the other way round. Stimulation off, it is simply a pair you&rsquo;ll love.
+            If you wouldn&rsquo;t choose them for the sound alone, nothing else matters. Stimulation off, they&rsquo;re simply a
+            great pair of earphones.
           </p>
         </div>
 
@@ -90,16 +90,14 @@ export function Sound() {
           </div>
         </div>
         <div className="mt-5 flex flex-col items-center gap-1 text-center sm:flex-row sm:justify-center sm:gap-3">
-          <ConceptCaption>Concept render. Industrial design in development.</ConceptCaption>
-          <span aria-hidden="true" className="hidden size-1 rounded-full bg-faint/60 sm:block" />
-          <p className="text-[0.8125rem] text-faint">Acoustic specifications will be published once the design is finalised.</p>
+          <ConceptCaption>Concept render. Specifications to follow.</ConceptCaption>
         </div>
 
         {/* A quiet ask, early */}
         <div className="reveal mt-20 flex flex-col items-start justify-between gap-6 border-y border-[var(--line)] py-8 sm:mt-24 sm:flex-row sm:items-center">
           <div>
             <p className="text-[1.375rem] font-normal tracking-[-0.035em] text-ivory">Be first to hear it.</p>
-            <p className="mt-1 text-[0.9375rem] text-muted">Early access is free, with no commitment.</p>
+            <p className="mt-1 text-[0.9375rem] text-muted">Free. No commitment.</p>
           </div>
           <CtaButton location="band">Join early access</CtaButton>
         </div>

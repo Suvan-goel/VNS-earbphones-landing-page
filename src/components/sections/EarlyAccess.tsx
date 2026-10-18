@@ -1,12 +1,12 @@
-import { site, type HeroVariant } from "@/config/site";
+import type { HeroVariant } from "@/config/site";
 import type { StorageMode } from "@/lib/storage";
 import { WaitlistForm } from "../WaitlistForm";
 import { Container, Headline, Eyebrow } from "../ui";
 
 const perks = [
-  { t: "Honest development updates", s: "Real progress from the lab and the workshop, including what didn’t work." },
-  { t: "First to know", s: "Availability and pricing, as soon as they’re decided." },
-  { t: "Help shape it", s: "Opt in to prototype testing, research studies and design decisions." },
+  { t: "Honest updates", s: "Progress from the lab, including what didn’t work." },
+  { t: "First to know", s: "Availability and pricing." },
+  { t: "Help shape it", s: "Prototype testing, studies and design calls." },
 ];
 
 export function EarlyAccess({ mode, v }: { mode: StorageMode; v: HeroVariant }) {
@@ -18,8 +18,7 @@ export function EarlyAccess({ mode, v }: { mode: StorageMode; v: HeroVariant }) 
           <Eyebrow className="reveal">05 / Early access</Eyebrow>
           <Headline id="ea-title" lines={["Be part of", "what comes next."]} className="reveal mt-5 text-[clamp(2.5rem,5vw,4.25rem)]" />
           <p className="reveal mt-6 max-w-lg text-[1.0625rem] leading-relaxed text-ivory-soft">
-            {site.product} is being built in the open, with the people who&rsquo;d actually use it. Join early access and follow it from
-            concept to product.
+            Built in the open, with the people who&rsquo;ll use it.
           </p>
           <ul className="mt-12 space-y-6">
             {perks.map((p, i) => (

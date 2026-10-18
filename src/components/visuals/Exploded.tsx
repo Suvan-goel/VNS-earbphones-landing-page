@@ -8,12 +8,12 @@ export type ExplodedPart = {
 };
 
 export const explodedParts: ExplodedPart[] = [
-  { n: 1, name: "Faceplate", body: "Anodised graphite over a titanium-tone shell. Compact and understated.", status: "core" },
-  { n: 2, name: "Audio driver", body: "A dedicated acoustic system tuned first for music. Specifications to come.", status: "core" },
-  { n: 3, name: "Acoustic shell", body: "Anatomical enclosure shaped for long-session comfort and passive isolation.", status: "core" },
-  { n: 4, name: "Stimulation fin", body: "Soft fin carrying two small contacts toward the cymba conchae. Geometry under investigation.", status: "core" },
-  { n: 5, name: "Optical sensor", body: "Compact PPG window on the inner face to explore pulse-related signals.", status: "research" },
-  { n: 6, name: "Ear tip", body: "Replaceable silicone tips. Conductive tips are being explored for ear-EEG.", status: "research" },
+  { n: 1, name: "Faceplate", body: "Anodised graphite over a titanium-tone shell.", status: "core" },
+  { n: 2, name: "Audio driver", body: "Tuned for music. Specifications to come.", status: "core" },
+  { n: 3, name: "Acoustic shell", body: "Shaped for long sessions and passive isolation.", status: "core" },
+  { n: 4, name: "Stimulation fin", body: "Two soft contacts resting in the cymba conchae.", status: "core" },
+  { n: 5, name: "Optical sensor", body: "PPG window on the inner face.", status: "research" },
+  { n: 6, name: "Ear tip", body: "Replaceable silicone. Conductive tips explored for ear-EEG.", status: "research" },
 ];
 
 /** Exploded, annotated concept view of a single earpiece. */

@@ -10,7 +10,7 @@ export function Footer() {
         <div className="flex flex-col justify-between gap-10 md:flex-row">
           <div>
             <Wordmark size="text-[2.25rem]" />
-            <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted">Premium earphones, built to explore how you learn.</p>
+            <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted">Earphones, engineered for the way you learn.</p>
           </div>
           <nav aria-label="Footer" className="flex flex-wrap gap-x-8 gap-y-3 text-sm text-ivory-soft">
             <a href={`mailto:${site.contactEmail}`} className="hover:text-ivory">
@@ -31,9 +31,8 @@ export function Footer() {
         </div>
         <div className="mt-16 border-t border-[var(--line)] pt-8 text-xs leading-relaxed text-faint">
           <p className="max-w-3xl">
-            {site.brand} is a working name. {site.product} is a concept in development: it is not available for sale, has not been shown
-            to improve learning, memory or any other cognitive outcome, and has not been evaluated by any regulator. Nothing on this site is
-            medical advice. Product images are concept illustrations, not photographs of a manufactured product.
+            {site.brand} is a working name. {site.product} is a concept in development: not for sale, not shown to improve learning or
+            memory, not evaluated by any regulator. Not medical advice. Images are concept renders, not photographs.
           </p>
           <p className="mt-4">
             © {year} {site.legalName}

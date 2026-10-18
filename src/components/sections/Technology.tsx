@@ -12,23 +12,19 @@ export function Technology() {
         <div className="mt-16 grid items-center gap-12 lg:grid-cols-12">
           <div className="space-y-5 text-[1.0625rem] leading-relaxed text-muted lg:col-span-5 lg:col-start-2">
             <p className="reveal">
-              A small hollow in your outer ear, the cymba conchae, is supplied by a branch of the vagus nerve: one of the main
-              communication lines between your brain and body.
+              Part of your outer ear, the cymba conchae, is wired to the vagus nerve: a main line between brain and body.
             </p>
+            <p className="reveal">taVNS sends tiny, controlled pulses through the skin there. No needles. No implants.</p>
             <p className="reveal">
-              Transcutaneous auricular vagus nerve stimulation (taVNS) uses tiny, precisely controlled electrical pulses at the skin to
-              engage these sensory pathways. No needles, no implants.
-            </p>
-            <p className="reveal">
-              Research suggests it can influence brain systems involved in arousal and attention. Aurel One is designed to put that
-              pathway to work while you study. Whether it measurably helps is the question our research programme exists to answer.
+              Studies link it to the brain&rsquo;s arousal and attention systems. Aurel One puts it in your earphones. Whether it helps
+              you learn is what our research exists to answer.
             </p>
           </div>
           <div className="relative lg:col-span-5 lg:col-start-7">
             <div className="reveal mx-auto max-w-[500px] text-ivory">
               <EarView className="h-auto w-full" />
             </div>
-            <ConceptCaption className="mt-2 text-center">Concept illustration. Contact geometry under investigation.</ConceptCaption>
+            <ConceptCaption className="mt-2 text-center">Concept illustration. Contact position not final.</ConceptCaption>
           </div>
         </div>
 
@@ -37,7 +33,7 @@ export function Technology() {
           <div className="reveal mx-auto max-w-[900px] text-ivory">
             <Exploded className="h-auto w-full" />
           </div>
-          <ConceptCaption className="mt-2 text-center">Exploded concept view. Not a final design.</ConceptCaption>
+          <ConceptCaption className="mt-2 text-center">Exploded concept view. Not final.</ConceptCaption>
 
           <ol className="mt-12 grid gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
             {explodedParts.map((p, i) => (
@@ -59,8 +55,7 @@ export function Technology() {
           <div className="reveal mx-auto mt-14 flex max-w-[48rem] flex-col items-center gap-3 text-center">
             <StatusTag status="research" />
             <p className="text-[0.9375rem] leading-relaxed text-muted">
-              Electrodes in the tip and fin, and the optical sensor on the inner face, are being developed to study how each person
-              responds to stimulation. Nothing derived from them ships until it has been validated.
+              Sensing is for studying how each person responds. Nothing derived from it ships until validated.
             </p>
           </div>
         </div>

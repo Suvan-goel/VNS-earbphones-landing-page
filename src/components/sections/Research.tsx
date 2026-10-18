@@ -3,30 +3,30 @@ import { Container, Eyebrow, Headline, StatusTag } from "../ui";
 const principles = [
   {
     t: "Measure outcomes, not moods",
-    s: "Task performance and delayed recall, tested days later. Not just whether a session felt productive.",
+    s: "Task performance and recall, tested days later.",
   },
   {
     t: "Compare fairly",
-    s: "Active stimulation against sham and standard protocols, with blinding wherever it’s possible.",
+    s: "Active against sham, blinded wherever possible.",
   },
   {
     t: "Share what we learn",
-    s: "Early-access members hear how the research is going, including the results we didn’t hope for.",
+    s: "Members hear the results, including the ones we didn’t hope for.",
   },
 ];
 
 const roadmap = [
   { n: "01", t: "Concept and demand", now: true },
-  { n: "02", t: "Prototypes on an established acoustic platform" },
-  { n: "03", t: "Comfort, safety and signal-quality testing" },
-  { n: "04", t: "Controlled studies of cognitive outcomes" },
+  { n: "02", t: "Prototypes" },
+  { n: "03", t: "Comfort, safety and signal testing" },
+  { n: "04", t: "Controlled studies" },
   { n: "05", t: "Product" },
 ];
 
 const status = [
-  { status: "core" as const, title: "Building", items: ["Premium wired in-ear earphones", "Integrated, non-invasive taVNS", "Inline control module"] },
-  { status: "research" as const, title: "Investigating", items: ["Measurable benefits for learning and memory", "Ear-EEG and optical pulse sensing", "Personalised stimulation"] },
-  { status: "future" as const, title: "Later", items: ["Closed-loop, sensing-informed control", "A wireless version", "Active noise cancellation"] },
+  { status: "core" as const, title: "Building", items: ["Wired in-ear earphones", "Integrated taVNS", "Inline module"] },
+  { status: "research" as const, title: "Investigating", items: ["Benefits for learning and memory", "Ear-EEG and PPG sensing", "Personalised stimulation"] },
+  { status: "future" as const, title: "Later", items: ["Closed-loop control", "Wireless", "Noise cancellation"] },
 ];
 
 export function Research() {
@@ -38,8 +38,8 @@ export function Research() {
             <Eyebrow className="reveal">04 / Research</Eyebrow>
             <Headline id="research-title" lines={["Not just feeling sharper.", "Finding out whether it actually works."]} className="reveal mt-5 text-[clamp(2.25rem,4.2vw,3.6rem)]" />
             <p className="reveal mt-6 max-w-[34rem] text-[1.0625rem] leading-relaxed text-ivory-soft">
-              Plenty of products promise focus. We&rsquo;d rather measure it. Published research on taVNS and cognition is intriguing but
-              mixed, and nobody has yet shown what our device can do. Rigorous testing is how we&rsquo;ll find out.
+              Plenty of products promise focus. We&rsquo;d rather measure it. The published evidence on taVNS and cognition is mixed,
+              and nothing has been shown for our device yet.
             </p>
           </div>
           <dl className="lg:col-span-5 lg:col-start-8 lg:pt-10">
@@ -56,7 +56,7 @@ export function Research() {
         <div className="reveal mt-20 sm:mt-24">
           <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-baseline">
             <h3 className="text-[1.375rem] font-normal tracking-[-0.035em] text-ivory">The road from here</h3>
-            <p className="text-sm text-faint">Planned path. Sequence and timing will change as we learn.</p>
+            <p className="text-sm text-faint">Planned. Timing will change.</p>
           </div>
           <ol className="mt-10 grid gap-6 sm:grid-cols-5 sm:gap-4">
             {roadmap.map((r) => (
