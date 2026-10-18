@@ -44,7 +44,7 @@ export const heroVariants: Record<HeroVariant["id"], HeroVariant> = {
     eyebrow: "Introducing Aurel One",
     headline: ["Earphones engineered", "for the way you learn."],
     subhead:
-      "Premium wired sound, with gentle ear stimulation built into the earpiece. Designed for the hours you spend studying, and for finding out how much more your earphones can do.",
+      "Premium wired sound, with gentle ear stimulation built into the earpiece. Designed for the hours you spend studying.",
     primaryCta: "Join early access",
     secondaryCta: "Explore the technology",
   },

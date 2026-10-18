@@ -1,7 +1,6 @@
 import { site, type HeroVariant } from "@/config/site";
 import type { StorageMode } from "@/lib/storage";
 import { WaitlistForm } from "../WaitlistForm";
-import { HeroPair } from "../visuals/HeroPair";
 import { Container, Headline, Eyebrow } from "../ui";
 
 const perks = [
@@ -16,7 +15,7 @@ export function EarlyAccess({ mode, v }: { mode: StorageMode; v: HeroVariant }) 
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(45%_55%_at_75%_45%,rgba(207,162,142,0.07),transparent_70%)]" />
       <Container className="relative grid gap-16 lg:grid-cols-12">
         <div className="lg:col-span-6">
-          <Eyebrow className="reveal">08 / Early access</Eyebrow>
+          <Eyebrow className="reveal">05 / Early access</Eyebrow>
           <Headline id="ea-title" lines={["Be part of", "what comes next."]} className="reveal mt-5 text-[clamp(2.5rem,5vw,4.25rem)]" />
           <p className="reveal mt-6 max-w-lg text-[1.0625rem] leading-relaxed text-ivory-soft">
             {site.product} is being built in the open, with the people who&rsquo;d actually use it. Join early access and follow it from
@@ -34,12 +33,9 @@ export function EarlyAccess({ mode, v }: { mode: StorageMode; v: HeroVariant }) 
             ))}
           </ul>
         </div>
-        <div className="lg:col-span-6 lg:pt-10">
+        <div className="lg:col-span-6 lg:self-center">
           <div className="reveal panel p-5 sm:p-8">
             <WaitlistForm mode={mode} variant={v.id} cta={v.primaryCta} />
-          </div>
-          <div aria-hidden="true" className="reveal mx-auto mt-10 hidden max-w-sm opacity-80 lg:block">
-            <HeroPair p="ea" className="h-auto w-full" />
           </div>
         </div>
       </Container>

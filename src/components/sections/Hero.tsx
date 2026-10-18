@@ -24,7 +24,7 @@ export function Hero({ v }: { v: HeroVariant }) {
           <span className="rounded-full bg-ivory px-2.5 py-0.5 text-[0.6875rem] font-medium tracking-[0.08em] text-[#141414] uppercase">New</span>
           {v.eyebrow}
         </p>
-        <h1 className="headline mt-7 max-w-[15ch] text-[clamp(2.75rem,6vw,5.25rem)] !leading-[1.04] sm:max-w-none">
+        <h1 className="headline mt-7 max-w-[15ch] text-[clamp(2.5rem,6vw,5.25rem)] !leading-[1.04] sm:max-w-none">
           <span className="hero-in block" style={{ ["--d" as string]: "120ms" }}>
             {first}
           </span>
@@ -37,14 +37,20 @@ export function Hero({ v }: { v: HeroVariant }) {
         <p className="hero-in mt-6 max-w-[34rem] text-[1.0625rem] leading-relaxed text-ivory-soft sm:text-lg" style={{ ["--d" as string]: "380ms" }}>
           {v.subhead}
         </p>
-        <div className="hero-in mt-8 flex flex-wrap items-center justify-center gap-3" style={{ ["--d" as string]: "500ms" }}>
+        <div className="hero-in mt-8 flex flex-col items-center gap-4 sm:flex-row sm:gap-3" style={{ ["--d" as string]: "500ms" }}>
           <CtaButton location="hero">{v.primaryCta}</CtaButton>
-          <SecondaryButton href="#technology" cta="hero_secondary">
+          <span className="hidden sm:contents">
+            <SecondaryButton href="#technology" cta="hero_secondary">
+              {v.secondaryCta}
+            </SecondaryButton>
+          </span>
+          <a href="#technology" data-cta="hero_secondary" className="inline-flex items-center gap-2 text-[0.9375rem] text-ivory-soft underline decoration-[var(--line-strong)] underline-offset-4 sm:hidden">
             {v.secondaryCta}
-          </SecondaryButton>
+            <span aria-hidden="true">↓</span>
+          </a>
         </div>
 
-        <div className="product-in relative -mt-2 w-full max-w-[960px]">
+        <div className="product-in relative mt-2 w-full max-w-[960px] sm:-mt-2">
           <div className="float-slow">
             <HeroPair className="mx-auto h-auto w-full max-h-[78svh]" />
           </div>

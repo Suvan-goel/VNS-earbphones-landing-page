@@ -8,10 +8,9 @@ import { EarlyAccess } from "@/components/sections/EarlyAccess";
 import { Faq, faqs } from "@/components/sections/Faq";
 import { Footer } from "@/components/sections/Footer";
 import { Hero } from "@/components/sections/Hero";
-import { Life } from "@/components/sections/Life";
 import { Research } from "@/components/sections/Research";
 import { Opportunity, Sound } from "@/components/sections/Story";
-import { Sensing, StatusBoard, Stimulation } from "@/components/sections/Technology";
+import { Technology } from "@/components/sections/Technology";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
@@ -41,10 +40,7 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
         <Hero v={v} />
         <Opportunity />
         <Sound />
-        <Stimulation />
-        <Sensing />
-        <StatusBoard />
-        <Life />
+        <Technology />
         <Research />
         <EarlyAccess mode={mode} v={v} />
         <Faq />

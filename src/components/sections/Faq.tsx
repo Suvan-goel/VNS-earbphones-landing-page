@@ -66,7 +66,7 @@ export function Faq() {
     <section id="faq" aria-labelledby="faq-title" className="section scroll-mt-10">
       <Container className="grid gap-12 lg:grid-cols-12">
         <div className="lg:col-span-4">
-          <Eyebrow className="reveal">09 / Questions</Eyebrow>
+          <Eyebrow className="reveal">06 / Questions</Eyebrow>
           <Headline id="faq-title" lines={["Questions,", "answered straight."]} className="reveal mt-5 text-[clamp(2.25rem,4vw,3.25rem)]" />
           <p className="reveal mt-6 text-muted">
             Something else on your mind?{" "}

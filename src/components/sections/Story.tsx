@@ -1,5 +1,5 @@
 import { site } from "@/config/site";
-import { ConceptCaption, Container, Eyebrow, Headline } from "../ui";
+import { ConceptCaption, Container, CtaButton, Eyebrow, Headline } from "../ui";
 import { Earpiece, EarpieceDefs } from "../visuals/Earpiece";
 
 const statement =
@@ -19,8 +19,7 @@ export function Opportunity() {
           ))}
         </h2>
         <p className="reveal mt-10 max-w-[38rem] text-[1.0625rem] leading-relaxed text-ivory-soft sm:text-lg">
-          {site.product} is designed to do more: a quiet, everyday interface to the body&rsquo;s own pathways for attention and learning.
-          No headband. No new routine. Just the earphones you&rsquo;d want to wear anyway.
+          {site.product} is designed to do more, without a headband or a new routine.
         </p>
       </Container>
     </section>
@@ -56,7 +55,7 @@ export function Sound() {
           <Headline id="sound-title" lines={["Earphones first.", "Uncompromisingly."]} className="reveal mt-5 text-[clamp(2.5rem,5.4vw,4.75rem)]" />
           <p className="reveal mt-6 max-w-[38rem] text-[1.0625rem] leading-relaxed text-ivory-soft sm:text-lg">
             If it isn&rsquo;t a pair you love listening to, nothing else matters. The technology earns its place inside a genuinely
-            excellent set of earphones, never the other way round.
+            excellent set of earphones, never the other way round. Stimulation off, it is simply a pair you&rsquo;ll love.
           </p>
         </div>
 
@@ -94,6 +93,15 @@ export function Sound() {
           <ConceptCaption>Concept render. Industrial design in development.</ConceptCaption>
           <span aria-hidden="true" className="hidden size-1 rounded-full bg-faint/60 sm:block" />
           <p className="text-[0.8125rem] text-faint">Acoustic specifications will be published once the design is finalised.</p>
+        </div>
+
+        {/* A quiet ask, early */}
+        <div className="reveal mt-20 flex flex-col items-start justify-between gap-6 border-y border-[var(--line)] py-8 sm:mt-24 sm:flex-row sm:items-center">
+          <div>
+            <p className="text-[1.375rem] font-normal tracking-[-0.035em] text-ivory">Be first to hear it.</p>
+            <p className="mt-1 text-[0.9375rem] text-muted">Early access is free, with no commitment.</p>
+          </div>
+          <CtaButton location="band">Join early access</CtaButton>
         </div>
       </Container>
     </section>

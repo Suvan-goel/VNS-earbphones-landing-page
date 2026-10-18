@@ -324,7 +324,7 @@ details[open] .faq-body {
   border-radius: 28px;
 }
 .section {
-  padding-block: clamp(6rem, 12vw, 10rem);
+  padding-block: clamp(5rem, 9vw, 8rem);
 }
 
 /* Statement text that brightens word by word as it scrolls into view */
