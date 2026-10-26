@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import { site } from "@/config/site";
-import { MarketingConsent } from "@/components/MarketingConsent";
 import "./globals.css";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist", weight: ["400", "500", "600"], display: "swap" });
@@ -39,7 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Remove the no-js fallback as early as possible so reveals can animate. */}
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.remove('no-js')" }} />
       </head>
-      <body>{children}<MarketingConsent /></body>
+      <body>{children}</body>
     </html>
   );
 }

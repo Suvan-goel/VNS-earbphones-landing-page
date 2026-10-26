@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: `Privacy notice · ${site.brand}`, ro
 
 export default function Privacy() {
   return (
-    <LegalPage title="Privacy notice" updated="25 October 2026" showTemplateNotice={false}>
+    <LegalPage title="Privacy notice" updated="26 October 2026" showTemplateNotice={false}>
       <p>
         This notice explains what {site.brand} (&ldquo;we&rdquo;) collects through this website and our Facebook and Instagram signup forms
         as we prepare to launch {site.product}, why, and what you can do about it.
@@ -60,25 +60,11 @@ export default function Privacy() {
         ask us to stop sending updates at any time by emailing <a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>.
         Joining is free and is not a preorder or an obligation to buy.
       </p>
-      <h2>Optional Meta advertising measurement</h2>
+      <h2>Website advertising measurement</h2>
       <p>
-        We ask for separate marketing consent before loading Meta Pixel on <a href="https://trycymba.com">trycymba.com</a>. With your consent,
-        it records a homepage visit (PageView) to help us understand our ads. Completed-signup tracking is disabled. Declining has no
-        effect on your ability to sign up. We do not send your email address, survey answers, research preferences, sensor readings or
-        survey access token as Pixel data, and do not enable advanced matching or automatic event collection in our integration.
-      </p>
-      <p>
-        The Pixel communicates with Meta and can share your IP address, browser and device information, page URL, referring page and
-        advertising cookie identifiers. Meta may associate these events with your Meta account and use them to measure and personalise
-        advertising. This is not anonymous tracking. Meta may process information outside the United Kingdom under its own privacy
-        terms. See the <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener noreferrer">Meta Privacy Policy</a>.
-      </p>
-      <p>
-        Your marketing choice is stored in your browser, separately from first-party analytics permission. If accepted, Meta may set
-        advertising cookies; their duration depends on your browser and Meta&apos;s settings. Use <strong>Cookie settings</strong> on any
-        page to reject or withdraw marketing consent. We stop
-        future Pixel events, discard unsent events and remove these first-party Meta cookies where accessible. Withdrawal cannot recall
-        information already sent to Meta. If your browser prevents preference storage, your choice applies for the current page only.
+        Meta Pixel is disabled on this website. We do not load its advertising script or send website visits or signup events to
+        Meta, including for visitors who previously accepted marketing cookies. This does not affect the Facebook and Instagram
+        instant forms described above.
       </p>
       <h2>Why we use it</h2>
       <p>

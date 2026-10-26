@@ -3,7 +3,6 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { survey } from "@/config/site";
 import { getAttribution, track } from "@/lib/analytics";
-import { trackMetaLead } from "@/lib/meta-pixel";
 import { ReserveStep } from "./ReserveStep";
 import styles from "./WaitlistForm.module.css";
 
@@ -72,7 +71,6 @@ export function WaitlistForm({
       });
       const data = (await res.json().catch(() => ({}))) as { status?: string; message?: string; surveyToken?: string };
       if (data.status === "created" && data.surveyToken) {
-        trackMetaLead(res.status, data);
         track("waitlist_signup_success", { location: placement, research_opt_in: false });
         setPhase({ k: "created", token: data.surveyToken });
       } else if (data.status === "duplicate") {
