@@ -1,0 +1,15 @@
+{
+  "tool": "Built-in ImageGen",
+  "created": "2026-10-21",
+  "use_case": "photorealistic-natural",
+  "reference": "assets/cymba-locked-design-reference.png",
+  "source": "assets/cymba-cognition-v2/cognition-ideas-v2.png",
+  "web_asset": "src/assets/earbuds/cognition-ideas-v2.webp",
+  "prompt": "Use case: photorealistic-natural.\nAsset type: premium website editorial image for CYMBA cognitive technology, landscape 6:5 aspect ratio.\nInput image: HARDWARE IDENTITY REFERENCE ONLY. Use the exact referenced CYMBA earbud as a small worn device: round matte graphite faceplate, thin champagne-metal rim, smoked body, plain soft black upper wing, and a black braided cable exiting downward. Preserve believable compact earbud scale and seated fit. Do not reproduce the reference layout.\nCreate an entirely new natural editorial photograph of a person actively developing an idea. It must work for ambitious learners and knowledge workers broadly, not read as a school exam scene.\nSubject and action: a woman in her early thirties with dark hair loosely tied back, wearing a simple slate-grey long-sleeved shirt, seated upright at a light walnut worktable. Three-quarter side view, facing right, camera on her left so the worn CYMBA earbud in her left ear is clearly visible. She leans slightly forward with an alert, engaged expression, looking at a small visual map of ideas on the table. One hand is placing a small white card among a few diagram cards, the other holds a pencil over a sketchbook. Show a genuine active thinking process; natural anatomy and hands. Do not have her resting her chin in a hand or looking tired.\nSetting: quiet sunlit contemporary studio or home workspace. Pale warm-grey wall, one blurred shelf with a few books, restrained uncluttered environment. On the table only an open sketchbook with spare line diagrams, four or five white idea cards and a pencil. Notes are incidental, not readable typography. No computer screen, no laboratory.\nComposition: medium-wide 6:5 editorial shot from a slight elevated side angle, revealing the person's head, upper torso, both active hands and work surface. The working hands and arranged cards matter as much as the face. Keep head, visible earbud, hands and main notes within the central 80 percent of the frame so it crops to near-square or 4:3 without losing the story. Leave breathing room above head. Not a close-up portrait and not a distant room view.\nLighting and finish: refined natural window light from camera-left, soft directional shadows, authentic skin and fabric texture, warm stone and charcoal palette, understated contemporary editorial photography. Moderate depth of field, earbud and main action remain legible. Confident, engaged, quietly ambitious.\nConstraints: no text overlay, no brand logos, no watermark, no glowing brains, diagrams floating in air, sound waves or sci-fi effects. No headphones. One coherent scene. Product identity must match reference.",
+  "export": {
+    "format": "webp",
+    "quality": 90,
+    "effort": 6
+  },
+  "note": "Generated concept visualisation, not a photograph of manufactured hardware."
+}

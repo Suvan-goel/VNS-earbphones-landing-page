@@ -1,0 +1,18 @@
+{
+  "webModel": "/Users/suvangoel/VNS-earbuds-site/public/models/cymba-neural-mannequin-marble.glb",
+  "bytes": 3459604,
+  "curvesBefore": 544,
+  "addedBranches": 169,
+  "editableCurves": 713,
+  "triangles": 228515,
+  "stoneMaps": [
+    "mineral colour",
+    "tangent normal",
+    "roughness"
+  ],
+  "sourcePreserved": true,
+  "buildSteps": [
+    "dramatic_stone_fibres.py --bright-marble (Blender)",
+    "optimize_stone_glb.py --bright-marble (Python)"
+  ]
+}

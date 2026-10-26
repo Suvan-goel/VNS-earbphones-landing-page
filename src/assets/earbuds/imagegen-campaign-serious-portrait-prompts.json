@@ -1,0 +1,32 @@
+{
+  "mode": "built-in ImageGen",
+  "intent": "edit",
+  "use_case": "precise-object-edit",
+  "created": "2026-10-19",
+  "source_generated_image": "/Users/suvangoel/.codex/generated_images/01a153ef-6b88-7220-9645-73e3c68dc03f/exec-5bd20c6b-381e-4ce0-8ea3-4ff3951d3405.png",
+  "output": "src/assets/earbuds/listening-portrait-campaign-serious.webp",
+  "input_images": [
+    {
+      "path": "src/assets/earbuds/listening-portrait-campaign-charcoal.webp",
+      "role": "Approved campaign pose, identity, lighting and product; facial expression edit only"
+    }
+  ],
+  "transparent_background": false,
+  "export": {
+    "format": "webp",
+    "quality": 93,
+    "resize": false,
+    "width": 1122,
+    "height": 1402
+  },
+  "prompt": "FACIAL EXPRESSION EDIT — make this man visibly and unmistakably MORE SERIOUS, STERN AND INTENT. Previous subtle edits were not strong enough. This difference must be clear even when the portrait is only 300 pixels wide.\n\nKeep the same person's identity, skin tone, hair, beard, upward-facing head pose, composition, dark charcoal backdrop, lighting, graphite in-ear wired earphone and its cable. Change the expression decisively:\n- Lower and draw the eyebrows inward enough to form a small natural vertical concentration crease between the brows. The brow is now firm and resolute, not raised and hopeful.\n- Slightly narrow the eyes with the upper eyelids lowered. Retain the off-camera upward-right gaze, but make it piercing, focused and determined rather than wide-eyed and dreamy.\n- Make the mouth completely unsmiling. Lips closed and lightly pressed together, mouth corners resting slightly downward, no uplift, no smirk.\n- Let the cheeks settle and set the jaw firmly. The overall emotion is stern concentration and quiet authority, like a serious athlete or musician intensely listening before a performance.\n\nThis should be a clearly different SERIOUS expression, not another nearly identical relaxed expression. Keep it physically natural and believable; no caricature or teeth showing. Retain the subject's individual features rather than changing him into another person. Do not enlarge the earbud or change its position and design. Keep the cable continuous.\n\nPhotographic rendering: realistic matte skin with normal pores, subtle grain, no extra skin sharpening or glossy plastic rendering. Preserve the original studio lighting, crop and image proportions. Opaque solid dark backdrop. No text or additional objects. Change only the facial muscle expression.",
+  "previous_attempts": [
+    {
+      "source": "src/assets/earbuds/listening-portrait-campaign-charcoal.webp",
+      "output": "/Users/suvangoel/.codex/generated_images/01a153ef-6b88-7220-9645-73e3c68dc03f/exec-f2161a34-587b-4823-a296-635477e5799e.png",
+      "selected": false,
+      "reason": "Expression change too subtle at the website display size.",
+      "prompt": "Edit ONLY the facial expression of this exact portrait. The user finds the expression still too cheerful and wants a CLEARLY MORE SERIOUS look. Make the change unmistakable but realistic.\n\nKeep the SAME man with exactly the same facial identity, nose, lips, facial proportions, short coiled hair, beard, skin tone, pose, lifted chin and upward-right gaze. Keep the camera crop and all lighting. Keep the dark opaque charcoal background unchanged. Keep the graphite wired earbud, its position, faceplate, contact wing and cable EXACTLY as they are. Keep the black knit top.\n\nEXPRESSION: remove ALL trace of a smile, smirk or pleased expression. Lower the mouth corners from their current uplift, make the closed mouth rest in a firm neutral line, and release the raised cheek muscles. Give the jaw a slightly firmer set. Lower the brows very slightly and narrow the eyes just a little for a serious, intent, concentrated gaze. He should read as resolute, focused and self-assured, like a strong premium technology campaign portrait. Subtly stern is appropriate. Do not leave a soft half-smile. Do not create a comical scowl, clenched teeth, exaggerated angry forehead wrinkles, sadness or aggression. The eyes must still look upward-right with the same head angle.\n\nPreserve realistic photographic skin and natural imperfections. Do not sharpen or amplify skin texture or beard outlines. No beauty retouching, plastic skin or etched textures. Preserve the existing photo's dimensions and composition. No other changes, no typography, no logos. Fully opaque background, no transparency."
+    }
+  ]
+}

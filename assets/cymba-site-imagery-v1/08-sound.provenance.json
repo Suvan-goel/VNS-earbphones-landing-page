@@ -1,0 +1,29 @@
+{
+  "asset": "08-sound.png",
+  "tool": "built-in ImageGen",
+  "mode": "reference-guided generation",
+  "date": "2026-10-20",
+  "references": [
+    {
+      "path": "/Users/suvangoel/VNS-earbuds-site/assets/cymba-locked-design-reference.png",
+      "role": "Authoritative product geometry reference"
+    },
+    {
+      "path": "/Users/suvangoel/VNS-earbuds-site/src/assets/earbuds/hero-premium-pair-v2.webp",
+      "role": "Supporting commercial materials and finish reference"
+    }
+  ],
+  "prompt": "Use case: product-mockup\nAsset type: CYMBA website sound section, landscape 16:9 premium editorial product photograph.\nPrimary request: Create one striking, restrained sculptural image of a SINGLE compact wired CYMBA earbud against a tactile acoustic wave-form still-life backdrop.\nInput images: Image 1 is the authoritative locked product geometry reference. Image 2 is a supporting commercial materials/finish reference. Reproduce precisely the same product as the outer-facing earbud in these references, not a redesigned earbud.\nScene/backdrop: Matte grey sculpted paper or softly molded acoustic material forms broad, shallow concentric arcs through the studio floor and backdrop. This is visibly a solid dry tactile surface, not liquid. The arcs create gentle natural shadows that suggest the experience of sound. Quiet muted slate and very pale lilac light in the shadows, graphite and soft grey, a small amount of pale champagne on the product rim. No glowing effects.\nSubject: A single compact earbud, outer three-quarter view. Organically sculpted smoked translucent charcoal body, slightly oval subtly domed finely textured satin-black faceplate, thin pale champagne perimeter bezel, plain soft black curved concha stabilization fin curving upward. The fin has NO metallic pads. Preserve the smoke-grey silicone tip and short acoustic nozzle only to the extent visible naturally from this outer view. Fine black braided cable exits the BOTTOM of the earbud through a short charcoal strain relief and falls down to the surface, then leaves the lower frame in one quiet curve. No second earbud, controller or connector in this close composition.\nComposition/framing: Landscape 16:9. Product rests convincingly on the gently curved solid surface in the central-right portion, with generous breathing room; product occupies approximately 40% of image height. Low three-quarter camera, tactile macro-grade clarity on faceplate, bezel, smoked housing and braided cable. Concentric arcs frame the product with sophisticated visual rhythm. Physically believable grounding and contact shadow.\nLighting/mood: Soft directional studio light with a delicate rim highlight, no harsh flares. Sophisticated, calm, editorial, photorealistic rather than sci-fi. Restrained colour, rich but readable graphite values.\nConstraints: Precisely preserve referenced compact product proportions, plain black fin, thin champagne rim, smoked shell, correct single cable exiting DOWN. Show only hardware details actually visible from this viewpoint. No invented parts, over-ear cable routing or wireless styling. No text, logos, watermark, labels, people, hands, ears, water, droplets, neon, brain or nerve diagrams, medical effects, charging case, or LED glow.",
+  "source_path": "/Users/suvangoel/.codex/generated_images/01a159cb-1b61-7611-a614-467292af8371/exec-885a9d21-6374-4577-b399-c0b1279c79fb.png",
+  "output_path": "/Users/suvangoel/VNS-earbuds-site/assets/cymba-site-imagery-v1/08-sound.png",
+  "qa": {
+    "status": "accepted",
+    "notes": [
+      "Inspected full output visually.",
+      "Single outer-view earbud matches reference geometry, textured satin-black faceplate, narrow champagne bezel, smoked shell, plain black stabilization fin, smoke-grey tip, bottom cable outlet and braided cable.",
+      "Landscape composition has dry tactile sculptural concentric arcs, natural shadows and restrained grey/lilac tones.",
+      "No people, water, medical effects, text, logos or invented hardware visible.",
+      "Silicone-tip champagne contacts are naturally hidden in outer view, consistent with authoritative outer-view reference."
+    ]
+  }
+}

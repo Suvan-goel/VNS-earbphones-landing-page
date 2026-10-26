@@ -1,0 +1,423 @@
+{
+  "source_layout_revision": 4,
+  "source_files_unchanged": true,
+  "source_sha256": {
+    "/Users/suvangoel/VNS-earbuds-site/output/meshy-earbud-blender/cymba-wired-assembly.blend": "6df8644a6a8b458b6276469df69ebbb1330b38a04ec9ae8ffd604727f8fd4bf7",
+    "/Users/suvangoel/VNS-earbuds-site/output/meshy-earbud-blender/cymba-wired-assembly.glb": "3013bc72db43289e34cb881119d4a816491b92254e35cc9a61561807fb6cc8ab"
+  },
+  "before": {
+    "objects": [
+      {
+        "name": "Earbud \u00b7 L \u00b7 supplied textured mesh",
+        "vertices": 119368,
+        "triangles": 221745
+      },
+      {
+        "name": "Earbud \u00b7 R \u00b7 mirrored supplied textured mesh",
+        "vertices": 119368,
+        "triangles": 221745
+      },
+      {
+        "name": "Left earbud \u00b7 editable wire",
+        "vertices": 3626,
+        "triangles": 7192
+      },
+      {
+        "name": "Right earbud \u00b7 editable wire",
+        "vertices": 3626,
+        "triangles": 7192
+      },
+      {
+        "name": "Y-junction \u00b7 seamless rubber housing",
+        "vertices": 414594,
+        "triangles": 829184
+      },
+      {
+        "name": "Y-junction \u00b7 bronze exit collar",
+        "vertices": 512,
+        "triangles": 1020
+      },
+      {
+        "name": "Junction to controller \u00b7 editable wire",
+        "vertices": 46186,
+        "triangles": 92312
+      },
+      {
+        "name": "Controller \u00b7 lower housing",
+        "vertices": 456,
+        "triangles": 908
+      },
+      {
+        "name": "Controller \u00b7 case seam",
+        "vertices": 152,
+        "triangles": 300
+      },
+      {
+        "name": "Controller \u00b7 upper housing",
+        "vertices": 456,
+        "triangles": 908
+      },
+      {
+        "name": "Controller \u00b7 bronze perimeter bezel",
+        "vertices": 304,
+        "triangles": 604
+      },
+      {
+        "name": "Controller \u00b7 face seal",
+        "vertices": 152,
+        "triangles": 300
+      },
+      {
+        "name": "Controller \u00b7 inset face",
+        "vertices": 228,
+        "triangles": 452
+      },
+      {
+        "name": "Controller \u00b7 button recess",
+        "vertices": 152,
+        "triangles": 300
+      },
+      {
+        "name": "Controller \u00b7 multifunction button",
+        "vertices": 304,
+        "triangles": 604
+      },
+      {
+        "name": "Controller \u00b7 indicator socket",
+        "vertices": 152,
+        "triangles": 300
+      },
+      {
+        "name": "Controller \u00b7 white status indicator",
+        "vertices": 152,
+        "triangles": 300
+      },
+      {
+        "name": "Controller \u00b7 CYMBA laser marking",
+        "vertices": 2786,
+        "triangles": 2776
+      },
+      {
+        "name": "Controller \u00b7 input strain relief",
+        "vertices": 832,
+        "triangles": 1660
+      },
+      {
+        "name": "Controller \u00b7 output strain relief",
+        "vertices": 832,
+        "triangles": 1660
+      },
+      {
+        "name": "Controller to USB-C \u00b7 continuous coiled lead",
+        "vertices": 490,
+        "triangles": 920
+      },
+      {
+        "name": "Cable keeper \u00b7 soft wrap band",
+        "vertices": 768,
+        "triangles": 1536
+      },
+      {
+        "name": "USB-C \u00b7 black connector body",
+        "vertices": 296,
+        "triangles": 588
+      },
+      {
+        "name": "USB-C \u00b7 bronze end trim",
+        "vertices": 296,
+        "triangles": 588
+      },
+      {
+        "name": "USB-C \u00b7 tapered strain relief",
+        "vertices": 1386,
+        "triangles": 2712
+      },
+      {
+        "name": "USB-C \u00b7 open metal plug shell",
+        "vertices": 768,
+        "triangles": 1536
+      },
+      {
+        "name": "USB-C \u00b7 recessed dark cavity",
+        "vertices": 296,
+        "triangles": 588
+      },
+      {
+        "name": "USB-C \u00b7 internal polymer tongue",
+        "vertices": 296,
+        "triangles": 588
+      },
+      {
+        "name": "USB-C \u00b7 recessed gold contact array",
+        "vertices": 4736,
+        "triangles": 9408
+      }
+    ],
+    "triangles": 1409926,
+    "bounds_mm": {
+      "min": [
+        -81.3267822265625,
+        -42.84185791015625,
+        0.0
+      ],
+      "max": [
+        106.75000762939453,
+        54.84917449951172,
+        16.711132049560547
+      ]
+    }
+  },
+  "after": {
+    "objects": [
+      {
+        "name": "Earbud \u00b7 L \u00b7 supplied textured mesh",
+        "vertices": 35921,
+        "triangles": 55435
+      },
+      {
+        "name": "Earbud \u00b7 R \u00b7 mirrored supplied textured mesh",
+        "vertices": 35921,
+        "triangles": 55435
+      },
+      {
+        "name": "Left earbud \u00b7 editable wire",
+        "vertices": 1560,
+        "triangles": 3084
+      },
+      {
+        "name": "Right earbud \u00b7 editable wire",
+        "vertices": 1560,
+        "triangles": 3084
+      },
+      {
+        "name": "Y-junction \u00b7 seamless rubber housing",
+        "vertices": 4147,
+        "triangles": 8290
+      },
+      {
+        "name": "Y-junction \u00b7 bronze exit collar",
+        "vertices": 512,
+        "triangles": 1020
+      },
+      {
+        "name": "Junction to controller \u00b7 editable wire",
+        "vertices": 19800,
+        "triangles": 39564
+      },
+      {
+        "name": "Controller \u00b7 lower housing",
+        "vertices": 456,
+        "triangles": 908
+      },
+      {
+        "name": "Controller \u00b7 case seam",
+        "vertices": 152,
+        "triangles": 300
+      },
+      {
+        "name": "Controller \u00b7 upper housing",
+        "vertices": 456,
+        "triangles": 908
+      },
+      {
+        "name": "Controller \u00b7 bronze perimeter bezel",
+        "vertices": 304,
+        "triangles": 604
+      },
+      {
+        "name": "Controller \u00b7 face seal",
+        "vertices": 152,
+        "triangles": 300
+      },
+      {
+        "name": "Controller \u00b7 inset face",
+        "vertices": 228,
+        "triangles": 452
+      },
+      {
+        "name": "Controller \u00b7 button recess",
+        "vertices": 152,
+        "triangles": 300
+      },
+      {
+        "name": "Controller \u00b7 multifunction button",
+        "vertices": 304,
+        "triangles": 604
+      },
+      {
+        "name": "Controller \u00b7 indicator socket",
+        "vertices": 152,
+        "triangles": 300
+      },
+      {
+        "name": "Controller \u00b7 white status indicator",
+        "vertices": 152,
+        "triangles": 300
+      },
+      {
+        "name": "Controller \u00b7 CYMBA laser marking",
+        "vertices": 2786,
+        "triangles": 2776
+      },
+      {
+        "name": "Controller \u00b7 input strain relief",
+        "vertices": 832,
+        "triangles": 1660
+      },
+      {
+        "name": "Controller \u00b7 output strain relief",
+        "vertices": 832,
+        "triangles": 1660
+      },
+      {
+        "name": "Controller to USB-C \u00b7 continuous coiled lead",
+        "vertices": 490,
+        "triangles": 920
+      },
+      {
+        "name": "Cable keeper \u00b7 soft wrap band",
+        "vertices": 768,
+        "triangles": 1536
+      },
+      {
+        "name": "USB-C \u00b7 black connector body",
+        "vertices": 296,
+        "triangles": 588
+      },
+      {
+        "name": "USB-C \u00b7 bronze end trim",
+        "vertices": 296,
+        "triangles": 588
+      },
+      {
+        "name": "USB-C \u00b7 tapered strain relief",
+        "vertices": 1386,
+        "triangles": 2712
+      },
+      {
+        "name": "USB-C \u00b7 open metal plug shell",
+        "vertices": 768,
+        "triangles": 1536
+      },
+      {
+        "name": "USB-C \u00b7 recessed dark cavity",
+        "vertices": 296,
+        "triangles": 588
+      },
+      {
+        "name": "USB-C \u00b7 internal polymer tongue",
+        "vertices": 296,
+        "triangles": 588
+      },
+      {
+        "name": "USB-C \u00b7 recessed gold contact array",
+        "vertices": 4736,
+        "triangles": 9408
+      }
+    ],
+    "triangles": 195448,
+    "bounds_mm": {
+      "min": [
+        -81.32759857177734,
+        -42.84184265136719,
+        0.0
+      ],
+      "max": [
+        106.75000762939453,
+        54.84917449951172,
+        16.712156295776367
+      ]
+    }
+  },
+  "changes": [
+    {
+      "name": "Left earbud \u00b7 editable wire",
+      "curve_before": [
+        32,
+        32,
+        5
+      ],
+      "curve_after": [
+        24,
+        24,
+        2
+      ]
+    },
+    {
+      "name": "Right earbud \u00b7 editable wire",
+      "curve_before": [
+        32,
+        32,
+        5
+      ],
+      "curve_after": [
+        24,
+        24,
+        2
+      ]
+    },
+    {
+      "name": "Junction to controller \u00b7 editable wire",
+      "curve_before": [
+        32,
+        32,
+        5
+      ],
+      "curve_after": [
+        24,
+        24,
+        2
+      ]
+    },
+    {
+      "name": "Earbud \u00b7 L \u00b7 supplied textured mesh",
+      "decimate_ratio": 0.25
+    },
+    {
+      "name": "Earbud \u00b7 R \u00b7 mirrored supplied textured mesh",
+      "decimate_ratio": 0.25
+    },
+    {
+      "name": "Y-junction \u00b7 seamless rubber housing",
+      "decimate_ratio": 0.01
+    }
+  ],
+  "textures": [
+    {
+      "name": "Image_0",
+      "source_size": [
+        4096,
+        4096
+      ],
+      "web_size": [
+        2048,
+        2048
+      ]
+    },
+    {
+      "name": "Image_1",
+      "source_size": [
+        2048,
+        2048
+      ],
+      "web_size": [
+        2048,
+        2048
+      ]
+    },
+    {
+      "name": "Image_2",
+      "source_size": [
+        4096,
+        4096
+      ],
+      "web_size": [
+        2048,
+        2048
+      ]
+    }
+  ],
+  "export_path": "/Users/suvangoel/VNS-earbuds-site/public/models/cymba-wired-assembly-web.glb",
+  "size_bytes": 3203320,
+  "requires_draco": true
+}

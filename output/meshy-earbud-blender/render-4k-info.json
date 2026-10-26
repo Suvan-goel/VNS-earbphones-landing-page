@@ -1,0 +1,16 @@
+{
+  "image": "/Users/suvangoel/VNS-earbuds-site/output/meshy-earbud-blender/cymba-product-render-4k.png",
+  "resolution": [
+    3840,
+    2160
+  ],
+  "aspect_ratio": "16:9",
+  "engine": "Cycles",
+  "maximum_samples": 256,
+  "adaptive_threshold": 0.01,
+  "denoising": true,
+  "camera": "Camera \u00b7 reference layout",
+  "render_seconds": 179.6,
+  "source_scene": "cymba-render-source.blend",
+  "model_modified": false
+}

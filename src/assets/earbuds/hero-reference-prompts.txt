@@ -1,0 +1,15 @@
+CYMBA hero generation
+Mode: built-in image_gen
+
+DESKTOP PROMPT
+Use case: precise-object-edit
+Asset type: high-resolution, full-bleed desktop website hero background, 2:1 landscape, ideally 3536 × 1780 pixels.
+Input image 1 is the edit target and exact composition reference.
+Primary request: recreate the supplied hero photograph as closely as possible, removing ONLY all website UI and lettering. Remove the CYMBA wordmark at top left, the entire navigation pill at top right, all heading and eyebrow text, and both buttons and arrow in the bottom third. Seamlessly fill their areas with the existing dark photographic background.
+Preserve all photographic subject matter and its relative positions precisely: the two graphite wired in-ear earphones centered on the upper face of a wide curved dark textured stone plinth, circular brushed-metal faceplates, smoky silicone tips, black ear-contact wings, braided cables curving across the foreground to the inline controller on the right. Keep the enormous softly lit warm bronze circular backdrop behind the left earphones; its lit arc enters from the top center and falls toward the center. Maintain the reference camera angle, scale, focus, soft warm lighting, material textures, shadows, and near-black right background.
+Composition must stay locked to the reference: left foreground earbud around x42%, y46%; rear earbud around x57%, y40%; controller around x78%, y52%; platform front lip around y66%; entire bottom quarter is very dark uncluttered negative space for live HTML text. Top 15% remains clear for live navigation. Do not move product into the text space or add any objects.
+Output ONLY the photographic background, edge-to-edge. No text, letters, logo, watermark, UI, buttons or borders. This image will receive real interactive HTML elements at the original positions.
+
+MOBILE PROMPT
+undefined
+

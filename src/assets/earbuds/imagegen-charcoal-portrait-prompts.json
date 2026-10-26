@@ -1,0 +1,30 @@
+{
+  "mode": "built-in ImageGen",
+  "intent": "generate",
+  "use_case": "photorealistic-natural",
+  "created": "2026-10-19",
+  "source_generated_image": "/Users/suvangoel/.codex/generated_images/01a153ef-6b88-7220-9645-73e3c68dc03f/exec-ba5a7519-fd59-4c39-b0f2-86900bac4d28.png",
+  "output": "src/assets/earbuds/listening-portrait-charcoal.webp",
+  "input_images": [
+    {
+      "path": "/Users/suvangoel/.codex/generated_images/01a153ef-6b88-7220-9645-73e3c68dc03f/exec-b8cf2420-0c6f-4042-8cfa-a4c7192f0509.png",
+      "role": "Photographic style and composition reference; different person requested"
+    },
+    {
+      "path": "src/assets/earbuds/detail-transparent.webp",
+      "role": "Product design reference"
+    },
+    {
+      "path": "src/assets/earbuds/in-ear.webp",
+      "role": "Earphone fit reference"
+    }
+  ],
+  "transparent_background": false,
+  "export": {
+    "format": "webp",
+    "quality": 93,
+    "resize": false
+  },
+  "presentation": "Nested horizontal and vertical CSS masks soften the portrait edges into the existing dark page background.",
+  "prompt": "Use case: photorealistic-natural.\nAsset type: editorial listening portrait for a premium audio website.\nPrimary request: Create a fresh version of image 1 with a DIFFERENT PERSON: a Black man in his early thirties, subtly happier, with the same sense of intimate professional photography. His softly raised mouth corners and relaxed eyes suggest a small, natural closed-mouth smile. He is absorbed in listening, not performing for the camera. He must have distinctly different facial features and hair from the man in image 1.\nInput images: Image 1 is the composition, photographic style and earphone-wearing reference, not an identity to preserve. Images 2 and 3 specify CYMBA earbud design and ear fit.\nSubject: Black adult man with deep brown skin, short natural coiled hair, a little uneven short facial stubble, relaxed shoulders, plain dark charcoal knit top. Normal human features, subtle facial asymmetry, pores and a few tiny blemishes; gently softened expression and faint smile, no exposed teeth or broad grin. Three-quarter profile facing towards frame right, near ear completely visible, gaze slightly off camera and down, comfortable upright posture.\nProduct: Wear the CYMBA wired in-ear product from images 2 and 3. Preserve compact realistic scale, graphite shell, small round brushed metal outer disc with delicate champagne rim, upward soft contact wing with champagne contacts tucked into upper concha, eartip seated inside ear canal. Fine black cable exits bottom and hangs naturally down neck over top. Only one visible earbud in the near ear. No over-ear headphones. No floating or protruding silicone tip.\nPhotographic treatment: Natural unretouched magazine portrait, dimensional soft directional light with gentle shadow falloff; authentic skin texture, moderate depth of field with visible eye and earphone both sharp. Subtle film grain. Avoid waxy, over-sharpened or airbrushed skin.\nComposition: 4:5 portrait, closely framed head and upper shoulders, similar scale to image 1. Give a little breathing room around hair and face, keep whole near earphone visible. Crop shoulders near bottom, no hands or other props.\nBackground and blending: Very dark neutral charcoal, approximately #111213, continuous and matte with almost no texture. Remove the plum studio backdrop. Gently let hair, far shoulder and lower clothing fall into matching dark shadows around the frame edges. Keep face and earphone clearly lit. This must integrate seamlessly into a charcoal website with no visible rectangular photo backdrop, no border, no abrupt edge, no halo. The result is an opaque low-key photograph, not a visibly extracted cutout.\nConstraints: No words, logos, text, watermark, graphic effects or neon. Do not reuse image 1's man. No polished model perfection, artificial grin or beauty retouching."
+}

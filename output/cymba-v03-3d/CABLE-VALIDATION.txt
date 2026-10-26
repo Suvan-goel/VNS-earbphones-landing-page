@@ -1,0 +1,271 @@
+CABLE GEOMETRY AND PRESENTATION-ROUTE VALIDATION
+Units: millimetres. Actual swept CAD cable solids are generated and checked;
+no surrogate or dummy shapes are used for any solid-validity statement.
+
+Scope: both 150 mm branch routes, the approximately 1000 mm trunk route and
+the molded Y body. Branch radius 1.05 mm; trunk radius 1.50 mm. The separate
+cutaway inspection specimen is outside this route audit.
+
+Distance checks use centreline samples spaced at most 0.2 mm. For each check,
+the radius sum and a conservative full sampling interval from BOTH routes
+are subtracted. Positive lower bounds support separation within this sampled
+presentation route. Self checks exclude neighboring arc stations within four
+tube radii; sampled local curvature is checked separately. Cross-route checks
+exclude only pairs with BOTH centres within the intended molded Y connection
+region. A 10 mm spatial grid finds all pairs below that centre-distance radius;
+absence of such a pair is reported as a lower bound, never a fabricated minimum.
+
+This checks the current displayed route and CAD validity, not conductor routing,
+shielding performance, bend-fatigue limits, braid manufacture, assembly motion
+or the occupied anatomical space. The molded Y's local termination interfaces
+are conceptual. Endpoint/tangent values are reported independently below.
+
+{
+  "source_sha256": "45afd7c1d2aeefea62bad4d740de946b5823c29c718690cb5891952d44226e73",
+  "centerline_metrics": {
+    "LBranchCenterlineMm": 149.99999995800783,
+    "RBranchCenterlineMm": 149.99999995800783,
+    "trunkCenterlineMm": 999.9999947488509
+  },
+  "real_swept_solid_validity": [
+    {
+      "name": "L | 150 mm branch cable",
+      "valid": true,
+      "solids": 1,
+      "volume_mm3": 519.5635875184606
+    },
+    {
+      "name": "R | 150 mm branch cable",
+      "valid": true,
+      "solids": 1,
+      "volume_mm3": 519.5630178466344
+    },
+    {
+      "name": "Shielded Y-split body",
+      "valid": true,
+      "solids": 1,
+      "volume_mm3": 527.1670434159751
+    },
+    {
+      "name": "1000 mm shielded trunk cable",
+      "valid": true,
+      "solids": 1,
+      "volume_mm3": 6842.945838574466
+    }
+  ],
+  "routes": [
+    {
+      "name": "left_branch",
+      "centerline_length_mm": 149.99999995800783,
+      "radius_mm": 1.05,
+      "sample_count": 835,
+      "maximum_sample_interval_mm": 0.17985611503230814,
+      "sampled_minimum_bend_radius_mm": 39.78439701250644,
+      "curvature_samples_per_knot_span": 17
+    },
+    {
+      "name": "right_branch",
+      "centerline_length_mm": 149.99999995800783,
+      "radius_mm": 1.05,
+      "sample_count": 835,
+      "maximum_sample_interval_mm": 0.17985611503230814,
+      "sampled_minimum_bend_radius_mm": 39.78439701250644,
+      "curvature_samples_per_knot_span": 17
+    },
+    {
+      "name": "trunk",
+      "centerline_length_mm": 999.9999947488509,
+      "radius_mm": 1.5,
+      "sample_count": 5557,
+      "maximum_sample_interval_mm": 0.17998560020248533,
+      "sampled_minimum_bend_radius_mm": 3.4726957914410175,
+      "curvature_samples_per_knot_span": 17
+    }
+  ],
+  "distance_checks": [
+    {
+      "route_a": "left_branch",
+      "route_b": "left_branch",
+      "local_self_arc_exclusion_mm": 4.2,
+      "radius_sum_mm": 2.1,
+      "sampling_allowance_mm": 0.3597122300646163,
+      "sampled_minimum_center_distance_mm": 4.3144496617524455,
+      "sampled_surface_clearance_mm": 2.2144496617524454,
+      "conservative_surface_clearance_lower_bound_mm": 1.8547374316878291,
+      "search_radius_mm": 10.0,
+      "arc_stations_mm": [
+        18.884879682139545,
+        23.201422806356444
+      ],
+      "points_mm": [
+        [
+          -46.2128542826507,
+          -29.940875886808833,
+          -0.5977764746247766
+        ],
+        [
+          -48.905281042801356,
+          -33.31029637394371,
+          -0.7087701947004371
+        ]
+      ]
+    },
+    {
+      "route_a": "right_branch",
+      "route_b": "right_branch",
+      "local_self_arc_exclusion_mm": 4.2,
+      "radius_sum_mm": 2.1,
+      "sampling_allowance_mm": 0.3597122300646163,
+      "sampled_minimum_center_distance_mm": 4.3144496617524455,
+      "sampled_surface_clearance_mm": 2.2144496617524454,
+      "conservative_surface_clearance_lower_bound_mm": 1.8547374316878291,
+      "search_radius_mm": 10.0,
+      "arc_stations_mm": [
+        18.884879682139545,
+        23.201422806356444
+      ],
+      "points_mm": [
+        [
+          46.2128542826507,
+          -29.940875886808833,
+          -0.5977764746247766
+        ],
+        [
+          48.905281042801356,
+          -33.31029637394371,
+          -0.7087701947004371
+        ]
+      ]
+    },
+    {
+      "route_a": "trunk",
+      "route_b": "trunk",
+      "local_self_arc_exclusion_mm": 6.0,
+      "radius_sum_mm": 3.0,
+      "sampling_allowance_mm": 0.35997120040497066,
+      "sampled_minimum_center_distance_mm": 4.875074125839988,
+      "sampled_surface_clearance_mm": 1.875074125839988,
+      "conservative_surface_clearance_lower_bound_mm": 1.5151029254350172,
+      "search_radius_mm": 10.0,
+      "arc_stations_mm": [
+        79.55328390944572,
+        186.6441501936792
+      ],
+      "points_mm": [
+        [
+          -14.434571987885626,
+          -216.69201472753872,
+          2.3083508136104127
+        ],
+        [
+          -18.37893886009738,
+          -214.99500729351342,
+          5.675119998825715e-28
+        ]
+      ]
+    },
+    {
+      "route_a": "left_branch",
+      "route_b": "right_branch",
+      "local_self_arc_exclusion_mm": 0,
+      "radius_sum_mm": 2.1,
+      "sampling_allowance_mm": 0.3597122300646163,
+      "sampled_minimum_center_distance_mm": 6.922748350014273,
+      "sampled_surface_clearance_mm": 4.8227483500142725,
+      "conservative_surface_clearance_lower_bound_mm": 4.463036119949656,
+      "search_radius_mm": 10.0,
+      "arc_stations_mm": [
+        149.9999331006808,
+        146.04310062332695
+      ],
+      "points_mm": [
+        [
+          -2.0,
+          -136.0,
+          0.0
+        ],
+        [
+          4.034471545525222,
+          -132.60755329732078,
+          0.030054173630931127
+        ]
+      ]
+    },
+    {
+      "route_a": "left_branch",
+      "route_b": "trunk",
+      "local_self_arc_exclusion_mm": 0,
+      "radius_sum_mm": 2.55,
+      "sampling_allowance_mm": 0.35984171523479347,
+      "sampled_minimum_center_distance_mm": 3.955816735655609,
+      "sampled_surface_clearance_mm": 1.405816735655609,
+      "conservative_surface_clearance_lower_bound_mm": 1.0459750204208156,
+      "search_radius_mm": 10.0,
+      "arc_stations_mm": [
+        136.51073071667597,
+        888.0465726939275
+      ],
+      "points_mm": [
+        [
+          -9.920011791964395,
+          -125.12407913151905,
+          0.023307119412258732
+        ],
+        [
+          -10.183592732176164,
+          -125.23742420218446,
+          3.9687049484031367
+        ]
+      ]
+    },
+    {
+      "route_a": "right_branch",
+      "route_b": "trunk",
+      "local_self_arc_exclusion_mm": 0,
+      "radius_sum_mm": 2.55,
+      "sampling_allowance_mm": 0.35984171523479347,
+      "sampled_minimum_center_distance_mm": 7.251965626645346,
+      "sampled_surface_clearance_mm": 4.701965626645346,
+      "conservative_surface_clearance_lower_bound_mm": 4.342123911410552,
+      "search_radius_mm": 10.0,
+      "arc_stations_mm": [
+        75.53952547047321,
+        968.320119784347
+      ],
+      "points_mm": [
+        [
+          53.35068565853692,
+          -83.42689037559754,
+          -1.1080765465930549
+        ],
+        [
+          53.282409543523784,
+          -83.35416925063208,
+          6.143203027395807
+        ]
+      ]
+    }
+  ],
+  "hub_interface": {
+    "required_exit_mm": [
+      65.0,
+      -107.9046875,
+      6.16
+    ],
+    "actual_exit_mm": [
+      65.0,
+      -107.9046875,
+      6.16
+    ],
+    "endpoint_error_mm": 0.0,
+    "incoming_tangent": [
+      1.0319035234073401e-17,
+      -1.0,
+      6.718121897183204e-20
+    ],
+    "incoming_tangent_angle_to_minus_y_degrees": 0.0,
+    "trunk_radius_mm": 1.5,
+    "hub_boot_exit_radius_mm": 1.65
+  },
+  "failures": []
+}

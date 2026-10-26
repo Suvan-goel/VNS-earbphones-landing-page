@@ -1,0 +1,27 @@
+CYMBA site imagery — 20 October 2026
+
+Create eight individual images using built-in ImageGen. This is a new image set for review; do not change the website or overwrite existing assets.
+
+Authoritative product geometry reference:
+/Users/suvangoel/VNS-earbuds-site/assets/cymba-locked-design-reference.png
+
+Supporting commercial finish reference:
+/Users/suvangoel/VNS-earbuds-site/src/assets/earbuds/hero-premium-pair-v2.webp
+
+Product identity:
+Compact premium wired in-ear monitors. Organically sculpted smoked translucent charcoal shell; slightly oval subtly domed finely textured satin-black outer faceplate; thin pale champagne perimeter bezel. Soft black curved concha stabilization fin, entirely plain black, with NO metallic pads on the fin. The inward-facing body below the fin carries two vertically arranged pale champagne oval contacts beside one recessed vertical rectangular optical window. Short dark acoustic nozzle with a soft smoke-grey silicone tip, a single dark sound bore, and slim champagne insets on the tip as shown in the reference. Fine black braided cable exits the BOTTOM of the housing through a short dark strain relief. No over-ear cable routing. Slim rounded charcoal inline controller with minus, centre, plus buttons and a small status light; USB-C plug. Do not invent new hardware. Render only details actually visible from the chosen viewpoint.
+
+Campaign language:
+Editorial premium product photography; tactile, believable materials; restrained graphite, soft grey, pale champagne palette. Soft directional light, real shadows, composed negative space, photorealistic fine detail. Context scenes feel gently lived-in with few deliberate props. No logos, labels, captions, watermarks or generated marketing text. No fake study results, nerve pathways, brain graphics, neon stimulation effects, charging case or wireless product. No hands or people except the single cropped ear fit image. Atmosphere is expressed with light, composition and surroundings.
+
+Assets:
+01-hero.png — whole product system on a neutral light studio surface, landscape 4:3.
+02-worn-fit.png — one adult ear and a little jaw/neck, no full face, correct small fit and cable down, portrait 4:5.
+03-study.png — earbuds and controller beside an open notebook, pencil and textbook edge; morning light, portrait 4:5.
+04-deep-work.png — product beside keyboard on a quiet desk in warm lamplight, portrait 4:5.
+05-learning.png — product beside a compact musical keyboard and a modest practice notebook, portrait 4:5.
+06-outer-detail.png — single outer three-quarter macro of faceplate, smoked housing, wing and downward cable, portrait 4:5.
+07-inner-detail.png — single inner-side macro showing body contacts, optical window, silicone tip and plain fin, portrait 4:5.
+08-sound.png — one outer-view earbud as a sculptural product composition with soft concentric wave-form shadows and restrained colour, landscape 16:9. No water or implication of water resistance.
+
+Each image must be generated in a separate built-in ImageGen call using the locked reference. Inspect results before accepting; use targeted ImageGen corrections for substantial defects. Save selected full-resolution outputs in this folder and save each exact prompt, tool mode, references, generated source path and any QA notes in a sibling JSON provenance file. Do not alter source images using Python.

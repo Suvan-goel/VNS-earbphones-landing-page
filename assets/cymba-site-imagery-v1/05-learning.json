@@ -1,0 +1,21 @@
+{
+  "asset": "05-learning.png",
+  "date": "2026-10-20",
+  "tool": "image_gen.imagegen",
+  "mode": "built-in",
+  "intent": "generate from reference",
+  "prompt": "Use case: product-mockup\nAsset type: portrait 4:5 website lifestyle product photograph, learning and music practice scene, single image.\nPrimary request: Create a quiet, premium editorial photograph of the exact wired CYMBA earbuds beside a compact musical keyboard and a modest practice notebook. No person or hands. A relatable private moment of learning through music, tactile and gently lived-in.\nInput images: Image 1 is authoritative product geometry reference; Image 2 is supporting commercial finish reference. These are hardware references, not composition references. Keep the exact product design but compose a distinct new still life.\nSubject: Two compact wired in-ear monitors. Subtly domed finely textured satin-black oval faceplates encircled by thin pale champagne bezels, organically sculpted smoked translucent charcoal shells, soft plain black curved concha fins, smoke-grey silicone tips with slim champagne insets. The inner side below each fin has two vertically arranged champagne oval contacts beside one recessed vertical optical window. Do not show these through the outer face. Braided black wire exits the BOTTOM of each housing through a short strain relief. Two earbud branches join one black cable containing a slim rounded charcoal inline controller with minus, centre, plus buttons and small status light, plus a USB-C plug. Use only hardware in the references.\nScene: Pale warm grey tabletop with cropped black-and-white keys of a compact musical keyboard entering from the upper right side. A small practice notebook to the upper left is open to cream paper with faint empty music staves and a few simple nonsemantic pencil marks, no readable text; one simple pencil. The earbuds rest at centre-left, with the controller lower right and a loose natural curve of cable connecting the system. Product is small at true earbud scale; white keys are approximately 2 cm wide, earpiece body about 2.5 cm, fin about 1 cm beyond.\nComposition: Portrait 4:5, close overhead editorial still life. A diagonal rhythm from the notebook through the pair to the controller, keyboard only part of background so product remains dominant. Keep a generous strip of quiet tabletop along the lower edge. One earbud tilted to outer face; the second naturally at a three-quarter inner angle. Real contacts, real supporting shadows, no floating objects.\nLighting/style: Soft afternoon window light from left, balanced neutral-warm illumination with restrained pale champagne reflections. Editorial premium product photography with believable tactile surfaces, fine detail and gentle falloff. Muted graphite, grey and ivory campaign palette; no saturated colors.\nConstraints: No humans, faces, hands, logos, branding, labels, captions, watermarks or generated words. No charging case, no wireless earbuds, no contacts on fins, no over-ear cables, no new hardware, no luminous medical or neurological effects. Output one full-bleed 4:5 portrait photograph.",
+  "references": [
+    "/Users/suvangoel/VNS-earbuds-site/assets/cymba-locked-design-reference.png",
+    "/Users/suvangoel/VNS-earbuds-site/src/assets/earbuds/hero-premium-pair-v2.webp"
+  ],
+  "transparent_background": false,
+  "generated_source": "/Users/suvangoel/.codex/generated_images/01a159ca-cd34-71e2-99ff-18aeeb2233e0/exec-3f3f7400-1e13-4c68-b759-9c2b3b360b82.png",
+  "qa_notes": [
+    "Inspected displayed full-resolution generation.",
+    "Portrait 4:5, music keyboard and practice notebook frame central product; no humans or marketing text.",
+    "Product retains exact reference anatomy and material family; one outer view, one inner view, wired controller and USB-C.",
+    "Notebook contains simple musical marks, not explanatory or marketing text.",
+    "Accepted first generation; no postprocessing."
+  ]
+}

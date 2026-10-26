@@ -1,0 +1,7 @@
+Use case: precise-object-edit.
+Edit this CYMBA Facebook cover with one layout refinement. Preserve the exact gold Flow logo, exact lowercase cymba lettering, headline words "The earbuds" / "for cognition", all typography, headline size and positioning, palette, white studio background, lighting and exact product hardware design.
+
+Change ONLY the product pair size and placement:
+Scale BOTH earbuds uniformly to approximately 72% of their CURRENT SIZE, keeping their exact individual shapes, materials, orientation and relative proportions. Recompose the pair into a compact balanced group occupying roughly x=52% to x=76% of the total canvas width and y=25% to y=65% of canvas height. Largest left earbud centred around x=59%, y=42%; slightly smaller right earbud around x=70%, y=49%. The two earbuds must not touch. Their thin separate cables stay attached at the bottom and continue down gently off the lower edge, at the reduced cable thickness appropriate to the smaller buds. Do not stretch either bud.
+Leave the entire rightmost 22% of canvas as calm white negative space. Keep the left text group exactly as it is, and keep the lower-left corner clean. Logo and headline must retain exact text and proportions.
+Retain the original very wide 2.70:1 aspect ratio and high native resolution. This is a smaller, more spacious product composition for a Facebook banner, not a redesign. Do not add any text, labels, watermark, logo, features, new hardware, shadows under text, backgrounds or effects. One finished image.

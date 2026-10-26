@@ -1,0 +1,101 @@
+PORTABLE CABLE DISPLAY MESH VALIDATION
+
+Only the three GLB cable meshes are replaced. Editable CAD and STEP
+geometry, actual routes, radii, metadata and materials remain unchanged.
+Circular cross-sections have the same continuous swept envelope under
+parallel transport and Frenet framing. This display approximation uses
+stored centreline samples and 32 radial segments, with closed end caps.
+Trunk endpoint frames are explicitly axial. Every index, coordinate and
+triangle was checked for range, finiteness and nondegenerate area.
+Unrelated vertex/index ranges are copied and verified byte-for-byte.
+
+The reported error estimate sums radial polygon sag and centreline chord
+sag using curvature estimated from adjacent stored centreline samples;
+it is a display-quality estimate, not a production tolerance guarantee.
+
+{
+  "cable_meshes": [
+    {
+      "samples": 300,
+      "vertices": 9666,
+      "triangles": 19200,
+      "radius_mm": 1.05,
+      "radial_segments": 32,
+      "max_centerline_step_mm": 0.5016722401131141,
+      "radial_polygon_sag_mm": 0.005056036994193225,
+      "sampled_chord_sag_estimate_mm": 0.0007876813255199657,
+      "combined_display_error_estimate_mm": 0.005843718319713191,
+      "trunk_axial_end_tangents": false,
+      "closed_end_caps": true,
+      "name": "L | 150 mm branch cable"
+    },
+    {
+      "samples": 300,
+      "vertices": 9666,
+      "triangles": 19200,
+      "radius_mm": 1.05,
+      "radial_segments": 32,
+      "max_centerline_step_mm": 0.5016722401131141,
+      "radial_polygon_sag_mm": 0.005056036994193225,
+      "sampled_chord_sag_estimate_mm": 0.0007876813255199657,
+      "combined_display_error_estimate_mm": 0.005843718319713191,
+      "trunk_axial_end_tangents": false,
+      "closed_end_caps": true,
+      "name": "R | 150 mm branch cable"
+    },
+    {
+      "samples": 2000,
+      "vertices": 64066,
+      "triangles": 128000,
+      "radius_mm": 1.5,
+      "radial_segments": 32,
+      "max_centerline_step_mm": 0.500250121536901,
+      "radial_polygon_sag_mm": 0.007222909991704607,
+      "sampled_chord_sag_estimate_mm": 0.00889455227749925,
+      "combined_display_error_estimate_mm": 0.016117462269203856,
+      "trunk_axial_end_tangents": true,
+      "closed_end_caps": true,
+      "name": "1000 mm shielded trunk cable"
+    }
+  ],
+  "total_triangle_count": 807770,
+  "unchanged_buffer_views_verified_byte_for_byte": 918,
+  "replaced_buffer_views": 9,
+  "binary_bytes": 21132840,
+  "glb_bytes": 21673288,
+  "glb_sha256": "e4c507772e01f13bacaab7d3767c244dbb25b7a22b6d5f42f4293caee878dc4b",
+  "cad_geometry_unchanged": true,
+  "all_scene_metadata_materials_unchanged": true,
+  "exact_curve_comparison": [
+    {
+      "name": "L | 150 mm branch cable",
+      "max_sample_to_exact_curve_error_mm": 5.709267298455617e-14,
+      "max_exact_curve_chord_error_mm": 0.0007887332402790912,
+      "conservative_frame_orientation_error_mm": 4.195392866499606e-05,
+      "radial_polygon_sag_mm": 0.005056036994193225,
+      "float32_position_allowance_mm": 3e-05,
+      "combined_sampled_display_error_estimate_mm": 0.005916724163194405,
+      "exact_curve_interior_checks_per_segment": 15
+    },
+    {
+      "name": "R | 150 mm branch cable",
+      "max_sample_to_exact_curve_error_mm": 5.709267298455617e-14,
+      "max_exact_curve_chord_error_mm": 0.0007887332402790912,
+      "conservative_frame_orientation_error_mm": 4.1953928664996156e-05,
+      "radial_polygon_sag_mm": 0.005056036994193225,
+      "float32_position_allowance_mm": 3e-05,
+      "combined_sampled_display_error_estimate_mm": 0.005916724163194405,
+      "exact_curve_interior_checks_per_segment": 15
+    },
+    {
+      "name": "1000 mm shielded trunk cable",
+      "max_sample_to_exact_curve_error_mm": 5.85928550226896e-14,
+      "max_exact_curve_chord_error_mm": 0.00886377542683329,
+      "conservative_frame_orientation_error_mm": 0.006505051458593964,
+      "radial_polygon_sag_mm": 0.007222909991704607,
+      "float32_position_allowance_mm": 3e-05,
+      "combined_sampled_display_error_estimate_mm": 0.022621736877190452,
+      "exact_curve_interior_checks_per_segment": 15
+    }
+  ]
+}

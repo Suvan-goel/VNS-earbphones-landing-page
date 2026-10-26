@@ -2,42 +2,39 @@ import { site } from "@/config/site";
 import { Wordmark } from "../Wordmark";
 import { Container } from "../ui";
 
+const links = [
+  { href: `mailto:${site.contactEmail}`, label: "Contact" },
+  { href: "/privacy", label: "Privacy" },
+  { href: "/terms", label: "Terms" },
+  { href: "/models/credits.txt", label: "3D credits" },
+];
+
+/* One line of footer: wordmark, links, copyright. Small print beneath, in small print. */
 export function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="pt-20 pb-10">
-      <Container>
-        <div className="flex flex-col justify-between gap-10 md:flex-row">
-          <div>
-            <Wordmark size="text-[2.25rem]" />
-            <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted">Earphones, engineered for the way you learn.</p>
-          </div>
-          <nav aria-label="Footer" className="flex flex-wrap gap-x-8 gap-y-3 text-sm text-ivory-soft">
-            <a href={`mailto:${site.contactEmail}`} className="hover:text-ivory">
-              Contact
-            </a>
-            <a href="/privacy" className="hover:text-ivory">
-              Privacy
-            </a>
-            <a href="/terms" className="hover:text-ivory">
-              Terms
-            </a>
+    <footer className="bg-studio text-ivory-soft">
+      <Container className="py-8">
+        <div className="flex flex-col gap-4 text-xs sm:flex-row sm:items-center sm:justify-between">
+          <Wordmark size="text-[0.9375rem]" />
+          <nav aria-label="Footer" className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            {links.map((l) => (
+              <a key={l.label} href={l.href} className="hover:text-ivory">
+                {l.label}
+              </a>
+            ))}
             {site.social.map((s) => (
               <a key={s.href} href={s.href} className="hover:text-ivory" rel="noopener noreferrer" target="_blank">
                 {s.label}
               </a>
             ))}
+            <span>© {year} {site.legalName}</span>
           </nav>
         </div>
-        <div className="mt-16 border-t border-[var(--line)] pt-8 text-xs leading-relaxed text-faint">
-          <p className="max-w-3xl">
-            {site.brand} is a working name. {site.product} is a concept in development: not for sale, not shown to improve learning or
-            memory, not evaluated by any regulator. Not medical advice. Images are concept renders, not photographs.
-          </p>
-          <p className="mt-4">
-            © {year} {site.legalName}
-          </p>
-        </div>
+        <p className="mt-5 max-w-[60rem] text-[0.6875rem] leading-relaxed">
+          {site.product} is not yet available to buy. It is not a medical device, and benefits for learning or memory have not been
+          independently demonstrated.
+        </p>
       </Container>
     </footer>
   );

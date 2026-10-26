@@ -1,0 +1,22 @@
+{
+  "mode": "built-in ImageGen",
+  "intent": "edit",
+  "use_case": "lighting-weather",
+  "created": "2026-10-19",
+  "source_generated_image": "/Users/suvangoel/.codex/generated_images/01a153ef-6b88-7220-9645-73e3c68dc03f/exec-05dcda44-b8cb-4644-af4b-f2bbc4740171.png",
+  "output": "src/assets/earbuds/listening-portrait-studio-hue.webp",
+  "input_images": [
+    {
+      "path": "src/assets/earbuds/listening-portrait-charcoal.webp",
+      "role": "Approved portrait edit target; change backdrop only, preserve foreground subject and framing"
+    }
+  ],
+  "transparent_background": false,
+  "export": {
+    "format": "webp",
+    "quality": 93,
+    "resize": false
+  },
+  "presentation": "Existing smaller portrait layout and edge masks retained. Removed external CSS glow; colour is in photograph directly behind the subject.",
+  "prompt": "Edit the supplied photograph. BACKGROUND ONLY.\nKeep the photographed man completely unchanged: exact same face, expression, skin texture, hair, silhouette, pose, clothing, earphone, cable, lighting, size, framing and position. Do not regenerate, beautify, reinterpret, zoom, resize or relight the person. Preserve the foreground subject as faithfully as possible.\nReplace ONLY the dark studio backdrop directly behind and around his head with a soft diffused pink-purple studio hue. This colour must fill the negative space right up to the silhouette of his hair, ears, neck and face, on both sides of his head, as if the actual backdrop behind him is softly lit with muted rose and plum light. Clearly visible but restrained, sophisticated premium audio campaign photography.\nUse a gentle blended muted rose-magenta on the left and smoky violet-plum on the right. The colour is in the background, not on the man's skin or hair. The corners and bottom fade smoothly into very dark charcoal (#111213), so the photograph integrates into a dark webpage. No dark rectangular backdrop remaining between the hue and the head.\nAbsolutely no paint, splash, brush strokes, particles, texture effects, smoke, hard ring or neon. No text or logos. Opaque photograph. Retain original 4:5 aspect ratio and exact subject framing.\nThe only requested alteration is replacing the background with this softly coloured photographic backdrop."
+}

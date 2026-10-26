@@ -1,0 +1,70 @@
+{
+  "layout_revision": 2,
+  "render_resolution": [
+    1920,
+    1080
+  ],
+  "aspect_ratio": "16:9",
+  "unchanged_component_count": 25,
+  "unchanged_geometry_and_materials": true,
+  "unchanged_earbud_rotations_and_all_scales": true,
+  "controller_rotation_delta_degrees": 90,
+  "unchanged_wire_diameters": true,
+  "controller_center_mm": [
+    16,
+    11
+  ],
+  "earbud_origins_xy_mm": [
+    [
+      -68,
+      28
+    ],
+    [
+      -24,
+      28
+    ]
+  ],
+  "coil_center_mm": [
+    64,
+    -6
+  ],
+  "cable_lengths_before_mm": {
+    "Left earbud \u00b7 editable wire": 75.88414764404297,
+    "Right earbud \u00b7 editable wire": 75.88414764404297,
+    "Junction to controller \u00b7 editable wire": 66.62128448486328,
+    "Controller to USB-C \u00b7 continuous coiled lead": 300.9515380859375
+  },
+  "cable_lengths_after_mm": {
+    "Left earbud \u00b7 editable wire": 78.86109161376953,
+    "Right earbud \u00b7 editable wire": 78.8610610961914,
+    "Junction to controller \u00b7 editable wire": 82.83247375488281,
+    "Controller to USB-C \u00b7 continuous coiled lead": 417.3479309082031
+  },
+  "component_fingerprints": {
+    "Earbud \u00b7 L \u00b7 supplied textured mesh": "7dffdf2a7e2a990c15fdb93860901071cfa40110587bfde5667e067d6eddd72d",
+    "Earbud \u00b7 R \u00b7 mirrored supplied textured mesh": "f7c2b09f4375d7ab6a9ee5fe0cc352f05dbc61485d927d96fc530d3fd43b3287",
+    "Y-junction \u00b7 seamless rubber housing": "8d75b4fa0a3f692b6b0ea27e9d50c2225e49c64ce01365a7450f658c69ea5530",
+    "Y-junction \u00b7 bronze exit collar": "049d3a26ecd71839e56e76b320a6834d469265c8325e43ec84bdb09ac065b52f",
+    "Controller \u00b7 lower housing": "8423c568b739b8135dafdc0b6842c9af6ce13e4a754e578dc89118fa168d0d84",
+    "Controller \u00b7 case seam": "81dd3adecc9c839d6b6abf742ca028cd198c6e29e17374c25218e9632b7171be",
+    "Controller \u00b7 upper housing": "a761c4c6fb570644484700ac42fcde036c560516a7beddfc89616dff1286f04c",
+    "Controller \u00b7 bronze perimeter bezel": "c36f172c8d0a6f5801e15d1da024157b828070d06d9d590c994983f81c0c721f",
+    "Controller \u00b7 face seal": "3e4e23140faaa9f523bd13ae506a4982b8c208c835a641e5dea0709aa074f717",
+    "Controller \u00b7 inset face": "fd00de3251a0024c838ca19987f427aaa0c0c7829e113a096a6f40cb3928d5c4",
+    "Controller \u00b7 button recess": "8272e96331db57c19ae7e1dd64f2d40f47d6eea0d0d47f7a199e274643903755",
+    "Controller \u00b7 multifunction button": "966bfde4964f6609ae34bd92568fb84d67f1ae4453a2eae6f58d88599361c760",
+    "Controller \u00b7 indicator socket": "602eb7b492ac054ad5882572e18550f6961eef571d3d5ebff308583637451c65",
+    "Controller \u00b7 white status indicator": "15a871819dfb66ba7e5bb9b34828539bbab693fc71eb098df21f8ba6a3794ab2",
+    "Controller \u00b7 CYMBA laser marking": "d27df8ac0df6a9189aad6f458f932ba53e32cfd8a64b910d6abbab7caf0a0f50",
+    "Controller \u00b7 input strain relief": "e0fc75f63b905baf0a1d1ad4226de2a666b7f6232503e7d1f7bff89701c100b7",
+    "Controller \u00b7 output strain relief": "2df3b1719a902ca5cd6306ea87ef7fa8981dc628f86689f7cce5ce392595ea7d",
+    "Cable keeper \u00b7 soft wrap band": "7048a25303f7c9ad68f8553e7bfb9e8d7a138368a3f66e7d7c797949888b2ca3",
+    "USB-C \u00b7 black connector body": "2d9f2bc8b7b11ad339392c1ccb6ffe87a0cd089f6e65a5679ba1662ed34f3649",
+    "USB-C \u00b7 bronze end trim": "51cea4863ab0816cb6741bbf43b352987e23be7a4f09da77b193bb65743104c1",
+    "USB-C \u00b7 tapered strain relief": "911bb2385e7c29bb74f52aab99b2a38f90b7a684e0ded0d372f01ec1cbce997f",
+    "USB-C \u00b7 open metal plug shell": "6738d116e4c716284c665f310853b9060d822cdfd287c06b35e4d0fc2d619def",
+    "USB-C \u00b7 recessed dark cavity": "3db2f035262434785c336801efb932e20ec7af2999fbce6fefaf28500946d115",
+    "USB-C \u00b7 internal polymer tongue": "48e02340c0f554292c943430e16919b6d29cc495da9611a278ef6c086a6bcff8",
+    "USB-C \u00b7 recessed gold contact array": "b4a1913ef6d40a9c2070b0815d25db24f6e72e85d12016eea5af9d5e31053aa8"
+  }
+}

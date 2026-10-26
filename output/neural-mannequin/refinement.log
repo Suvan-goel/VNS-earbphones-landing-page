@@ -1,0 +1,36 @@
+18:07:28 | INFO: Data are loaded, start creating Blender stuff
+18:07:28 | INFO: Blender create Mesh node 0
+18:07:28 | INFO: glTF import finished in 0.60s
+/Users/suvangoel/VNS-earbuds-site/output/neural-mannequin/refine_mannequin.py:38: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  mat=bpy.data.materials.new('Honed ivory marble with purple neural inlay');mat.use_nodes=True
+/Users/suvangoel/VNS-earbuds-site/output/neural-mannequin/refine_mannequin.py:127: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  nerve=bpy.data.materials.new('Purple neural fibres');nerve.use_nodes=True
+Info: Baking map saved to internal image, save it externally or pack it
+Info: Baking map saved to internal image, save it externally or pack it
+INFO Draco is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_draco_bridge.dylib
+INFO MeshOptimizer is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_meshopt_bridge.dylib
+18:07:35 | INFO: Starting glTF 2.0 export
+18:07:35 | INFO: Extracting primitive: Mesh_0
+18:07:35 | INFO: Primitives created: 1
+18:07:35 | INFO: Extracting primitive: Brainstem surface projection.001
+18:07:35 | INFO: Primitives created: 1
+18:07:35 | INFO: Draco encoder: Encoding mesh Cymba_Marble_Mannequin.
+18:07:35 | INFO: Draco encoder: Encoding mesh Purple_Surface_Nerve_Fibres.
+18:07:35 | INFO: Finished glTF 2.0 export in 0.29257917404174805 s
+/Users/suvangoel/VNS-earbuds-site/output/neural-mannequin/refine_mannequin.py:253: DeprecationWarning: 'World.use_nodes' is expected to be removed in Blender 6.0
+  scene.world=bpy.data.worlds.new('Soft pearl studio');scene.world.use_nodes=True
+00:09.442  render           | Saved: '/Users/suvangoel/VNS-earbuds-site/output/neural-mannequin/refined-front.png'
+00:10.007  render           | Saved: '/Users/suvangoel/VNS-earbuds-site/output/neural-mannequin/refined-angle.png'
+00:10.625  render           | Saved: '/Users/suvangoel/VNS-earbuds-site/output/neural-mannequin/refined-side.png'
+00:11.192  render           | Saved: '/Users/suvangoel/VNS-earbuds-site/output/neural-mannequin/refined-back.png'
+
+Info: No new files have been packed
+Info: Saved as "cymba-neural-mannequin.blend"
+REFINEMENT_COMPLETE={"source": "/Users/suvangoel/Downloads/Meshy_AI_neural_head_bust_fron_1025174930_image-to-3d-texture.glb", "sourceSHA256": "a0aaf13ac3e09c329d820f925e4570874b67a7a78f45fc71b7b8914a91fb5ece", "sourceTriangles": 610126, "exportTriangles": 139875, "webModel": "/Users/suvangoel/VNS-earbuds-site/public/models/cymba-neural-mannequin.glb", "sizeBytes": 2224744, "blend": "/Users/suvangoel/VNS-earbuds-site/output/neural-mannequin/cymba-neural-mannequin.blend", "textureResolution": [2048, 2048], "addedNerveCurves": 47, "palette": "Violet, amethyst and lilac; no pink", "surface": "Opaque honed ivory marble, irregular soft grey/taupe veins", "bounds": {"min": [-1.3884241580963135, -2.4293980598449707, -1.2480921745300293], "max": [1.386123538017273, 1.8519901037216187, 1.8240994215011597]}, "earCanalsApprox": [[-1.1475, 0.05, 0.04], [1.1475, 0.05, 0.04]], "note": "Schematic artistic surface highlights, not anatomical or measured activation. Original supplied GLB remains unchanged."}
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:31:22)
+DracoEncoder | Preserve triangle order: no
+DracoEncoder | Encoded 68750 vertices, 347769 indices, raw size: 3587812, encoded size: 570642, compression ratio: 6.29
+DracoEncoder | Preserve triangle order: no
+DracoEncoder | Encoded 13896 vertices, 71856 indices, raw size: 588384, encoded size: 74388, compression ratio: 7.91
+
+Blender quit

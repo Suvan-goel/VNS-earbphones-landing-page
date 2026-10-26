@@ -1,0 +1,23 @@
+{
+  "mode": "built-in ImageGen",
+  "intent": "edit",
+  "use_case": "precise-object-edit",
+  "created": "2026-10-19",
+  "source_generated_image": "/Users/suvangoel/.codex/generated_images/01a153ef-6b88-7220-9645-73e3c68dc03f/exec-407aac5b-d337-4ac5-86d7-6f9e77216d5f.png",
+  "output": "src/assets/earbuds/listening-portrait-solid-plum.webp",
+  "input_images": [
+    {
+      "path": "src/assets/earbuds/listening-portrait-charcoal.webp",
+      "role": "Approved original portrait, replace backdrop only"
+    }
+  ],
+  "transparent_background": false,
+  "background_color_target": "#302633",
+  "export": {
+    "format": "webp",
+    "quality": 93,
+    "resize": false
+  },
+  "presentation": "Opaque portrait, neutral dark section, no section glow or portrait masks. 4:5 frame with 4px corners, 84% column width capped at 420px.",
+  "prompt": "Use case: precise-object-edit.\nEdit the background of the supplied approved photograph only.\nReplace its dark studio background with a solid, uniform, matte smoky plum colour approximately #302633. It must be a flat single-colour backdrop, the same colour behind the hair, face, neck and shoulders. No gradient, no glow, no vignette, no halo, no texture, no paint effects. Keep the colour muted and sophisticated.\nPreserve the original foreground photograph as faithfully as possible: the exact same man, face, subtle smile, hair, skin texture, pose, earphone details, cable and knit top. Do not reinterpret or beautify the face, do not change the expression or relight the subject. No plum or pink colour spill on his skin.\nKeep the existing 4:5 composition, subject scale, position and crop unchanged. Do not zoom out or zoom in.\nOutput a fully opaque photograph with a solid smoky plum background. No transparent areas, text, logos or borders. The only change is the flat background colour."
+}

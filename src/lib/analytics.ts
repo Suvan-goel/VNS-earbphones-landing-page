@@ -20,7 +20,10 @@ export type EventName =
   | "survey_completed"
   | "survey_skipped"
   | "faq_open"
-  | "section_view";
+  | "section_view"
+  | "reserve_click"
+  | "reserve_checkout_started"
+  | "reserve_error";
 
 type Props = Record<string, string | number | boolean | null>;
 

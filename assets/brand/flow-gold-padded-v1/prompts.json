@@ -1,0 +1,32 @@
+{
+  "created": "2026-10-21",
+  "tool": "Built-in image_gen",
+  "brief": "Current approved CYMBA Flow logo, much smaller with generous padding; gold artwork on opaque white background. Full logo and standalone symbol.",
+  "status": "Downloadable raster exports.",
+  "assets": [
+    {
+      "file": "cymba-logo-gold-white-padded.png",
+      "name": "Gold logo with brand name",
+      "source": "/Users/suvangoel/VNS-earbuds-site/src/assets/brand/cymba-flow-logo-charcoal.png",
+      "prompt": "Use case: precise-object-edit.\nEdit the attached CURRENT CYMBA logo asset. Its shape is defined by the alpha channel; the RGB outside that shape is irrelevant.\nThe user wants this exact logo much smaller, with a lot more padding, in GOLD on a WHITE background.\nPreserve the approved Flow identity exactly: contours, proportions and letterforms. Change only colour, size and surrounding canvas. Do not invent a new logo or typeface.\nUse a uniform opaque pure white #FFFFFF background, and render the entire existing logo (all symbol and text artwork present in the source) in flat elegant muted champagne gold #9c7b4a. Crisp antialiased edges. Flat solid colour, no metallic shine, no gradients, no texture, no shadows.\nCentre the original artwork horizontally and vertically, uniformly scaled down to occupy only 34% of canvas width. Leave about 33% empty white space on each side and abundant white padding above and below. No crops, no stretching, no added objects, no captions, no borders, no duplicate samples.\nKeep the whole horizontal open-C symbol plus lowercase \"cymba\" lockup exactly as in the source. The exact text is \"cymba\", preserving its current original font and kerning. A wide landscape canvas with 3:1 aspect ratio. The complete logo is small in the centre. One logo only.",
+      "generatedSource": "/Users/suvangoel/.codex/generated_images/01a15f25-0bce-70b0-af01-e24e50ca9605/exec-dfc796a4-60c5-4c19-bb2f-80b19b4f58f8.png",
+      "dimensions": {
+        "width": 2172,
+        "height": 724
+      },
+      "review": "Gold approved Flow identity, correct text where applicable, white background, centered composition and generous padding."
+    },
+    {
+      "file": "cymba-symbol-gold-white-padded.png",
+      "name": "Gold symbol only",
+      "source": "/Users/suvangoel/VNS-earbuds-site/src/assets/brand/cymba-flow-mark-charcoal.png",
+      "prompt": "Use case: precise-object-edit.\nEdit the attached CURRENT CYMBA logo asset. Its shape is defined by the alpha channel; the RGB outside that shape is irrelevant.\nThe user wants this exact logo much smaller, with a lot more padding, in GOLD on a WHITE background.\nPreserve the approved Flow identity exactly: contours, proportions and letterforms. Change only colour, size and surrounding canvas. Do not invent a new logo or typeface.\nUse a uniform opaque pure white #FFFFFF background, and render the entire existing logo (all symbol and text artwork present in the source) in flat elegant muted champagne gold #9c7b4a. Crisp antialiased edges. Flat solid colour, no metallic shine, no gradients, no texture, no shadows.\nCentre the original artwork horizontally and vertically, uniformly scaled down to occupy only 34% of canvas width. Leave about 33% empty white space on each side and abundant white padding above and below. No crops, no stretching, no added objects, no captions, no borders, no duplicate samples.\nKeep only the original flowing open-C symbol exactly as supplied, with its distinctive curved lower terminal. Square canvas. The symbol is small in the centre. Absolutely no wordmark or additional text. One symbol only.",
+      "generatedSource": "/Users/suvangoel/.codex/generated_images/01a15f25-0bce-70b0-af01-e24e50ca9605/exec-3a69de22-d37f-469f-9d84-e64a6e06bd96.png",
+      "dimensions": {
+        "width": 1254,
+        "height": 1254
+      },
+      "review": "Gold approved Flow identity, correct text where applicable, white background, centered composition and generous padding."
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "version": 12,
+  "created": "2026-10-25",
+  "generator": "Built-in imagegen",
+  "change": "Moderately increased neural branching detail; all highlights purple, with pink removed.",
+  "note": "Artistic schematic projections on opaque stone; not a medically accurate depiction of superficial vagus anatomy or measured brain activation.",
+  "images": [
+    {
+      "file": "sculpture-three-quarter.png",
+      "source": "/Users/suvangoel/.codex/generated_images/01a173b0-7eac-7042-9b43-f7543b521c36/exec-bb9cb15f-0d8d-45c6-bde9-8bbdbe30657e.png",
+      "references": [
+        "../mannequin-reference-v11/sculpture-three-quarter.png"
+      ],
+      "prompt": "Use case: precise-object-edit.\nEdit target: supplied ivory marble sculpture with medium-detail violet-and-pink neural highlights.\nMake ONLY these two changes:\n1. Increase neural branching detail moderately, by about 30-40 percent. Preserve all existing trunks and major branches; add a few extra fine tapering secondary forks and short delicate offshoots, roughly 35-45 visible terminal tips across the head. Keep the structure airy and legible with clear stone between the branches. Maintain graceful stylized curves; no dense realistic microfibres, fuzzy fringes, tangled mesh, round neuron starbursts, bright beads or lightning.\n2. REMOVE ALL PINK from every highlight. Use a unified PURPLE palette only: amethyst, violet and lilac, with subtle pale lavender bright cores. Recolor every formerly pink branch, ear detail, neck segment and colored glow to purple. No rose, hot pink, magenta, red, coral or orange neural light.\n\nPreserve everything else exactly: same stone sculpture, face, open completely blank carved eyes, neutral pleasant expression, solid closed opaque head, fine-veined honed ivory marble, neck-only base, camera angle, composition, lighting and pale grey background. Keep the localized upper-concha ear signal separate from the cerebral projection. Retain the short schematic rear brainstem extension, stopping at the skull-base/uppermost-neck junction. Keep the anterolateral neck route a subtle thin continuous purple curve, with no dots, dashes or neck branches. Do not add glass, cutaway, transparency, internal anatomy, text, labels, earbuds, cables or any other objects."
+    },
+    {
+      "file": "sculpture-four-views.png",
+      "source": "/Users/suvangoel/.codex/generated_images/01a173b0-7eac-7042-9b43-f7543b521c36/exec-ae8801df-0436-46ed-bd46-09d186dfe244.png",
+      "references": [
+        "../mannequin-reference-v10/sculpture-four-views.png",
+        "sculpture-three-quarter.png"
+      ],
+      "prompt": "Use case: precise image edit, consistent sculpture turnaround sheet.\nImage 1 is the four-view layout to edit. Image 2 is the approved updated three-quarter sculpture: use its neural detail level, purple hue and branch styling as the exact visual reference.\n\nKeep image 1's 2-by-2 layout, four viewpoints (front, both side profiles, back), sculpture identity, solid opaque honed ivory marble, fine warm mineral veins, blank carved open eyes, neutral pleasant face, upright head and neck-only base. Keep lighting, background, scale, framing, and footer text \"Schematic brain, brainstem and vagus pathways.\"\n\nIncrease the branching detail on ALL four heads to closely match image 2. Preserve the existing gracefully flowing main branches and add two restrained levels of tapering secondary and fine terminal forks. Aim for around 35-45 visible terminal tips on each full side projection and comparable coverage in the rear, airy with clear stone between branches. These should resemble a stylized neural arbor on the STONE SURFACE: clear flowing hierarchy, elegant varying line weights, no fuzzy microscopic hair, no photorealistic tissue, no radial starburst neurons, no tangled mesh. Do not make it sparse like image 1. The increased density should match image 2.\n\nEvery neural highlight must be PURPLE ONLY: amethyst and violet with pale lilac cores, soft restrained purple bloom. Remove all pink, rose, magenta, red, orange, or coral from highlights and halos. Preserve natural warm stone veining. Do not flood the stone with purple wash.\n\nKeep the small upper-concha ear stimulation signal localized and distinct from the cerebral branches. Keep thin continuous purple neck routes visible from front and sides, with absolutely no dots or dashes and no neck branching. On the rear view, form a graceful bilateral cerebral tree with a short slim central descending schematic brainstem projection terminating at the skull-base / uppermost-neck junction, just like image 1. Do not extend it down the lower nape. Rear ear backs and lower nape remain plain stone. These are a schematic artistic surface projection, not a transparent anatomical cutaway.\n\nNo glass, transparency, windows, exposed brain, tissue, colored stone, pink light, dots, beads, dashed lines, earbuds, cables, accessories or added objects. Output one clean high quality square four-view reference sheet."
+    }
+  ]
+}

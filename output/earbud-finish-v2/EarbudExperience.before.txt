@@ -1,0 +1,248 @@
+"use client";
+
+import { useEffect, useMemo, useRef, type RefObject } from "react";
+import * as THREE from "three";
+import { useGLTF } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
+import { useMotionValue, type MotionValue } from "motion/react";
+import { Mannequin } from "./Mannequin";
+import sleeveRim from "./earbudSleeveRim.json";
+
+const CABLE_RADIUS = 0.036;
+// Measured in the normalized earbud's sleeve, on its slanted end face.
+const SLEEVE_END = new THREE.Vector3(0.02178, -0.45850, 0.10645);
+const SLEEVE_AXIS = new THREE.Vector3(0.55, -0.83, 0.06).normalize();
+const OUTLET = SLEEVE_END.clone().addScaledVector(SLEEVE_AXIS, 0.014);
+
+const ease = (a: number, b: number, value: number) => {
+  const t = THREE.MathUtils.clamp((value - a) / (b - a), 0, 1);
+  return t * t * (3 - 2 * t);
+};
+
+function prepareEarbud(scene: THREE.Group, side: "L" | "R") {
+  scene.updateMatrixWorld(true);
+  let source: THREE.Object3D | undefined;
+  scene.traverse((object) => {
+    const name = String(object.userData.name ?? object.name);
+    if ((object as THREE.Mesh).isMesh && name.includes("Earbud") && new RegExp(`(?:_| )${side}(?:_| )`).test(name)) source = object;
+  });
+  if (!source) throw new Error(`The ${side} earbud is missing from the product model.`);
+  const mesh = source.clone(true);
+  source.matrixWorld.decompose(mesh.position, mesh.quaternion, mesh.scale);
+  const oriented = new THREE.Group();
+  oriented.rotation.x = Math.PI / 2;
+  oriented.add(mesh);
+  oriented.updateMatrixWorld(true);
+  const box = new THREE.Box3().setFromObject(oriented, true);
+  const scale = 1 / box.getSize(new THREE.Vector3()).y;
+  oriented.position.copy(box.getCenter(new THREE.Vector3())).multiplyScalar(-scale);
+  oriented.scale.setScalar(scale);
+  oriented.updateMatrixWorld(true);
+  // Remove the scanned cable stump at the actual angled sleeve opening.
+  // Restrict the cut to the lower sleeve so the silicone tip is untouched.
+  // Source geometry and textures remain cache-owned and unchanged.
+  oriented.traverse((object) => {
+    const part = object as THREE.Mesh;
+    if (!part.isMesh) return;
+    const sign = side === "L" ? 1 : -1;
+    const centre = new THREE.Vector3(sign * SLEEVE_END.x, SLEEVE_END.y, SLEEVE_END.z);
+    const inward = new THREE.Vector3(-sign * SLEEVE_AXIS.x, -SLEEVE_AXIS.y, -SLEEVE_AXIS.z);
+    const inverse = part.matrixWorld.clone().invert();
+    const plane = new THREE.Plane().setFromNormalAndCoplanarPoint(inward, centre).applyMatrix4(inverse);
+    const region = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0.30).applyMatrix4(inverse);
+    const trim = (sourceMaterial: THREE.Material) => {
+      const material = sourceMaterial.clone();
+      material.onBeforeCompile = (shader) => {
+        shader.uniforms.sleeveTrimPlane = { value: new THREE.Vector4(...plane.normal.toArray(), plane.constant) };
+        shader.uniforms.sleeveTrimRegion = { value: new THREE.Vector4(...region.normal.toArray(), region.constant) };
+        shader.vertexShader = shader.vertexShader
+          .replace("#include <common>", "#include <common>\nuniform vec4 sleeveTrimPlane;\nuniform vec4 sleeveTrimRegion;\nvarying vec2 vSleeveTrim;")
+          .replace("#include <begin_vertex>", "#include <begin_vertex>\nvSleeveTrim = vec2(dot(sleeveTrimPlane, vec4(position, 1.0)), dot(sleeveTrimRegion, vec4(position, 1.0)));");
+        shader.fragmentShader = shader.fragmentShader
+          .replace("#include <common>", "#include <common>\nvarying vec2 vSleeveTrim;")
+          .replace("#include <clipping_planes_fragment>", "#include <clipping_planes_fragment>\nif (vSleeveTrim.x < 0.0 && vSleeveTrim.y < 0.0) discard;")
+          // Soften the metal body's reflections using the existing material mask.
+          // Keep its colour, fine texture, and the silicone/rubber finish intact.
+          .replace("#include <metalnessmap_fragment>", "#include <metalnessmap_fragment>\nroughnessFactor = mix(roughnessFactor, 1.0, 0.20 * smoothstep(0.35, 0.75, metalnessFactor));");
+      };
+      material.customProgramCacheKey = () => "cymba-sleeve-trim-matte-body-v3";
+      return material;
+    };
+    part.material = Array.isArray(part.material) ? part.material.map(trim) : trim(part.material);
+  });
+  return oriented;
+}
+
+/** A flush end cap on the existing sleeve, with the cable seated in its centre. */
+function CableSleeve({ side }: { side: "L" | "R" }) {
+  const geometry = useMemo(() => {
+    const sign = side === "L" ? 1 : -1;
+    const centre = new THREE.Vector3(sign * SLEEVE_END.x, SLEEVE_END.y, SLEEVE_END.z);
+    const axis = new THREE.Vector3(sign * SLEEVE_AXIS.x, SLEEVE_AXIS.y, SLEEVE_AXIS.z);
+    const normal = new THREE.Vector3(-axis.y, axis.x, 0).normalize();
+    const binormal = new THREE.Vector3().crossVectors(axis, normal).normalize();
+    // This shallow rolled rim replaces only the damaged end of the scan.
+    // Its face is perpendicular to the sleeve, rather than the screen.
+    const profile = [
+      [-0.007, 0.015], [0, 0], [0.005, 0.03], [0.010, 0.10],
+      [0.015, 0.24], [0.018, 0.52], [0.018, 0.84], [0.014, 1], [0.004, 1],
+    ];
+    // Reuse the measured cut contour so the rim meets the scan precisely
+    // instead of leaving the overlap/gap produced by an approximate ellipse.
+    const contour = sleeveRim.samples.map(([u, v]) => [sign * u, v])
+      .sort((a, b) => Math.atan2(a[1], a[0]) - Math.atan2(b[1], b[0]));
+    const positions: number[] = [], indices: number[] = [];
+    const rows = profile.length - 1, sides = contour.length;
+    profile.forEach(([distance, blend], row) => {
+      const ring = centre.clone().addScaledVector(axis, distance);
+      for (let col = 0; col <= sides; col++) {
+        const [u, v] = contour[col % sides];
+        const outerRadius = Math.hypot(u, v);
+        const ratio = THREE.MathUtils.lerp(outerRadius, CABLE_RADIUS + 0.0003, blend) / outerRadius;
+        const point = ring.clone().addScaledVector(normal, u * ratio).addScaledVector(binormal, v * ratio);
+        positions.push(point.x, point.y, point.z);
+        if (row < rows && col < sides) {
+          const a = row * (sides + 1) + col, b = a + sides + 1;
+          indices.push(a, a + 1, b, a + 1, b + 1, b);
+        }
+      }
+    });
+    const result = new THREE.BufferGeometry();
+    result.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+    result.setIndex(indices);
+    result.computeVertexNormals();
+    // Share the normal across the duplicated UV seam for a continuous finish.
+    const normals = result.getAttribute("normal") as THREE.BufferAttribute;
+    const average = new THREE.Vector3();
+    for (let row = 0; row <= rows; row++) {
+      const first = row * (sides + 1), last = first + sides;
+      average.fromBufferAttribute(normals, first).add(new THREE.Vector3().fromBufferAttribute(normals, last)).normalize();
+      normals.setXYZ(first, average.x, average.y, average.z);
+      normals.setXYZ(last, average.x, average.y, average.z);
+    }
+    return result;
+  }, [side]);
+  const material = useMemo(() => new THREE.MeshStandardMaterial({ color: "#181a1c", roughness: 0.48, metalness: 0.02 }), []);
+  useEffect(() => () => { geometry.dispose(); material.dispose(); }, [geometry, material]);
+  return <mesh geometry={geometry} material={material} />;
+}
+
+/** The socket follows the product, while the cable hangs vertically under gravity. */
+function TrailingCable({ side, anchor }: { side: "L" | "R"; anchor: RefObject<THREE.Group | null> }) {
+  const lastTransform = useRef(new THREE.Matrix4().makeScale(0, 0, 0));
+  const geometry = useMemo(() => new THREE.TubeGeometry(new THREE.LineCurve3(
+    new THREE.Vector3(), new THREE.Vector3(0, -2.3, 0),
+  ), 96, CABLE_RADIUS, 16, false), []);
+  const material = useMemo(() => {
+    const value = new THREE.MeshStandardMaterial({ color: "#181a1c", roughness: 0.37, metalness: 0.1, transparent: true, depthWrite: false });
+    value.onBeforeCompile = (shader) => {
+      shader.vertexShader = shader.vertexShader.replace("#include <common>", "#include <common>\nvarying float vCableProgress;").replace("#include <uv_vertex>", "#include <uv_vertex>\nvCableProgress = uv.x;");
+      shader.fragmentShader = shader.fragmentShader.replace("#include <common>", "#include <common>\nvarying float vCableProgress;").replace("#include <opaque_fragment>", "diffuseColor.a *= 1.0 - smoothstep(0.42, 0.98, vCableProgress);\n#include <opaque_fragment>");
+    };
+    value.customProgramCacheKey = () => "trailing-cable-fade-v2";
+    return value;
+  }, []);
+  useFrame(() => {
+    const bud = anchor.current;
+    if (!bud) return;
+    bud.updateMatrix();
+    if (bud.matrix.equals(lastTransform.current)) return;
+    lastTransform.current.copy(bud.matrix);
+    const sign = side === "L" ? 1 : -1;
+    const localTangent = new THREE.Vector3(sign * SLEEVE_AXIS.x, SLEEVE_AXIS.y, SLEEVE_AXIS.z);
+    const socket = new THREE.Vector3(sign * OUTLET.x, OUTLET.y, OUTLET.z)
+      .addScaledVector(localTangent, -0.006).applyMatrix4(bud.matrix);
+    const tangent = localTangent.transformDirection(bud.matrix);
+    const scale = bud.scale.x;
+    // A circular bend begins inside the opening, then meets the vertical
+    // drop tangentially. No extra straight connector delays the bend.
+    const horizontal = new THREE.Vector3(tangent.x, 0, tangent.z);
+    const angle = Math.atan2(horizontal.length(), -tangent.y);
+    const bendRadius = 0.24 * scale;
+    const settled = socket.clone()
+      .addScaledVector(horizontal.normalize(), bendRadius * (1 - Math.cos(angle)))
+      .add(new THREE.Vector3(0, -bendRadius * Math.sin(angle), 0));
+    const handle = 4 / 3 * Math.tan(angle / 4) * bendRadius;
+    const path = new THREE.CurvePath<THREE.Vector3>();
+    path.add(new THREE.CubicBezierCurve3(
+      socket, socket.clone().addScaledVector(tangent, handle),
+      settled.clone().add(new THREE.Vector3(0, handle, 0)), settled,
+    ));
+    path.add(new THREE.LineCurve3(settled, settled.clone().add(new THREE.Vector3(0, -2.08, 0))));
+    const next = new THREE.TubeGeometry(path, 96, CABLE_RADIUS * bud.scale.x, 16, false);
+    for (const name of ["position", "normal"] as const) {
+      const attribute = geometry.getAttribute(name) as THREE.BufferAttribute;
+      attribute.copyArray(next.getAttribute(name).array);
+      attribute.needsUpdate = true;
+    }
+    geometry.computeBoundingSphere();
+    next.dispose();
+  });
+  useEffect(() => () => { geometry.dispose(); material.dispose(); }, [geometry, material]);
+  return <mesh geometry={geometry} material={material} renderOrder={5} />;
+}
+
+function EarbudPair({ modelUrl, progress, onReady }: { modelUrl: string; progress: MotionValue<number>; onReady?: () => void }) {
+  const { scene } = useGLTF(modelUrl, "/draco/");
+  const left = useMemo(() => prepareEarbud(scene, "L"), [scene]);
+  const right = useMemo(() => prepareEarbud(scene, "R"), [scene]);
+  const leftGroup = useRef<THREE.Group>(null);
+  const rightGroup = useRef<THREE.Group>(null);
+  const renderedFrames = useRef(0);
+  useEffect(() => () => {
+    [left, right].forEach((bud) => bud.traverse((object) => {
+      const mesh = object as THREE.Mesh;
+      if (mesh.isMesh) (Array.isArray(mesh.material) ? mesh.material : [mesh.material]).forEach((material) => material.dispose());
+    }));
+  }, [left, right]);
+  useFrame(() => {
+    // Keep the loading still until the scene has actually drawn with its
+    // materials, environment and camera, rather than just mounted in React.
+    if (++renderedFrames.current === 2) onReady?.();
+    const t = ease(0.16, 0.42, progress.get());
+    [leftGroup.current, rightGroup.current].forEach((group, index) => {
+      if (!group) return;
+      const sign = index === 0 ? -1 : 1;
+      const arc = Math.sin(Math.PI * t);
+      group.position.set(
+        sign * (THREE.MathUtils.lerp(0.60, 1.145, t) + arc * 0.42),
+        THREE.MathUtils.lerp(index === 0 ? 0.04 : 0.78, 0.05, t) + arc * 0.12,
+        THREE.MathUtils.lerp(index === 0 ? 0 : -0.05, 0.04, t) + arc * 0.3,
+      );
+      group.scale.setScalar(THREE.MathUtils.lerp(0.79, 0.36, t));
+      group.rotation.set(THREE.MathUtils.lerp(-0.06, 0, t), sign * THREE.MathUtils.lerp(-0.30, -0.12, t), sign * THREE.MathUtils.lerp(0.09, 0, t));
+    });
+  });
+  return <>
+    <group ref={leftGroup}><primitive object={left} dispose={null} /><CableSleeve side="L" /></group>
+    <group ref={rightGroup}><primitive object={right} dispose={null} /><CableSleeve side="R" /></group>
+    <TrailingCable side="L" anchor={leftGroup} />
+    <TrailingCable side="R" anchor={rightGroup} />
+  </>;
+}
+
+export function EarbudExperience({ modelUrl, progress, onReady }: { modelUrl: string; progress: MotionValue<number>; onReady?: () => void }) {
+  const presentation = useRef<THREE.Group>(null);
+  const reveal = useMotionValue(0);
+  const stimulation = useMotionValue(0);
+  const target = useRef(new THREE.Vector3());
+  useFrame(({ camera, size }) => {
+    const p = progress.get();
+    const worn = ease(0.16, 0.42, p);
+    reveal.set(ease(0.18, 0.36, p));
+    stimulation.set(ease(0.42, 0.56, p));
+    if (presentation.current) {
+      presentation.current.rotation.y = THREE.MathUtils.lerp(0, -0.95, worn) + ease(0.43, 0.84, p) * 1.9;
+    }
+    const frameHeight = THREE.MathUtils.lerp(4.7, 5.9, worn);
+    const frameWidth = THREE.MathUtils.lerp(4.2, 4.5, worn);
+    const distance = Math.max(frameHeight, frameWidth / (size.width / size.height)) / (2 * Math.tan(THREE.MathUtils.degToRad((camera as THREE.PerspectiveCamera).fov / 2)));
+    const targetY = THREE.MathUtils.lerp(-0.2, -0.12, worn);
+    camera.position.set(0, targetY + worn * 0.12, distance);
+    camera.lookAt(target.current.set(0, targetY, 0));
+  });
+  return <group ref={presentation}>
+    <EarbudPair modelUrl={modelUrl} progress={progress} onReady={onReady} />
+    <Mannequin reveal={reveal} stimulation={stimulation} />
+  </group>;
+}

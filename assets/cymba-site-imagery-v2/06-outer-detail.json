@@ -1,0 +1,11 @@
+{
+  "createdOn": "2026-10-20",
+  "tool": "Built-in ImageGen",
+  "file": "06-outer-detail.png",
+  "source": "/Users/suvangoel/.codex/generated_images/01a159ae-5d36-7d93-af69-6cfe1d3fb868/exec-38738550-aa11-492d-8dbc-678d3261c196.png",
+  "references": [
+    "/Users/suvangoel/VNS-earbuds-site/assets/cymba-site-imagery-v1/06-outer-detail.png"
+  ],
+  "prompt": "Use case: product-mockup. Create ONE high-detail portrait 4:5 editorial MATERIAL MACRO for CYMBA. The input is a PRODUCT GEOMETRY reference ONLY. Do NOT reproduce its framing, upright orientation, camera angle or complete earbud silhouette.\nNEW COMPOSITION: rotate the actual earbud about 55 degrees clockwise, bring the camera extremely close at a low grazing angle across the outer face. Show a tightly cropped sweep of the champagne perimeter where the satin black oval faceplate meets the smoky translucent resin shell. The thin rim sweeps diagonally from upper left toward lower right. Parts of the faceplate and housing extend OUTSIDE the frame; the complete earbud must NOT fit in frame. The dark silicone wing is a soft out-of-focus shape at the distant edge; nozzle/tip only a partial glimpse near upper-right if visible. No cable/controller required in this material crop. Fine tactile surface texture, warm specular hairline along the metal edge, smoky resin depth, cool grey background sliver. Focus stacked on the join, graceful natural falloff elsewhere. Restrained quiet luxury hardware photography.\nPreserve the exact referenced hardware, thin champagne bezel, smoked shell, satin-black faceplate and plain black silicone fin. No new structure, no radial brushed circle, no text/logos/labels, no hands or people, no sci-fi glow. This is a macro detail taken with a different lens and physically rotated device, NOT the same complete product shot zoomed out.",
+  "qa": "Accepted extreme cropped material detail; complete upright silhouette removed, rim texture and shell grain visible."
+}

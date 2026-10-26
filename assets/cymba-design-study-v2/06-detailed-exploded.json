@@ -1,0 +1,17 @@
+{
+  "key": "06-detailed-exploded",
+  "title": "Annotated exploded concept architecture",
+  "prompt": "Use case: precise-object-edit.\nImage 1 is the edit target: annotated CYMBA ONE exploded plate. Image 2 is the corrected complete-product design, showing the true INNER, skin-facing PPG position.\nMake ONE targeted correction to Image 1. The PPG module is currently wrongly floating between the shell and the OUTWARD faceplate. Remove that entire optical PCB, black window, optical aperture barrel, and its label/leader from the right-hand axial gap. In the main exploded assembly this gap must contain only empty air separating acoustic shell from outer faceplate. Keep all other components, EEG-capable tip, driver, concha wing, cable-down exit, title and typography unchanged.\nShow the PPG correctly in a dedicated small detail inset at LOWER RIGHT, beneath the outer faceplate and to the right of the controller. This inset must show an INNER-SIDE view of a small portion of the shell near the nozzle, matching the right earbud in Image 2: two stimulation pads nearby and one small rectangular black-glass PPG window facing the SKIN. Draw a tiny optical PCB behind this skin-facing window, offset only slightly to reveal it. It must be clearly a close-up/detail inset of this earbud, not another complete earbud or extra main-axis component.\nMove the exact label \"06  PPG optical window + sensor\" to this lower-right inset, with a short leader to the actual window. Add a small readable inset sublabel exactly \"Inner housing · skin-facing\". No PPG component whatsoever between the main shell and outward faceplate.\nKeep remaining labels 01,02,03,04,05,07,08 and the top title and existing footer unchanged and legible. Controller remains beneath the main assembly. Bottom cable exit unchanged. Warm off-white background, premium precise photoreal industrial design rendering, high native detail.",
+  "source": "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-82e02856-f1d2-4ed5-b1f7-54a2e5f157c5.png",
+  "references": [
+    "/Users/suvangoel/VNS-earbuds-site/assets/cymba-design-study-v2/06-detailed-exploded.png",
+    "/Users/suvangoel/VNS-earbuds-site/assets/cymba-design-study-v2/01-complete-system.png"
+  ],
+  "tool": "Built-in ImageGen",
+  "revision": "PPG moved to an explicit inner-housing detail inset",
+  "original": "06-detailed-exploded.png",
+  "web": "06-detailed-exploded.webp",
+  "width": 1536,
+  "height": 1024,
+  "upscaled": false
+}

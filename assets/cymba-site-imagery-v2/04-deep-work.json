@@ -1,0 +1,29 @@
+{
+  "asset": "04-deep-work.png",
+  "version": 2,
+  "tool": "built-in ImageGen",
+  "use_case": "photorealistic-natural",
+  "intent": "generate",
+  "prompt": "Use case: photorealistic-natural\nAsset type: premium earbud website deep-work lifestyle photograph, portrait 4:5.\nPrimary request: Photograph ONE CYMBA wired earbud casually lying fully ON ITS SIDE on a dark walnut desk, at nearly desk-level camera height. The entire earbud is horizontally rotated and rests naturally with its silicone nozzle pointing LEFT. Its satin black oval faceplate is seen obliquely at a grazing sideways angle with a thin champagne edge, NOT standing upright or turned front-on. The soft black curved concha fin lies nearly horizontal toward the rear. The bottom-of-device cable socket rotates with the earbud, and a fine braided black cable snakes away across the tabletop.\nInput images: Image 1 is a GEOMETRY AND MATERIAL REFERENCE of the outer face only. Image 2 is a GEOMETRY AND MATERIAL REFERENCE of the inner face only. Do not copy either reference's camera angle, vertical orientation, composition or background. Physically rotate the exact product 90 degrees onto its side and photograph it from a new low view.\nScene/backdrop: Warm evening work desk. The one small earbud is crisp in the lower foreground, slightly right of center. A low-profile dark keyboard runs away into soft focus behind it, with warm amber light from a desk lamp in the upper background. Quiet, atmospheric negative space in the upper half. A restrained, credible working environment. No human.\nComposition/framing: Camera approximately 1.5 cm above desk surface, view looking across the tabletop rather than down onto it; strong recession and shallow depth of field. Portrait 4:5. Earbud real-world width around 2 cm and much smaller than a keyboard; it occupies roughly 25% of image width, not most of frame. No second earbud, no controller required.\nSubject geometry constraints: Preserve smoked charcoal resin body, subtly oval black faceplate with VERY THIN champagne perimeter, plain black curved soft fin, short nozzle with smoke-grey silicone tip, compact authentic proportions. The body has two oval champagne contacts and a separate optical window on its inner face; show these only if physically visible in this new side view. No extra buttons or invented hardware. No contacts on the fin. Cable exits device-bottom socket even though the device is physically on its side.\nStyle/medium: Genuine photographic editorial still-life, realistic matte wood grain, fine cable braid, authentic silicone, soft focus background, restrained graphite and warm walnut tones. Premium and calm.\nAvoid: Upright bud, fin pointing vertically up, conventional three-quarter frontal product pose, neatly staged symmetrical pair, repeating reference pose, floating product, giant earbud, logos, text, watermarks, overlay effects.",
+  "references": [
+    {
+      "path": "/Users/suvangoel/VNS-earbuds-site/assets/cymba-site-imagery-v1/06-outer-detail.png",
+      "role": "Geometry and material reference; composition not copied"
+    },
+    {
+      "path": "/Users/suvangoel/VNS-earbuds-site/assets/cymba-site-imagery-v1/07-inner-detail.png",
+      "role": "Geometry and material reference; composition not copied"
+    }
+  ],
+  "source_path": "/Users/suvangoel/.codex/generated_images/01a15ada-fdcb-7701-93d6-092e877cff59/exec-cfe51517-d93e-4f69-a25a-dad5a6e3c769.png",
+  "qa": {
+    "inspected": true,
+    "accepted": true,
+    "notes": "One earbud rests horizontally on its side, nozzle pointing left and fin curving right. Low desk-level camera, warm lamp bokeh, keyboard receding into background, brown walnut desk. Much greater pose variety than v1 upright pair. Product is larger in frame than requested 25% width, but foreground perspective provides clear detail and smaller keyboard in distance. No people, lettering, or extraneous hardware visible.",
+    "aspect_ratio": "4:5",
+    "dimensions": [
+      1122,
+      1402
+    ]
+  }
+}

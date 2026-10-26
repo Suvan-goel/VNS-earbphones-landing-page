@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-25",
+  "scope": "Local mannequin refinement and site integration; no deployment",
+  "checks": {
+    "typescript": "passed",
+    "existingAutomatedTests": { "passed": 71, "failed": 0 },
+    "browser": ["desktop 1280x800", "phone 350x758", "earbud placement", "scroll reveal", "purple surface animation", "rear brainstem view"],
+    "asset": ["valid GLB 2 container", "two meshes and materials", "Draco-compressed geometry", "opaque materials", "no transmission material", "three embedded baked textures", "original source checksum unchanged"]
+  },
+  "editableSource": "cymba-neural-mannequin.blend",
+  "assetReport": "refinement-report.json",
+  "screenshots": ["site-desktop.jpg", "site-rear.jpg", "site-mobile.jpg"],
+  "note": "Neural highlights remain schematic artistic projections. The existing earbuds loading poster and reduced-motion imagery are preserved."
+}

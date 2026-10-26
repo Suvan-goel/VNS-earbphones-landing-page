@@ -1,0 +1,91 @@
+CYMBA / EARBUD COGNITION DEVICE
+Specification v0.3 — detailed 3D concept, third visual revision
+21 October 2026
+
+WHAT THIS REVISION FOLLOWS
+The v0.3 technical specification defines functions and contact architecture.
+The locked site reference and active premium-pair hero define appearance:
+plain black oval faceplates, front champagne bezels, smoked rear shells,
+curled retention horns, smoke-grey tips and a slender hub.
+CHANGES-TO-MATCH-IMAGERY.txt explains the retained differences from the images.
+
+OPEN / EXPLORE
+Open model-review.html for the self-contained interactive review. The file
+embeds its viewer libraries and geometry. Browser/WebGL support and local-file
+policies determine whether this viewing mode is available; the modular
+index.html version can also be served by a local static web server.
+
+The Product view pairs a three-quarter exterior view with a contact-side view, inward
+tips and presentation leads cropped at the stage edge. Choose Left or Right earbud, then
+Exterior, Contacts or Profile, to inspect the other surfaces. The hub, complete
+system, fit kit and cable section also have individual views. Drag to orbit, scroll to zoom, and use the
+construction slider or housing switch to inspect internal components.
+Select a surface or an item under Inspect components to read its role, source,
+assumptions and unposed envelope. Display posing does not alter source parts.
+CAD download links refer to adjacent files; keep the extracted folder intact.
+
+EDIT / REUSE
+editable.FCStd    FreeCAD assembly with individually named components,
+                 material assignments and role/source/assumption properties.
+assembly.step    Complete main system, millimetres, with named solid geometry.
+earbud-L.step    Left earbud alone.
+earbud-R.step    Right earbud alone.
+fit-kit.step     Five tip sizes and three fins, with separate contact parts.
+assembly.glb     Presentation asset, metres, with part metadata, fit kit,
+                 cable specimen and exploded-view offsets.
+source/          Editable, parameter-based Python construction scripts.
+
+The FreeCAD file is an assembly of editable solid objects, not a fully
+constrained sketch/feature-history model. Change the construction parameters
+and regenerate to revise the design consistently. The GLB includes material transmission for supporting viewers. Fine braid and
+finish-grain shading are added by the interactive viewer; STEP does not store
+those effects or individual textile fibres. The cable solid and its full length remain CAD.
+
+THIS REVISION
+- Tapered earbud bodies with plain satin-black crowned faceplate inserts and
+  visible champagne bezels around the front edge; no earbud branding.
+- Rounded, deeply curled retention horns with flush curved active contacts.
+- Distinct smoke-grey bell tips, a longer exposed neck and narrower EEG inlays.
+- Smoked shell appearance, black silicone fins and warm metallic body returns.
+- Slender 25 × 77 × 12 mm nominal hub, with one stop control and one status lens.
+- Thinner 3.0 mm trunk and curve-following braid shading in the viewer.
+
+FUNCTIONS PRESERVED
+Both earbuds retain the specified stimulation and sensing hardware: separate
+fin active contact and body return, two canal EEG contacts, concha EEG reference,
+PPG, IMU and audio. The right DRL is shared; the mirrored inactive left pad is
+a disclosed interpretation. Each fin has approximately 75.4 mm2 of exposed
+curved active contact, and each body return has a 100 mm2 planar face.
+The branches target 150 mm exposed centreline each; the trunk targets 1000 mm.
+The complete-system trunk is coiled for presentation. The hub retains a clip,
+battery and electronics allocations, physical stop, status light, haptic unit,
+USB-C and a keyed magnetic breakaway. The cable specimen shows shield groups.
+
+READ THE ASSUMPTIONS / CHECKS
+SPECIFICATION-NOTES.txt distinguishes requirements from appearance choices and
+provisional dimensions. model-manifest.json supplies per-part metadata.
+validation.json, CAD-INTERFERENCE-AUDIT.txt, HUB-VALIDATION.txt and
+CABLE-VALIDATION.txt record checks within their stated scopes. Consult the
+current generated reports for actual geometry results and unresolved overlaps.
+
+The source supplies no production drawings, final packages or ear-scan data.
+This remains a concept and packaging study. Anatomical fit, contact pressure,
+tolerances, sealing, manufacture, electrical design and medical performance
+remain unvalidated. Electronic blocks are spatial allocations, not selected
+components or circuit designs. No stimulation firmware is included.
+
+REGENERATE
+Use FreeCAD's Python interpreter with source/build.py, then source/style_cad.py
+with QT_QPA_PLATFORM=offscreen for native colours and STEP exports.
+Use Python 3 with source/package_viewer.py to rebuild the self-contained review,
+and source/package_release.py to rebuild the ZIP and file checksums.
+The construction scripts use the installed macOS FreeCAD path; adapt that path
+for other platforms. Regeneration does not replace the documented CAD checks.
+
+Viewer library: Three.js r170, MIT licence in vendor/LICENSE.
+
+PORTABLE CABLE DISPLAY
+The three GLB cable meshes are capped circular sweeps of their saved CAD
+centreline samples, with 32 segments around each cross section. This avoids
+a display triangulation sliver in the long swept CAD surface. CAD/STEP solids,
+centreline lengths and metadata are unchanged. See CABLE-MESH-VALIDATION.txt.

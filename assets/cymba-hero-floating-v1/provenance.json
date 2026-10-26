@@ -1,0 +1,18 @@
+{
+  "tool": "image_gen.imagegen",
+  "mode": "built-in ImageGen reference edit",
+  "transparent_background": true,
+  "prompt": "Use case: product-mockup.\nAsset type: a transparent PNG hero asset for the CYMBA website. Landscape 4:3 composition, high native detail.\nInput image 1 is ONLY the locked hardware reference. Regenerate its two earbuds in an entirely new, DISTANT floating composition. Preserve the actual product design, not the reference surface, cables arrangement, controller or framing.\n\nEXACT COMPOSITION:\nTwo small CYMBA earbuds hover freely in empty air, widely separated and with substantial transparent negative space all around. Camera is pulled far back: EACH complete earbud including its soft wing occupies only about 17–20% of canvas width and 25% of canvas height. Their centres are around 32% and 68% across the canvas; left bud a little lower at 36% canvas height, right bud at 29%. The left bud shows the oval satin-black outer faceplate and champagne rim, the right bud is turned to show the inner contact panel and grey silicone tip. Use subtly different natural three-quarter rotations. Both bodies are completely visible, never touching.\n\nEXACT CABLE BEHAVIOUR:\nA separate thin black braided cable is attached to the BOTTOM socket of EACH earbud. Each cable drops vertically DOWN immediately below its own earbud under gravity, with just a gentle natural bend. They remain far apart, do not cross, do not connect or run horizontally. Cables descend toward about 85% of canvas height. In their lower third, their opacity gradually fades smoothly to fully TRANSPARENT, until they disappear with no visible cut end. The fade must be in the ALPHA CHANNEL: no painted white gradient, white haze, smoke or blur. When composited on the site's near-white page, they should seem to dissolve into that page. Both earbuds remain fully opaque and crisply detailed.\n\nBACKGROUND:\nREAL TRANSPARENCY throughout all empty canvas, including between the earbuds and cables and below their fade. No backdrop of any colour, no white rectangle, no grey studio panel, no ground, no contact shadows, no drop shadows, no reflections, no floating platform and no baked checkerboard. Self-shading and reflections on hardware are natural; illumination is soft premium studio lighting.\n\nHARDWARE:\nCompact smoked translucent charcoal shells; oval subtly domed satin-black finely textured outer faceplate; thin champagne bezel; plain curved black silicone support fin with NO gold on fin; inner housing has two vertically arranged champagne oval contacts beside a small optical window; soft smoke-grey tip, one acoustic bore and narrow tip contact insets as reference. Keep them compact and elegant. Lower cable exit only.\nShow ONLY the two earbuds and their two individual fading cables. NO inline controller, USB-C plug, splitter, connector, charging case, additional hardware, human, lettering, label, logo, watermark or UI.\nDo not enlarge the buds to fill the frame. This is an airy, pulled-back, suspended pair cutout, with gently disappearing vertical cables.",
+  "referenced_image_paths": [
+    "/Users/suvangoel/VNS-earbuds-site/assets/cymba-locked-design-reference.png"
+  ],
+  "generated_source": "/Users/suvangoel/.codex/generated_images/01a159ae-5d36-7d93-af69-6cfe1d3fb868/exec-f72504f8-fa31-4ed7-b13b-9dbe1656c6cf.png",
+  "saved_png": "assets/cymba-hero-floating-v1/hero-floating-pair.png",
+  "site_asset": "src/assets/earbuds/hero-floating-pair-v1.webp",
+  "alpha_verification": {
+    "hasAlpha": true,
+    "fully_transparent_percentage": 90,
+    "partial_alpha_pixels": 156497,
+    "fade": "Cable opacity progressively decreases to zero at the bottom; no additional CSS mask applied."
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "status": "Concept CAD geometry checks; not manufacturing or medical validation",
+  "cadUnits": "mm",
+  "glbUnits": "m",
+  "partCount": 309,
+  "triangleCount": 807770,
+  "allShapesValid": true,
+  "metrics": {
+    "left": {
+      "side": "L",
+      "bodyEnvelopeMm": [
+        23.6,
+        28.8,
+        14.1
+      ],
+      "activeAreaMm2": 75.39628909005133,
+      "returnAreaMm2": 100,
+      "tipAngleDegrees": -15,
+      "cableExit": [
+        -31,
+        -19,
+        0
+      ]
+    },
+    "right": {
+      "side": "R",
+      "bodyEnvelopeMm": [
+        23.6,
+        28.8,
+        14.1
+      ],
+      "activeAreaMm2": 75.39628909005133,
+      "returnAreaMm2": 100,
+      "tipAngleDegrees": -15,
+      "cableExit": [
+        31,
+        -19,
+        0
+      ]
+    },
+    "hub": {
+      "origin_mm": [
+        65.0,
+        -160.0,
+        0.0
+      ],
+      "nominal_shell_mm": {
+        "width_x": 25,
+        "height_y": 77,
+        "depth_z": 12
+      },
+      "packaging_scale_from_previous_provisional_layout": [
+        0.7352941176470589,
+        1.203125,
+        0.8
+      ],
+      "shell_wall_mm_xy": [
+        1.0294117647058825,
+        1.684375
+      ],
+      "floor_roof_mm": 1.04,
+      "rear_clip_extension_mm": 4.0,
+      "button_extension_mm": -0.05600000000000001,
+      "button_oval_mm_xy": [
+        7.058823529411765,
+        11.549999999999999
+      ],
+      "top_edge_roll_semiaxes_mm_xyz": [
+        0.9558823529411765,
+        1.5640625000000001,
+        1.04
+      ],
+      "bottom_edge_roll_semiaxes_mm_xyz": [
+        0.8455882352941176,
+        1.38359375,
+        0.9199999999999999
+      ],
+      "front_finish": "Plain slender rolled lid; no wordmark; single oval concave stop and small status lens",
+      "battery_envelope_mm": [
+        16.911764705882355,
+        40.90625,
+        3.5200000000000005
+      ],
+      "main_pcb_envelope_mm": [
+        20.58823529411765,
+        60.15625,
+        0.6400000000000001
+      ],
+      "stimulation_pcb_envelope_mm": [
+        8.382352941176471,
+        19.25,
+        0.6400000000000001
+      ],
+      "usb_shell_envelope_mm_xyz": [
+        9.2,
+        6.7,
+        3.2
+      ],
+      "usb_geometry_status": "Dimensions and contact pitch preserved; port relocated to the revised shell",
+      "connector_positions": 24,
+      "connector_pinout_status": "Unspecified; 12 representative positions allocated per ear",
+      "connector_cable_exit_mm": [
+        65,
+        -107.9046875,
+        6.16
+      ],
+      "connector_cable_exit_direction": [
+        0,
+        1,
+        0
+      ],
+      "connector_neck_end_radius_mm": 1.65,
+      "connector_neck_root_radius_mm": 2.5,
+      "connector_neck_length_mm": 7.21875,
+      "provisional_trunk_diameter_mm": 3.0,
+      "minimum_board_domain_gap_mm": 2.4264705882352944,
+      "dimension_status": "Provisional mechanical allocation; dimensions are absent from v0.3",
+      "electronics_status": "Representative component envelope only, not a selected or sourced package; no routing, electrical isolation, safety performance or capacity is established."
+    },
+    "cables": {
+      "LBranchCenterlineMm": 149.99999995800783,
+      "RBranchCenterlineMm": 149.99999995800783,
+      "trunkCenterlineMm": 999.9999947488509
+    }
+  }
+}

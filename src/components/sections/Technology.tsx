@@ -1,62 +1,79 @@
-import { ConceptCaption, Container, SectionHead, StatusTag } from "../ui";
-import { EarView } from "../visuals/EarView";
-import { Exploded, explodedParts } from "../visuals/Exploded";
+import Image from "next/image";
+import outerDetailImage from "@/assets/earbuds/site-imagery-v2/06-outer-detail.webp";
+import innerDetailImage from "@/assets/earbuds/site-imagery-v1/07-inner-detail.webp";
+import { site } from "@/config/site";
+import { Container, Eyebrow, Headline } from "../ui";
 
+/*
+ * The specification table. Every value marked TBC is a PLACEHOLDER
+ * until the engineering numbers are confirmed; edit this list only.
+ */
+const specs: { label: string; values: string[] }[] = [
+  { label: "Audio", values: ["Dynamic driver, size TBC", "Frequency response TBC"] },
+  { label: "Stimulation", values: ["Two conductive contacts on the inner housing", "Low-current pulses with a fixed ceiling", "20-minute sessions, one button to start and stop"] },
+  { label: "Fit", values: ["Shaped housing with soft support wing", "Silicone tips in three sizes", "Weight per bud TBC"] },
+  { label: "Cable and controller", values: ["Braided cable, length TBC", "Inline controller with three buttons and an indicator light", "Connector TBC (3.5 mm or USB-C)"] },
+  { label: "In the box", values: [`${site.product} earbuds`, "Three sizes of silicone tips", "Carry pouch (TBC)"] },
+];
+
+const productDetails = [
+  {
+    image: outerDetailImage,
+    label: "Housing detail",
+    alt: `An extreme close-up of the champagne rim joining ${site.product}'s textured black faceplate to its smoked translucent housing.`,
+  },
+  {
+    image: innerDetailImage,
+    label: "Inner contacts",
+    alt: `Close-up of the inner side of ${site.product}, showing two conductive contacts on the housing, the silicone tip and plain support wing.`,
+  },
+];
+
+/* Complementary product details beside the provisional specifications. */
 export function Technology() {
   return (
-    <section id="technology" aria-labelledby="tech-title" className="section relative overflow-hidden scroll-mt-10">
+    <section id="technology" aria-labelledby="tech-title" className="section scroll-mt-14">
       <Container>
-        <SectionHead eyebrow="03 / Technology" id="tech-title" lines={["A gentle signal,", "through the ear."]} aside={<StatusTag status="core" />} />
-
-        {/* How it works */}
-        <div className="mt-16 grid items-center gap-12 lg:grid-cols-12">
-          <div className="space-y-5 text-[1.0625rem] leading-relaxed text-muted lg:col-span-5 lg:col-start-2">
-            <p className="reveal">
-              Part of your outer ear, the cymba conchae, is wired to the vagus nerve: a main line between brain and body.
-            </p>
-            <p className="reveal">taVNS sends tiny, controlled pulses through the skin there. No needles. No implants.</p>
-            <p className="reveal">
-              Studies link it to the brain&rsquo;s arousal and attention systems. Aurel One puts it in your earphones. Whether it helps
-              you learn is what our research exists to answer.
-            </p>
-          </div>
-          <div className="relative lg:col-span-5 lg:col-start-7">
-            <div className="reveal mx-auto max-w-[500px] text-ivory">
-              <EarView className="h-auto w-full" />
-            </div>
-            <ConceptCaption className="mt-2 text-center">Concept illustration. Contact position not final.</ConceptCaption>
-          </div>
+        <div className="max-w-[40rem]">
+          <Eyebrow className="reveal">Design and specifications</Eyebrow>
+          <Headline id="tech-title" lines={["Designed to be", "worn all day."]} className="reveal mt-5 text-[clamp(2rem,3.6vw,3.25rem)]" />
         </div>
 
-        {/* Inside the earpiece */}
-        <div className="mt-24 sm:mt-32">
-          <div className="reveal mx-auto max-w-[900px] text-ivory">
-            <Exploded className="h-auto w-full" />
-          </div>
-          <ConceptCaption className="mt-2 text-center">Exploded concept view. Not final.</ConceptCaption>
-
-          <ol className="mt-12 grid gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
-            {explodedParts.map((p, i) => (
-              <li key={p.n} className="reveal grid grid-cols-[1.75rem_1fr] gap-x-3" style={{ ["--d" as string]: `${i * 60}ms` }}>
-                <span className="mt-0.5 inline-flex size-6 items-center justify-center rounded-full bg-ivory text-[0.7rem] font-medium text-[#141414]">
-                  {p.n}
-                </span>
-                <div>
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                    <span className="font-medium tracking-[-0.02em] text-ivory">{p.name}</span>
-                    <StatusTag status={p.status} className="!px-2 !py-0.5 !text-[0.58rem]" />
+        <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-start lg:gap-12">
+          <div className="reveal lg:sticky lg:top-24">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
+              {productDetails.map((detail) => (
+                <figure key={detail.label}>
+                  <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-studio">
+                    <Image
+                      src={detail.image}
+                      alt={detail.alt}
+                      fill
+                      sizes="(min-width: 1330px) 300px, (min-width: 1024px) 23vw, calc((100vw - 56px) / 2)"
+                      className="object-cover object-center"
+                    />
                   </div>
-                  <p className="mt-1 text-sm leading-relaxed text-muted">{p.body}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
+                  <figcaption className="mt-3 text-xs font-medium text-muted">{detail.label}</figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
 
-          <div className="reveal mx-auto mt-14 flex max-w-[48rem] flex-col items-center gap-3 text-center">
-            <StatusTag status="research" />
-            <p className="text-[0.9375rem] leading-relaxed text-muted">
-              Sensing is for studying how each person responds. Nothing derived from it ships until validated.
-            </p>
+          {/* Label on the left, values on the right, a hairline between rows. */}
+          <div className="reveal">
+            <dl className="border-t border-line">
+              {specs.map((row) => (
+                <div key={row.label} className="grid gap-2 border-b border-line py-5 sm:grid-cols-[minmax(0,0.8fr)_minmax(0,2fr)] sm:gap-8">
+                  <dt className="text-sm font-medium text-ivory">{row.label}</dt>
+                  <dd className="space-y-1 text-[0.9375rem] leading-relaxed text-muted">
+                    {row.values.map((v) => (
+                      <p key={v}>{v}</p>
+                    ))}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+            <p className="mt-4 text-xs text-faint">Specifications are provisional and will be confirmed before launch.</p>
           </div>
         </div>
       </Container>

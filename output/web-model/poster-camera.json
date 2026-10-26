@@ -1,0 +1,17 @@
+{
+  "camera_location_mm": [
+    13.5,
+    5.0,
+    310.0
+  ],
+  "camera_rotation": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "ortho_scale_mm": 224.0,
+  "resolution": [
+    1600,
+    900
+  ]
+}

@@ -3,6 +3,9 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { survey } from "@/config/site";
 import { getAttribution, track } from "@/lib/analytics";
+import { trackMetaLead } from "@/lib/meta-pixel";
+import { ReserveStep } from "./ReserveStep";
+import styles from "./WaitlistForm.module.css";
 
 type Mode = "supabase" | "file" | "demo";
 type Phase =
@@ -15,10 +18,23 @@ type Phase =
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-export function WaitlistForm({ mode, variant, cta }: { mode: Mode; variant: string; cta: string }) {
+export function WaitlistForm({
+  mode,
+  variant,
+  cta,
+  placement = "early_access",
+  reservations = false,
+}: {
+  mode: Mode;
+  variant: string;
+  cta: string;
+  placement?: "hero" | "early_access";
+  /** Offer the refundable deposit after joining. */
+  reservations?: boolean;
+}) {
+  const compact = placement === "hero";
   const [phase, setPhase] = useState<Phase>({ k: "idle" });
   const [email, setEmail] = useState("");
-  const [researchOptIn, setResearchOptIn] = useState(false);
   const [touched, setTouched] = useState(false);
   const startedAt = useRef(0);
   const statusRef = useRef<HTMLDivElement>(null);
@@ -39,7 +55,7 @@ export function WaitlistForm({ mode, variant, cta }: { mode: Mode; variant: stri
     }
     const company = (new FormData(e.currentTarget).get("company") as string) ?? "";
     setPhase({ k: "submitting" });
-    track("waitlist_submit_attempt", { location: "early_access" });
+    track("waitlist_submit_attempt", { location: placement });
 
     try {
       const res = await fetch("/api/waitlist", {
@@ -47,7 +63,7 @@ export function WaitlistForm({ mode, variant, cta }: { mode: Mode; variant: stri
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email,
-          researchOptIn,
+          researchOptIn: false,
           company,
           startedAt: startedAt.current,
           variant,
@@ -56,19 +72,20 @@ export function WaitlistForm({ mode, variant, cta }: { mode: Mode; variant: stri
       });
       const data = (await res.json().catch(() => ({}))) as { status?: string; message?: string; surveyToken?: string };
       if (data.status === "created" && data.surveyToken) {
-        track("waitlist_signup_success", { research_opt_in: researchOptIn });
+        trackMetaLead(res.status, data);
+        track("waitlist_signup_success", { location: placement, research_opt_in: false });
         setPhase({ k: "created", token: data.surveyToken });
       } else if (data.status === "duplicate") {
-        track("waitlist_signup_duplicate");
+        track("waitlist_signup_duplicate", { location: placement });
         setPhase({ k: "duplicate" });
       } else if (data.status === "demo") {
         setPhase({ k: "demo" });
       } else {
-        track("waitlist_signup_error", { code: res.status });
+        track("waitlist_signup_error", { location: placement, code: res.status });
         setPhase({ k: "error", message: data.message ?? "Something went wrong. Please try again." });
       }
     } catch {
-      track("waitlist_signup_error", { code: 0 });
+      track("waitlist_signup_error", { location: placement, code: 0 });
       setPhase({ k: "error", message: "We couldn't reach our server. Check your connection and try again." });
     }
   }
@@ -80,45 +97,44 @@ export function WaitlistForm({ mode, variant, cta }: { mode: Mode; variant: stri
   if (phase.k === "created" || phase.k === "demo") {
     return (
       <div ref={statusRef} tabIndex={-1} className="outline-none">
-        <Confirmation demo={phase.k === "demo"} />
-        <Survey token={phase.k === "created" ? phase.token : null} demo={phase.k === "demo"} />
+        <Confirmation demo={phase.k === "demo"} compact={compact} />
+        {reservations && phase.k === "created" && <ReserveStep email={email} variant={variant} compact={compact} />}
+        {!compact && <Survey token={phase.k === "created" ? phase.token : null} demo={phase.k === "demo"} />}
       </div>
     );
   }
 
   if (phase.k === "duplicate") {
     return (
-      <div ref={statusRef} tabIndex={-1} className="rounded-3xl border border-[var(--line)] bg-black/20 p-6 outline-none sm:p-8" role="status">
+      <div ref={statusRef} tabIndex={-1} className={compact ? styles.confirmation : "rounded-2xl border border-[var(--line)] bg-surface p-6 outline-none sm:p-8"} role="status">
         <p className="eyebrow">Already on the list</p>
-        <p className="mt-3 text-2xl font-normal tracking-[-0.035em] text-ivory">You&rsquo;re already signed up with that email.</p>
+        <p className="mt-2 text-2xl font-normal tracking-[-0.035em] text-ivory">You&rsquo;re already on the list.</p>
         <p className="mt-2 text-muted">Nothing more to do. We&rsquo;ll be in touch.</p>
+        {reservations && <ReserveStep email={email} variant={variant} compact={compact} />}
       </div>
     );
   }
 
   const busy = phase.k === "submitting";
   const errId = `${id}-err`;
+  const noteId = `${id}-note`;
+  const descriptionId = [phase.k === "error" ? errId : null, noteId].filter(Boolean).join(" ");
 
   return (
-    <form onSubmit={onSubmit} noValidate aria-describedby={phase.k === "error" ? errId : undefined}>
-      <p className="mb-5 px-1 text-sm text-muted sm:px-4">Just your email. No commitment.</p>
-      {mode === "demo" && <DemoNotice />}
+    <form onSubmit={onSubmit} noValidate aria-label={cta} aria-busy={busy}>
       <label htmlFor={`${id}-email`} className="sr-only">
         Email address
       </label>
-      <div
-        className={`flex flex-col gap-2 rounded-[1.75rem] border bg-black/25 p-2 transition-colors focus-within:border-ivory/40 sm:flex-row sm:items-center sm:rounded-full ${
-          invalid ? "border-rose/70" : "border-[var(--line-strong)]"
-        }`}
-      >
+      <div className={styles.controls} data-placement={placement} data-invalid={invalid || undefined}>
         <input
           id={`${id}-email`}
           type="email"
           name="email"
           inputMode="email"
           autoComplete="email"
-          placeholder="you@example.com"
+          placeholder="Email address"
           required
+          maxLength={254}
           value={email}
           onChange={(e) => {
             setEmail(e.target.value);
@@ -126,17 +142,19 @@ export function WaitlistForm({ mode, variant, cta }: { mode: Mode; variant: stri
           }}
           onBlur={() => email && setTouched(true)}
           aria-invalid={invalid || undefined}
+          aria-describedby={descriptionId}
           disabled={busy}
-          className="h-12 min-w-0 flex-1 bg-transparent px-4 text-[1.02rem] text-ivory placeholder:text-faint/70 focus:outline-none disabled:opacity-60"
+          className={styles.input}
         />
         <button
           type="submit"
+          data-cta={placement}
           disabled={busy}
-          className="relative inline-flex h-12 items-center justify-center gap-2 rounded-full bg-ivory px-6 text-[0.95rem] font-medium text-[#141414] transition-colors hover:bg-[#fffaf0] disabled:cursor-progress"
+          className={styles.button}
         >
           {busy ? (
             <>
-              <span className="size-4 animate-spin rounded-full border-2 border-[#141414]/25 border-t-[#141414]" aria-hidden="true" />
+              <span className="size-4 animate-spin rounded-full border-2 border-paper/25 border-t-paper" aria-hidden="true" />
               Joining…
             </>
           ) : (
@@ -153,57 +171,49 @@ export function WaitlistForm({ mode, variant, cta }: { mode: Mode; variant: stri
         </label>
       </div>
 
-      <div className="mt-3 min-h-6 px-4" aria-live="polite">
+      <div className="px-1" aria-live="polite">
         {phase.k === "error" && (
-          <p id={errId} ref={statusRef} tabIndex={-1} className="text-sm text-[#f0a58c] outline-none">
+          <p id={errId} ref={statusRef} tabIndex={-1} className="mt-2 text-sm text-[#a33d2b] outline-none">
             {phase.message}
           </p>
         )}
       </div>
 
-      <label className="mt-2 flex cursor-pointer items-start gap-3 px-4 text-sm leading-relaxed text-muted">
-        <input
-          type="checkbox"
-          checked={researchOptIn}
-          onChange={(e) => setResearchOptIn(e.target.checked)}
-          className="mt-1 size-4 shrink-0 accent-[var(--accent)]"
-        />
-        <span>Invite me to prototype testing and studies.</span>
-      </label>
-      <p className="mt-3 px-4 text-xs leading-relaxed text-faint">
-        Occasional updates. Unsubscribe any time. See our{" "}
-        <a href="/privacy" className="underline underline-offset-2 hover:text-ivory-soft">
-          privacy notice
+      <p id={noteId} className="mt-3 text-center text-xs leading-relaxed text-muted">
+        {!compact && "Unsubscribe anytime. "}
+        <a href="/privacy" className="decoration-muted/35 underline underline-offset-[3px] transition-colors hover:text-ivory">
+          Privacy
         </a>
-        .
+        {mode === "demo" && <DemoNotice compact={compact} />}
       </p>
     </form>
   );
 }
 
-function DemoNotice() {
+/* Development only: shown while no backend is connected. One quiet line, not a box. */
+function DemoNotice({ compact = false }: { compact?: boolean }) {
   return (
-    <p className="mb-4 flex items-start gap-2 rounded-2xl border border-dashed border-[var(--line-strong)] px-4 py-3 text-[0.8rem] leading-relaxed text-muted">
-      <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-rose" aria-hidden="true" />
-      <span>
-        <strong className="font-medium text-ivory-soft">Demonstration mode.</strong> No backend is connected, so emails entered here
-        are not saved.
-      </span>
-    </p>
+    <span className="block mt-1">
+      {compact ? "Preview only. Email addresses aren’t saved yet." : "Demonstration mode: no backend is connected, so emails entered here are not saved."}
+    </span>
   );
 }
 
-function Confirmation({ demo }: { demo: boolean }) {
+function Confirmation({ demo, compact = false }: { demo: boolean; compact?: boolean }) {
   return (
-    <div role="status" className="mb-8">
+    <div role="status" className={compact ? styles.confirmation : "mb-8"}>
       <p className="eyebrow">{demo ? "Demonstration mode" : "You’re on the list"}</p>
-      <p className="mt-3 text-3xl font-normal tracking-[-0.04em] text-ivory sm:text-4xl">
-        {demo ? "Form works. Nothing was saved." : "Welcome to early access."}
+      <p className={`mt-2 font-normal tracking-[-0.04em] text-ivory ${compact ? "text-2xl sm:text-3xl" : "text-3xl sm:text-4xl"}`}>
+        {demo ? "Form works. Nothing was saved." : "You’re on the launch list."}
       </p>
       <p className="mt-3 max-w-lg text-muted">
         {demo
-          ? "No backend is connected yet, so your email was not stored. Connect Supabase to start collecting signups. You can still try the optional survey below."
-          : "One more thing, if you have a moment:"}
+          ? compact
+            ? "This preview isn’t saving email addresses yet."
+            : "No backend is connected yet, so your email was not stored. Connect Supabase to start collecting signups. You can still try the optional survey below."
+          : compact
+            ? "We’ll be in touch with launch news and first access."
+            : "One more thing, if you have a moment:"}
       </p>
     </div>
   );
@@ -259,13 +269,13 @@ function Survey({ token, demo }: { token: string | null; demo: boolean }) {
 
   if (state === "saved" || state === "demo" || state === "skipped") {
     return (
-      <div role="status" className="rounded-3xl border border-[var(--line)] bg-black/20 p-6 sm:p-8">
+      <div role="status" className="rounded-2xl border border-[var(--line)] bg-surface p-6 sm:p-8">
         <p className="text-2xl font-normal tracking-[-0.035em] text-ivory">
           {state === "saved" ? "Thank you. That genuinely helps." : state === "demo" ? "Survey complete (not saved)." : "No problem."}
         </p>
         <p className="mt-2 text-muted">
           {state === "saved"
-            ? "Your answers shape what we build first."
+            ? "Your feedback helps shape what comes next."
             : state === "demo"
               ? "In demonstration mode answers are discarded. With a backend connected they are stored against the signup."
               : demo
@@ -278,7 +288,7 @@ function Survey({ token, demo }: { token: string | null; demo: boolean }) {
 
   const q = step === "concern" ? null : survey[step];
   return (
-    <div ref={panel} className="rounded-3xl border border-[var(--line)] bg-black/20 p-6 sm:p-8">
+    <div ref={panel} className="rounded-2xl border border-[var(--line)] bg-surface p-6 sm:p-8">
       <div className="flex items-center justify-between gap-4">
         <p className="eyebrow">
           Optional · {i + 1} of {steps.length}
@@ -344,7 +354,7 @@ function Survey({ token, demo }: { token: string | null; demo: boolean }) {
             type="button"
             onClick={send}
             disabled={state === "sending"}
-            className="inline-flex h-11 items-center rounded-full bg-ivory px-5 text-sm font-medium text-[#141414] hover:bg-[#fffaf0] disabled:cursor-progress disabled:opacity-70"
+            className="inline-flex h-11 items-center rounded-xl bg-ivory px-5 text-sm font-medium text-paper hover:bg-[#2b2b2b] disabled:cursor-progress disabled:opacity-70"
           >
             {state === "sending" ? "Sending…" : "Send answers"}
           </button>
@@ -355,7 +365,7 @@ function Survey({ token, demo }: { token: string | null; demo: boolean }) {
         )}
       </div>
       {state === "error" && (
-        <p role="alert" className="mt-3 text-sm text-[#f0a58c]">
+        <p role="alert" className="mt-3 text-sm text-[#a33d2b]">
           {error}
         </p>
       )}

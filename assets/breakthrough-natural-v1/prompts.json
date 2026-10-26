@@ -1,0 +1,50 @@
+{
+  "created": "2026-10-21",
+  "mode": "built-in image_gen",
+  "intent": "Edits of the original three images, following user preference for more natural environments, subtler earbuds, varied camera views, and no people.",
+  "product_identity_reference": "assets/cymba-locked-design-reference.png",
+  "outputs": [
+    {
+      "key": "study",
+      "source": "/Users/suvangoel/VNS-earbuds-site/src/assets/earbuds/site-imagery-v2/03-study.webp",
+      "master": "assets/breakthrough-natural-v1/study.png",
+      "web": "src/assets/earbuds/breakthrough-natural-v1/study.webp",
+      "prompt": "Use case: precise-object-edit.\nPrimary request: Refine the existing website photograph in image 1. The user prefers this ORIGINAL image to new concepts: keep its basic setting, photographic character, and recognisable objects. Make the environment feel more naturally used, make the earbuds much more subtle, and change the camera distance to show context. This is a restrained refinement, not a wholesale new art direction.\nInput 1: the exact original photograph to edit. Input 2: product design reference only, to preserve the earbud design (small wired black/smoked shells, champagne rims, plain black fins, braided cable).\nOutput: one 4:5 portrait photo, approximately 1120 x 1400. Absolutely no people, hands, faces, silhouettes or human reflections. The earbud design must stay recognisable but be at realistic SMALL scale, secondary to the activity; no foreground glamour close-up. Keep photographic quality while removing the excessively styled advertising feel. Ordinary uneven ambient light, natural tonal range, slightly imperfect object positions and materials. Do not create a neatly organised collection of explanatory props. No dramatic colour grading or golden glow, no exaggerated mess, no signage, no logos, no overlay text or watermark.\nRefinement of the NOTEBOOK STUDY image: Keep the softly lit pale tabletop, the same cream open notebook, dark pencil and simple mug. Pull back about twice as far for a loose, slightly off-axis overhead view of a real quiet study session at home. The open notebook has a few short lines of handwritten study notes and one rough explanatory sketch, some crossed out, not decorative handwriting or a botanical doodle. A single open paperback reference book partly overlaps the upper left of the notebook and is casually cropped by the frame; nothing needs readable text. Keep useful clear breathing room on the tabletop. Remove the gold clip dish and decorative plant arrangement. Keep the mug only partly visible near a distant edge, not carefully aligned. Reduce the earbuds to true small earbud scale, about a third of their current visual prominence; set them casually on the table beside the notebook rather than centered on its pages. Let just a short unarranged section of cable enter the scene, with the rest outside the frame. Gentle neutral overcast daylight, cream and pale-grey atmosphere close to the original. Nothing theatrical or obsessively tidy. The open notebook is the focus. Preserve a simple uncluttered scene, not a dense exam-revision prop spread.",
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      },
+      "bytes": 133268
+    },
+    {
+      "key": "deep-work",
+      "source": "/Users/suvangoel/VNS-earbuds-site/src/assets/earbuds/site-imagery-v2/04-deep-work.webp",
+      "master": "assets/breakthrough-natural-v1/deep-work.png",
+      "web": "src/assets/earbuds/breakthrough-natural-v1/deep-work.webp",
+      "prompt": "Use case: precise-object-edit.\nPrimary request: Refine the existing website photograph in image 1. The user prefers this ORIGINAL image to new concepts: keep its basic setting, photographic character, and recognisable objects. Make the environment feel more naturally used, make the earbuds much more subtle, and change the camera distance to show context. This is a restrained refinement, not a wholesale new art direction.\nInput 1: the exact original photograph to edit. Input 2: product design reference only, to preserve the earbud design (small wired black/smoked shells, champagne rims, plain black fins, braided cable).\nOutput: one 4:5 portrait photo, approximately 1120 x 1400. Absolutely no people, hands, faces, silhouettes or human reflections. The earbud design must stay recognisable but be at realistic SMALL scale, secondary to the activity; no foreground glamour close-up. Keep photographic quality while removing the excessively styled advertising feel. Ordinary uneven ambient light, natural tonal range, slightly imperfect object positions and materials. Do not create a neatly organised collection of explanatory props. No dramatic colour grading or golden glow, no exaggerated mess, no signage, no logos, no overlay text or watermark.\nRefinement of the WOODEN COMPUTER DESK image: Keep the original ordinary wooden desk, matte black computer keyboard and simple work lamp. Completely remove the giant foreground earbud macro perspective. Move camera farther back and slightly above desk level, as if casually looking toward the workstation from beside an empty chair. The keyboard should be normal sized and legible; show the lower part of a laptop or monitor behind it with a muted document/code-editor window, small believable content not legible text, no neon interface. Keep a single lightly used small note sheet with a rough diagram partly tucked under the keyboard. The scene is a real home work session paused for a moment, with slight natural misalignment, not a showroom and not a theatrical 'busy desk'. Put the small pair of original earbuds off to one side of the keyboard, normal small scale, not front and centre, cable falling casually toward the desk edge without decorative loops. The warm lamp stays dim, mixed with cool blue-grey ambient early-evening light from outside the frame; less orange than original. Moderate realistic depth of field so the workspace, not the earbud, is the subject. Distinct darker evening atmosphere relative to the pale daylight study image. Avoid adding coffee, plants, stacked books, architectural models or coordinated accessories.",
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      },
+      "bytes": 74206
+    },
+    {
+      "key": "learning",
+      "source": "/Users/suvangoel/VNS-earbuds-site/src/assets/earbuds/site-imagery-v2/05-learning.webp",
+      "master": "assets/breakthrough-natural-v1/learning.png",
+      "web": "src/assets/earbuds/breakthrough-natural-v1/learning.webp",
+      "prompt": "Use case: precise-object-edit.\nPrimary request: Refine the existing website photograph in image 1. The user prefers this ORIGINAL image to new concepts: keep its basic setting, photographic character, and recognisable objects. Make the environment feel more naturally used, make the earbuds much more subtle, and change the camera distance to show context. This is a restrained refinement, not a wholesale new art direction.\nInput 1: the exact original photograph to edit. Input 2: product design reference only, to preserve the earbud design (small wired black/smoked shells, champagne rims, plain black fins, braided cable).\nOutput: one 4:5 portrait photo, approximately 1120 x 1400. Absolutely no people, hands, faces, silhouettes or human reflections. The earbud design must stay recognisable but be at realistic SMALL scale, secondary to the activity; no foreground glamour close-up. Keep photographic quality while removing the excessively styled advertising feel. Ordinary uneven ambient light, natural tonal range, slightly imperfect object positions and materials. Do not create a neatly organised collection of explanatory props. No dramatic colour grading or golden glow, no exaggerated mess, no signage, no logos, no overlay text or watermark.\nRefinement of the ELECTRONIC MUSIC KEYBOARD image: Preserve the original black compact electronic piano keyboard and modest modern home feeling; do not change it into an antique upright piano or a luxurious studio. Pull the view wider and look diagonally from the side to reveal an everyday keyboard practice corner beside a plain wall. The keyboard is now naturally on a simple black X-stand with a modest stool/bench partly visible below, and a single dog-eared beginner music sheet sits on its normal music rest. It looks like someone has just paused practising. No staged coffee, decorative plants or carefully arranged accessories. Keep the original dark fabric notebook, but resting casually on the edge of the bench, with the much smaller earbuds placed beside it (not symmetrically posed on top). A short thin cable hangs toward the side naturally. Piano keys must have correct alternating groups of two and three black keys. Neutral soft side daylight, a little cooler and more open than the original, no golden sun stripes. Simple real room with slight marks on floor/bench and an unobtrusive cable near the stand; avoid excessive mess. The instrument and practice corner are the focus, with earbuds merely noticed on second glance. Retain the understated contemporary visual language of the source.",
+      "dimensions": {
+        "width": 1122,
+        "height": 1402
+      },
+      "bytes": 134476
+    }
+  ],
+  "export": {
+    "format": "webp",
+    "quality": 84,
+    "effort": 6,
+    "resize": false
+  }
+}

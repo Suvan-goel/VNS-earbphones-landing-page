@@ -1,10 +1,28 @@
 node_modules/
 .next/
+.next-dev/
+.next-reservations/
 out/
 .data/
-.env
-.env.local
+supabase/.temp/
 .env*.local
 next-env.d.ts
 *.tsbuildinfo
 .DS_Store
+
+
+# Sites maintains its own source repository and build dependencies.
+/sites/cymba/
+
+.projects/cache
+.projects/vault
+.projects/state.test.json
+.projects/state.local.test.json
+.env
+.env.*
+!.env.example
+
+# Private account administration captures and generated deployment bundles.
+/output/facebook-setup/
+/output/cymba-owner-invitation.jpg
+/output/*.tar.gz

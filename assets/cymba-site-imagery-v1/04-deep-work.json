@@ -1,0 +1,20 @@
+{
+  "asset": "04-deep-work.png",
+  "date": "2026-10-20",
+  "tool": "image_gen.imagegen",
+  "mode": "built-in",
+  "intent": "generate from reference",
+  "prompt": "Use case: product-mockup\nAsset type: portrait 4:5 website lifestyle product photograph, deep work scene, single image.\nPrimary request: Create a beautifully composed editorial photograph of the exact wired CYMBA earbuds in the reference on a quiet desk beside a compact computer keyboard. Warm lamplight makes a pool of light across the work surface. Nobody present; a calm moment during focused evening work, tactile and believable.\nInput images: Image 1 is authoritative product geometry; Image 2 supports commercial finish. Preserve the exact hardware rather than redesigning it.\nSubject: A pair of compact in-ear earpieces, realistic earbud scale, subtly domed finely textured satin-black oval faceplates with thin pale champagne bezel, organically sculpted smoked translucent charcoal shells, plain soft black curved concha fins, smoke-grey silicone tips with slim champagne insets. Inner body carries two vertically arranged oval champagne contacts beside one recessed optical window, ONLY visible on inner side below the fin. Fine black braided cable must exit the BOTTOM of each earpiece through the dark strain relief. The two cable branches join a slim cable, with matching rounded charcoal inline controller, minus/centre/plus buttons and small status light, USB-C plug. No invented components.\nComposition: Portrait 4:5. The product arranged on the lower and central part of a softly textured warm grey desk; compact charcoal computer keyboard enters across the top edge, softly out of focus. One earpiece shows its handsome outer faceplate and the other is at a gentle side angle. Controller lies horizontally in the foreground slightly offset, cable loops loosely and naturally across the desk; USB-C end may be clearly visible near the keyboard. A cropped neutral ceramic mug near a far corner only if needed. Product at plausible size relative to standard keyboard keys. Oblique close overhead view with composed negative space and soft layered depth. No screen, no people.\nLighting and style: Editorial premium product photography, warm lamplight from upper right, soft shadows fading into cool grey ambience, rich charcoal material detail and pale champagne edge accents. Realistic textured desk, subtle dust-free clean surfaces, believable slight use, no glossy CGI aesthetic. Fine photographic detail.\nConstraints: Single full-bleed 4:5 photograph. No hands, bodies, faces, labels, branding, marketing copy, readable text or watermarks. Keyboard legends subtle, no attention to words. No charging case, wireless format, metallic pads on fin, cable above or around fin, neon lighting, extra sensors or invented hardware. Preserve restrained graphite, grey and pale champagne campaign palette.",
+  "references": [
+    "/Users/suvangoel/VNS-earbuds-site/assets/cymba-locked-design-reference.png",
+    "/Users/suvangoel/VNS-earbuds-site/src/assets/earbuds/hero-premium-pair-v2.webp"
+  ],
+  "transparent_background": false,
+  "generated_source": "/Users/suvangoel/.codex/generated_images/01a159ca-cd34-71e2-99ff-18aeeb2233e0/exec-d328ee3b-f50e-455d-9da0-5b9629cd9eca.png",
+  "qa_notes": [
+    "Inspected displayed full-resolution generation.",
+    "Portrait 4:5 with warm lamplight and computer keyboard context, no people or marketing text.",
+    "Locked product geometry retained: plain fin, champagne faceplate bezel, inner contacts, optical window, silicone tip, lower cable routing and three-button controller.",
+    "Accepted first generation; no postprocessing."
+  ]
+}

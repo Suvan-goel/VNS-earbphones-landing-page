@@ -1,0 +1,237 @@
+{
+  "title": "CYMBA transparent product-tour keyframes",
+  "generatedOn": "2026-10-19",
+  "method": "Built-in ImageGen",
+  "status": "complete",
+  "format": "PNG with native generated alpha",
+  "upscaled": false,
+  "sequence": [
+    "01-outer-face",
+    "02-outer-three-quarter",
+    "03-side-profile",
+    "04-inner-three-quarter",
+    "05-explosion-ready",
+    "06-partial-explosion",
+    "07-full-explosion"
+  ],
+  "poster": "00-pair-hero",
+  "designStatus": "Conceptual intended architecture; not validated CAD or a manufacturing assembly.",
+  "assets": [
+    {
+      "name": "00-pair-hero",
+      "file": "00-pair-hero.png",
+      "prompt": "Use case: product-mockup. Premium photographic CGI transparent hero cutout for a website/product video. Input image 1 is the exact exterior CYMBA earbud identity and input2 the inner geometry. Show a matched LEFT and RIGHT PAIR of these compact premium wired earbuds, floating side by side with restrained stagger, same scale. Left earbud shows its oval charcoal outside faceplate with thin champagne-gunmetal rim, right earbud shows its inward side with TWO larger stimulation contacts on soft wing base, ONE distinct rectangular optical PPG window (sensor-equipped ear only), and TWO smaller flush EEG contact areas on the silicone tip. Same compact smoky black shell, curved matte black silicone concha wing, shallow dark-grey soft tip, fine realistic textures. No over-ear cables: each black braided cable exits its BOTTOM strain relief, drops gracefully down and exits lower canvas edge. No inline controller. Portraits of actual consistent manufactured-looking same-design pair, no artistic redesign.\nTransparent alpha background. Landscape16:9 highest native resolution. Balanced composition with two earbuds centered across x=34% and x=67%; no overlap, wide generous transparent outer margins, all tips and wings visible. Each body 65% canvas height. Neutral large softbox upper-left, soft fill right; no extreme reflections, full sharp focus. No floor, shadow, backdrop, checkerboard, gradient. No text, arrows, labels, marks, watermark, extra components or glowing lights.",
+      "referencedImagePaths": [
+        "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-d1868731-2c7c-4609-ae68-3803800353ee.png",
+        "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-c1bb483c-fccc-4971-ab19-cb4292d70faa.png"
+      ],
+      "source": "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-d916cc54-a45e-4782-878e-4ea1795d79bd.png",
+      "width": 1672,
+      "height": 941,
+      "channels": 4,
+      "hasAlpha": true,
+      "bytes": 1341040,
+      "sha256": "06d3c99330352e0f9f18b7f45908d552776e2491d3c83d450c8659222d1582a7",
+      "matchesGeneratedOriginal": true,
+      "alphaRange": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "name": "01-outer-face",
+      "file": "01-outer-face.png",
+      "prompt": "Use case: product-mockup. Create ONE high-end photorealistic CGI frame for a product orbit video. Image 1 is the exact locked product identity, materials, lighting and image framing; image 2 is the reverse-side geometry reference of the SAME earbud. Preserve this exact single cable-down earbud, no redesign. True transparent alpha background. Wide 16:9, highest native resolution.\nINVARIANTS: compact smoky translucent black acoustic shell; oval matte charcoal faceplate and thin champagne-gunmetal metal rim; ONE curved soft matte black concha wing on top; ONE shallow smoke-grey silicone acoustic tip; exactly TWO smaller satin-gold dry EEG contact areas flush in the outer skin-facing tip surface, not on a separate metal collar. Exactly TWO larger isolated stimulation pads on the inner wing base. ONE separate recessed rectangular inward-facing PPG sensor window beside those pads. Single bottom black strain relief and black braided cable hanging straight DOWN to the lower frame edge. No over-ear cable. No controller, spare parts or second earbud.\nMATCH Image 1's macro product quality, light direction from upper-left, neutral tone, fine dark silicone texture, metallic edge width and shell proportions. Keep world vertical upright and orbit around the vertical axis only, constant lens distance and camera height; do not tilt, roll or mirror. Same apparent physical scale and product center as Image 1. All of wing, tip and shell in frame. Crisp full-product focus. Empty pixels truly alpha=0, no floor, shadow, glow, backdrop, checkerboard, text, labels, arrows, logos or watermarks.\nSHOT: Exterior face-on starting view: turn the same earbud approximately 40 degrees from Image 1 until the broad oval OUTWARD faceplate looks straight toward the viewer, faceplate fully readable and nearly symmetric; the rear nozzle and tip mostly disappear behind its right edge, the curved silicone wing remains above and bottom cable below. The inner stimulation pads and PPG must be hidden on the rear surface, never added to the outward faceplate.",
+      "referencedImagePaths": [
+        "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-d1868731-2c7c-4609-ae68-3803800353ee.png",
+        "/Users/suvangoel/VNS-earbuds-site/assets/cymba-design-study-v2/03-inner-contact-view.png"
+      ],
+      "source": "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-dd14881f-5df4-41f7-a86e-a553e62720c7.png",
+      "width": 1672,
+      "height": 941,
+      "channels": 4,
+      "hasAlpha": true,
+      "bytes": 802384,
+      "sha256": "caf0dccfa77eb1133baed309648aefb59aa7b8213afa570ccb543c134e2ecd6f",
+      "matchesGeneratedOriginal": true,
+      "alphaRange": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "name": "02-outer-three-quarter",
+      "file": "02-outer-three-quarter.png",
+      "prompt": "Use case: product-mockup.\nCreate a premium photorealistic CGI product video keyframe, on a GENUINELY TRANSPARENT ALPHA background, of exactly one CYMBA concept wired earbud. Reference image 1 is the exterior industrial-design identity, reference image 2 is the SAME PRODUCT's inward surface identity. Rebuild it faithfully with refined precision; do not redesign it.\nSHOT: exterior three-quarter hero view matching reference 1: oval graphite faceplate toward front-left camera, narrow satin champagne-gunmetal rim, compact smoky translucent black shell, short acoustic nozzle and soft shallow smoke-grey silicone tip extending to image right. A single curved matte black silicone concha wing rises from the top. Cable exits the BOTTOM strain relief and hangs down, never over the ear. One short length of black braided cable continues out through the bottom canvas edge. No controller or second earbud.\nIDENTITY: on the hidden inner side of the removable wing base are exactly TWO isolated satin gold stimulation contacts, a distinct recessed rectangular PPG window on the inner shell; TWO much smaller dry EEG contact areas embedded flush in the exterior skin-contact surface of the replaceable silicone tip (only show if physically visible from this angle). No lights or extra electronics.\nCOMPOSITION: landscape 16:9 master, highest available native resolution, ideally 3840x2160. Body centered at x=50%, y=46%, earbud body excluding cable occupies about 48% of canvas height. Whole tip, fin and faceplate within frame; ample empty transparent margins for later explosion. Straight upright world vertical, fixed 85mm macro product lens perspective, no diagonal product tilt. Extremely crisp fine texture, clean engineering seams, precise soft silicone, optically convincing dark translucent resin and restrained metallic rim.\nLIGHT: large neutral softbox upper-left, gentle white fill right and restrained rim highlight; studio light fixed relative to camera; clear readable dark forms on both dark and light web backgrounds. Full-product focus, no blur or bokeh.\nBACKGROUND: actual alpha=0 empty pixels, no floor, no cast shadow, no backdrop, no white rectangle and absolutely no visible checkerboard pattern. No text, labels, numbers, branding, arrows, diagram lines or watermarks. This is a consistent industrial-design visualization, not a claim of a validated internal layout.",
+      "source": "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-d1868731-2c7c-4609-ae68-3803800353ee.png",
+      "referencedImagePaths": [
+        "/Users/suvangoel/VNS-earbuds-site/assets/cymba-design-study-v2/02-outer-three-quarter.png",
+        "/Users/suvangoel/VNS-earbuds-site/assets/cymba-design-study-v2/03-inner-contact-view.png"
+      ],
+      "width": 1672,
+      "height": 941,
+      "channels": 4,
+      "hasAlpha": true,
+      "bytes": 942090,
+      "sha256": "196941627a1db495484560728e29a092dc54fd5503174649711f5d2f35396afc",
+      "matchesGeneratedOriginal": true,
+      "alphaRange": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "name": "03-side-profile",
+      "file": "03-side-profile.png",
+      "prompt": "Use case: product-mockup. Create ONE high-end photorealistic CGI frame for a product orbit video. Image 1 is the exact locked product identity, materials, lighting and image framing; image 2 is the reverse-side geometry reference of the SAME earbud. Preserve this exact single cable-down earbud, no redesign. True transparent alpha background. Wide 16:9, highest native resolution.\nINVARIANTS: compact smoky translucent black acoustic shell; oval matte charcoal faceplate and thin champagne-gunmetal metal rim; ONE curved soft matte black concha wing on top; ONE shallow smoke-grey silicone acoustic tip; exactly TWO smaller satin-gold dry EEG contact areas flush in the outer skin-facing tip surface, not on a separate metal collar. Exactly TWO larger isolated stimulation pads on the inner wing base. ONE separate recessed rectangular inward-facing PPG sensor window beside those pads. Single bottom black strain relief and black braided cable hanging straight DOWN to the lower frame edge. No over-ear cable. No controller, spare parts or second earbud.\nMATCH Image 1's macro product quality, light direction from upper-left, neutral tone, fine dark silicone texture, metallic edge width and shell proportions. Keep world vertical upright and orbit around the vertical axis only, constant lens distance and camera height; do not tilt, roll or mirror. Same apparent physical scale and product center as Image 1. All of wing, tip and shell in frame. Crisp full-product focus. Empty pixels truly alpha=0, no floor, shadow, glow, backdrop, checkerboard, text, labels, arrows, logos or watermarks.\nSHOT: True side-profile view midway between exterior and inner side. Rotate about 45 degrees farther from Image 1 until the broad outward faceplate is almost edge-on at image LEFT, smoky housing in the middle, acoustic nozzle extends horizontally to image RIGHT and silicone tip at the far right. Show physical thickness and seam architecture. Wing is seen side-on above shell. Do not repeat Image 1's broad three-quarter faceplate; this is a substantially more side-on profile.",
+      "referencedImagePaths": [
+        "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-d1868731-2c7c-4609-ae68-3803800353ee.png",
+        "/Users/suvangoel/VNS-earbuds-site/assets/cymba-design-study-v2/03-inner-contact-view.png"
+      ],
+      "source": "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-01c3b64e-e49d-4e60-a962-cbb2690491fa.png",
+      "width": 1672,
+      "height": 941,
+      "channels": 4,
+      "hasAlpha": true,
+      "bytes": 799488,
+      "sha256": "e0042b07af09030061f9103b57f95ccfe6799052631ab08ad6633ec577f4430b",
+      "matchesGeneratedOriginal": true,
+      "alphaRange": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "name": "04-inner-three-quarter",
+      "file": "04-inner-three-quarter.png",
+      "prompt": "Use case: product-mockup. Create ONE high-end photorealistic CGI frame for a product orbit video. Image 1 is the exact locked product identity, materials, lighting and image framing; image 2 is the reverse-side geometry reference of the SAME earbud. Preserve this exact single cable-down earbud, no redesign. True transparent alpha background. Wide 16:9, highest native resolution.\nINVARIANTS: compact smoky translucent black acoustic shell; oval matte charcoal faceplate and thin champagne-gunmetal metal rim; ONE curved soft matte black concha wing on top; ONE shallow smoke-grey silicone acoustic tip; exactly TWO smaller satin-gold dry EEG contact areas flush in the outer skin-facing tip surface, not on a separate metal collar. Exactly TWO larger isolated stimulation pads on the inner wing base. ONE separate recessed rectangular inward-facing PPG sensor window beside those pads. Single bottom black strain relief and black braided cable hanging straight DOWN to the lower frame edge. No over-ear cable. No controller, spare parts or second earbud.\nMATCH Image 1's macro product quality, light direction from upper-left, neutral tone, fine dark silicone texture, metallic edge width and shell proportions. Keep world vertical upright and orbit around the vertical axis only, constant lens distance and camera height; do not tilt, roll or mirror. Same apparent physical scale and product center as Image 1. All of wing, tip and shell in frame. Crisp full-product focus. Empty pixels truly alpha=0, no floor, shadow, glow, backdrop, checkerboard, text, labels, arrows, logos or watermarks.\nSHOT: Reverse inner three-quarter view as the orbit end and closed starting frame for an exploded sequence. Match Image 2's physical inward surface: grey silicone tip points toward lower-left of image, two small EEG pads visibly embedded flush on the tip; TWO larger satin gold stimulation contacts vertically aligned on the removable inward wing base; ONE rectangular dark optical PPG window alongside them on the inner shell; exterior faceplate is hidden behind the shell with only a narrow rim at image right. Curved wing rises upper-left, cable exits bottom. Same product, no extra pads and no holes added. Center the main shell at x=56%, y=56% of canvas, with tip leftward and outer faceplate rightward; leave enough transparent space LEFT and RIGHT for a later horizontal explosion. Body including wing should not exceed 68% of image height. This one must expose the exact inner architecture clearly and beautifully.",
+      "referencedImagePaths": [
+        "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-d1868731-2c7c-4609-ae68-3803800353ee.png",
+        "/Users/suvangoel/VNS-earbuds-site/assets/cymba-design-study-v2/03-inner-contact-view.png"
+      ],
+      "source": "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-c1bb483c-fccc-4971-ab19-cb4292d70faa.png",
+      "width": 1672,
+      "height": 941,
+      "channels": 4,
+      "hasAlpha": true,
+      "bytes": 923422,
+      "sha256": "f1eb069039100f862e24c62f9218e1a300933a546ea5cd44673b5ede69910bdf",
+      "matchesGeneratedOriginal": true,
+      "alphaRange": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "name": "05-explosion-ready",
+      "file": "05-explosion-ready.png",
+      "prompt": "Use case: precise-object-edit. Create a matching keyframe for this exact transparent product-explosion sequence. Image1 is the FULLY EXPLODED endpoint and determines camera, framing, component identity and lighting; image2 is the same earbud assembled, for exterior fit and seams. True alpha transparent background; same landscape16:9 canvas, maximum native detail. Keep main shell's center at approximately x=65%, y=61%, its apparent size, PPG window, bottom strain relief and braided cable position FIXED as in Image1. Camera and light absolutely fixed. Cable hangs down and exits bottom. Exact same smoky black shell, charcoal faceplate, thin champagne rim, grey tip, curved black wing. Do not introduce any new or duplicate parts. EEG pads must move with silicone tip, exactly TWO larger stimulation contacts with removable wing, PPG remains inward-facing on shell. Crisp clean silhouette with smooth antialiasing, no white matte, no red/magenta/cyan color fringe, no isolated pixels. No text, labels, arrows, inset, floor, cast shadow or background pattern.\nFRAME STATE: COMPLETELY ASSEMBLED, zero gaps. Reassemble all the detached parts from Image1 into the closed earbud body, with the tip extending to LEFT from the shell, outer faceplate closed on RIGHT and soft wing seated on TOP. The one audio driver and acoustic nozzle are now correctly inside the housing/tip and must NOT appear as floating parts. No flex tails exposed. Show exactly the assembled geometry of Image2, but at Image1's SMALLER shell size, perspective and screen anchor. This is the wider static starting frame immediately before the explosion; preserve all surrounding empty transparent room that the exploded components will occupy. Do not enlarge or recenter product to fill the canvas. ONE small assembled earbud on the right of the wide frame, with broad empty transparent area to the left.",
+      "referencedImagePaths": [
+        "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-ca65cde5-05b4-4ce1-a1c8-e2a840903574.png",
+        "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-c1bb483c-fccc-4971-ab19-cb4292d70faa.png"
+      ],
+      "source": "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-28886f3c-f640-47d6-995e-5bda7c16b797.png",
+      "width": 1672,
+      "height": 941,
+      "channels": 4,
+      "hasAlpha": true,
+      "bytes": 505894,
+      "sha256": "df1429f5f399d0cd6a20e49414a14389e7ca3c1e1294168a044c32457625da46",
+      "matchesGeneratedOriginal": true,
+      "alphaRange": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "name": "06-partial-explosion",
+      "file": "06-partial-explosion.png",
+      "prompt": "Use case: product-mockup. Generate a NEW clean premium CGI product photograph of ONE CYMBA cable-down earbud in an exploded state. Use the two input images ONLY as visual references for design and component architecture; render from scratch, do not paste pixels, do not reuse their background. Image1 establishes inner skin-facing assembled design. Image2 establishes conceptual internal parts. NO labels, text, controller or insets from Image2.\nTransparent alpha background with perfectly isolated hard product edges and gently antialiased neutral outlines. ZERO floor, shadow, atmosphere, haze, aura, white/grey matte, noise or colored fringe. Empty space is completely transparent including all gaps between parts.\nLandscape16:9 canvas, highest native resolution. Product camera is inner three-quarter, tip toward imageLEFT, faceplate toward imageRIGHT. Large neutral studio softbox upper-left and gentle fill. Matte graphite silicone wing and faceplate, subtle champagne metal rim, smoky black shell, soft darkgrey silicone tip. Refined crisp natural textures, no overly shiny chrome.\nExactly SIX major modules: (1)grey replaceable silicone tip with TWO small flat EEG pads on the OUTER skin-contact surface, (2)one short black nozzle with mesh, (3)ONE compact dynamic audio driver, (4)compact shell with flex and ONE inward-facing optical PPG window, (5)curved removable wing INCLUDING TWO larger stimulation pads on its base, (6)oval outer faceplate with champagne rim. No second driver, duplicate pads, loose rings, battery or processor. Wing is above shell. Main shell center at x=64%,y=60%, shell body is about24% canvas width and35% canvas height. Keep one bottom strain relief and black braided cable attached to shell, exiting lower frame edge, no over-ear routing. Components correctly sized to fit inside this shell, driver smaller than faceplate, no glows.\nAll parts completely in frame with generous transparent margins, top wing with at least10% empty canvas above it. PARTIAL REVEAL FRAME: separate modules only modestly, grouped closely around the shell. The driver is halfway withdrawn from shell towardLEFT, nozzle halfway along its travel, silicone tip fartherLEFT at x=35%, all along same acoustic axis. Faceplate floats immediately toRIGHT at x=83%. Wing rises only a little from its seated position, with a small transparent gap under its connector. Clearly visible modest gaps between neighboring parts, no connected bridges; move each part independently without stretching. The whole arrangement spans roughly x=28% to88%. This is an elegant partially opened product, with plenty of transparent space on farLEFT.",
+      "referencedImagePaths": [
+        "/Users/suvangoel/VNS-earbuds-site/assets/cymba-design-study-v2/03-inner-contact-view.png",
+        "/Users/suvangoel/VNS-earbuds-site/assets/cymba-design-study-v2/06-detailed-exploded.png"
+      ],
+      "previousVersion": {
+        "name": "06-partial-explosion",
+        "prompt": "Use case: precise-object-edit. Create a matching keyframe for this exact transparent product-explosion sequence. Image1 is the FULLY EXPLODED endpoint and determines camera, framing, component identity and lighting; image2 is the same earbud assembled, for exterior fit and seams. True alpha transparent background; same landscape16:9 canvas, maximum native detail. Keep main shell's center at approximately x=65%, y=61%, its apparent size, PPG window, bottom strain relief and braided cable position FIXED as in Image1. Camera and light absolutely fixed. Cable hangs down and exits bottom. Exact same smoky black shell, charcoal faceplate, thin champagne rim, grey tip, curved black wing. Do not introduce any new or duplicate parts. EEG pads must move with silicone tip, exactly TWO larger stimulation contacts with removable wing, PPG remains inward-facing on shell. Crisp clean silhouette with smooth antialiasing, no white matte, no red/magenta/cyan color fringe, no isolated pixels. No text, labels, arrows, inset, floor, cast shadow or background pattern.\nFRAME STATE: PARTIALLY EXPLODED at about40% of the full separation shown in Image1. Draw the same SIX major modules, all recognizable. Move the tip, nozzle and driver substantially closer toward their assembled positions at the shell LEFT; move faceplate toward shell RIGHT; lower wing toward shell TOP. Retain a SMALL visible transparent gap between EACH separated component so the mechanism is starting to open. Main shell and cable cannot move or change size. Preserve same physical size of each part from Image1; change only position/separation. The finished array should be much narrower than Image1, gathered around the fixed shell, leaving more empty transparent area on the far left. Same single dynamic driver, no component duplication. Wing's two contacts stay together, tip's two EEG pads stay together, inward PPG stays on shell.",
+        "referencedImagePaths": [
+          "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-ca65cde5-05b4-4ce1-a1c8-e2a840903574.png",
+          "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-c1bb483c-fccc-4971-ab19-cb4292d70faa.png"
+        ],
+        "source": "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-3cab07e4-ef9d-42af-a8d8-352a2e4d86d6.png"
+      },
+      "source": "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-f4fe9569-e3e8-48ef-9af2-d72c16d4dcc0.png",
+      "width": 1672,
+      "height": 941,
+      "channels": 4,
+      "hasAlpha": true,
+      "bytes": 1068579,
+      "sha256": "0b32eb134b55acf66338eda21f61b815807bc49dea0fd64736b3bf35e21c9f98",
+      "matchesGeneratedOriginal": true,
+      "alphaRange": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "name": "07-full-explosion",
+      "file": "07-full-explosion.png",
+      "prompt": "Use case: product-mockup. Generate a NEW clean premium CGI product photograph of ONE CYMBA cable-down earbud in an exploded state. Use the two input images ONLY as visual references for design and component architecture; render from scratch, do not paste pixels, do not reuse their background. Image1 establishes inner skin-facing assembled design. Image2 establishes conceptual internal parts. NO labels, text, controller or insets from Image2.\nTransparent alpha background with perfectly isolated hard product edges and gently antialiased neutral outlines. ZERO floor, shadow, atmosphere, haze, aura, white/grey matte, noise or colored fringe. Empty space is completely transparent including all gaps between parts.\nLandscape16:9 canvas, highest native resolution. Product camera is inner three-quarter, tip toward imageLEFT, faceplate toward imageRIGHT. Large neutral studio softbox upper-left and gentle fill. Matte graphite silicone wing and faceplate, subtle champagne metal rim, smoky black shell, soft darkgrey silicone tip. Refined crisp natural textures, no overly shiny chrome.\nExactly SIX major modules: (1)grey replaceable silicone tip with TWO small flat EEG pads on the OUTER skin-contact surface, (2)one short black nozzle with mesh, (3)ONE compact dynamic audio driver, (4)compact shell with flex and ONE inward-facing optical PPG window, (5)curved removable wing INCLUDING TWO larger stimulation pads on its base, (6)oval outer faceplate with champagne rim. No second driver, duplicate pads, loose rings, battery or processor. Wing is above shell. Main shell center at x=64%,y=60%, shell body is about24% canvas width and35% canvas height. Keep one bottom strain relief and black braided cable attached to shell, exiting lower frame edge, no over-ear routing. Components correctly sized to fit inside this shell, driver smaller than faceplate, no glows.\nAll parts completely in frame with generous transparent margins, top wing with at least10% empty canvas above it. FULL EXPLOSION END FRAME: all six modules fully separated with unmistakable transparent gaps. Horizontal row: tip centeredx=15%, nozzle x=32%, single driver x=46%, shellx=64%, outerfaceplatex=87%. Wing centeredx=65%,y=25% above shell with clear air gap below shortflex tail. Tip/nozzle/driver/shell/faceplate share an optical axis angled gently through y=61%. Each component separated from its neighbor by a clearly visible transparent gap, no shaft bridges. Keep all part sizes physically consistent and plausible to reassemble. No inset.",
+      "referencedImagePaths": [
+        "/Users/suvangoel/VNS-earbuds-site/assets/cymba-design-study-v2/03-inner-contact-view.png",
+        "/Users/suvangoel/VNS-earbuds-site/assets/cymba-design-study-v2/06-detailed-exploded.png"
+      ],
+      "previousVersion": {
+        "name": "07-full-explosion",
+        "prompt": "Use case: precise-object-edit. Clean the transparent edges of this exact fully exploded earbud product render while preserving the exact composition, camera, part positions, spacing, all part sizes, material textures and lighting. There are unwanted bright red/magenta/orange speckles outside the product silhouette around the tip, driver and shell. Remove ALL floating colored contamination and white matte fringes from transparent areas; preserve the actual intentional copper/gold flex and gold contact pads inside the objects. Empty background must be genuinely alpha0 with clean neutral antialiased product edges. Do not alter a single component or add/remove an actual physical part; one tip with2small electrodes, nozzle,1driver, shell withPPG, detached wing with2large contacts, faceplate and downward cable. Keep the exact generous16:9 framing and full-component visibility. Highest native sharp detail, no text or logos, no backdrop/shadow/checkerboard.",
+        "referencedImagePaths": [
+          "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-ca65cde5-05b4-4ce1-a1c8-e2a840903574.png"
+        ],
+        "previousVersion": {
+          "name": "07-full-explosion",
+          "prompt": "Use case: precise-object-edit. Refine this transparent exploded product render, keeping the exact same six modules, proportions, materials, camera orientation, colors and lighting. This is an animation's FULLY EXPLODED end frame. Change only the spacing so all six modules are truly detached and separated by unmistakable clear transparent air gaps. Several currently touch.\nKeep main shell and downward cable near x=61%, y=60%. Along the horizontal acoustic axis, arrange from left to right: silicone EEG tip, short nozzle/mesh, ONE dynamic audio driver, main shell with inward PPG, oval outer faceplate. There must be a clear EMPTY TRANSPARENT GAP of roughly 4% canvas width between EACH adjacent pair, including specifically nozzle-to-driver AND driver-to-shell. No shaft, wire, bridge or stretched material joins adjacent modules. Attached flex tails may remain short but must stop before the next module. Do not remove, shrink away or merge any component.\nThe removable soft wing with TWO gold stimulation pads floats ABOVE the shell, with at least a 5% canvas-height transparent gap below its flex connector before the shell starts; do not let connector touch shell. Preserve exactly TWO flush EEG pads on the grey tip, exactly TWO stimulation pads on the detached wing, ONE PPG window remaining on inward main shell, ONE driver, ONE faceplate.\nFit full array inside the same wide16:9 canvas, at least5% margin left/right and8% above wing; if needed apply a small uniform zoom-out to the entire assembly, never change relative part scale. Preserve premium sharpness and fine geometry. No text, label, arrows, diagram, floor, shadow, glow or opaque background. Actual alpha transparency.",
+          "referencedImagePaths": [
+            "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-08e4b659-417d-40fb-b17f-4d59628c7305.png"
+          ],
+          "previousVersion": {
+            "name": "07-full-explosion",
+            "prompt": "Use case: precise-object-edit. Edit this exact transparent exploded earbud image ONLY to give it safe spacious framing. Preserve EVERY existing module, silhouette, camera angle, relative positions, texture, contact count, PPG placement, lighting and realistic fine detail. Do not redesign, relabel, mirror or add anything.\nThe top wing is currently almost touching the canvas edge and the overall array too tight. Zoom the entire product array OUT uniformly so it occupies only 80% of its current width and height, maintaining the center at canvas center. Retain exactly the same wide16:9 canvas/aspect and high native resolution. Add empty TRUE TRANSPARENT alpha margins: the uppermost wing must have at least 10% of the full canvas height above it, the leftmost silicone tip at least 10% canvas width to its left, and rightmost faceplate at least 10% canvas width to its right. The black braided cable remains attached to shell and extends straight down to lower frame edge. Everything else must remain visually identical to the input, including precisely ONE driver, one nozzle, one EEG tip, one two-contact wing, inward PPG on shell, and one faceplate. Background stays genuinely transparent, not grey or white, no floor, shadows, checkerboard, labels or text.",
+            "referencedImagePaths": [
+              "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-ad3b0d35-d0a2-4b05-a263-e4683cb55506.png"
+            ],
+            "previousVersion": {
+              "name": "07-full-explosion",
+              "prompt": "Use case: product-mockup. Premium photorealistic CGI transparent product-animation END FRAME. Image 1 is the exact ASSEMBLED earbud whose material identity and inner-three-quarter camera orientation must be retained. Image 2 is an earlier conceptual architecture reference only; do NOT copy its text, controller, inset or inconsistent pad placement.\nCreate a beautifully precise, fully EXPLODED VIEW of this ONE cable-down CYMBA concept earbud. Transparent alpha empty background, landscape 16:9, highest native resolution. The exploded array is centered across the image with at least 7% clear margins, all components completely visible and in crisp focus.\nPRESERVE ORIENTATION: acoustic nozzle/tip axis projects toward image LEFT, outer faceplate toward RIGHT. This is the same inner-facing three-quarter perspective as image1, not a mirrored earbud. Maintain the graphite silicone, smoky translucent shell, subtle champagne rim, fine matte texture and neutral upper-left softbox lighting.\nEXACT PART INVENTORY, one each and physically aligned to fit together:\n1 leftmost: ONE shallow grey silicone tip module, containing exactly TWO small flush satin-gold EEG contact areas on the EXTERIOR skin-contact silicone surface. Move those contacts with this tip; do not leave them on a metal collar. Show a tiny attached conductive flex tail at the rear only.\n2 next: ONE short black acoustic nozzle with metal acoustic mesh, its axis aligned to the tip.\n3 next: ONE realistic compact dynamic audio driver, restrained thin metallic circular housing with diaphragm, aligned on the acoustic axis. No duplicate drivers, no extra stack of invented discs.\n4 center-right at x=60%,y=57%: the ONE compact smoky shell chassis with a small plausible flex interconnect. The dark rectangular PPG optical window and sensor remain visibly mounted on this shell's INWARD/SKIN-facing side. Keep the PPG clearly separate from the driver and wing; it does not become a faceplate light.\n5 hovering just above and slightly left of the shell: ONE independently removable curved soft concha wing INCLUDING its lower inner base with exactly TWO larger isolated satin-gold stimulation contacts and a small flex tail. Show a clean separation from shell. These stimulation contacts occur only on this wing, never duplicated on shell.\n6 rightmost: ONE removed oval graphite outward faceplate with narrow champagne metal rim, separated enough to see inside shell, oriented to fit back onto shell.\nBOTTOM: ONE short bottom strain relief and black braided cable remain ATTACHED to shell chassis, hanging down through bottom canvas edge. No over-ear cable and no controller.\nOnly these six main modules plus attached flex. Express precise elegant spacing and restrained engineering detail, readable small contact pads. The product body modules should have believable relative sizes: silicone tip smaller than shell; driver fits inside shell; faceplate fits the shell. Reserve a clearly readable outline of every component; do not overlap away the EEG pads, stimulation pads or PPG window.\nThis is a coherent conceptual exploded product render for an animation, not a labeled schematic. No labels, text, numerals, arrows, dotted lines, montage, inset, callout, watermark, logo, glows, spark effects, battery or processor block. Absolutely no floor, shadow, opaque background or baked checkerboard. True transparent alpha outside product.",
+              "referencedImagePaths": [
+                "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-c1bb483c-fccc-4971-ab19-cb4292d70faa.png",
+                "/Users/suvangoel/VNS-earbuds-site/assets/cymba-design-study-v2/06-detailed-exploded.png"
+              ],
+              "source": "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-ad3b0d35-d0a2-4b05-a263-e4683cb55506.png"
+            },
+            "source": "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-08e4b659-417d-40fb-b17f-4d59628c7305.png"
+          },
+          "source": "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-ca65cde5-05b4-4ce1-a1c8-e2a840903574.png"
+        },
+        "source": "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-9762d5d3-3231-4569-b44b-8ecb00487679.png"
+      },
+      "source": "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-82c1e73e-8d56-4716-a2d8-ad2c31e27891.png",
+      "width": 1672,
+      "height": 941,
+      "channels": 4,
+      "hasAlpha": true,
+      "bytes": 1201207,
+      "sha256": "ced13afbc52efe744d4bff5ea1c6ee222c2fa614700ab88a3acdb87e20f21435",
+      "matchesGeneratedOriginal": true,
+      "alphaRange": {
+        "min": 0,
+        "max": 255
+      }
+    }
+  ],
+  "review": {
+    "componentInventory": "Reviewed; no major duplicate components or topology issues.",
+    "transparency": "All eight original generated PNGs have alpha and fully transparent pixels.",
+    "continuity": "Conceptual keyframes, not registered frames from one CAD model. Use05→06 for the main reveal and06→07 for the final spacing extension.",
+    "edges": "Minor pale edge fringes remain around portions of some silicone tips; inspect final compositing/video output."
+  }
+}

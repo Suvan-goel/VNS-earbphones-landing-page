@@ -1,0 +1,24 @@
+{
+  "generatedOn": "2026-10-19",
+  "tool": "Built-in ImageGen",
+  "purpose": "Replace remaining technology section SVG diagrams with reference-based product concept imagery.",
+  "assets": [
+    {
+      "file": "in-ear.webp",
+      "references": [
+        "detail.webp",
+        "cafe.webp"
+      ],
+      "source": "exec-f5e99541-448f-4ca5-ab31-0c343dcf69a6.png",
+      "prompt": "Use case: product-mockup\nAsset type: premium wired-earbud website technology section, square editorial close-up.\nPrimary request: Generate a photorealistic close-up of one adult ear wearing the concept earbud from the product reference, replacing a simple ear-placement diagram.\nInput images: Image 1 is the precise product design reference. Image 2 is a reference for how this product is worn, its scale, the natural skin and editorial photography style. Create a new close-up composition, not a collage.\nSubject and composition: side view of a naturally shaped adult ear, hair tucked away, cropped from temple to upper neck. Ear and single earbud are the clear focus, centered with breathing room; no full face. Realistic small in-ear scale. The circular graphite brushed-metal faceplate with thin champagne metal rim sits in the lower concha; the soft dark wing rises into the upper concha. Match the reference product's physical shape, finish and proportions. Black cable exits the bottom of the earpiece and falls straight down toward the neck, never around or behind the top of the ear.\nScene and lighting: softly blurred dark warm charcoal studio backdrop, warm natural skin, soft lateral daylight, subtle warm highlights, detailed skin texture, calm premium editorial product photograph. Sharp ear and device, gentle background blur.\nConstraints: retain the reference product identity, a single ear and single earbud, no exaggerated product size, no extra contacts added, no glowing nerves or anatomy overlays, no arrows, no diagrams, no labels, no logos, no text, no watermark. This is a visual concept for fit, not a validated anatomical illustration. Square framing, high detail."
+    },
+    {
+      "file": "exploded.webp",
+      "references": [
+        "detail.webp"
+      ],
+      "source": "exec-e8d13be8-9fef-4bab-961c-62051c0a86f2.png",
+      "prompt": "Use case: product-mockup\nAsset type: wide premium product website image for an inside-the-earpiece section.\nPrimary request: Create a photorealistic 3D exploded concept render of the single wired earbud in the reference image, with elegant physically plausible separation of its components.\nInput images: Image 1 is the product design reference. Preserve the graphite circular faceplate, thin champagne metal rim, dark sculpted shell, curved silicone stimulation wing and replaceable silicone ear tip.\nComposition: panoramic landscape approximately 2:1. One exploded earbud, six main groups arranged left to right along a gently diagonal assembly axis, all fully inside the image with generous surrounding negative space. From left to right: circular graphite brushed-metal faceplate with champagne rim; small circular audio driver with detailed diaphragm and copper coil; dark sculpted acoustic shell with the short black cable exiting down; curved soft dark contact wing with two subtle metallic contact pads; small optical sensor module with black window; soft grey replaceable silicone ear tip. Keep component sizes plausible relative to the tiny earbud. Consistent three-quarter perspective. Components float close to each other, clearly related as one assembly, with restrained shadows beneath. This is an illustrative industrial design concept, not a manufacturing drawing.\nStyle and lighting: exquisite premium industrial-design CGI with realistic fine materials, graphite anodised metal, brushed warm titanium tone, soft silicone and subtle copper. Seamless near-black charcoal studio background matching #141516, warm broad softbox light, delicate edge highlights, understated and tactile.\nConstraints: no complete extra earbuds, no duplicate components, no gratuitous circuits, no large battery, no over-ear cable loop. No arrows, no leader lines, no numbered labels, no typography, no logos, no watermark. The reference form and materials must remain recognizable."
+    }
+  ]
+}

@@ -1,0 +1,329 @@
+Part: L | Inner housing shell
+Part: L | Outer faceplate
+Part: L | Faceplate carrier
+Part: L | Champagne faceplate bezel
+Part: L | Housing perimeter gasket
+Part: L | Stimulation return insulator
+Part: L | Stimulation return
+Part: L | Stimulation return spring termination
+Part: L | EEG concha reference insulator
+Part: L | EEG concha reference
+Part: L | EEG concha reference spring termination
+Part: L | Reserved DRL contact insulator
+Part: L | Reserved DRL contact
+Part: L | Reserved DRL contact spring termination
+Part: L | PPG window 1
+Part: L | PPG window 2
+Part: L | PPG window 3
+Part: L | PPG opaque optical baffle
+Part: L | PPG Photodiode
+Part: L | PPG Infrared LED 256 Hz
+Part: L | PPG Green fallback LED
+Part: L | Medium silicone cymba fin
+Part: L | Cymba active stimulation electrode
+Part: L | Fin connector contact -8.5
+Part: L | Fin connector contact -6.3
+Part: L | Acoustic nozzle
+Part: L | Tip retention bead
+Part: L | Medium removable silicone tip
+Part: L | EEG canal signal 1
+Part: L | EEG canal signal 2
+Part: L | Acoustic outlet mesh
+Part: L | 8.8 mm speaker basket
+Part: L | Speaker diaphragm
+Part: L | Speaker magnetic motor
+Part: L | Sensor PCB
+Part: L | 6-axis IMU
+Part: L | PPG sensor carrier
+Part: L | Sensor passive 1
+Part: L | Sensor passive 2
+Part: L | Sensor passive 3
+Part: L | Sensor passive 4
+Part: L | Sensor passive 5
+Part: L | Sensor passive 6
+Part: L | Sensor passive 7
+Part: L | Cable termination 1
+Part: L | Cable termination 2
+Part: L | Cable termination 3
+Part: L | Cable termination 4
+Part: L | Cable termination 5
+Part: L | Cable termination 6
+Part: L | Cable termination 7
+Part: L | Cable termination 8
+Part: L | Cable termination 9
+Part: L | Cable termination 10
+Part: L | Cable termination 11
+Part: L | Cable termination 12
+Part: L | Cable strain relief
+Part: L | Strain relief groove -15.3
+Part: L | Strain relief groove -16.6
+Part: L | Strain relief groove -17.9
+Part: L | Electrode lead 1
+Part: L | Electrode lead 2
+Part: L | Electrode lead 3
+Part: R | Inner housing shell
+Part: R | Outer faceplate
+Part: R | Faceplate carrier
+Part: R | Champagne faceplate bezel
+Part: R | Housing perimeter gasket
+Part: R | Stimulation return insulator
+Part: R | Stimulation return
+Part: R | Stimulation return spring termination
+Part: R | EEG concha reference insulator
+Part: R | EEG concha reference
+Part: R | EEG concha reference spring termination
+Part: R | DRL contact insulator
+Part: R | DRL contact
+Part: R | DRL contact spring termination
+Part: R | PPG window 1
+Part: R | PPG window 2
+Part: R | PPG window 3
+Part: R | PPG opaque optical baffle
+Part: R | PPG Photodiode
+Part: R | PPG Infrared LED 256 Hz
+Part: R | PPG Green fallback LED
+Part: R | Medium silicone cymba fin
+Part: R | Cymba active stimulation electrode
+Part: R | Fin connector contact -8.5
+Part: R | Fin connector contact -6.3
+Part: R | Acoustic nozzle
+Part: R | Tip retention bead
+Part: R | Medium removable silicone tip
+Part: R | EEG canal signal 1
+Part: R | EEG canal signal 2
+Part: R | Acoustic outlet mesh
+Part: R | 8.8 mm speaker basket
+Part: R | Speaker diaphragm
+Part: R | Speaker magnetic motor
+Part: R | Sensor PCB
+Part: R | 6-axis IMU
+Part: R | PPG sensor carrier
+Part: R | Sensor passive 1
+Part: R | Sensor passive 2
+Part: R | Sensor passive 3
+Part: R | Sensor passive 4
+Part: R | Sensor passive 5
+Part: R | Sensor passive 6
+Part: R | Sensor passive 7
+Part: R | Cable termination 1
+Part: R | Cable termination 2
+Part: R | Cable termination 3
+Part: R | Cable termination 4
+Part: R | Cable termination 5
+Part: R | Cable termination 6
+Part: R | Cable termination 7
+Part: R | Cable termination 8
+Part: R | Cable termination 9
+Part: R | Cable termination 10
+Part: R | Cable termination 11
+Part: R | Cable termination 12
+Part: R | Cable strain relief
+Part: R | Strain relief groove -15.3
+Part: R | Strain relief groove -16.6
+Part: R | Strain relief groove -17.9
+Part: R | Electrode lead 1
+Part: R | Electrode lead 2
+Part: R | Electrode lead 3
+Part: Hub_Lid_screw_01
+Part: Hub_Lid_screw_02
+Part: Hub_Lid_screw_03
+Part: Hub_Lid_screw_04
+Part: Hub_Lower_chassis
+Part: Hub_Front_lid
+Part: Hub_Perimeter_seal
+Part: Hub_Fine_perimeter_trim
+Part: Hub_Battery_foam
+Part: Hub_Battery_cell_envelope
+Part: Hub_Battery_wrapper_panel
+Part: Hub_Battery_guide_L
+Part: Hub_Battery_guide_R
+Part: Hub_Battery_tab_negative
+Part: Hub_Battery_tab_positive
+Part: Hub_Main_sensor_PCB
+Part: Hub_Stimulation_PCB
+Part: Hub_Sensor_board_standoff
+Part: Hub_Stim_board_standoff
+Part: Hub_EEG_analog_front_end
+Part: Hub_Shared_clock
+Part: Hub_DRL_driver
+Part: Hub_EEG_shield_can
+Part: Hub_Main_processor
+Part: Hub_Radio_reserve
+Part: Hub_Power_management
+Part: Hub_USB_controller
+Part: Hub_Hub_6_axis_IMU
+Part: Hub_Audio_driver
+Part: Hub_Stim_pulse_control
+Part: Hub_Stim_isolated_power
+Part: Hub_Isolation_coupler_allocation
+Part: Hub_Antenna_keepout
+Part: Hub_Representative_antenna_trace
+Part: Hub_Stop_switch
+Part: Hub_Stop_actuator
+Part: Hub_Stop_diaphragm
+Part: Hub_Stop_button_grommet
+Part: Hub_Physical_stop_button
+Part: Hub_Stop_symbol
+Part: Hub_Status_LED
+Part: Hub_Status_light_pipe
+Part: Hub_Haptic_mount
+Part: Hub_Haptic_actuator
+Part: Hub_Haptic_cap
+Part: Hub_USB_C_receptacle_shell
+Part: Hub_USB_C_port_gasket
+Part: Hub_USB_C_tongue
+Part: Hub_USB_C_upper_contact_01
+Part: Hub_USB_C_upper_contact_02
+Part: Hub_USB_C_upper_contact_03
+Part: Hub_USB_C_upper_contact_04
+Part: Hub_USB_C_upper_contact_05
+Part: Hub_USB_C_upper_contact_06
+Part: Hub_USB_C_upper_contact_07
+Part: Hub_USB_C_upper_contact_08
+Part: Hub_USB_C_upper_contact_09
+Part: Hub_USB_C_upper_contact_10
+Part: Hub_USB_C_upper_contact_11
+Part: Hub_USB_C_upper_contact_12
+Part: Hub_USB_C_lower_contact_01
+Part: Hub_USB_C_lower_contact_02
+Part: Hub_USB_C_lower_contact_03
+Part: Hub_USB_C_lower_contact_04
+Part: Hub_USB_C_lower_contact_05
+Part: Hub_USB_C_lower_contact_06
+Part: Hub_USB_C_lower_contact_07
+Part: Hub_USB_C_lower_contact_08
+Part: Hub_USB_C_lower_contact_09
+Part: Hub_USB_C_lower_contact_10
+Part: Hub_USB_C_lower_contact_11
+Part: Hub_USB_C_lower_contact_12
+Part: Hub_Breakaway_receiver_magnet_1
+Part: Hub_Breakaway_plug_magnet_1
+Part: Hub_Breakaway_receiver_magnet_2
+Part: Hub_Breakaway_plug_magnet_2
+Part: Hub_Breakaway_L_pad_01
+Part: Hub_Breakaway_L_pin_01
+Part: Hub_Breakaway_L_pad_02
+Part: Hub_Breakaway_L_pin_02
+Part: Hub_Breakaway_L_pad_03
+Part: Hub_Breakaway_L_pin_03
+Part: Hub_Breakaway_L_pad_04
+Part: Hub_Breakaway_L_pin_04
+Part: Hub_Breakaway_L_pad_05
+Part: Hub_Breakaway_L_pin_05
+Part: Hub_Breakaway_L_pad_06
+Part: Hub_Breakaway_L_pin_06
+Part: Hub_Breakaway_L_pad_07
+Part: Hub_Breakaway_L_pin_07
+Part: Hub_Breakaway_L_pad_08
+Part: Hub_Breakaway_L_pin_08
+Part: Hub_Breakaway_L_pad_09
+Part: Hub_Breakaway_L_pin_09
+Part: Hub_Breakaway_L_pad_10
+Part: Hub_Breakaway_L_pin_10
+Part: Hub_Breakaway_L_pad_11
+Part: Hub_Breakaway_L_pin_11
+Part: Hub_Breakaway_L_pad_12
+Part: Hub_Breakaway_L_pin_12
+Part: Hub_Breakaway_R_pad_01
+Part: Hub_Breakaway_R_pin_01
+Part: Hub_Breakaway_R_pad_02
+Part: Hub_Breakaway_R_pin_02
+Part: Hub_Breakaway_R_pad_03
+Part: Hub_Breakaway_R_pin_03
+Part: Hub_Breakaway_R_pad_04
+Part: Hub_Breakaway_R_pin_04
+Part: Hub_Breakaway_R_pad_05
+Part: Hub_Breakaway_R_pin_05
+Part: Hub_Breakaway_R_pad_06
+Part: Hub_Breakaway_R_pin_06
+Part: Hub_Breakaway_R_pad_07
+Part: Hub_Breakaway_R_pin_07
+Part: Hub_Breakaway_R_pad_08
+Part: Hub_Breakaway_R_pin_08
+Part: Hub_Breakaway_R_pad_09
+Part: Hub_Breakaway_R_pin_09
+Part: Hub_Breakaway_R_pad_10
+Part: Hub_Breakaway_R_pin_10
+Part: Hub_Breakaway_R_pad_11
+Part: Hub_Breakaway_R_pin_11
+Part: Hub_Breakaway_R_pad_12
+Part: Hub_Breakaway_R_pin_12
+Part: Hub_Breakaway_receiver
+Part: Hub_Breakaway_cable_plug
+Part: Hub_Breakaway_strain_relief
+Part: Hub_Rear_spring_clip
+Part: Hub_Clip_fastener_1
+Part: Hub_Clip_fastener_2
+Part: L | 150 mm branch cable
+Part: R | 150 mm branch cable
+Part: Shielded Y-split body
+Part: 1000 mm shielded trunk cable
+Part: Fit kit | XS tip
+Part: Fit kit | XS EEG 1
+Part: Fit kit | XS EEG 2
+Part: Fit kit | S tip
+Part: Fit kit | S EEG 1
+Part: Fit kit | S EEG 2
+Part: Fit kit | M tip
+Part: Fit kit | M EEG 1
+Part: Fit kit | M EEG 2
+Part: Fit kit | L tip
+Part: Fit kit | L EEG 1
+Part: Fit kit | L EEG 2
+Part: Fit kit | XL tip
+Part: Fit kit | XL EEG 1
+Part: Fit kit | XL EEG 2
+Part: Fit kit | S fin
+Part: Fit kit | S cymba electrode
+Part: Fit kit | M fin
+Part: Fit kit | M cymba electrode
+Part: Fit kit | L fin
+Part: Fit kit | L cymba electrode
+Part: Cable section | Insulating jacket cutaway
+Part: Cable section | Stimulation foil shield
+Part: Cable section | Conductor 1.1
+Part: Cable section | Wire insulation 1.1
+Part: Cable section | Conductor 1.2
+Part: Cable section | Wire insulation 1.2
+Part: Cable section | Driven EEG shield
+Part: Cable section | Conductor 2.1
+Part: Cable section | Wire insulation 2.1
+Part: Cable section | Conductor 2.2
+Part: Cable section | Wire insulation 2.2
+Part: Cable section | Conductor 2.3
+Part: Cable section | Wire insulation 2.3
+Part: Cable section | Conductor 2.4
+Part: Cable section | Wire insulation 2.4
+Part: Cable section | Sensor audio group shield
+Part: Cable section | Conductor 3.1
+Part: Cable section | Wire insulation 3.1
+Part: Cable section | Conductor 3.2
+Part: Cable section | Wire insulation 3.2
+Part: Cable section | Conductor 3.3
+Part: Cable section | Wire insulation 3.3
+Part: Cable section | Conductor 3.4
+Part: Cable section | Wire insulation 3.4
+Part: Cable section | Conductor 3.5
+Part: Cable section | Wire insulation 3.5
+Part: Cable section | Conductor 3.6
+Part: Cable section | Wire insulation 3.6
+Export STEP
+Tessellated 0 / 309
+Tessellated 25 / 309
+Tessellated 50 / 309
+Tessellated 75 / 309
+Tessellated 100 / 309
+Tessellated 125 / 309
+Tessellated 150 / 309
+Tessellated 175 / 309
+Tessellated 200 / 309
+Tessellated 225 / 309
+Tessellated 250 / 309
+Timeout (0:02:00)!
+Thread 0x00000001f5921e80 (most recent call first):
+  File "/Users/suvangoel/VNS-earbuds-site/output/cymba-v03-3d/source/export_model.py", line 62 in export_all
+  File "/Users/suvangoel/VNS-earbuds-site/output/cymba-v03-3d/source/build.py", line 18 in <module>
+Tessellated 275 / 309
+Tessellated 300 / 309
+FINISHED 309 parts 1626388 triangles
+Elapsed 139.1 seconds

@@ -1,0 +1,42 @@
+{
+  "generatedOn": "2026-10-19",
+  "tool": "Built-in ImageGen",
+  "purpose": "Enhance hero sharpness and definition while preserving the existing product design, composition, lighting and responsive framing.",
+  "resolutionNote": "ImageGen returned 1672x941 desktop and 1086x1448 portrait renders even when supplied larger target canvases. Enhanced outputs were resampled with Lanczos3 to the delivery dimensions below; these are enhanced, upscaled exports, not native 4K generations.",
+  "assets": [
+    {
+      "file": "hero-campaign-hd.webp",
+      "source": "exec-744cc89a-9a50-409c-9119-ded4de46b222.png",
+      "reference": "hero-campaign-corrected.webp",
+      "referencePreparation": "Original reference resized to 3840x2160 for ImageGen input.",
+      "generatedDimensions": [
+        1672,
+        941
+      ],
+      "exportDimensions": [
+        3840,
+        2160
+      ],
+      "webpQuality": 97,
+      "transparentBackground": false,
+      "prompt": "Use case: precise-object-edit\nPrimary request: High-resolution quality enhancement only of the provided edit target. Reproduce this EXACT existing image with higher native resolution, sharper definition and cleaner fine detail. This is a faithful restoration/up-resolution, not a new composition.\nPreserve unchanged: Every object and silhouette, exact relative positions and scale, camera viewpoint, framing, perspective, graphite earbud geometry, circular radially brushed metal faceplates, thin champagne rims, curved contact wings and their pads, grey silicone eartips with dark marks, black optical windows, braided cable paths, controller with round button and tiny amber light, curved charcoal wall, stone plinth, diagonal light direction and softness, exposure, colors, shadows and dark negative space. Foreground earbud tip remains attached to the REAR of its housing on image-right; rear earbud tip points image-left. Do not move or redesign anything.\nEnhance only rendering fidelity: resolve fine radial metal brushing, subtle satin surfaces, precise existing seams and edges, individual braided cable fibers and restrained stone grain. Reduce blur and compression artifacts while keeping natural photographic gradients and physically soft shadows. Product edges and surface details must be crisp and defined without halos or crunchy sharpening.\nConstraints: No added objects, altered features, changed proportions, rearrangement, new textures/patterns, added text, logos, labels, UI, watermark or borders. Preserve exact design and art direction. Opaque image. Generate at the requested native high resolution.\nAsset type: landscape website hero background. Input image 1 is the exact edit target. Preserve the full 16:9 composition. Output 3840 × 2160 pixels, 4K landscape.\nThe supplied target canvas is already the required full resolution. Retain the input canvas dimensions. Its details are currently soft from enlargement; regenerate fine product surface detail sharply while keeping all original geometry and scene content fixed. Keep the backdrop and stone understated; prioritize precise clean product details. Do not shrink the output."
+    },
+    {
+      "file": "hero-campaign-mobile-hd.webp",
+      "source": "exec-8b7b8e3e-dcb4-410f-95a6-8e05cb01a4f4.png",
+      "reference": "hero-campaign-mobile-corrected.webp",
+      "referencePreparation": "Original reference resized to 2496x3328 for ImageGen input.",
+      "generatedDimensions": [
+        1086,
+        1448
+      ],
+      "exportDimensions": [
+        2496,
+        3328
+      ],
+      "webpQuality": 97,
+      "transparentBackground": false,
+      "prompt": "Use case: precise-object-edit\nPrimary request: High-resolution quality enhancement only of the provided edit target. Reproduce this EXACT existing image with higher native resolution, sharper definition and cleaner fine detail. This is a faithful restoration/up-resolution, not a new composition.\nPreserve unchanged: Every object and silhouette, exact relative positions and scale, camera viewpoint, framing, perspective, graphite earbud geometry, circular radially brushed metal faceplates, thin champagne rims, curved contact wings and their pads, grey silicone eartips with dark marks, black optical windows, braided cable paths, controller with round button and tiny amber light, curved charcoal wall, stone plinth, diagonal light direction and softness, exposure, colors, shadows and dark negative space. Foreground earbud tip remains attached to the REAR of its housing on image-right; rear earbud tip points image-left. Do not move or redesign anything.\nEnhance only rendering fidelity: resolve fine radial metal brushing, subtle satin surfaces, precise existing seams and edges, individual braided cable fibers and restrained stone grain. Reduce blur and compression artifacts while keeping natural photographic gradients and physically soft shadows. Product edges and surface details must be crisp and defined without halos or crunchy sharpening.\nConstraints: No added objects, altered features, changed proportions, rearrangement, new textures/patterns, added text, logos, labels, UI, watermark or borders. Preserve exact design and art direction. Opaque image. Generate at the requested native high resolution.\nAsset type: portrait mobile website hero background. Input image 1 is the exact edit target. Preserve the full 3:4 portrait composition and all existing dark space below the products. Output 2496 × 3328 pixels, high-resolution portrait.\nThe supplied target canvas is already the required full resolution. Retain the input canvas dimensions. Its details are currently soft from enlargement; regenerate fine product surface detail sharply while keeping all original geometry and scene content fixed. Keep the backdrop and stone understated; prioritize precise clean product details. Do not shrink the output."
+    }
+  ]
+}

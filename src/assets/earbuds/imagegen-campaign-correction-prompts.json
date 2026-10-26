@@ -1,0 +1,34 @@
+{
+  "generatedOn": "2026-10-19",
+  "tool": "Built-in ImageGen",
+  "purpose": "Correct the foreground eartip placement while preserving the existing campaign scene.",
+  "assets": [
+    {
+      "file": "hero-campaign-corrected.webp",
+      "source": "exec-7ab345d3-dfaf-44ba-a9bd-ec7011f50403.png",
+      "references": [
+        "hero-campaign.webp",
+        "detail-transparent.webp"
+      ],
+      "transparentBackground": false,
+      "prompt": "Use case: precise-object-edit\nAsset type: existing landscape website hero background, 16:9.\nInput images: Image 1 is the exact scene to edit. Image 2 is a supporting product geometry reference only, demonstrating the correct connection of this earbud's inner shell, rear nozzle and silicone tip.\nPrimary request: Correct ONLY the incorrectly placed silicone eartip on the large foreground earbud at center-left. Preserve this beautiful campaign photograph as closely as possible.\nCritical geometry: The foreground earbud's outward-facing circular brushed-metal faceplate is on its image-left/front side; its dark inner housing and small black optical window extend image-right behind that faceplate. Its grey silicone eartip is currently wrongly attached on the image-LEFT of the faceplate. REMOVE that incorrectly placed grey bulb completely, restoring the stone surface/background it hides. Reattach ONE matching grey silicone tip to a short dark acoustic nozzle projecting from the REAR of the inner housing on the image-RIGHT, following the construction of reference image 2. The nozzle and tip should sit slightly above the downward cable outlet, behind the housing and beyond the optical window, with coherent perspective and natural partial occlusion. Do not connect the tip to the optical window, metal faceplate, contact wing or cable. This foreground earbud should have one tip only.\nPreserve unchanged: the smaller rear earbud (its tip correctly points image-left because that earpiece faces the opposite direction), both graphite circular faceplates and champagne rims, contact wings and pads, braided cables, controller, camera viewpoint, relative scale, product positions, curved charcoal wall, plinth shape and texture, diagonal light, shadows, and the dark empty lower area. Match the original graphite and champagne materials and photographic detail.\nConstraints: minimal local correction, not a redesign or reframe. Natural physical product geometry and credible contact shadows. No text, logos, labels, UI or watermark. Opaque cinematic background photograph, same wide composition."
+    },
+    {
+      "file": "hero-campaign-mobile-corrected.webp",
+      "source": "exec-743abd87-2082-4289-9328-f698e0908e1e.png",
+      "references": [
+        "hero-campaign-mobile.webp",
+        "detail-transparent.webp"
+      ],
+      "transparentBackground": false,
+      "prompt": "Use case: precise-object-edit\nAsset type: existing portrait mobile website hero background, 3:4.\nInput images: Image 1 is the exact scene to edit. Image 2 is a supporting product geometry reference only, demonstrating the correct connection of this earbud's inner shell, rear nozzle and silicone tip.\nPrimary request: Correct ONLY the incorrectly placed silicone eartip on the large foreground earbud at center-left. Preserve this beautiful campaign photograph as closely as possible.\nCritical geometry: The foreground earbud's outward-facing circular brushed-metal faceplate is on its image-left/front side; its dark inner housing and small black optical window extend image-right behind that faceplate. Its grey silicone eartip is currently wrongly attached on the image-LEFT of the faceplate. REMOVE that incorrectly placed grey bulb completely, restoring the stone surface/background it hides. Reattach ONE matching grey silicone tip to a short dark acoustic nozzle projecting from the REAR of the inner housing on the image-RIGHT, following the construction of reference image 2. The nozzle and tip should sit slightly above the downward cable outlet, behind the housing and beyond the optical window, with coherent perspective and natural partial occlusion. Do not connect the tip to the optical window, metal faceplate, contact wing or cable. This foreground earbud should have one tip only.\nPreserve unchanged: the smaller rear earbud (its tip correctly points image-left because that earpiece faces the opposite direction), both graphite circular faceplates and champagne rims, contact wings and pads, braided cables, controller, camera viewpoint, relative scale, product positions, curved charcoal wall, plinth shape and texture, diagonal light, shadows, and the dark empty lower area. Match the original graphite and champagne materials and photographic detail.\nConstraints: minimal local correction, not a redesign or reframe. Natural physical product geometry and credible contact shadows. No text, logos, labels, UI or watermark. Opaque cinematic background photograph, same portrait composition and framing. Keep every product within the existing portrait canvas and preserve all the lower empty space."
+    }
+  ],
+  "derivatives": [
+    {
+      "file": "hero-campaign-social-corrected.jpg",
+      "source": "exec-7ab345d3-dfaf-44ba-a9bd-ec7011f50403.png",
+      "purpose": "Matching Open Graph sharing card"
+    }
+  ]
+}

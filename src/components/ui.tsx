@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 export function Container({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <div className={`mx-auto w-full max-w-[1330px] px-5 sm:px-8 lg:px-12 ${className}`}>{children}</div>;
+  return <div className={`mx-auto w-full max-w-[1330px] px-5 sm:px-8 lg:px-[var(--desktop-gutter)] ${className}`}>{children}</div>;
 }
 
 /**
@@ -28,7 +28,7 @@ export function Headline({
 }
 
 export function CtaButton({
-  href = "#early-access",
+  href = "#signup",
   children,
   location,
   className = "",
@@ -72,11 +72,6 @@ export function StatusTag({ status, className = "" }: { status: keyof typeof sta
 
 export function Eyebrow({ children, className = "" }: { children: ReactNode; className?: string }) {
   return <p className={`eyebrow ${className}`}>{children}</p>;
-}
-
-/** Labels a visual as a concept, so illustrations are never mistaken for product photos. */
-export function ConceptCaption({ children = "Concept render. Industrial design in development.", className = "" }: { children?: ReactNode; className?: string }) {
-  return <p className={`text-[0.8125rem] leading-relaxed text-faint ${className}`}>{children}</p>;
 }
 
 /** Centred section opener: eyebrow, two-tone headline and an optional lede. */

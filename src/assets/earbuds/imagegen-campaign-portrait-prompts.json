@@ -1,0 +1,28 @@
+{
+  "mode": "built-in ImageGen",
+  "intent": "edit",
+  "use_case": "style-reference",
+  "created": "2026-10-19",
+  "source_generated_image": "/Users/suvangoel/.codex/generated_images/01a153ef-6b88-7220-9645-73e3c68dc03f/exec-52b16dde-1fd6-4246-80c1-2ac69a4f44ea.png",
+  "output": "src/assets/earbuds/listening-portrait-campaign-charcoal.webp",
+  "input_images": [
+    {
+      "path": "src/assets/earbuds/listening-portrait-charcoal.webp",
+      "role": "Approved subject identity, clothing and earphone reference"
+    },
+    {
+      "path": "/var/folders/lj/tjbv_1093fj7v46j17k4m_kh0000gn/T/codex-clipboard-58ff48a3-13cc-45cf-93fe-f48652cb7aac.png",
+      "role": "User-supplied art direction for lifted gaze and powerful campaign mood"
+    }
+  ],
+  "transparent_background": false,
+  "background_color_target": "#171416",
+  "export": {
+    "format": "webp",
+    "quality": 93,
+    "resize": false,
+    "width": 1122,
+    "height": 1402
+  },
+  "prompt": "Create a refined premium audio campaign portrait by editing reference image 1 (the CYMBA earbud portrait). Reference image 2 is art direction ONLY for the powerful, composed mood, sculptural light and subtly lifted gaze. Do NOT copy the identity, headphones, outfit or literal composition of reference 2.\n\nSUBJECT IDENTITY AND PRODUCT: Use the SAME Black man from image 1, recognisably the same individual: retain his facial structure, eye shape, nose, full lips, jaw, age, warm brown skin tone, short natural coiled hair and short irregular beard. He wears the same charcoal knit crewneck. Retain the CYMBA graphite wired earphone in his visible left ear: correctly seated small graphite shell with its round brushed-metal disc, delicate champagne rim, soft upper contact wing and thin black cable descending naturally down his chest. It must remain a small in-ear product, no over-ear headphones. Keep realistic product scale and coherent anatomy.\n\nPOSE AND EXPRESSION: Re-photograph him from a subtly lower camera position in a close three-quarter/right-facing profile. Gently lift his chin and direct his eyes slightly upward and outward toward the upper right beyond the frame. His jawline should feel cleanly sculpted and his neck comfortably extended. Serious, quietly confident, focused and absorbed in listening. Neutral closed lips, relaxed brow, no smile, no scowl, no aggression. This is a strong aspirational campaign portrait, not a casual downward-looking headshot. Do not dramatically tilt or distort his head.\n\nLIGHTING AND PHOTOGRAPHIC DIRECTION: Take inspiration from reference 2's controlled low-key studio lighting and deep rich shadows. One large directional key from high camera-right illuminates his eye, forehead, bridge of nose and upper cheek, with the near jaw, neck and sweater falling into rich charcoal shadow. Restrained natural edge separation along the hair; no neon rim light. Keep the earphone's faceplate subtly legible with a gentle metallic highlight. Skin has natural pores and slight irregularities, realistic soft tonal transitions and subtle photographic grain. Avoid glossy CGI skin, hyper-sharpened texture, etched maze-like pore patterns, perfect symmetry, overly smoothed skin, dramatic HDR or illustration.\n\nBACKGROUND AND COMPOSITION: Opaque, very dark warm charcoal seamless studio background around #171416, flat and restrained, with no purple/pink glow, paint, spotlight halo, gradients or transparency. 4:5 vertical portrait, head and upper shoulders visible at the same overall scale as reference 1, a little breathing room above his hair, nose comfortably inside the right edge. The man occupies the left and centre, looking toward the page copy on the right. No borders, typography, logos or extra objects. Preserve a premium, realistic photograph quality with the same person and correctly fitted earbud."
+}

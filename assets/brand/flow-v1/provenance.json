@@ -1,0 +1,10 @@
+{
+  "created": "2026-10-20",
+  "selectedConcept": "../logo-concepts-v3/02-flow.png",
+  "tool": "Built-in image_gen",
+  "prompt": "Use case: background-extraction\nAsset type: production logo asset for the CYMBA website.\nEdit target: attached CYMBA Flow concept board.\nPrimary request: isolate ONLY the large main horizontal logo from the upper half of the reference onto a genuinely transparent background. Preserve the exact approved design: flowing open C symbol at left and lowercase \"cymba\" lettering at right. Keep the shape, curved terminals, proportions, spacing, weight and all five glyphs as close to the original as possible. This is an extraction and cleanup, not a redesign.\nRemove all other samples, all background, and the dark lower-right panel. Output only ONE horizontal logo lockup. Make all logo pixels a uniform flat charcoal #1d1d1f with crisp antialiased edges; remove any paper or mottled texture.\nComposition: logo centered and filling about 90% of a wide landscape canvas; small even transparent margin. Use a sufficiently wide aspect ratio for the logo to remain exactly the same natural proportions as the reference. Do not compress or stretch.\nText (verbatim): \"cymba\". Preserve lowercase lettering and original shapes.\nConstraints: genuinely transparent alpha background, no shadows, no gradients, no new details, no extra symbols, no white rectangle, no checkerboard drawn into the image, no captions or mockups.",
+  "master": "imagegen-transparent-master.png",
+  "exports": "../../../src/assets/brand/",
+  "processing": "Trimmed transparent padding and exported solid charcoal and white fills using the generated alpha, preserving its geometry. The favicon uses the same isolated symbol on a light background.",
+  "format": "Raster PNG assets, not vectors."
+}

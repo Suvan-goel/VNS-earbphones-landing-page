@@ -1,0 +1,15 @@
+{
+  "tool": "Built-in ImageGen",
+  "created": "2026-10-21",
+  "use_case": "photorealistic-natural",
+  "reference": "assets/cymba-locked-design-reference.png",
+  "source": "assets/cymba-cognition-v1/cognition-study-v1.png",
+  "web_asset": "src/assets/earbuds/cognition-study-v1.webp",
+  "prompt": "Use case: photorealistic-natural.\nAsset type: a premium cognitive technology website section image, portrait 4:5 composition.\nInput image: product identity reference ONLY. Preserve this exact CYMBA earbud architecture when worn: compact circular matte graphite outer face, very fine champagne rim, subtle smoked body, plain black soft support wing, thin black braided cable leaving downward. Match plausible real ear scale, do not enlarge it.\nPrimary request: Create a new editorial photograph showing a thoughtful person absorbed in developing a difficult idea, wearing the referenced CYMBA earbud. Cognitive engagement and learning are the subject.\nScene: a quiet contemporary workspace, pale warm-grey plaster wall, one softly blurred pinboard with a few small paper sketches, walnut desk. A woman in her late twenties or thirties with dark hair loosely tucked behind the camera-facing ear, natural skin, simple charcoal knit top, is seated in three-quarter side profile facing right. Head, shoulders, forearms and open notebook visible. She is looking intently down at a notebook with subtle hand-drawn diagrams and notes, pen poised over the page, other hand resting naturally on the notebook. A few understated annotated pages nearby. No headphones or other device. Earbud clearly visible in her camera-facing ear, correctly seated, cable falls naturally down toward desk.\nComposition: medium editorial portrait, not an extreme ear close-up. Head in upper half and notebook in lower quarter, clear calm silhouette, hands and ear in frame with space around them. The person and writing fill the frame with natural breathing room. Keep earbud understated but recognisable. The image will sit to the left of large website text, so no blank text area required.\nLighting: soft but directional window daylight from left, refined shadows, tactile skin, paper and knit texture, restrained charcoal and warm stone palette, premium magazine photography, realistic lens perspective, selective depth of field but earbud and notebook recognizable. Mood: thoughtful, quietly ambitious, engaged in learning; no smile to camera, no closed-eye music enjoyment, no exaggerated distress.\nConstraints: one coherent photorealistic scene, anatomically natural hands and ears, no text overlay, no logos, no watermark, no glowing brain, no neural graphics, no medical setting, no decorative sound waves. Preserve hardware identity from reference.",
+  "export": {
+    "format": "webp",
+    "quality": 90,
+    "effort": 6
+  },
+  "note": "Generated concept visualisation, not a photograph of manufactured hardware."
+}

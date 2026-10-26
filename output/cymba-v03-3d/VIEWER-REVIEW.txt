@@ -1,0 +1,25 @@
+INTERACTIVE VIEWER REVIEW — 21 October 2026, third visual revision
+
+Reviewed the final 309-object / 807,770-triangle model in the local browser.
+Product: exterior and contact faces together, curled fins, visible champagne
+bezels, smoke-grey tips and braided leads cropped at the stage edge.
+Earbud: contact and exterior camera presets, component selection with source,
+role, assumptions and unposed dimensions; 100% exploded construction.
+Hub: assembled and exploded views, slender plain lid, single stop and small
+status lens. Nominal shell dimensions are shown separately from display posing.
+System: all 260 main-assembly objects and complete coiled harness. Verified
+that the portable cable mesh refinement removes the swept-surface sliver.
+Fit kit: five tips and three fins, 21 separate solids, with contact inlays.
+Reset, view selection, camera presets, explosion and component selection work.
+
+The self-contained model-review.html loads its embedded libraries and model;
+reviewed through localhost with no browser console errors or warnings.
+Direct file:// opening was not tested in this browser environment.
+The viewer needs no external images, fonts, textures or model resources.
+CAD download links refer to adjacent local package files.
+Generated content hashes prevent stale model/module caching after regeneration.
+
+Screenshots in this folder show this final geometry and finish. The Product
+and System screenshots were refreshed after the portable cable refinement;
+other views are unchanged by that refinement.
+These are presentation checks, not evidence of physical device performance.

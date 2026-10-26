@@ -1,0 +1,97 @@
+{
+  "checks": [
+    {
+      "label": "desktop mannequin",
+      "expected": 0.5719818376068376,
+      "loaded": "loaded",
+      "rendered": 0.572,
+      "scrollY": 2141.5,
+      "state": "running"
+    },
+    {
+      "label": "reload while scrolled",
+      "expected": 0.5719818376068376,
+      "loaded": "loaded",
+      "rendered": 0.572,
+      "scrollY": 2141.5,
+      "state": "running"
+    },
+    {
+      "label": "back to hero",
+      "expected": 0,
+      "loaded": "loaded",
+      "rendered": 0,
+      "scrollY": 0,
+      "state": "running"
+    },
+    {
+      "label": "scroll to mannequin again",
+      "expected": 0.5608974358974359,
+      "loaded": "loaded",
+      "rendered": 0.5609,
+      "scrollY": 2100,
+      "state": "running"
+    },
+    {
+      "label": "fresh preview after server restart",
+      "expected": 0.5608974358974359,
+      "loaded": "loaded",
+      "rendered": 0.5609,
+      "scrollY": 2100,
+      "state": "running"
+    },
+    {
+      "label": "wheel scrolling after fresh reload",
+      "expected": 0.31303418803418803,
+      "loaded": "loaded",
+      "rendered": 0.3102,
+      "scrollY": 1172,
+      "state": "running"
+    },
+    {
+      "label": "phone repeated scrolling",
+      "expected": 0.5632519139628144,
+      "loaded": "loaded",
+      "rendered": 0.5633,
+      "scrollY": 2472,
+      "state": "running"
+    },
+    {
+      "label": "phone reload while midway",
+      "expected": 0.5632519139628144,
+      "loaded": "loaded",
+      "rendered": 0.5633,
+      "scrollY": 2472,
+      "state": "running"
+    },
+    {
+      "label": "offscreen pause",
+      "expected": 1,
+      "loaded": "loaded",
+      "rendered": 0.9058,
+      "scrollY": 7462.5,
+      "state": "paused"
+    },
+    {
+      "label": "return from offscreen",
+      "expected": 1,
+      "loaded": "loaded",
+      "rendered": 0.9058,
+      "scrollY": 6482,
+      "state": "paused"
+    },
+    {
+      "label": "return from offscreen settled",
+      "expected": 0.5719818376068376,
+      "loaded": "loaded",
+      "rendered": 0.572,
+      "scrollY": 2141.5,
+      "state": "running"
+    }
+  ],
+  "notes": [
+    "Samples taken during smooth scrolling can differ by one frame.",
+    "Paused canvases intentionally retain their last rendered frame until visible again."
+  ],
+  "automatedTests": "6 passed; TypeScript passed"
+}

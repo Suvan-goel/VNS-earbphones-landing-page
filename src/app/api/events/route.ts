@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
-import { storeEvents, type EventRow } from "@/lib/storage";
+import { storeEvents, storageMode, storageUnavailable, type EventRow } from "@/lib/storage";
 import { clientKey, rateLimit } from "@/lib/rate-limit";
 import { cleanAttribution, cleanVariant } from "@/lib/validation";
+import { readJsonObject } from "@/lib/request-json";
 
 export const runtime = "nodejs";
 
@@ -34,13 +35,13 @@ function cleanProps(raw: unknown): EventRow["props"] {
 
 export async function POST(req: Request) {
   if (!rateLimit(`events:${clientKey(req)}`, 120, 60 * 1000)) return new NextResponse(null, { status: 429 });
-  let body: { events?: Incoming[] };
-  try {
-    body = await req.json();
-  } catch {
-    return new NextResponse(null, { status: 400 });
+  const parsed = await readJsonObject(req, 64 * 1024);
+  if (parsed.response) return parsed.response;
+  const { body } = parsed;
+  if (!Array.isArray(body.events) || body.events.some((event) => !event || typeof event !== "object" || Array.isArray(event))) {
+    return NextResponse.json({ status: "error", message: "Invalid events." }, { status: 400 });
   }
-  const rows: EventRow[] = (Array.isArray(body.events) ? body.events : [])
+  const rows: EventRow[] = (body.events as Incoming[])
     .slice(0, 25)
     .filter((e) => typeof e.name === "string" && EVENTS.has(e.name))
     .map((e) => ({
@@ -51,6 +52,12 @@ export async function POST(req: Request) {
       props: cleanProps(e.props),
       attribution: cleanAttribution(e.attribution),
     }));
+  if (storageUnavailable()) {
+    return NextResponse.json({ stored: false, count: 0 }, { status: 503 });
+  }
   const stored = await storeEvents(rows);
+  if (rows.length > 0 && !stored && storageMode() !== "demo") {
+    return NextResponse.json({ stored: false, count: 0 }, { status: 502 });
+  }
   return NextResponse.json({ stored, count: rows.length });
 }

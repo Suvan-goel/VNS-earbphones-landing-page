@@ -1,0 +1,42 @@
+{
+  "bounds": {
+    "min": [
+      -1.64479660987854,
+      -2.299999952316284,
+      -1.7289973497390747
+    ],
+    "max": [
+      1.546055793762207,
+      1.9842829704284668,
+      1.7134356498718262
+    ]
+  },
+  "triangles": 98636,
+  "earCanalsApprox": [
+    [
+      -1.03,
+      0.05,
+      0
+    ],
+    [
+      1.03,
+      0.05,
+      0
+    ]
+  ],
+  "sourceToGltf": {
+    "scale": [
+      0.625,
+      0.72,
+      0.72
+    ],
+    "translation": [
+      0,
+      -0.8716,
+      -0.144
+    ]
+  },
+  "license": "CC BY 3.0",
+  "attribution": "Infinite, 3D Head Scan by Lee Perry-Smith, based on work at triplegangers.com. Smoothed, cropped, tapered and normalized.",
+  "sizeBytes": 377228
+}

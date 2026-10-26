@@ -1,0 +1,26 @@
+{
+  "checkedAt": "2026-10-26T16:40:18.718Z",
+  "checks": {
+    "delayedMannequin": "Earbuds remained ready and moved from progress 0.28 to 0.57 while the head was held in Suspense; head appeared when released.",
+    "stoppedRenderLoop": "With render loop stopped at 0.57, requested 0.84. Viewer recreated the canvas (generation 0 to 1) and rendered 0.84 automatically.",
+    "assetTimeout": "Permanently held head load produced a retry notice; retry reached ready at 0.84.",
+    "contextLoss": "Lost WebGL context; automatically recreated canvas and returned ready at 0.84.",
+    "desktopReload": {
+      "expected": 0.5608974358974359,
+      "rendered": 0.5609,
+      "loaded": true,
+      "newConsoleErrors": []
+    },
+    "phoneScroll": {
+      "viewport": [
+        350,
+        758
+      ],
+      "expected": 0.5617008321493809,
+      "rendered": 0.5617,
+      "loaded": true
+    },
+    "automated": "TypeScript passed; 9 targeted tests passed"
+  },
+  "resizeError": "Fixed queued layout measurement dereferencing cleared React refs."
+}

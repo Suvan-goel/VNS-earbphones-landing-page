@@ -1,0 +1,16 @@
+{
+  "asset": "07-inner-detail.png",
+  "mode": "built-in image_gen",
+  "prompt": "Use case: product-mockup\nAsset type: CYMBA website inner-hardware detail photograph, portrait 4:5.\nInput images: Image 1 is the authoritative locked hardware geometry. Image 2 is a supporting premium material finish reference. Preserve this exact device, not a reinterpretation.\nPrimary request: One beautifully detailed macro product photograph of a SINGLE CYMBA wired earbud viewed from its INNER side, showing the contact surfaces, optical window, silicone tip and plain black stabilization fin. Use the right-hand inner-facing earbud in the first reference as the exact geometry. No controller or second earbud.\nScene/backdrop: warm light-grey studio surface and seamless grey background, quiet pale-champagne/graphite palette, natural soft contact shadow.\nComposition: portrait 4:5, centered earbud with generous edge space, full upper fin visible. Inner side faces the camera at a mild three-quarter angle, nozzle and silicone tip project to the right. Fine black braided cable leaves BOTTOM of housing through short black strain relief and curves gently down out of frame. Entire earpiece is in sharp macro focus.\nProduct identity invariants: compact smoked-translucent charcoal sculpted body. Exactly TWO pale champagne oval contact pads, stacked vertically on the INNER BODY beneath the black curved fin, beside exactly ONE recessed vertical rectangular optical window with dark greenish optical glass. Keep pad count and positions like reference. Curved stabilization fin entirely PLAIN BLACK rubber with absolutely NO metal pads. Preserve the short black acoustic nozzle and soft smoke-grey silicone tip: one dark mesh sound bore, and two slim champagne inset strips on the visible side of the tip exactly as in reference. Thin champagne outer faceplate bezel may be barely visible at far edge. Maintain physical compact proportions.\nLighting/style: premium editorial macro photograph with soft directional upper-left lighting, tactile realistic rubber texture, brushed champagne contacts and restrained polished glass highlights. Gentle falloff on background, crisp product edges, natural shadows, refined and believable.\nAvoid: extra sensors, extra contacts, gold pads on fin, oversized fin, cable over ear, additional wires, split or exploded product, cross-section, people, hands, text, logos, watermark, captions, charging cases, medical effects, diagrams, multiple panels.",
+  "references": [
+    "/Users/suvangoel/VNS-earbuds-site/assets/cymba-locked-design-reference.png",
+    "/Users/suvangoel/VNS-earbuds-site/src/assets/earbuds/hero-premium-pair-v2.webp"
+  ],
+  "generated_source_path": "/Users/suvangoel/.codex/generated_images/01a159ca-f30c-7311-8c54-224260628f5d/exec-d216152b-1ca0-4b1c-b206-0bd79f9fc4fa.png",
+  "qa_notes": [
+    "Inspected generated output visually. Inner body has exactly two vertically stacked champagne oval pads beside one vertical recessed optical window.",
+    "Fin is plain black; silicone tip has two slim champagne insets and one dark bore, matching reference.",
+    "Bottom strain relief and braided cable route downward; compact smoked housing matches locked silhouette.",
+    "Portrait 4:5 requested; output is 1122 x 1402."
+  ]
+}

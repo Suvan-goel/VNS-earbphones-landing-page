@@ -1,0 +1,10 @@
+{
+  "tool": "image_gen.imagegen",
+  "mode": "built-in ImageGen reference edit",
+  "transparent_background": true,
+  "prompt": "Use case: precise-object-edit.\nEdit the supplied transparent CYMBA hero image with just ONE change: make the two long dangling cables gradually come a little closer together as they go down.\n\nKeep the earbuds EXACTLY the same tiny size, same positions, same height, same mirrored worn orientation, same materials and lighting. Preserve the entire 4:3 canvas and all its transparent negative space. Do not enlarge, move or rotate the buds. Keep their camera distance identical.\n\nChange ONLY each cable path below its earbud: starting at the existing sockets around x=35% and x=65%, make both cables curve very gently inward toward the centre as they descend. By their lower fading ends they should lie around x=41% and x=59%, so their bottom gap is about 60% of the gap near the buds. This is a subtle natural convergence, not a V-shape. Smooth relaxed downward arcs, no kink, no outward flare at the bottom. They remain two separate wires, never touching, crossing or joining.\n\nKeep the very long cables reaching the existing bottom region, the same thin braided texture and gradual fade into alpha transparency at their lower ends. Do not shorten the wires. Preserve true transparent background everywhere, no opaque fill, no baked checkerboard, no white fog. No new objects, person, silhouette, controller, splitter, plug, text or logo. All changes outside the cable paths are forbidden.",
+  "reference": "assets/cymba-hero-distant-v2/hero-distant-pair.png",
+  "generated_source": "/Users/suvangoel/.codex/generated_images/01a159ae-5d36-7d93-af69-6cfe1d3fb868/exec-3265f07a-3699-46bd-841d-6110a93df202.png",
+  "saved_png": "assets/cymba-hero-distant-v3/hero-distant-pair.png",
+  "site_asset": "src/assets/earbuds/hero-distant-pair-v3.webp"
+}

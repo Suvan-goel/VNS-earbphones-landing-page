@@ -1,0 +1,41 @@
+{
+  "source": "/Users/suvangoel/Downloads/Meshy_AI_neural_head_bust_fron_1025174930_image-to-3d-texture.glb",
+  "sourceSHA256": "a0aaf13ac3e09c329d820f925e4570874b67a7a78f45fc71b7b8914a91fb5ece",
+  "sourceTriangles": 610126,
+  "exportTriangles": 139875,
+  "webModel": "/Users/suvangoel/VNS-earbuds-site/public/models/cymba-neural-mannequin.glb",
+  "sizeBytes": 2224744,
+  "blend": "/Users/suvangoel/VNS-earbuds-site/output/neural-mannequin/cymba-neural-mannequin.blend",
+  "textureResolution": [
+    2048,
+    2048
+  ],
+  "addedNerveCurves": 47,
+  "palette": "Violet, amethyst and lilac; no pink",
+  "surface": "Opaque honed ivory marble, irregular soft grey/taupe veins",
+  "bounds": {
+    "min": [
+      -1.3884241580963135,
+      -2.4293980598449707,
+      -1.2480921745300293
+    ],
+    "max": [
+      1.386123538017273,
+      1.8519901037216187,
+      1.8240994215011597
+    ]
+  },
+  "earCanalsApprox": [
+    [
+      -1.1475,
+      0.05,
+      0.04
+    ],
+    [
+      1.1475,
+      0.05,
+      0.04
+    ]
+  ],
+  "note": "Schematic artistic surface highlights, not anatomical or measured activation. Original supplied GLB remains unchanged."
+}

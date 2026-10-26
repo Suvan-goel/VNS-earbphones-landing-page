@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createSignup } from "@/lib/storage";
 import { clientKey, rateLimit } from "@/lib/rate-limit";
 import { cleanAttribution, cleanVariant, normaliseEmail } from "@/lib/validation";
+import { readJsonObject } from "@/lib/request-json";
 
 export const runtime = "nodejs";
 
@@ -13,16 +14,13 @@ export async function POST(req: Request) {
     return NextResponse.json({ status: "error", message: "Too many attempts. Please wait a few minutes and try again." }, { status: 429 });
   }
 
-  let body: Record<string, unknown>;
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ status: "error", message: "Invalid request." }, { status: 400 });
-  }
+  const parsed = await readJsonObject(req);
+  if (parsed.response) return parsed.response;
+  const { body } = parsed;
 
   // Honeypot and timing checks. Bots get an honest failure, never a fake success.
-  const startedAt = Number(body.startedAt);
-  if ((typeof body.company === "string" && body.company.length > 0) || !startedAt || Date.now() - startedAt < MIN_FILL_MS) {
+  const startedAt = body.startedAt;
+  if ((typeof body.company === "string" && body.company.length > 0) || typeof startedAt !== "number" || !Number.isFinite(startedAt) || startedAt <= 0 || Date.now() - startedAt < MIN_FILL_MS) {
     return NextResponse.json({ status: "error", message: "We couldn't verify that submission. Please try again." }, { status: 400 });
   }
 
@@ -45,6 +43,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ status: "duplicate" }, { status: 200 });
     case "demo":
       return NextResponse.json({ status: "demo" }, { status: 200 });
+    case "unavailable":
+      return NextResponse.json({ status: "error", message: result.message }, { status: 503 });
     default:
       return NextResponse.json({ status: "error", message: result.message }, { status: 502 });
   }

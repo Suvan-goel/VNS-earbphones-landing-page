@@ -1,0 +1,17 @@
+Reading exact saved geometry in the CAD core
+Read 318 source objects
+Error: Failed to open library "/Library/Frameworks/3DconnexionNavlib.framework/3DconnexionNavlib"! Error: dlopen(/Library/Frameworks/3DconnexionNavlib.framework/3DconnexionNavlib, 0x0005): tried: '/Library/Frameworks/3DconnexionNavlib.framework/3DconnexionNavlib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/Library/Frameworks/3DconnexionNavlib.framework/3DconnexionNavlib' (no such file), '/Library/Frameworks/3DconnexionNavlib.framework/3DconnexionNavlib' (no such file)!
+QOpenGLWidget is not supported on this platform.
+Styled and validated 50 objects
+Styled and validated 100 objects
+Styled and validated 150 objects
+Styled and validated 200 objects
+Styled and validated 250 objects
+Styled and validated 300 objects
+This plugin does not support grabbing the keyboard
+This plugin does not support grabbing the keyboard
+imageFromFramebuffer failed because no context is active
+Saved coloured native document: 309 unchanged shapes
+Saved L earbud STEP with 63 objects
+Saved R earbud STEP with 63 objects
+Finished native styling and individual earbud exports

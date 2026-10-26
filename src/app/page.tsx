@@ -1,18 +1,31 @@
-import { defaultVariant, heroVariants, type HeroVariant } from "@/config/site";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+import type { Metadata } from "next";
+import { closingLine, defaultVariant, heroVariants, reservation, type HeroVariant } from "@/config/site";
 import { storageMode } from "@/lib/storage";
-import { ConsentBanner } from "@/components/ConsentBanner";
+import { reservationsOpen } from "@/lib/stripe";
 import { Nav } from "@/components/Nav";
+import { ProductStage } from "@/components/ProductStage";
 import { RevealObserver } from "@/components/RevealObserver";
+import { SmoothScroll } from "@/components/SmoothScroll";
 import { Tracker } from "@/components/Tracker";
 import { EarlyAccess } from "@/components/sections/EarlyAccess";
-import { Faq, faqs } from "@/components/sections/Faq";
+import { Faq } from "@/components/sections/Faq";
+import { getFaqGroups } from "@/config/faq";
 import { Footer } from "@/components/sections/Footer";
 import { Hero } from "@/components/sections/Hero";
+import { ProductReveal } from "@/components/sections/ProductReveal";
 import { Research } from "@/components/sections/Research";
-import { Opportunity, Sound } from "@/components/sections/Story";
-import { Technology } from "@/components/sections/Technology";
+import { Glance } from "@/components/sections/Glance";
+import { Worn } from "@/components/sections/Worn";
+import { HowItWorks } from "@/components/sections/HowItWorks";
+import heroPoster from "../../public/models/cymba-earbuds-hero-poster.webp";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 /** Hero variant comes from `?v=learn|focus|audio`, falling back to the configured default. */
 function pickVariant(raw: string | string[] | undefined): HeroVariant {
@@ -20,34 +33,67 @@ function pickVariant(raw: string | string[] | undefined): HeroVariant {
   return v && v in heroVariants ? heroVariants[v as HeroVariant["id"]] : heroVariants[defaultVariant];
 }
 
+/**
+ * Serve the web export, keeping the editable Blender source out of the page.
+ * The matching poster covers loading and browsers without WebGL.
+ */
+function findProductModel(): { modelUrl: string | null; posterUrl: string | null } {
+  const dir = join(process.cwd(), "public/models");
+  const modelUrl = existsSync(join(dir, "cymba-earbuds-hero.glb")) ? "/models/cymba-earbuds-hero.glb" : null;
+  // A content-hashed URL invalidates both browser and Next image caches
+  // whenever the live-rendered loading still changes.
+  const posterUrl = heroPoster.src;
+  return { modelUrl, posterUrl };
+}
+
 export default async function Page({ searchParams }: { searchParams: SearchParams }) {
   const v = pickVariant((await searchParams).v);
   const mode = storageMode();
+  const reservations = reservationsOpen();
+  const { modelUrl, posterUrl } = findProductModel();
 
   const faqLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+    mainEntity: getFaqGroups(reservations).flatMap((group) => group.items).map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
   };
 
   return (
     <>
-      <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-ivory focus:px-4 focus:py-2 focus:text-[#141414]">
+      <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-ivory focus:px-4 focus:py-2 focus:text-paper">
         Skip to content
       </a>
-      <Nav cta={v.primaryCta} />
+      <Nav cta={reservations ? reservation.navCta : v.primaryCta} ctaHref={reservations ? reservation.path : "#signup"} />
       <main id="main">
-        <Hero v={v} />
-        <Opportunity />
-        <Sound />
-        <Technology />
-        <Research />
-        <EarlyAccess mode={mode} v={v} />
-        <Faq />
+        {/* Desktop: one pinned product stage carries the first three chapters. Phones and reduced motion get the stacked sections. */}
+        <ProductStage
+          mode={mode}
+          v={v}
+          modelUrl={modelUrl}
+          posterUrl={posterUrl}
+          reservations={reservations}
+          fallback={
+            <>
+              <Hero mode={mode} v={v} modelUrl={modelUrl} posterUrl={posterUrl} reservations={reservations} />
+              <ProductReveal />
+              <HowItWorks modelUrl={modelUrl} posterUrl={posterUrl} />
+              <Worn cta={reservations ? reservation.cta : v.primaryCta} href={reservations ? reservation.path : "#signup"} line={closingLine(reservations)} />
+            </>
+          }
+        />
+        {/* Everything after the stage scrolls over the room, so these sections take the dark treatment. */}
+        <div className="on-scene">
+          <Research />
+          <Glance />
+          <EarlyAccess mode={mode} v={v} reservations={reservations} />
+          <Faq reservations={reservations} />
+        </div>
       </main>
-      <Footer />
-      <ConsentBanner />
+      <div className="on-scene">
+        <Footer />
+      </div>
       <RevealObserver />
+      <SmoothScroll />
       <Tracker variant={v.id} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
     </>

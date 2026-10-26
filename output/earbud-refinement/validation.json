@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "sourceBytes": 2926760,
+  "refinedBytes": 1340032,
+  "maxBoundsDifferenceMetres": 0,
+  "triangles": 110870,
+  "images": [
+    {
+      "name": "Cymba_refined_microfinish",
+      "width": 2048,
+      "height": 2048
+    },
+    {
+      "name": "Cymba_refined_basecolor",
+      "width": 2048,
+      "height": 2048
+    },
+    {
+      "name": "Cymba_refined_roughness_metallic",
+      "width": 2048,
+      "height": 2048
+    }
+  ],
+  "material": "Cymba · smoke silicone / satin champagne / charcoal"
+}

@@ -1,0 +1,32 @@
+CYMBA — transparent product-tour source images
+Generated with the built-in ImageGen tool. All PNGs preserve the original generated alpha channel. Native dimensions are recorded in prompts-and-provenance.json; these files have not been upscaled.
+
+FILES AND ORDER
+00-pair-hero.png — optional pair opening/poster.
+01-outer-face.png — outward face.
+02-outer-three-quarter.png — outward three-quarter.
+03-side-profile.png — side.
+04-inner-three-quarter.png — inner contacts and optical sensor.
+05-explosion-ready.png — wider assembled composition.
+06-partial-explosion.png — intermediate component reveal.
+07-full-explosion.png — final component reveal.
+
+SUGGESTED EDIT
+Use 01 → 02 → 03 → 04 for the orbit. Move from 04 to 05 with a gentle pullback and reframe. Use 05 → 06 for the main reveal; 06 is already substantially opened. Use 06 → 07 for the final spacing extension and settling. 00 is a separate opening/poster; keep a single earbud in the orbit and explosion.
+Generate and review each transition as a separate short shot. These are independently generated visual keyframes, not frames exported from a dimensionally exact 3D model, so check identity, framing and part continuity in the resulting video. The 03 → 04 turn is larger than 01 → 02 and should be slower.
+
+ORBIT MOTION PROMPT
+A slow, controlled product turntable move around the same single CYMBA wired earbud, travelling from the supplied starting view to the supplied ending view. Preserve its exact shell silhouette, curved silicone wing, shallow grey tip, narrow champagne rim, smoky resin and matte graphite materials. The black braided cable always exits downward. Rotate the product physically in 3D; do not mirror, melt, morph or redesign it. Keep a steady neutral studio light and crisp full-product focus. No extra parts, glowing effects, labels or text. Ease gently into and out of the motion.
+
+PULLBACK MOTION PROMPT
+Keep the same inner three-quarter view and the exact assembled earbud. Smoothly pull back and reframe to the wider endpoint so there is space for the component reveal. The earbud stays completely assembled; the cable remains attached below. No rotation, shape changes, sudden scale jumps or extra components.
+
+EXPLOSION MOTION PROMPT
+Begin with the supplied assembled/partly opened earbud and move smoothly to the supplied final exploded reference. Keep a fixed camera while the silicone tip, acoustic nozzle, single audio driver and outer faceplate separate along their assembly axis; the curved stimulation wing lifts above the shell. Each component moves as one rigid object with smooth easing. The two small EEG contact areas travel with the tip. The two larger stimulation contacts travel with the wing. The inward optical sensor remains on the shell. Keep the shell and bottom cable anchored. Preserve component count, material, size and identity. No bursting, fragments, wires stretching between detached parts, duplicate components, labels or text. Finish with a stable hold.
+
+DESIGN STATUS
+The parts depict intended conceptual architecture, not validated engineering or a manufacturing assembly. The PPG is shown in its proposed inward-facing position. Exact packaging and contact geometry remain provisional.
+
+
+EXPORT REVIEW
+All eight files are native 1672 × 941 RGBA PNGs. The broad alpha halo in an earlier reveal draft was rejected. Small pale edge fringes remain on portions of some silicone tips; inspect final video/compositing output, particularly on dark backgrounds.

@@ -1,0 +1,26 @@
+{
+  "webModel": "/Users/suvangoel/VNS-earbuds-site/public/models/cymba-neural-mannequin-growing.glb",
+  "bytes": 3700228,
+  "paths": 1417,
+  "triangles": 300819,
+  "scalpTargets": 2400,
+  "unreachedTargets": 56,
+  "maxPathLength": 3.2847648356919734,
+  "growthRange": [
+    0.018,
+    0.958
+  ],
+  "coverage": [
+    "temples",
+    "frontal scalp",
+    "crown",
+    "occipital scalp",
+    "cervical routes"
+  ],
+  "maxScalpDisplacement": 0.05003529673656663,
+  "sourcePreserved": true,
+  "buildSteps": [
+    "build_growing_network.py (Blender)",
+    "optimize_stone_glb.py --growing-network (Python)"
+  ]
+}

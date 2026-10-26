@@ -1,0 +1,11 @@
+{
+  "createdOn": "2026-10-20",
+  "tool": "Built-in ImageGen",
+  "file": "08-sound.png",
+  "source": "/Users/suvangoel/.codex/generated_images/01a159ae-5d36-7d93-af69-6cfe1d3fb868/exec-e5da771c-7c92-4921-8517-eefb6636c6bc.png",
+  "references": [
+    "/Users/suvangoel/VNS-earbuds-site/assets/cymba-site-imagery-v1/06-outer-detail.png"
+  ],
+  "prompt": "Use case: ads-marketing. Create ONE photorealistic landscape 16:9 premium audio campaign photograph. The input image supplies PRODUCT GEOMETRY ONLY. Completely change camera orientation, placement, backdrop and physical pose.\nONE CYMBA earbud appears suspended in a dark slate studio, positioned in the right half of a wide composition. Its oval satin-black outer faceplate is seen almost STRAIGHT ON rather than the reference three-quarter side angle. Rotate the entire device roughly 70 degrees COUNTERCLOCKWISE in the image plane, so its plain curved black fin points LEFT and slightly up, and the black braided cable emerges from the device's own bottom socket toward the LOWER RIGHT of the frame, forming one broad elegant curve. The device itself may float, but every component remains correctly attached. Faceplate diameter about one third of image height. Plenty of spacious smoky negative space on the left.\nDirectional rim light traces the thin champagne bezel and the smoked resin shell; enough soft fill reveals actual surface texture. Behind it, out-of-focus broad curved bands of reflected soft slate-blue light suggest rhythm without touching or radiating from the earbud. No stage or tabletop, no concentric stair forms, no water, no bright neon, no beams emerging from contacts, no biological or medical graphics. Overall graphite, muted pewter and slight cool blue, premium editorial photograph.\nPreserve compact oval housing and plain black concha fin, short grey silicone tip naturally hidden behind the front view. No invented buttons, grills, contacts on exterior or wireless case. No second bud, human, hands, lettering, brand text or watermark. Distinct FRONT-ON rotated floating pose is essential; do not repeat the reference's upright three-quarter silhouette.",
+  "qa": "Accepted new front-facing rotated single-bud composition, suspended on dark slate with restrained broad light bands; cable lower right, wing left."
+}

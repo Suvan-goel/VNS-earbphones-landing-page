@@ -27,15 +27,15 @@ export function HeroPair({ className = "", p = "hero" }: { className?: string; p
   const ra = place(R, true);
   const split = { x: 640, y: 540 };
 
-  const leftCable = `M ${la.x} ${la.y} C ${la.x + 6} ${la.y - 70}, ${la.x + 70} ${la.y - 84}, ${la.x + 78} ${la.y - 14} C ${la.x + 86} ${la.y + 70}, ${split.x - 24} ${split.y - 170}, ${split.x - 2} ${split.y}`;
-  const rightCable = `M ${ra.x} ${ra.y} C ${ra.x - 6} ${ra.y - 64}, ${ra.x - 56} ${ra.y - 76}, ${ra.x - 62} ${ra.y - 14} C ${ra.x - 68} ${ra.y + 60}, ${split.x + 24} ${split.y - 150}, ${split.x + 2} ${split.y}`;
+  const leftCable = `M ${la.x} ${la.y} C ${la.x + 8} ${la.y + 62}, ${split.x - 24} ${split.y - 70}, ${split.x - 2} ${split.y}`;
+  const rightCable = `M ${ra.x} ${ra.y} C ${ra.x - 8} ${ra.y + 52}, ${split.x + 24} ${split.y - 40}, ${split.x + 2} ${split.y}`;
 
   return (
     <svg
       viewBox="250 20 740 770"
       className={className}
       role="img"
-      aria-label="Concept render: a pair of premium wired in-ear earphones in titanium and graphite. Each earpiece has a slim soft fin carrying two small contacts, and the cable runs to a compact inline control module."
+      aria-label="A pair of premium wired in-ear earphones in titanium and graphite. Each earpiece has a slim soft fin carrying two small contacts, and the cable runs to a compact inline control module."
     >
       <EarpieceDefs p={p} />
       <defs>

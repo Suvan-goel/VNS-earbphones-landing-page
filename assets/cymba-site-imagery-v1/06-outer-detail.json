@@ -1,0 +1,16 @@
+{
+  "asset": "06-outer-detail.png",
+  "mode": "built-in image_gen",
+  "prompt": "Use case: product-mockup\nAsset type: CYMBA website outer-material detail photograph, portrait 4:5.\nInput images: Image 1 is the authoritative locked hardware geometry. Image 2 is a supporting premium material finish reference. Preserve this exact device, not a reinterpretation.\nPrimary request: Create one exceptionally polished photorealistic macro product photograph of a SINGLE CYMBA wired earbud, viewed from its OUTER three-quarter angle, focusing on the faceplate, translucent housing, black stabilization fin and downward cable. Show only the one earbud, no controller or second earpiece.\nScene/backdrop: warm light-grey studio surface, seamless subtle grey background, soft actual contact shadow, restrained graphite/pale-champagne palette.\nComposition: portrait 4:5 framing; device centered slightly above centre, full curved fin visible with generous margin, earbud fills about 60% of width. Faceplate faces camera at a slight angle, smoked shell and soft silicone tip recede to the right. Black braided cable exits only from BOTTOM through short black strain relief and gracefully curves down out of frame. No cable over the fin.\nProduct identity invariants: compact organically sculpted smoked translucent charcoal shell; slightly oval finely microtextured satin-black outer faceplate, subtly domed; thin pale champagne perimeter bezel, preserving proportions of the first image. Curved soft black concha stabilization fin is entirely PLAIN BLACK with no gold pads. No shiny metallic faceplate. Preserve nozzle and smoke-grey silicone tip from reference; do not invent visible interior features. Inner body sensors are hidden at this outer angle. Render only geometrically visible details.\nLighting/style: premium editorial macro photography, softly directional upper-left studio light, fine tactile texture and precise restrained edge highlights, photorealistic materials, gentle depth of field yet entire faceplate and fin sharp. Quiet crafted luxury rather than glossy CGI.\nAvoid: people, hands, text, logos, captions, watermarks, charging cases, wireless format, extra wires, gold pads on the fin, exaggerated geometry, medical effects, exploded views, multiple panels.",
+  "references": [
+    "/Users/suvangoel/VNS-earbuds-site/assets/cymba-locked-design-reference.png",
+    "/Users/suvangoel/VNS-earbuds-site/src/assets/earbuds/hero-premium-pair-v2.webp"
+  ],
+  "generated_source_path": "/Users/suvangoel/.codex/generated_images/01a159ca-f30c-7311-8c54-224260628f5d/exec-c5ff40c7-afb7-4f41-a4a2-efbe1f12a3ec.png",
+  "qa_notes": [
+    "Inspected generated output visually. Outer oval satin textured faceplate, thin champagne bezel, smoked body and plain black curved fin match locked design.",
+    "Bottom strain relief and braided cable route downward. Single earbud and no logos or text.",
+    "Macro composition shows silicone tip in profile with its inward insets correctly occluded at this angle.",
+    "Portrait 4:5 requested; output is 1122 x 1402."
+  ]
+}

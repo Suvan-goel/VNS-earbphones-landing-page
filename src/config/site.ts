@@ -2,23 +2,28 @@
  * Single source of truth for brand, copy experiments, survey options and
  * public links. Everything a non-engineer is likely to change lives here.
  *
- * Brand name is a PLACEHOLDER. Replace `brand` and `product` when the final
- * identity is chosen; nothing else in the codebase hard-codes the name.
+ * Keep the company and product identity here so every page stays consistent.
  */
 
+import { reservation } from "./reservation";
+export { reservation } from "./reservation";
+
+const brand = "cymba";
+const product = brand;
+
 export const site = {
-  brand: "Aurel", // placeholder company name
-  product: "Aurel One", // placeholder product name
-  /** Shown in the footer and privacy page until a legal entity exists. */
-  legalName: "Aurel (working name)",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
-  contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "hello@example.com",
+  brand,
+  product,
+  /** Public business label; this does not assert a registered legal entity. */
+  legalName: brand,
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://trycymba.com",
+  contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "support@muraband.com",
   /** Add real destinations only. Empty entries are not rendered. */
   social: [] as { label: string; href: string }[],
   seo: {
-    title: "Aurel One — Premium earphones, engineered for the way you learn",
+    title: `${product} — The earbuds for cognition`,
     description:
-      "Premium wired earphones with gentle, non-invasive ear stimulation built in. In development. Join early access.",
+      `${product}: targeted nerve stimulation in everyday earbuds, built for focus, learning and memory. Coming soon. Join waitlist.`,
   },
 };
 
@@ -30,47 +35,53 @@ export type HeroVariant = {
   id: "learn" | "focus" | "audio";
   hypothesis: string;
   eyebrow: string;
-  headline: string[]; // each entry renders on its own line on large screens
-  subhead: string;
+  headline: string[];
+  subhead?: string;
   primaryCta: string;
-  secondaryCta: string;
 };
 
 export const heroVariants: Record<HeroVariant["id"], HeroVariant> = {
-  // A. Learning and memory (default)
+  // A. Cognitive outcomes (legacy analytics ID retained)
   learn: {
     id: "learn",
-    hypothesis: "A. Learning and memory",
-    eyebrow: "Introducing Aurel One",
-    headline: ["Earphones engineered", "for the way you learn."],
-    subhead:
-      "Premium wired sound. Gentle ear stimulation built in.",
-    primaryCta: "Join early access",
-    secondaryCta: "How it works",
+    hypothesis: "A. Cognitive outcomes",
+    eyebrow: `${product} · Coming soon`,
+    headline: ["Do your best thinking", "for longer."],
+    primaryCta: "Join the waitlist",
   },
   // B. Focus and deep work
   focus: {
     id: "focus",
     hypothesis: "B. Focus and deep work",
-    eyebrow: "Introducing Aurel One",
-    headline: ["Built for", "your deepest work."],
+    eyebrow: `${product} · Launching soon`,
+    headline: ["For your most", "demanding work."],
     subhead:
-      "Serious isolation. Exceptional sound. Ear stimulation built in.",
-    primaryCta: "Join early access",
-    secondaryCta: "How it works",
+      "Cognitive technology built around deeper focus, faster learning and stronger memory.",
+    primaryCta: "Join waitlist",
   },
-  // C. Premium audio meets neuroscience
+  // C. Cognitive ambition (legacy audio analytics ID retained)
   audio: {
     id: "audio",
-    hypothesis: "C. Premium audio meets neuroscience",
-    eyebrow: "Introducing Aurel One",
-    headline: ["Extraordinary sound.", "Engineered for the mind."],
+    hypothesis: "C. Cognitive ambition",
+    eyebrow: `${product} · Launching soon`,
+    headline: ["More from", "your mind."],
     subhead:
-      "Premium wired earphones with neurotechnology built in.",
-    primaryCta: "Join early access",
-    secondaryCta: "How it works",
+      `Meet ${product}. Targeted nerve stimulation in everyday earbuds, built for focus, learning and memory.`,
+    primaryCta: "Join waitlist",
   },
 };
+
+/* -------------------------------------------------------------------------- */
+/* Reservations                                                                */
+/* -------------------------------------------------------------------------- */
+
+/** Shared copy for the closing portrait in the animated and stacked layouts. */
+export const closingHeadline = ["Made for", "curious minds."] as const;
+
+export const closingLine = (reservations: boolean) =>
+  reservations
+    ? `Reserve your pair for ${reservation.depositLabel}, fully refundable until it ships.`
+    : `For the work you care about and the ideas you want to explore. Be first to hear when ${product} launches.`;
 
 /** Variant served when no `?v=` query parameter is present. */
 export const defaultVariant: HeroVariant["id"] = "learn";
@@ -92,7 +103,7 @@ export const survey = {
   },
   intent: {
     question:
-      "If the benefits were proven and the sound was right, would you buy it?",
+      `How likely would you be to consider buying ${product} when it launches?`,
     options: [
       { value: "very_likely", label: "Very likely" },
       { value: "somewhat_likely", label: "Somewhat likely" },

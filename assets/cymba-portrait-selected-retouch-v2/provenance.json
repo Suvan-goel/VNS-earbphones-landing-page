@@ -1,0 +1,32 @@
+{
+  "tool": "Built-in ImageGen",
+  "created": "2026-10-21",
+  "useCase": "identity-preserve",
+  "request": "User selected the previous grey-background portrait and requested lighting and skin-tone retouch without replacing the subject.",
+  "source": "assets/cymba-portrait-selected-retouch-v2/selected-original.png",
+  "selectedOutput": "/Users/suvangoel/.codex/generated_images/01a15d77-290b-7b21-ba65-334c52d9e198/exec-451fb22f-c1da-4a81-b453-22d32152f9c7.png",
+  "master": "assets/cymba-portrait-selected-retouch-v2/portrait.png",
+  "webAsset": "src/assets/earbuds/listening-portrait-selected-retouch-v2.webp",
+  "dimensions": {
+    "width": 1122,
+    "height": 1402,
+    "native": true
+  },
+  "export": {
+    "format": "webp",
+    "quality": 93,
+    "effort": 6,
+    "resize": false
+  },
+  "assessment": "Conservative retouch retains selected portrait's facial profile, pose, framing and hardware. Softer highlights and less orange skin tone. Some artificial etched skin texture remains when enlarged.",
+  "prompts": [
+    {
+      "selected": false,
+      "prompt": "Use case: identity-preserve.\nEdit target: the attached portrait. This is a careful photographic retouch of THIS EXACT IMAGE, not a new portrait.\n\nPreserve the man's exact facial geometry, identity, expression, gaze, head angle, hair silhouette, beard distribution, clothing, framing, grey backdrop and earbud/cable design and placement. Do not replace the person or alter his proportions.\n\nChange only lighting, colour grading and artificial surface rendering to make the photograph natural:\n- Replace the bright hard golden sheen on forehead, nose and cheek with broad, diffused studio illumination and much softer specular highlights. A large softbox and gentle fill, natural shadow depth, restrained photographic contrast.\n- Correct the orange/copper colour cast to neutral rich brown skin with subtle natural undertones. Preserve his skin depth; do not lighten/whiten him or oversaturate.\n- Substantially reduce local microcontrast/clarity and remove the artificial etched, embossed maze-like lines on skin. Retouch the forehead, cheek and neck into normal skin: mostly smooth at this distance, with sparse very fine irregular pores and gentle tonal variation. Keep a few small natural marks. No plastic airbrush smoothing.\n- Soften the excessively crispy outlined facial hair and curls into normal photographic detail without changing their shape or coverage.\n- Keep the existing grey studio background and black earbud exactly as shown. Subtle natural camera grain, no HDR or sharpening.\n\nThe output must remain recognizably the exact supplied portrait, with the same profile and features, simply better lit, naturally colour-corrected and with restrained realistic skin texture. No composition change, no added objects, no text."
+    },
+    {
+      "selected": true,
+      "prompt": "Photographic retouch of the attached image, keeping EXACTLY this man's face shape, identity, expression, upward gaze, pose, hair outline, earbud, cable, black sweater and grey background.\n\nRepair only the skin rendering. His forehead, temple, cheeks, nose and neck are covered in unnatural embossed labyrinth / squiggle patterns. ERASE that entire artificial texture layer and REPAINT those skin surfaces with smooth, matte, naturally varied brown skin. Keep the same facial geometry and silhouette but do not preserve the original skin pixels. Use broad soft tonal gradients with only a few very subtle real pores and tiny imperfections. Make the texture quiet and almost invisible at this scale. Reduce harsh clarity in the beard without changing its coverage. Softer photographic skin takes priority over sharp detail. Do not add any new pattern or embossing.\n\nMake the skin tone less orange, a neutral warm deep brown, with soft overcast-window-style light. Suppress shiny highlights on cheek, forehead and nose. The result should resemble an understated, softly lit RAW photograph of this SAME person with ordinary matte skin, not an illustration. No facial reconstruction, no change to eyes/nose/lips/jaw proportions, no airbrushed beauty look, no lighting halo. Preserve the exact framing."
+    }
+  ]
+}

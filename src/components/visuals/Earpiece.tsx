@@ -1,5 +1,5 @@
 /**
- * Concept earpiece, drawn as SVG so every section shows the same device.
+ * Schematic concept earpiece used in the anatomical illustration.
  *
  * Local coordinate space is 400 × 400. The piece is a LEFT earpiece seen from
  * the outer face (the side visible when worn). Mirror the group for the right.
@@ -9,7 +9,7 @@
  *  - nozzle + silicone ear tip (behind the shell, pointing into the canal)
  *  - soft silicone fin reaching toward the cymba conchae, carrying two small
  *    stimulation contacts
- *  - detachable cable barrel at the top rear
+ *  - detachable cable barrel exiting below the shell
  */
 
 export function EarpieceDefs({ p }: { p: string }) {
@@ -78,7 +78,7 @@ export function earpiecePoint(x: number, y: number) {
 }
 
 /** Where the cable leaves the barrel, in local (rotated) space. */
-export const CABLE_ANCHOR = earpiecePoint(321, 116);
+export const CABLE_ANCHOR = earpiecePoint(236, 315);
 
 // Unrotated outlines. The whole group is rotated by ROT around PIVOT.
 const SHELL =
@@ -143,9 +143,9 @@ export function Earpiece({
       </g>
 
       {/* detachable cable barrel */}
-      <g transform="rotate(24 306 150)">
-        <rect x="295" y="112" width="22" height="44" rx="7" fill={`url(#${p}-barrel)`} />
-        <rect x="299" y="115" width="14" height="3" rx="1.5" fill="#FFFFFF" opacity="0.14" />
+      <g>
+        <rect x="225" y="263" width="22" height="52" rx="7" fill={`url(#${p}-barrel)`} />
+        <rect x="229" y="303" width="14" height="3" rx="1.5" fill="#FFFFFF" opacity="0.14" />
       </g>
 
       {/* shell */}

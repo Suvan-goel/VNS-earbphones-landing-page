@@ -1,0 +1,23 @@
+{
+  "checkedAt": "2026-10-26T10:30:24.920Z",
+  "environment": "Local development site, Codex in-app Chromium browser",
+  "passed": [
+    "Fresh desktop load reaches the live 3D scene",
+    "Scrolling from hero to mannequin",
+    "Reload at scroll position 2369 resumes the mannequin chapter",
+    "Scrolling offscreen pauses the viewer; returning resumes it",
+    "Phone layout at 390 x 844 shows the mannequin after scrolling",
+    "Compact 1000 x 650 layout releases the hidden stage canvas",
+    "Returning to 1440 x 900 restores the scroll scene with only one active canvas",
+    "Four automatic graphics-context recoveries in one visit",
+    "Graphics restoration after development refresh",
+    "Forced scene failure exposes Restart animation; restart restores the scene",
+    "TypeScript typecheck"
+  ],
+  "limits": [
+    "Not a cross-browser or physical-device certification",
+    "Persistent graphics failure or unsupported WebGL cannot be guaranteed to animate",
+    "Real background-tab suspension was not simulated by the browser tooling"
+  ],
+  "screenshot": "output/scene-reliability-verified.jpg"
+}

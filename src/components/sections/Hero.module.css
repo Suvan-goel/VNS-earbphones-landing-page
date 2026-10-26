@@ -1,0 +1,115 @@
+.hero {
+  overflow: hidden;
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  padding-top: clamp(112px, 10vw, 144px);
+  padding-bottom: 64px;
+}
+
+.copy {
+  width: 100%;
+  max-width: 46rem;
+  min-width: 0;
+  text-align: center;
+}
+
+.intro {
+  width: 100%;
+}
+
+.title {
+  font-size: clamp(2.5rem, 5.4vw, 5rem);
+  font-weight: 500;
+  line-height: 1.03;
+  letter-spacing: -0.05em;
+}
+
+.description {
+  max-width: 28rem;
+  margin: 24px auto 0;
+  color: var(--color-muted);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
+.signup {
+  width: 100%;
+  max-width: 28rem;
+  margin: 36px auto 0;
+}
+
+.media {
+  width: 100%;
+  max-width: 640px;
+  margin-inline: auto;
+  min-width: 0;
+}
+
+.product {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* The live model fills a fixed-height frame; the still takes over only under reduced motion. */
+.live {
+  width: 100%;
+  height: clamp(300px, 52svh, 440px);
+}
+.still { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .live { display: none; }
+  .still { display: block; }
+}
+
+@media (max-width: 639px) {
+  .layout {
+    gap: 24px;
+    padding-top: 96px;
+    padding-bottom: 48px;
+  }
+
+  .title {
+    font-size: clamp(2.125rem, 7.5vw, 3rem);
+  }
+
+  .description {
+    max-width: 29rem;
+    margin: 18px auto 0;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .signup {
+    margin-top: 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 48px;
+    min-height: 100svh;
+    padding-top: 112px;
+  }
+
+  .copy { text-align: left; }
+  .description { margin-inline: 0; }
+  .signup { margin-inline: 0; }
+  .live { height: clamp(360px, 62svh, 640px); }
+  .still { max-height: 72svh; object-fit: contain; }
+}
+
+@media (max-width: 479px) {
+  .layout {
+    padding-top: 88px;
+    gap: 22px;
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "mode": "built-in ImageGen",
+  "created": "2026-10-19",
+  "presentation": "Separate transparent portrait and dark gold paint layers; paint extends outside the portrait frame.",
+  "assets": [
+    {
+      "output": "src/assets/earbuds/listening-portrait-balanced-transparent.webp",
+      "intent": "background-removal",
+      "input": "src/assets/earbuds/listening-portrait-campaign-balanced.png",
+      "source_generated_image": "/Users/suvangoel/.codex/generated_images/01a153ef-6b88-7220-9645-73e3c68dc03f/exec-81418672-25b9-4282-acf2-42644b676ba1.png",
+      "transparent_background": true,
+      "prompt": "Background removal ONLY. Turn the supplied approved portrait into a clean transparent-background cutout with a genuine alpha channel.\n\nRemove every pixel of the dark charcoal studio backdrop around the man. Keep the man and wired earphone unchanged: EXACT same face, expression, upward-right gaze, brow, lips, hair shape and fine curls, beard, natural skin texture, lighting, black knit sweater, tiny graphite earphone, champagne metallic rim, contact wing and thin black cable. The user explicitly approved this expression and face; do not redraw, beautify, make him more serious, relight or otherwise reinterpret him. Preserve the current 4:5 canvas, subject position, scale and crop.\n\nCarefully preserve natural fine hair edges with antialiased partial transparency. Preserve the earbud, cable, shoulders and clothing as fully opaque foreground. Do not leave a dark rectangular background, charcoal halo or colour fringe. Do not make the face or garment translucent. No added glow, no added paint, no shadow, no replacement background, no text. Output only the unchanged man wearing his earphone on genuine transparent alpha."
+    },
+    {
+      "output": "src/assets/earbuds/portrait-gold-paint.webp",
+      "intent": "generate",
+      "source_generated_image": "/Users/suvangoel/.codex/generated_images/01a153ef-6b88-7220-9645-73e3c68dc03f/exec-45f58742-f041-4e18-81bb-14b4107339f0.png",
+      "transparent_background": true,
+      "prompt": "Create one isolated dark antique-gold paint splash on a completely transparent background, for layering behind a premium audio campaign portrait on a black website.\n\nA single broad asymmetrical painterly burst of matte gold-bronze pigment, with the tactile appearance of real paint pressed and swept across a surface. Bold but restrained. Dense, irregular swath in the middle, with rough dry-brush edges, a few small natural splatters and bristle streaks extending outward. Slight diagonal energy from lower-left toward upper-right. A compact roughly oval overall silhouette, wider than it is tall, with no perfect circular ring. Fine irregular holes and translucent ragged edges should reveal the genuine transparent background. The centre may be denser since a head will cover it.\n\nColour palette: deep aged gold and bronze (#76552A, #94703B, #4A341D), restrained muted warm highlights. Dark gold, not bright yellow, not orange, not glitter. Flat tangible painterly texture, not a 3D liquid splash, not metallic chrome, not a lens flare, not a cloud or smoky glow. Maintain enough gold midtone detail to be legible behind a dark-haired portrait on pure black. No black or white backdrop, no frame, no paper surface, no gradients covering the canvas. No person, no silhouette, no product, no text or logo.\n\nUse a landscape 3:2 canvas with at least 10 percent empty transparent margin on all sides, so every irregular paint edge and sparse fleck fits inside. Fully transparent alpha outside the paint."
+    }
+  ],
+  "export": {
+    "format": "webp",
+    "quality": 93,
+    "alphaQuality": 100,
+    "resize": false
+  }
+}

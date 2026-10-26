@@ -1,0 +1,24 @@
+{
+  "mode": "built-in ImageGen",
+  "intent": "edit",
+  "use_case": "background-extraction",
+  "created": "2026-10-19",
+  "source_generated_image": "/Users/suvangoel/.codex/generated_images/01a153ef-6b88-7220-9645-73e3c68dc03f/exec-149be999-e38a-4c39-bb9c-1d9c31d28b70.png",
+  "output": "src/assets/earbuds/listening-portrait-transparent.webp",
+  "input_images": [
+    {
+      "path": "src/assets/earbuds/listening-portrait-charcoal.webp",
+      "role": "Original approved portrait, without pink spill, for background removal"
+    }
+  ],
+  "transparent_background": true,
+  "export": {
+    "format": "webp",
+    "quality": 93,
+    "alphaQuality": 100,
+    "resize": false
+  },
+  "alpha_verification": "Source confirmed to contain an alpha channel with fully and partially transparent pixels; WebP export preserves alpha.",
+  "presentation": "Only section-level rose/plum gradients supply background colour. No image background, no figure glow, no top mask. Bottom clothing fade and narrow 5% side feather soften cropped shoulder edges.",
+  "prompt": "Use case: background-extraction.\nRemove the background from this exact approved photograph and return the man as a clean photographic cutout with a REAL transparent alpha channel.\nPreserve the original foreground as faithfully as possible: identical face, expression, hair silhouette and individual curls, natural skin detail, pose, proportions, graphite earphone, champagne details, cable, charcoal knitted clothing and original lighting. Do not redesign, regenerate, retouch, beautify, relight, recolour or change the subject. Do not change the camera angle or zoom.\nRemove every part of the dark studio backdrop around and between the subject's silhouette. No new backdrop, no tinted glow, no drop shadow, no halo, no floor, no opaque black or grey rectangle, no painted checkerboard. Keep fine hair edges naturally anti-aliased against genuine transparency, without dark fringe or colour spill.\nRetain the original 4:5 canvas, the same subject position, crop and scale. This is only a precise background removal; all visible foreground details and the earphone must remain unchanged."
+}

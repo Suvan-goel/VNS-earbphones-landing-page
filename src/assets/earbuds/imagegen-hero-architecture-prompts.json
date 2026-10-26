@@ -1,0 +1,20 @@
+{
+  "tool": "Built-in ImageGen",
+  "mobileCorrectionPrompt": undefined,
+  "purpose": "Align desktop and mobile hero earbuds with the established CYMBA product architecture.",
+  "referenceAssets": [
+    "technology-contacts-premium.webp",
+    "technology-fit-premium.webp"
+  ],
+  "assets": [
+    {
+      "file": "hero-architecture.webp",
+      "editTarget": "hero-reference.webp",
+      "prompt": "Use case: precise-object-edit\nAsset type: existing desktop website hero background, same wide 1768 × 889 composition.\nInput image 1 is the exact scene to edit. Input image 2 is the authoritative contact-side product structure reference. Input image 3 is the same product seen from its rear/ear-tip side.\nPrimary request: correct ONLY the two earbuds in image 1 to match the actual intended CYMBA One industrial design in images 2 and 3. Keep the entire setting and layout unchanged. This is a precise product-identity correction, not a new campaign scene.\nEach earpiece must be a compact sculpted graphite in-ear acoustic housing, with a circular radially brushed gunmetal OUTER faceplate edged by a very fine pale champagne rim. A slim curved MATTE BLACK SILICONE contact fin rises from the inner shell. Match the fin shape and scale in reference 2, including its slight curved recess. It is NOT a hollow metal horn, decorative rigid loop, or over-ear hook. The fin's skin-facing surface has exactly TWO small, flush, elongated rounded-rectangle PALE CHAMPAGNE contacts: one higher on the fin, one lower at its broad base. Both contacts should be clearly readable on the near earbud; show only physically visible contacts on the farther one, do not add duplicate contacts on the faceplate.\nAdd the small recessed dark optical window on the inner flank BELOW the contact fin and separate from the ear-tip nozzle, as indicated by reference 2. This is a discrete black glass window, no glowing lights, no grille. A short dark acoustic nozzle projects from the REAR/INNER housing, carrying one replaceable smoke-grey silicone ear tip, with the tip shape from the references. The nozzle must not connect to the circular outer faceplate, fin, optical window or cable outlet. The near earbud's silicone tip belongs behind the housing on image-right, the rear earbud's tip points image-left because it faces the opposite direction.\nA separate small strain-relieved cable barrel exits the BOTTOM of each shell, connecting to the existing thin black braided cable. Preserve the controller and cable routes exactly, with plausible connections. No wireless stems, batteries, extra fins or decorative gadgets.\nPlacement invariants: near earbud stays centered around x42%,y46%; farther earbud around x57%,y40%. Match their current footprint and scale as closely as possible. A subtle local rotation is allowed to reveal the near earbud's two contact pads and inner window without moving its position. Preserve the stone plinth, bronze circular background and its lighting, shadows, camera height and lens, controller on right, cables, empty top for navigation and entire dark bottom third for live HTML text. Only update local contact shadows to fit corrected geometry.\nPhotorealistic premium audio macro materials: deeply dark graphite, precise brushed metal, soft matte silicone fin, slightly translucent silicone tip, restrained champagne contacts. NO text, logo, labels, arrows, UI, extra objects or watermark. Opaque background."
+    },
+    {
+      "file": "hero-architecture-mobile.webp",
+      "editTarget": "hero-reference-mobile.webp"
+    }
+  ]
+}

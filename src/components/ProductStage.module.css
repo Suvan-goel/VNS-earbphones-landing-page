@@ -1,0 +1,458 @@
+/* Room for the pair-to-mannequin transition and the live signal sequence. */
+.track {
+  position: relative;
+  height: calc((1 + var(--story-scroll-screens) + var(--portrait-entry-screens)) * 100svh);
+}
+
+.anchor {
+  position: absolute;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  scroll-margin-top: 0;
+}
+.closingThemeAnchor { top: calc((var(--story-scroll-screens) * 0.97 + var(--portrait-entry-screens)) * 100svh); }
+
+.stage {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  height: 100svh;
+  overflow: hidden;
+}
+.storyPane {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
+/* Copy sits in the left column, vertically centred, for every chapter including the hero. */
+/* `translate` is used for placement because motion owns `transform`. */
+.copy {
+  position: absolute;
+  left: clamp(20px, 3.3vw, 48px);
+  top: 50%;
+  width: min(34rem, 42vw);
+  translate: 0 -50%;
+  will-change: opacity, transform;
+}
+.eyebrow {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.045em;
+  color: var(--color-muted);
+}
+
+/* The hero: the chapter column, wider, with the headline at about one and a half times the chapter size. */
+.heroCopy {
+  width: min(40rem, 46vw);
+  top: calc(50% + 8px);
+  max-height: calc(100svh - 160px);
+  padding: 4px;
+  margin: -4px;
+  box-sizing: content-box;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+/* Let expanded form feedback scroll without clipping it inside the pinned stage. */
+.heroCopy:has([role="status"]),
+.heroCopy:has([data-invalid]) {
+  overflow-y: auto;
+}
+.heroTitle {
+  font-size: clamp(3rem, 5.4vw, 5rem);
+  font-weight: 500;
+  line-height: 1.03;
+  letter-spacing: -0.05em;
+}
+.heroText {
+  max-width: 28rem;
+  margin-top: 24px;
+  color: var(--color-muted);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+.heroForm {
+  width: 100%;
+  max-width: 28rem;
+  margin-top: 36px;
+}
+
+.title {
+  margin-top: 16px;
+  font-size: clamp(2.25rem, 3.6vw, 3.25rem);
+}
+.lede {
+  max-width: 30rem;
+  margin-top: 20px;
+  color: var(--color-muted);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+.outcomes,
+.beats {
+  margin: 28px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 18px;
+  max-width: 30rem;
+}
+.itemTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.itemLine {
+  margin-top: 4px;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--color-muted);
+}
+
+/* The product occupies the right half; in the hero it is translated to the centre. */
+/* `.flight` carries the move to the ear so the hero move and the landing stay independent. */
+.flight {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+.media {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
+/* The room: fixed behind the page. The frame is scaled a little so the blur has no soft edges. */
+.scene,
+.sceneStatic {
+  /* The live site's 1248px container, 48px gutters and 4:5 photograph. */
+  --portrait-left: max(48px, calc((100cqw - 1248px) / 2 + 48px));
+  --portrait-width: min(calc((100cqw - 96px - clamp(48px, 6vw, 80px)) / 2), calc((1248px - 96px - clamp(48px, 6vw, 80px)) / 2));
+  --portrait-height: calc(var(--portrait-width) * 1.25);
+  /* Center the resting frame in the space below the 72px navigation. */
+  --portrait-top: max(80px, calc((100svh + 72px - var(--portrait-height)) / 2));
+  container-type: inline-size;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #0b0a09;
+}
+.scene { background: linear-gradient(180deg, #8e8f93 0%, #979b9e 60%, #94999e 100%); }
+.sceneStatic { display: none; }
+.sceneVisual {
+  position: absolute;
+  inset: 0;
+  will-change: filter, transform;
+}
+.sceneExtension {
+  /* Match both shoulder contours to the portrait; offset scales with its width. */
+  position: absolute;
+  left: calc(var(--portrait-left) - var(--portrait-width) * 1.733);
+  top: calc(var(--portrait-top) - var(--portrait-width) * 0.028);
+  width: calc(var(--portrait-width) * 2.985);
+  aspect-ratio: 1810 / 869;
+  mask-image: linear-gradient(180deg, transparent, #000 48px, #000 calc(100% - 64px), transparent), linear-gradient(90deg, #000 calc(100% - 80px), transparent);
+  mask-composite: intersect;
+  filter: saturate(0.5) brightness(1.005);
+}
+.extensionImage { object-fit: fill; }
+.sceneExtensionTail {
+  /* Continue only the sweater's lower fabric on taller windows. */
+  position: absolute;
+  left: calc(var(--portrait-left) - var(--portrait-width) * 1.733);
+  top: calc(var(--portrait-top) + var(--portrait-width) * 1.405 - 96px);
+  bottom: -4px;
+  width: calc(var(--portrait-width) * 2.985);
+  border-bottom: 1px solid transparent;
+  border-image-slice: 0 0 100 0;
+  border-image-width: 0 0 100% 0;
+  mask-image: linear-gradient(180deg, transparent, #000 64px), linear-gradient(90deg, #000 calc(100% - 80px), transparent);
+  mask-composite: intersect;
+  filter: saturate(0.5) brightness(1.005) blur(1px);
+}
+.sceneFrame {
+  position: absolute;
+  z-index: 1;
+  left: var(--portrait-left);
+  top: var(--portrait-top);
+  width: var(--portrait-width);
+  aspect-ratio: 4 / 5;
+  border-radius: 12px;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 var(--portrait-feather, 0px), #000 calc(100% - var(--portrait-feather, 0px)), transparent), linear-gradient(180deg, transparent, #000 var(--portrait-feather, 0px), #000 calc(100% - var(--portrait-feather, 0px)), transparent);
+  mask-composite: intersect;
+  will-change: filter, transform;
+}
+.sceneImage {
+  object-fit: cover;
+  object-position: 50% 20%;
+}
+.sceneShade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(90deg, #0b0a0900 calc(var(--portrait-left) + var(--portrait-width)), #0b0a0966 75%, #0b0a0999 100%);
+}
+.sceneDark {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: #0b0a09;
+}
+.sceneStatic .sceneImage {
+  filter: blur(18px);
+  scale: 1.06;
+  opacity: 0.28;
+}
+.closingPane,
+.closingReveal {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.closingPane { will-change: transform; }
+.closingCopy {
+  left: auto;
+  right: clamp(20px, 3.3vw, 48px);
+  text-align: left;
+}
+.closingCopy a { pointer-events: auto; }
+.copyOnScene {
+  /* Opaque ink prevents the dark duplicate from showing through the light letters. */
+  --color-ivory-soft: #d1d1d3;
+  color: #ffffff;
+}
+.copyOnScene .lede {
+  color: #d1d1d3;
+}
+.sceneCta { margin-top: 28px; }
+.copyOnScene .sceneCta {
+  background: #ffffff;
+  color: #1d1d1f;
+  border-color: #ffffff;
+}
+@media (hover: hover) {
+  .closingPane:has(a:hover) .copyOnScene .sceneCta {
+    background: #e8e8ed;
+    border-color: #e8e8ed;
+  }
+}
+.closingPane:has(a:focus-visible) .copyOnScene .sceneCta {
+  outline: 2px solid #ffffff;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+.closingPane:has(a:active) .copyOnScene .sceneCta {
+  background: #d1d1d6;
+  border-color: #d1d1d6;
+}
+/* The poster covers the canvas until the model is ready, then fades away. */
+.poster {
+  object-fit: contain;
+  transition: opacity 0.5s ease;
+}
+.poster[data-ready] { opacity: 0; }
+
+.caption {
+  position: absolute;
+  right: clamp(20px, 3.3vw, 48px);
+  bottom: 18px;
+  font-size: 0.6875rem;
+  color: var(--color-faint);
+}
+
+/* The stacked sections for phones, short screens and readers who prefer reduced motion. */
+.fallback {
+  display: none;
+  position: relative;
+  z-index: 1;
+  background: var(--color-paper);
+}
+
+/* Align the desktop story with the padded navigation and lower sections. */
+@media (min-width: 1024px) and (min-height: 640px) {
+  .copy {
+    left: var(--desktop-content-edge);
+    width: min(34rem, calc(50% - var(--desktop-content-edge) - 24px));
+  }
+  .heroCopy {
+    width: min(40rem, calc(50% - var(--desktop-content-edge) - 24px));
+  }
+  .closingCopy {
+    left: auto;
+    right: var(--desktop-content-edge);
+  }
+  .caption { right: var(--desktop-content-edge); }
+}
+
+/* Use the stacked layout when a short phone cannot fit both hero actions below the product. */
+@media (prefers-reduced-motion: reduce), (max-height: 559px), (max-width: 1023px) and (max-height: 699px) {
+  .track { display: none; }
+  .scene { display: none; }
+  .sceneStatic { display: block; }
+  .fallback { display: block; }
+}
+
+/* The phone shape: the product in a sticky band across the top, the chapters beneath it. */
+@media (max-width: 1023px), (max-height: 639px) {
+  .flight {
+    left: 0;
+    top: 44px;
+    width: 100%;
+    height: 42svh;
+  }
+  .copy,
+  .heroCopy {
+    left: 20px;
+    right: 20px;
+    top: calc(42svh + 56px);
+    width: auto;
+    translate: none;
+  }
+  .heroTitle {
+    font-size: clamp(2.125rem, 9.2vw, 2.75rem);
+    letter-spacing: -0.03em;
+  }
+  .heroCopy {
+    max-height: calc(58svh - 104px);
+  }
+  .heroText {
+    margin-top: 14px;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  .heroForm {
+    margin-top: 24px;
+  }
+  .title {
+    margin-top: 10px;
+    font-size: clamp(1.75rem, 8vw, 2.375rem);
+  }
+  .lede {
+    margin-top: 12px;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+  .outcomes,
+  .beats {
+    margin-top: 16px;
+    gap: 12px;
+  }
+  .itemTitle { font-size: 1rem; }
+  .itemLine {
+    margin-top: 2px;
+    font-size: 0.875rem;
+    line-height: 1.45;
+  }
+  .scene,
+  .closingPane {
+    --portrait-nav-height: 72px;
+    /* Reserve space for the introduction, navigation and separate action. */
+    --portrait-width: min(calc(100cqw - 48px), 320px, calc((100svh - 400px) * 0.8));
+    --portrait-height: calc(var(--portrait-width) * 1.25);
+    --portrait-left: calc((100cqw - var(--portrait-width)) / 2);
+    --portrait-top: calc((100svh + var(--portrait-nav-height) - var(--portrait-height)) / 2);
+  }
+  .closingPane { container-type: inline-size; }
+  /* Keep the static backdrop full bleed; the scrolling portrait rests as a centered card. */
+  .sceneFrame {
+    left: 0;
+    right: 0;
+    top: 0;
+    width: 100%;
+    height: 70svh;
+    aspect-ratio: auto;
+    border-radius: 0;
+  }
+  .scene .sceneFrame {
+    left: var(--portrait-left);
+    right: auto;
+    top: var(--portrait-top);
+    width: var(--portrait-width);
+    height: var(--portrait-height);
+    aspect-ratio: 4 / 5;
+  }
+  .sceneImage { object-position: 50% 20%; }
+  .sceneShade {
+    z-index: 1;
+    /* A light, broad fade avoids a visible band between the copy and photograph. */
+    background: linear-gradient(180deg,
+      rgb(11 10 9 / calc(var(--portrait-expansion, 0) * 0.2)) 0,
+      rgb(11 10 9 / calc(var(--portrait-expansion, 0) * 0.16)) calc(var(--portrait-top) - 24px),
+      #0b0a0900 calc(var(--portrait-top) + var(--portrait-height) * 0.4)),
+    linear-gradient(180deg,
+      #0b0a0900 calc(var(--portrait-top) + var(--portrait-height) * 0.5),
+      rgb(11 10 9 / calc(var(--portrait-expansion, 0) * 0.8)) calc(var(--portrait-top) + var(--portrait-height) * 0.85),
+      rgb(11 10 9 / var(--portrait-expansion, 0)) calc(var(--portrait-top) + var(--portrait-height)));
+  }
+  .copy.closingCopy {
+    inset: 0;
+    width: auto;
+    translate: none;
+  }
+  .closingIntro {
+    position: absolute;
+    left: max(24px, calc((100% - 320px) / 2));
+    right: max(24px, calc((100% - 320px) / 2));
+    bottom: calc(100% - var(--portrait-top) + 24px);
+  }
+  .closingIntro .title {
+    margin-top: 0;
+    font-size: clamp(1.5rem, 7.5vw, 1.875rem);
+  }
+  .closingIntro .lede {
+    margin-top: 10px;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    text-wrap: pretty;
+  }
+  .copyOnScene .closingIntro { --color-ivory-soft: #f0f0f2; }
+  .copyOnScene .closingIntro .lede { color: #f5f5f7; }
+  .closingCopy .sceneCta {
+    position: absolute;
+    left: 50%;
+    top: calc(var(--portrait-top) + var(--portrait-height) + 24px);
+    translate: -50% 0;
+    margin-top: 0;
+    white-space: nowrap;
+  }
+  .caption {
+    left: 20px;
+    right: auto;
+    bottom: 14px;
+  }
+}
+
+@media (max-width: 767px) {
+  .scene,
+  .closingPane { --portrait-nav-height: 64px; }
+}
+
+/* Short desktop windows keep the stacked story with the wider side margins. */
+@media (min-width: 1024px) and (max-height: 639px) {
+  .copy, .heroCopy {
+    left: var(--desktop-content-edge);
+    right: var(--desktop-content-edge);
+  }
+  .caption { left: var(--desktop-content-edge); }
+}
+
+/* Keep the scroll experience on compact phones while leaving room for both hero actions. */
+@media (max-width: 1023px) and (min-height: 700px) and (max-height: 759px) {
+  .closingIntro .title { font-size: 1.5rem; }
+  .flight { height: 35svh; }
+  .copy, .heroCopy { top: calc(35svh + 56px); }
+  .heroCopy { max-height: calc(65svh - 104px); }
+  .heroTitle { font-size: clamp(2rem, 8.6vw, 2.5rem); }
+  .heroText { margin-top: 10px; font-size: 0.9375rem; }
+  .heroForm { margin-top: 14px; }
+}

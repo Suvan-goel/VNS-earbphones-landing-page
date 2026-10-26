@@ -1,0 +1,143 @@
+HUB GEOMETRY VALIDATION — SLENDER INLINE REVISION
+Date: 2026-10-21
+Units: millimetres and cubic millimetres.
+source/hub.py SHA256: 318ff7794dfbd1ef0c89828aafb748338466cc393de0faee6193a54acae2ad99
+
+CHECKED RESULTS
+130 registered objects, each a nonempty valid CAD solid or solid compound.
+All 360 distinct object pairs with intersecting bounding boxes were checked
+using final transformed solids. Intersections greater than 0.1 mm3: 0.
+The tested final geometry includes the recessed USB-C port and flush stop seal.
+A separate tight-surface bounding check found no unintended enclosure
+protrusions. The rear clip and external breakaway connector/boot are deliberate
+external functional geometry and were excluded from that containment check.
+Tight dimensions use optimalBoundingBox(False): ordinary spline control-hull
+bounds can overestimate the physical geometry after an affine transformation.
+
+FORM AND CONTROLS
+Nominal enclosure: 25 x 77 x 12 mm, centred in X/Y at world (65, -160).
+Plain softly rolled front face; no branding or font dependency.
+Exactly one oval physical stop: 7.058824 x 11.550000 mm in X/Y.
+Stop edge is recessed 0.056 mm; concave centre is recessed 0.240 mm.
+Single small status-light lens; four rear-access enclosure fasteners.
+The dark perimeter seam insert is 0.128 mm high. The rear spring clip remains,
+with 4.0 mm rear extension and a nominal 3.08 mm free jaw gap.
+
+EXPLICIT PROVISIONAL REALLOCATION
+The previous unengineered packaging coordinates are mapped by
+X x 25/34, Y x 77/64, Z x 12/15. This preserves their spatial relationships
+and clearance topology. It does not identify purchasable component packages.
+Every registered object records its final tight allocated envelope in
+allocationEnvelopeMm and its Assumptions text. Any quoted dimensions in the
+clearly labelled construction-reference notes refer to the preceding layout;
+the final allocation fields and metrics supersede those dimensions.
+Derived nominal walls: X 1.029412 mm, Y 1.684375 mm; roof/floor 1.040000 mm.
+Battery reserved envelope: 16.911765 x 40.906250 x 3.520000 mm.
+Main PCB envelope: 20.588235 x 60.156250 x 0.640000 mm.
+Stimulation PCB envelope: 8.382353 x 19.250000 x 0.640000 mm.
+Minimum lateral board-domain gap allocation: 2.426471 mm.
+These gaps are not an electrical isolation or safety certification.
+The surface rolls become elliptical under the packaging map; final semiaxes
+are recorded in the metric block below rather than asserted as circular radii.
+
+INTERFACES PRESERVED OR REBUILT
+USB-C is an explicit exception to the packaging map: its shell dimensions
+9.2 x 6.7 x 3.2 mm (X/Y/Z), tongue and contact pitch are preserved. The aperture
+is precompensated to match; the shell front is recessed 0.05 mm from the
+exterior end plane. The connector is representative, not a selected part.
+The keyed magnetic breakaway still has 24 separate illustrative contacts.
+Its spring-contact layout remains provisional; no pinout or force is implied.
+The flexible boot is another explicit exception: circular 2.5 mm root and
+1.65 mm exit radii, length 7.218750 mm, for a provisional 3.0 mm cable trunk.
+Final cable centreline exit: (65, -107.9046875, 6.16) mm; direction +Y.
+The cable model must use this revised endpoint, replacing the former
+(65, -116.7, 7.7) mm endpoint.
+
+SCOPE
+This is a detailed concept consistent with the specified functional
+architecture and the referenced slender visual form. Package dimensions,
+component sourcing, assembly tolerances, electrical isolation, medical safety,
+contact performance, anatomical fit, environmental sealing and spring life
+remain unvalidated. CAD validity and nominal interference checks do not
+establish a manufacturable or clinically validated device.
+
+FINAL DERIVED METRICS
+{
+  "origin_mm": [
+    65.0,
+    -160.0,
+    0.0
+  ],
+  "nominal_shell_mm": {
+    "width_x": 25,
+    "height_y": 77,
+    "depth_z": 12
+  },
+  "packaging_scale_from_previous_provisional_layout": [
+    0.7352941176470589,
+    1.203125,
+    0.8
+  ],
+  "shell_wall_mm_xy": [
+    1.0294117647058825,
+    1.684375
+  ],
+  "floor_roof_mm": 1.04,
+  "rear_clip_extension_mm": 4.0,
+  "button_extension_mm": -0.05600000000000001,
+  "button_oval_mm_xy": [
+    7.058823529411765,
+    11.549999999999999
+  ],
+  "top_edge_roll_semiaxes_mm_xyz": [
+    0.9558823529411765,
+    1.5640625000000001,
+    1.04
+  ],
+  "bottom_edge_roll_semiaxes_mm_xyz": [
+    0.8455882352941176,
+    1.38359375,
+    0.9199999999999999
+  ],
+  "front_finish": "Plain slender rolled lid; no wordmark; single oval concave stop and small status lens",
+  "battery_envelope_mm": [
+    16.911764705882355,
+    40.90625,
+    3.5200000000000005
+  ],
+  "main_pcb_envelope_mm": [
+    20.58823529411765,
+    60.15625,
+    0.6400000000000001
+  ],
+  "stimulation_pcb_envelope_mm": [
+    8.382352941176471,
+    19.25,
+    0.6400000000000001
+  ],
+  "usb_shell_envelope_mm_xyz": [
+    9.2,
+    6.7,
+    3.2
+  ],
+  "usb_geometry_status": "Dimensions and contact pitch preserved; port relocated to the revised shell",
+  "connector_positions": 24,
+  "connector_pinout_status": "Unspecified; 12 representative positions allocated per ear",
+  "connector_cable_exit_mm": [
+    65,
+    -107.9046875,
+    6.16
+  ],
+  "connector_cable_exit_direction": [
+    0,
+    1,
+    0
+  ],
+  "connector_neck_end_radius_mm": 1.65,
+  "connector_neck_root_radius_mm": 2.5,
+  "connector_neck_length_mm": 7.21875,
+  "provisional_trunk_diameter_mm": 3.0,
+  "minimum_board_domain_gap_mm": 2.4264705882352944,
+  "dimension_status": "Provisional mechanical allocation; dimensions are absent from v0.3",
+  "electronics_status": "Representative component envelope only, not a selected or sourced package; no routing, electrical isolation, safety performance or capacity is established."
+}

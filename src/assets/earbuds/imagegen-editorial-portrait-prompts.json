@@ -1,0 +1,29 @@
+{
+  "mode": "built-in ImageGen",
+  "intent": "generate",
+  "use_case": "photorealistic-natural",
+  "created": "2026-10-19",
+  "source_generated_image": "/Users/suvangoel/.codex/generated_images/01a153ef-6b88-7220-9645-73e3c68dc03f/exec-b8cf2420-0c6f-4042-8cfa-a4c7192f0509.png",
+  "output": "src/assets/earbuds/listening-editorial-portrait.webp",
+  "input_images": [
+    {
+      "path": "/var/folders/lj/tjbv_1093fj7v46j17k4m_kh0000gn/T/codex-clipboard-2830dbd5-e5aa-42ed-9e00-dfda1de92fcb.png",
+      "role": "User-provided mood reference only"
+    },
+    {
+      "path": "src/assets/earbuds/detail-transparent.webp",
+      "role": "Product design reference"
+    },
+    {
+      "path": "src/assets/earbuds/in-ear.webp",
+      "role": "Earphone fit reference"
+    }
+  ],
+  "transparent_background": false,
+  "export": {
+    "format": "webp",
+    "quality": 93,
+    "resize": false
+  },
+  "prompt": "Use case: photorealistic-natural.\nAsset type: premium audio brand website editorial portrait, an opaque photograph with no text.\nPrimary request: Create a new original close portrait inspired by the intimate, textured photographic mood of reference image 1, but with a different person, pose, camera angle and colours. The person wears the CYMBA wired in-ear earphone from product references 2 and 3. This should look like a genuine professional magazine photoshoot, with real imperfect human details and subtle expression, not a beauty render.\nInput images: Image 1 is MOOD ONLY: close human portrait, quiet listening, directional light, rich shadows. Do not reproduce its person, over-ear headphones, red backdrop, text, logo or page layout. Image 2 is product design reference. Image 3 is product fit reference, showing the size and placement in an ear.\nSubject: A man in his early thirties with medium brown skin, short dark slightly untidy hair and ordinary understated features. Some faint blemishes, pores, slight under-eye texture, uneven stubble and tiny natural facial asymmetries. Calm, absorbed expression with relaxed closed lips, no obvious smile, gaze slightly down and to the right of camera. Wearing a plain charcoal knit top. Relaxed shoulders, head upright, not looking up. Three-quarter side view from ear level, with the near ear and the correctly worn earbud clearly visible; include head, neck and upper shoulders.\nProduct: Faithfully follow image 2's small graphite wired in-ear device with its circular brushed metal outer faceplate, fine champagne rim and soft upward contact wing. Follow image 3 for anatomically correct fit: silicone tip goes inside ear canal and is hidden; small stabilising wing rests naturally inside upper concha, not outside ear. Black fine cable exits bottom and falls naturally down neck over clothing. Proper realistic earbud scale; no over-ear headphones, no second duplicate bud on same ear.\nComposition: Portrait 4:5 frame. Tight thoughtful editorial crop, whole visible earbud and upper cable stay in frame. Subject fills most of photograph, face facing toward frame right with a little breathing room. Keep top of hair, chin and shoulder composition intentional. No hands, desk or additional props.\nLighting/background: Directional soft window-like light from front-right, natural falloff into deep shadows on back of head. Matte muted smoky aubergine-grey studio backdrop, very subtle dusty violet in the background, blending toward charcoal. Warm neutral skin tones, restrained colour. Avoid neon or coloured light on skin. Real camera look, 85mm portrait lens, moderate depth of field so both near eye and earbud are in focus. Fine subtle photographic grain, realistic dynamic range with deep blacks.\nConstraints: No retouched plastic skin, no fashion model perfection, no glossy CGI, no illustration, no exaggerated bokeh, no words or branding, no watermark. One continuous professional photographic scene; opaque background, not a cutout."
+}

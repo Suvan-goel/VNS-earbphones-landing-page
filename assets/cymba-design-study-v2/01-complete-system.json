@@ -1,0 +1,17 @@
+{
+  "key": "01-complete-system",
+  "title": "Earbuds and wired controller",
+  "prompt": "Use case: precise-object-edit.\nEdit target: Image 1, the completed two-earbud product render with correct DOWNWARD cable exits. Image 2 is the user's industrial-design reference, for shape and finish only; ignore all over-ear cable routes.\nMake ONLY these engineering-interface corrections while preserving the beautiful layout, compact smoked shells, smooth satin-black oval faceplates, thin champagne rims, soft concha wings, studio lighting, grey background, controller, USB-C plug, and lower cable exit on both earbuds:\n1. On the right earbud, REMOVE the unexplained second hollow circular port on its left flank. Replace it with a continuous smooth smoked shell. There must be exactly ONE acoustic nozzle per earbud, the one that carries the silicone tip.\n2. Replace the exposed rigid gold EEG collar around the right nozzle with a subtle dark insulated nozzle. Show dry EEG contacts as TWO slim, separated flush conductive areas embedded in the outer canal-contact portion of the REPLACEABLE SOFT SILICONE TIP ASSEMBLY. Preserve the central sound bore and comfortable grey silicone lip. This is a representative interface concept, not a fixed electrode count.\n3. Keep the two champagne stimulation pads together on the inner concha wing and keep ONE separate inward-facing PPG optical window beside them on the right earbud. Do not add another PPG sensor to the left earbud.\nNo cables above the earbuds or behind ears. No extra ports, text, labels, new components, large chips, glow, or brand markings. Keep all other details and framing unchanged. Highest native detail.",
+  "source": "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-3daab76f-098e-4c5f-b08e-770a685c53ab.png",
+  "references": [
+    "/Users/suvangoel/VNS-earbuds-site/assets/cymba-design-study-v2/01-complete-system.png",
+    "/Users/suvangoel/VNS-earbuds-site/assets/cymba-design-study-v2/design-reference.png"
+  ],
+  "tool": "Built-in ImageGen",
+  "revision": "Corrected from recovered product blueprint",
+  "original": "01-complete-system.png",
+  "web": "01-complete-system.webp",
+  "width": 1448,
+  "height": 1086,
+  "upscaled": false
+}

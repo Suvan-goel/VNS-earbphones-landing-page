@@ -1,0 +1,96 @@
+.layout { width: 100%; max-width: 960px; }
+
+.panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+  border: 1px solid #dedee3;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 14px 40px -28px #20202b30, 0 2px 6px #20202b03;
+}
+
+.summary { padding: 40px; background: #f0f0f2; }
+.eyebrow {
+  color: #686870;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+.title {
+  margin-top: 12px;
+  font-size: 2.5rem;
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  line-height: 1.12;
+}
+.subtitle { margin-top: 12px; color: #626269; font-size: 0.9375rem; line-height: 1.5; }
+
+.visual { position: relative; height: 182px; margin: 10px 0 24px; }
+.visual img {
+  display: block;
+  width: 280px;
+  height: 182px;
+  max-width: 100%;
+  margin-inline: auto;
+  object-fit: cover;
+  object-position: center 38%;
+  mask-image: linear-gradient(#000 70%, transparent 98%);
+}
+
+.deposit {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding-top: 24px;
+  border-top: 1px solid #dcdce1;
+}
+.depositLabel { font-size: 0.875rem; font-weight: 500; line-height: 1.4; }
+.refundable { margin-top: 5px; color: #626269; font-size: 0.8125rem; line-height: 1.5; }
+.amount { flex-shrink: 0; font-size: 2rem; font-weight: 500; letter-spacing: -0.045em; line-height: 1; text-align: right; }
+.amount span { display: block; margin-top: 8px; color: #6d6d75; font-size: 0.625rem; font-weight: 500; letter-spacing: 0.08em; }
+
+.benefits { display: grid; gap: 10px; margin-top: 24px; color: #49494f; font-size: 0.8125rem; line-height: 1.5; }
+.benefits li { display: flex; align-items: flex-start; gap: 9px; }
+.benefits svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; color: #565c55; }
+.details { margin-top: 22px; color: #686870; font-size: 0.8125rem; line-height: 1.6; }
+
+.checkout { display: flex; align-items: center; padding: 40px; border-left: 1px solid #e3e3e7; }
+.checkoutInner { width: 100%; }
+.formTitle { font-size: 1.25rem; font-weight: 500; line-height: 1.4; letter-spacing: -0.025em; }
+.formIntro { margin: 8px 0 30px; color: #686870; font-size: 0.875rem; line-height: 1.6; }
+.notice { margin-bottom: 24px; padding: 12px 14px; border: 1px solid #e2e2e6; border-radius: 8px; background: #f7f7f8; color: #4c4c54; font-size: 0.8125rem; line-height: 1.6; }
+
+.waitlist { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 7px; margin-top: 24px; color: #686870; font-size: 0.8125rem; line-height: 1.6; }
+.waitlist a { color: #36363b; font-weight: 500; }
+.waitlist a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.waitlist span { padding-left: 4px; }
+
+@media (max-width: 839px) {
+  .summary, .checkout { padding: 32px; }
+  .title { font-size: 2.125rem; }
+  .deposit { gap: 12px; }
+}
+
+@media (max-width: 699px) {
+  .layout { max-width: 480px; }
+  .panel { grid-template-columns: 1fr; border-radius: 16px; }
+  .summary, .checkout { padding: 28px; }
+  .summary { position: relative; }
+  .visual { display: none; }
+  .title { margin-top: 10px; }
+  .subtitle { margin-top: 10px; font-size: 0.875rem; }
+  .deposit { margin-top: 24px; padding-top: 22px; }
+  .benefits { margin-top: 20px; gap: 8px; }
+  .details { margin-top: 16px; }
+  .checkout { border-top: 1px solid #dedee3; border-left: 0; }
+  .formIntro { margin-bottom: 24px; }
+}
+
+@media (max-width: 359px) {
+  .summary, .checkout { padding: 24px; }
+  .refundable { max-width: 160px; }
+}

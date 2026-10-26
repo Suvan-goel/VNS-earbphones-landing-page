@@ -1,0 +1,42 @@
+{
+  "title": "Recovered CYMBA / neurostimulation earbud design requirements",
+  "source": {
+    "title": "Health Hardware Ideation",
+    "url": "https://chatgpt.com/c/6ad11db9-c164-83eb-81b0-58be24a271ef",
+    "retrievedOn": "2026-10-19"
+  },
+  "status": "Accepted design direction followed by an explicitly provisional engineering blueprint. No later message freezing numerical specifications was found in the retrieved turns.",
+  "acceptedDirection": [
+    "Compact, conventional-looking premium wired IEM with high-quality music playback, including when stimulation is off.",
+    "Modular acoustic and neural interfaces: independently replaceable EEG-capable acoustic tip and soft concha/cymba stimulation wing.",
+    "Replaceable shallow silicone tip with electrically separate dry recording contact areas against the outer canal; appropriate reference/bias contacts still require design.",
+    "Soft concha/cymba wing carrying two electrically isolated stimulation contacts.",
+    "One inward-facing reflective PPG sensor initially, in one ear; location remains a candidate requiring validation.",
+    "External clip-on or desk controller with physical controls; USB-C DAC, stimulation control, processing and sensing interface.",
+    "Keep audio path, stimulation contacts, EEG interfaces and PPG optical path distinct."
+  ],
+  "provisionalTargets": {
+    "driver": "One professionally tuned 7–10 mm dynamic driver",
+    "mass": "6–8 g per earpiece excluding cable",
+    "eeg": "Initially one useful differential channel, with appropriate reference/bias",
+    "ppg": "One reflective optical sensor in one ear",
+    "anc": "Later, if acoustic and EEG integration permit",
+    "motionSensor": "Optional accelerometer",
+    "personalisation": "Task-aware research controller; EEG assistance only if validated"
+  },
+  "currentUserOverrides": [
+    "Cable exits BOTTOM of each earbud and hangs down; no over-ear cable routing.",
+    "Use the compact smooth-faced industrial design in design-reference.png."
+  ],
+  "prototypeSequence": [
+    "Preserve an existing premium IEM's acoustic assembly and stock audio cable.",
+    "Add a reversible cradle and passive soft wing; assess fit and audio.",
+    "Validate stimulation and sensing using appropriate separate research systems.",
+    "Only then develop custom integrated housing and electronics."
+  ],
+  "visualisationLimits": [
+    "Internal packaging, contact geometry, exact electrode count/reference placement and electronics layouts remain illustrative.",
+    "Do not infer automatic or proven cognitive improvement from sensing or stimulation.",
+    "Do not depict the draft render as CAD or a construction schematic."
+  ]
+}

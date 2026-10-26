@@ -1,0 +1,53 @@
+{
+  "generatedOn": "2026-10-19",
+  "tool": "Built-in ImageGen",
+  "purpose": "Create a calmer high-end hero by simplifying the textured environment, lighting and staging while preserving the product design.",
+  "resolutionNote": "Generated renders were 1672x941 (desktop) and 1086x1448 (mobile), exported with Lanczos3 resampling at the site's established delivery dimensions. These are upscaled exports, not native 4K generations.",
+  "assets": [
+    {
+      "file": "hero-campaign-minimal.webp",
+      "source": "exec-07ce836a-f3e1-41f5-8972-d84843a05fab.png",
+      "initialSource": "exec-ff968182-4311-4580-9666-b2ae48658351.png",
+      "refinements": [
+        {
+          "purpose": "Leave room above the headline by reducing and raising the complete product composition.",
+          "source": "exec-0e95e2fa-3101-4df5-a54a-3f7cde87eefd.png",
+          "prompt": "Use case: precise-object-edit\nAsset type: landscape 16:9 website hero image.\nInput image 1 is the exact edit target: the calmer CYMBA product still life.\nPrimary request: Change ONLY the scale and position of the complete still life to give website text more breathing room. Keep this exact sophisticated smooth charcoal environment, soft lighting, platform and exact earphone/controller designs unchanged.\nTreat the two earbuds, controller, platform and their cables as ONE locked composition. Make this complete group approximately 80 percent of its present size and move it upward and slightly left, centering the overall composition horizontally. The product bodies should occupy about 10 to 53 percent of canvas height. The platform should finish above 60 percent height. The entire bottom 40 percent of the frame must be quiet dark empty background. This area will contain a large headline and buttons, so no product bodies or cables should intrude there. Preserve dark space beside the product and a clean top margin.\nPreserve without redesign: all graphite circular faceplates, thin champagne rims, contact wings and pads, grey rear silicone tips, optical windows, controller shape and button, amber indicator, all relative product positions, physical connections and believable contact shadows. Preserve proportions exactly. Keep the front earbud's silicone tip on image-right behind its housing. Keep smooth matte studio background and smooth graphite platform, soft highlights, precise brushed metal. Extend only the existing softly lit background into any newly exposed area.\nNo new objects, no extra texture, no light stripes, no text, labels, logos, UI, watermarks or borders. Same 16:9 wide canvas, highest available resolution."
+        },
+        {
+          "purpose": "Route the outgoing cable tails naturally behind the platform.",
+          "source": "exec-07ce836a-f3e1-41f5-8972-d84843a05fab.png",
+          "prompt": "Use case: precise-object-edit.\nInput image 1 is the exact image to edit. Make one tiny local correction only: the two cable tails leaving the back/top-right end of the controller currently terminate visibly in mid-air at the right side. Route those same two thin braided tails gently down behind the right rear edge of the oval platform, where they naturally disappear from view through occlusion. No visible cut cable ends, no floating cut ends, no extra cable loops, no additional wires or connectors. Keep them understated and in shadow.\nPreserve EVERYTHING else exactly: entire canvas and framing, product sizes and positions, both earbud designs and silicone tip orientation, controller and button, existing front cable connections, platform, smooth charcoal background, lighting, sharpness, negative space and all colors. Do not enlarge, move or redesign any object. The scene should look identical except for the small corrected route of the two cable tails behind the platform. Same 16:9 canvas, no text, no logo, no watermark."
+        }
+      ],
+      "reference": "hero-campaign-hd.webp",
+      "generatedDimensions": [
+        1672,
+        941
+      ],
+      "exportDimensions": [
+        3840,
+        2160
+      ],
+      "webpQuality": 97,
+      "transparentBackground": false,
+      "prompt": "Use case: precise-object-edit\nAsset type: refined luxury audio campaign hero photograph.\nInput image 1: edit target and exact product-design reference.\nPrimary request: Make this existing image a little less busy, calmer and more professional/high-end. Preserve the exact CYMBA earphone and controller industrial design; simplify only their staging and environment. The result should look like a restrained premium commercial product photograph.\nProduct identity invariants: Two graphite wired earbuds with the same radially brushed circular metal faceplates, thin muted champagne rims, sculpted black housings, curved soft contact fins with two champagne contact pads, grey silicone tips and dark optical windows. Foreground earbud tip attaches to the rear of its inner housing on image-right; rear earbud's tip points image-left. Preserve exact shell shapes, proportions and materials. Keep the same small dark inline controller with its round button and tiny amber indicator. Both earbuds and the controller must remain present and physically grounded.\nCalmer scene: Replace the heavily textured stone and textured architectural wall with a beautifully smooth matte charcoal studio sweep and one understated low smooth graphite oval platform. Almost imperceptible material grain. Remove the diagonal beam/stripe and the visible wall seams or arcs; use a quiet dark gradient behind the product. Soft broad directional studio light, narrow controlled champagne highlights, crisp metal detail, rich natural shadows, subtle contact shadows. No dramatic beam, coarse patterns or distracting reflections. No shine on the platform.\nComposition: Keep the familiar left-forward/right-rear earbud arrangement, with the controller secondary at lower right. Reduce the product group's overall scale slightly to introduce breathing room. Tidy the existing braided cables into simple relaxed gentle arcs close to the product, visually receding in shadow; maintain coherent wired connections, no tangles or loops across the lower text area.\nQuality: Premium precise photographic product rendering, refined radial metal brushing, smooth gradients and clearly defined edges. Natural satin silicone, restrained contrast. Detail on the product, calm surrounding space.\nConstraints: Do not redesign or remove product components. No extra products, props, decorative lines, abstract shapes, people, text, lettering, logo, watermark, UI or borders. Maintain the dark graphite and muted champagne palette. Bottom edge fades to near-black #0d0e0f. Opaque finished photograph.\nFormat: landscape 16:9. Product group including the controller should sit within the central 65% of the canvas width, between approximately 15% and 59% of image height. Keep the top 12% quiet for navigation, and bottom 40% calm and largely empty for website copy. High-resolution 3840x2160 output if supported."
+    },
+    {
+      "file": "hero-campaign-mobile-minimal.webp",
+      "source": "exec-f3daf9fb-37c5-4333-ae87-c41ed50ec405.png",
+      "reference": "hero-campaign-mobile-hd.webp",
+      "generatedDimensions": [
+        1086,
+        1448
+      ],
+      "exportDimensions": [
+        2496,
+        3328
+      ],
+      "webpQuality": 97,
+      "transparentBackground": false,
+      "prompt": "Use case: precise-object-edit\nAsset type: refined luxury audio campaign hero photograph.\nInput image 1: edit target and exact product-design reference.\nPrimary request: Make this existing image a little less busy, calmer and more professional/high-end. Preserve the exact CYMBA earphone and controller industrial design; simplify only their staging and environment. The result should look like a restrained premium commercial product photograph.\nProduct identity invariants: Two graphite wired earbuds with the same radially brushed circular metal faceplates, thin muted champagne rims, sculpted black housings, curved soft contact fins with two champagne contact pads, grey silicone tips and dark optical windows. Foreground earbud tip attaches to the rear of its inner housing on image-right; rear earbud's tip points image-left. Preserve exact shell shapes, proportions and materials. Keep the same small dark inline controller with its round button and tiny amber indicator. Both earbuds and the controller must remain present and physically grounded.\nCalmer scene: Replace the heavily textured stone and textured architectural wall with a beautifully smooth matte charcoal studio sweep and one understated low smooth graphite oval platform. Almost imperceptible material grain. Remove the diagonal beam/stripe and the visible wall seams or arcs; use a quiet dark gradient behind the product. Soft broad directional studio light, narrow controlled champagne highlights, crisp metal detail, rich natural shadows, subtle contact shadows. No dramatic beam, coarse patterns or distracting reflections. No shine on the platform.\nComposition: Keep the familiar left-forward/right-rear earbud arrangement, with the controller secondary at lower right. Reduce the product group's overall scale slightly to introduce breathing room. Tidy the existing braided cables into simple relaxed gentle arcs close to the product, visually receding in shadow; maintain coherent wired connections, no tangles or loops across the lower text area.\nQuality: Premium precise photographic product rendering, refined radial metal brushing, smooth gradients and clearly defined edges. Natural satin silicone, restrained contrast. Detail on the product, calm surrounding space.\nConstraints: Do not redesign or remove product components. No extra products, props, decorative lines, abstract shapes, people, text, lettering, logo, watermark, UI or borders. Maintain the dark graphite and muted champagne palette. Bottom edge fades to near-black #0d0e0f. Opaque finished photograph.\nFormat: portrait 3:4. Group products together within the central 80% of the canvas width, between approximately 20% and 60% of image height. Keep all product bodies fully inside the portrait canvas, top 15% quiet for navigation and bottom 40% calm and empty for website copy. High-resolution 2496x3328 output if supported."
+    }
+  ]
+}

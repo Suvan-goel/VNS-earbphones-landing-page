@@ -1,0 +1,206 @@
+CYMBA / EARBUD COGNITION DEVICE — v0.3 CONCEPT MODEL
+Third visual revision: requirements, references, dimensions and assumptions
+21 October 2026
+
+SOURCE HIERARCHY AND MODEL STATUS
+Functional source: "Earbud Cognition Device: Technical Specification v0.3",
+draft 18 October 2026, seven pages. Page references below refer to that PDF.
+Appearance sources: the website project's assets/cymba-locked-design-reference.png
+and active src/assets/earbuds/hero-premium-pair-v4.webp. The older unmounted
+TechnologyTour imagery is not this revision's appearance target.
+
+The PDF governs architecture, functions and contact separation. The images guide
+silhouette, finishes and presentation. They do not supply dimensions or establish
+anatomical fit. Where their styling conflicts with the PDF, the model keeps the
+specified function; notably, the hub has one stop control rather than the
+reference image's multiple buttons. CHANGES-TO-MATCH-IMAGERY.txt records this.
+
+The model is a detailed, separable concept assembly. Shells, connectors, packages,
+internal arrangements, visual materials and all dimensions not explicitly in the
+PDF are proposed interpretations. Appearance is not evidence of electrical
+function, manufacturability, human fit or medical performance.
+
+SOURCE REQUIREMENTS REPRESENTED
+
+1. Bilateral wired architecture (p.3)
+Two mirrored earbuds connect through individual branches and a Y-split to a
+clip-on hub. Left is the default stimulation side; right defaults to sensing.
+BOTH earbuds contain stimulation and sensing hardware so software can select
+the stimulation ear. Earbud contents include contacts, local sensors and audio.
+The main processor, EEG amplification, stimulation generation, battery and radio
+reserve are allocated to the hub. USB-C is the specified app connection.
+
+2. Independent skin contacts (pp.3-5)
+Each bud includes a fin-mounted cymba-conchae active contact, a separate
+cavum-conchae stimulation return, TWO isolated canal EEG signal contacts and a
+separate concha EEG reference. Stimulation and EEG contacts remain independent.
+The right tragus-facing pad represents the shared DRL. The matching inactive
+left pad is a disclosed interpretation of "identical hardware"; the PDF names
+an active DRL only on the right.
+
+The active contact now follows the rounded horn's actual tissue-facing curvature.
+Its exposed curved CAD surface targets approximately 75.4 mm2 for every fin size,
+within the specified 50-100 mm2 range. This replaces the previous planar ellipse;
+it is not an 8 × 12 mm flat disc. The measured exposed area excludes backing and
+edge faces. Each body return retains a 100 mm2 planar face, corresponding to
+approximately 1 cm2. Real effective skin contact depends on fit and compression
+and has not been established by either geometric area.
+
+The active pad uses the permitted black conductive-silicone interpretation.
+The body return uses a subdued warm Ag/AgCl-style appearance, while EEG parts
+represent dry conductive polymer. These are material/finish choices, not tested
+material specifications. The horn supports the curved active pad, and contact
+inserts are flush or near flush where practical. Active impedance below 5 kOhm
+at 1 kHz and dry EEG impedance below 50 kOhm, with a 20 kOhm target, remain source
+requirements; the model does not demonstrate those values.
+
+3. Ear tips and retention fins (pp.1-2, 6)
+The fit kit contains five removable tip sizes and three retention-fin sizes.
+Every tip has two curved 38-degree EEG sectors separated by two 142-degree
+insulating gaps. The number of independent EEG signals follows the PDF; the
+sector angles, placement and construction are design assumptions. Each sector
+is a separate part following the tip's outer contour.
+
+The tips have a smooth smoke-grey bell profile, rounded mouth, central acoustic
+opening and a longer exposed neck matching the chosen imagery. The nozzle has
+an open bore, retention feature and outlet mesh. Each curled fin includes its
+separate curved active contact. Fin attachment, electrical interconnects,
+retention force, contact pressure, insertion depth and anatomical coverage
+remain design work. The fin grading is not a clinical ear-size classification.
+
+4. PPG, motion and audio (p.5)
+Each bud includes separate IR-emitter, green-emitter and receiver windows with
+opaque optical separation, an IMU package and a dynamic speaker assembly.
+The nominal IR PPG requirement is 256 Hz; the six-axis IMUs require 100 Hz.
+These are functions assigned to representative components, not demonstrated
+operation. A third IMU, shared clock, audio-driver allocation and EEG/DRL blocks
+are represented in the hub. Package sizes and acoustic/optical design remain
+provisional; no sensor accuracy or optical performance is inferred from shape.
+
+5. Cable architecture (pp.3-4)
+The exposed branch centrelines target 150 mm each; the exposed trunk targets
+1000 mm. Internal termination depths are excluded. Generated reports record
+actual modeled lengths. The trunk is coiled for presentation, not shown as a
+prescribed wearing route. Its 3.0 mm outer diameter and the 2.1 mm branch diameter
+are provisional choices, not dimensions supplied by the PDF.
+
+The separate branch specimen contains 12 illustrative conductors: 2 stimulation,
+4 EEG/reference/DRL and 6 digital sensing/audio/power/ground. The stimulation
+pair is twisted in a foil-shield group; EEG has its own driven-shield group;
+sensor/audio lines form a third group. The specimen explains bundle separation,
+not final wire gauges or a connector pinout. It does not provide full conductor
+routing or engineered shielding terminations.
+
+The hub end has a keyed magnetic receiver and mating plug, with 24 illustrative
+positions allocated 12 per ear. Magnet choice, polarity, contact travel, pinout,
+release force and electrical ratings remain unresolved. Cable braid is a visual
+finish assumption: the viewer generates a fine pattern following sampled CAD
+centrelines. Individual textile fibres are not separate STEP solids, and their
+appearance is not a claim of a specified braid construction.
+
+6. Hub enclosure and controls (pp.3-5)
+The slender hub contains hollow chassis and lid, seals, rear-access fasteners,
+a rear spring clip, ONE physical stop, one status lens, USB-C and the keyed
+breakaway interface. Its front is plain and unbranded. There are no added
+volume or call controls from the appearance reference.
+
+Internals include a battery allocation, main logic/EEG board, stimulation-domain
+board, representative component envelopes, shielding allocation and a haptic
+actuator. The stop actuator is a mechanical representation; an independently
+operating stop circuit has not been designed or tested. The status indication
+must not distinguish active from sham. The haptic placement is a design
+interpretation for the specified gentle session-start/end feedback.
+
+To obtain the revised slender form, provisional hub allocations were mapped
+from the earlier layout by X × 25/34, Y × 77/64 and Z × 12/15. They are spatial
+allocations, not real components whose availability has been verified. USB-C
+geometry and contact pitch retain their original dimensions and are relocated
+to the new port. The breakaway cable boot retains a circular cross section;
+its length is adjusted. Per-part metadata records the final allocated envelope
+before quoting any older construction-reference dimensions. Use those final
+envelopes and the generated hub metrics, not the quoted older dimensions.
+
+SELECTED PROVISIONAL DIMENSIONS — MILLIMETRES
+The PDF supplies contact-area requirements and approximate cable lengths, but
+no dimensional drawings for shells, fins, tips, boards, battery or connectors.
+All dimensions below are therefore the modeled interpretation. Nominal design
+values can differ slightly from interpolated-surface bounding boxes.
+
+Earbud nominal body, excluding fin/tip/boot: 23.6 × 28.8 × 14.1.
+Housing wall allocation: approximately 1.2, locally sculpted for parts/seats.
+External nozzle inclination: -15 degrees about local Y; OD 6.3; bore 4.1.
+The internal driver retains a +15-degree package axis and feeds the shared
+acoustic chamber; acoustic response and chamber geometry remain unvalidated.
+Tip nominal diameters XS/S/M/L/XL: 12.0 / 13.2 / 14.4 / 15.6 / 16.8.
+Tip mouth nominal bore: 4.2; spline profile and wall thickness are provisional.
+The bell profile is displaced 3.1 along the nozzle relative to its construction
+origin to expose more neck; this is not a validated insertion-depth allowance.
+Fin S/M/L profile factors: 0.94 / 1.00 / 1.10; active area about 75.4 mm2 each.
+Speaker basket: 8.8 diameter; local sensor PCB allocation: 15 × 20 × 0.7.
+Branch cable OD: 2.1; trunk OD: 3.0; Y-split body: 8 × 15 × 5.
+
+Hub shell nominal X/Y/Z: 25 × 77 × 12.
+Nominal side-wall allocations in X/Y: about 1.03 / 1.68; floor/roof: 1.04.
+Recessed stop oval X/Y: about 7.06 × 11.55; edge about 0.056 below front face.
+Rear clip: about 9.56 wide and 50.5 long; 4.0 rear extension and 3.08 free jaw
+allocation. Spring material, load, travel and fatigue life remain unspecified.
+Battery allocation X/Y/Z: about 16.91 × 40.91 × 3.52; capacity unspecified.
+Main PCB base allocation X/Y/Z: about 20.59 × 60.16 × 0.64, with domain cutout.
+Stimulation PCB allocation X/Y/Z: about 8.38 × 19.25 × 0.64.
+Nominal lateral board-domain gap: about 2.43. This is a packaging allocation,
+NOT a verified electrical clearance, isolation design or certification.
+USB-C shell allocation X/Y/Z: 9.2 × 6.7 × 3.2; no manufacturer part selected.
+Breakaway receiver face X/Z: about 19.12 × 5.60.
+Breakaway plug body allocation X/Y/Z: about 18.38 × 5.78 × 5.12.
+Breakaway boot circular root/exit radii: 2.50 / 1.65; length about 7.22.
+
+Optical spacing, package sizes, screw construction, port tolerances, material
+properties, transparency and surface finish are also provisional. The finish
+shaders provide a visual interpretation, not measured optical/material data.
+
+SOURCE AMBIGUITIES PRESERVED
+- p.1 gives 60 minutes stimulation per session and 120 minutes per day; p.2
+  describes a conflicting 180-minute per-session cap. The model selects no
+  dosing policy and does not resolve this inconsistency.
+- p.3 places a radio in the hub while specifying USB-C-only app connection.
+  A package/antenna reserve is shown without assuming wireless app operation
+  or supplying a tuned antenna.
+- Identical hardware and the right-only active DRL do not fully define the
+  left implementation. The inactive matching left pad remains disclosed.
+- The Nurosym reference discusses a tragus clip. This product specifies active
+  stimulation at its cymba-conchae fin, which is the site modeled here.
+- The architecture summary's "only electrodes and sensors" is read alongside
+  the explicit speaker requirement in the component table and p.5.
+
+EDITABILITY AND VERIFICATION BOUNDARIES
+editable.FCStd contains named, separately selectable solid components with
+role/source/assumption metadata. It is not a fully constrained parametric
+feature-history model or manufacturing release. The source scripts regenerate
+the geometry; STEP supplies portable solid geometry; GLB supplies presentation
+meshes with names and metadata. CAD units are millimetres and glTF units metres.
+The Product view poses the pair independently for presentation; the complete
+system restores their source arrangement. Posing does not change part geometry.
+The assembled Product view also shows roughly 22 mm of each branch as a clipped
+presentation lead, derived from its existing sampled centreline. These meshes
+are excluded from the component registry, counts and CAD exports, hidden during
+explosion, and replaced by the full source cables in the complete-system view.
+
+model-manifest.json and validation.json record model content and generated
+geometry results. CAD-INTERFERENCE-AUDIT.txt records the stated earbud/fit-kit
+checks and any residual conceptual overlaps; HUB-VALIDATION.txt and
+CABLE-VALIDATION.txt have their own stated scopes. Consult the current reports
+for actual outcomes. A valid solid establishes only its geometric
+representation, not tolerance, assembly motion, electrical integrity or fit.
+
+No final circuit/PCB routing, selected bill of materials, electrode production
+process, qualified material, biocompatibility result, verified current path,
+electrical isolation, shielding performance, thermal assessment, acoustic test,
+human fit study or ingress test is supplied. IP57 remains a source design
+target. Impedance, sensor accuracy, retention force and all other performance
+requirements remain unverified.
+
+PORTABLE CABLE DISPLAY
+The three GLB cable meshes are capped circular sweeps of their saved CAD
+centreline samples, with 32 segments around each cross section. This avoids
+a display triangulation sliver in the long swept CAD surface. CAD/STEP solids,
+centreline lengths and metadata are unchanged. See CABLE-MESH-VALIDATION.txt.

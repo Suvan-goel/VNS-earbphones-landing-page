@@ -1,0 +1,21 @@
+{
+  "tool": "Built-in ImageGen",
+  "createdOn": "2026-10-20",
+  "reference": "src/assets/earbuds/hero-product-transparent.png",
+  "lockedDesign": "assets/cymba-locked-design-reference.png",
+  "source": "/Users/suvangoel/.codex/generated_images/01a153ca-9268-74c3-80a7-e067a88f2131/exec-c72d98a6-1c95-4a13-8d43-d4c51ec6e4c8.png",
+  "outputs": [
+    "hero-product-polished.png",
+    "hero-product-polished.webp"
+  ],
+  "dimensions": {
+    "width": 1536,
+    "height": 1024
+  },
+  "export": {
+    "webpQuality": 96,
+    "alphaQuality": 100,
+    "preserveTransparency": true
+  },
+  "prompt": "Use case: precise-object-edit.\nEdit target: the supplied transparent CYMBA One product image. The user says it looks like an unfinished prototype. Create a visibly more polished, premium, production-ready consumer-audio product photograph, not another engineering visualization. Preserve the locked hardware architecture and genuine transparent background.\n\nChange the MATERIALS AND FINISH decisively:\n- Outer faceplate: perfectly smooth, softly domed satin graphite, refined microbead finish with no visible grain at this scale. Remove the coarse leather-like texture, pitting, scratches and mottling. It should read like a finished high-end audio product with a beautifully controlled softbox reflection.\n- Shell: very deep smoke-black translucent material, almost opaque, with translucency only at thin edges. Conceal internal circuitry and mechanical clutter; it must look sealed and finished. Precise fine assembly seam, no exposed mechanisms.\n- Metal edge: narrow clean muted champagne-titanium rim, an elegant polished chamfer with one fine highlight, not thick yellow-gold jewelry.\n- Soft fin and eartip: immaculate smooth charcoal/grey silicone with subtle satin softness. No exaggerated pebbled grain, fuzzy edges, cloudy translucency or rubber wrinkles. Preserve the fin's curved outline and existing proportions.\n- Inner stimulation contacts: exactly two flush champagne ovals, smoothly integrated with tight clean edges. Keep the small optical window recessed flush in dark glass, with a subtle nearly black green tint, NOT a brightly glowing green electronic component. Keep the tip's slim flush electrode inserts and one sound bore.\n- Controller and USB-C: cohesive satin graphite finish, thin precise seams, subtle low-profile minus/center/plus buttons and a tiny white LED. Fine, tightly woven braided wire with uniform smooth jacket transitions; no rough thick rope texture.\n\nPresentation: a restrained luxury catalog photograph with soft neutral studio lighting, broad clean highlights that describe the curves, immaculate manufacturing precision, natural realistic contrast and crisp edges. No dramatic cinematic effects, no bloom, no gritty macro texture. Mild telephoto perspective, fully sharp product, no distortion. Slightly adjust the right earbud to a more elegant three-quarter angle so the silhouette and beautiful shell read first, with the inner contacts still visible. Both buds remain the focal point, and the controller secondary below. Keep both bottom-exit cables connected through the small Y junction to the controller, then to USB-C. Keep the same complete product components, no additions, no over-ear cables, no redesign into wireless buds. Do not add branding, text or labels.\nComposition: landscape 3:2, more compact arrangement with calm smooth cable curves and generous breathing room, all product edges inside the frame. Authentic photographic craftsmanship rather than a speculative sci-fi render.\nBackground: TRUE TRANSPARENT ALPHA. Product pixels and at most tiny soft translucent contact shadows only. No backdrop, white fill, floor, rectangular panel, halo, pedestal, fake transparency checkerboard, glow or scenery."
+}

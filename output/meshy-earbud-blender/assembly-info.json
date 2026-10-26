@@ -1,0 +1,29 @@
+{
+  "source_glb": "Meshy_AI_Smart_Earbud_1025112407_image-to-3d-texture.glb",
+  "reference_image": "3d575fef-e083-4147-ba8f-965358e7a938.png",
+  "scale_basis": "Reference proportions; no physical dimensions supplied",
+  "controller_assumed_mm": [
+    55,
+    13.5,
+    6.41
+  ],
+  "earbud_body_height_assumed_mm": 24.4066,
+  "product_objects": 29,
+  "wires_remain_editable_curves_in_blend": true,
+  "orientation_revision": 2,
+  "source_presentation_tilt_degrees": 20,
+  "layout_revision": 4,
+  "layout": "16:9 landscape with a refined vertical oval main cable coil, balanced cable tails and short USB-C lead",
+  "model_geometry_preserved": true,
+  "render_resolution": [
+    1920,
+    1080
+  ],
+  "cable_lengths_mm": {
+    "Left earbud \u00b7 editable wire": 78.86109161376953,
+    "Right earbud \u00b7 editable wire": 78.8610610961914,
+    "Junction to controller \u00b7 editable wire": 466.1324462890625,
+    "Controller to USB-C \u00b7 continuous coiled lead": 27.097198486328125
+  },
+  "middle_cable_length_mm": 466.1324462890625
+}

@@ -1,0 +1,500 @@
+{
+  "path": "/Users/suvangoel/VNS-earbuds-site/public/models/cymba-earbuds-hero.glb",
+  "sizeBytes": 2926760,
+  "decodedWithBundledDraco": true,
+  "geometryBytesUnchanged": true,
+  "textureBytesUnchanged": true,
+  "entries": [
+    {
+      "name": "Earbud · L · supplied textured mesh",
+      "triangles": 55435,
+      "worldMatrixGLTF": [
+        0.0008191519864626702,
+        0.0005735766067582929,
+        0,
+        0,
+        -0.0005735766067582929,
+        0.0008191519864626702,
+        0,
+        0,
+        0,
+        0,
+        0.0010000000474974513,
+        0,
+        -0.06800000369548798,
+        0.011090448126196861,
+        -0.02800000086426735,
+        1
+      ],
+      "frontMatrix": [
+        0.0008191519864626702,
+        3.5121437776617175e-20,
+        0.0005735766067582929,
+        0,
+        -0.0005735766067582929,
+        5.015859291183525e-20,
+        0.0008191519864626702,
+        0,
+        0,
+        -0.0010000000474974513,
+        6.123234286574775e-20,
+        0,
+        -0.06800000369548798,
+        0.02800000086426735,
+        0.01109044812619686,
+        1
+      ],
+      "frontBoundsMetres": {
+        "min": [
+          -0.08132760019369403,
+          0.029233126609483184,
+          0.0006501126319549255
+        ],
+        "max": [
+          -0.05791356126406972,
+          0.05364033716512573,
+          0.01671228698149263
+        ]
+      },
+      "frontCenterMetres": [
+        -0.06962058072888187,
+        0.04143673188730446,
+        0.008681199806723779
+      ],
+      "frontSizeMetres": [
+        0.023414038929624313,
+        0.024407210555642544,
+        0.016062174349537703
+      ],
+      "heightNormalization": 40.97149888227668,
+      "cableStartNormalized": [
+        0.011684841476380825,
+        -0.47320905327796936,
+        0.1089201420545578
+      ],
+      "cableDirectionFront": [
+        0.4231991171836853,
+        -0.9055804014205933,
+        -0.028751080855727196
+      ],
+      "heroPosition": [
+        -0.6,
+        0.04,
+        0
+      ],
+      "heroScale": 0.79,
+      "presentationConnection": {
+        "trimRegionBelowNormalizedY": -0.3,
+        "sleeveEndNormalized": [
+          0.021779999136924744,
+          -0.4584999978542328,
+          0.10644999891519547
+        ],
+        "trimOutwardNormal": [
+          0.5513802170753479,
+          -0.8320828676223755,
+          0.060150567442178726
+        ],
+        "outletNormalized": [
+          0.029499322175979614,
+          -0.4701491594314575,
+          0.10729210823774338
+        ],
+        "outletDirectionNormalized": [
+          0.5513802170753479,
+          -0.8320828676223755,
+          0.060150567442178726
+        ],
+        "roundedRimProfile": [
+          [
+            -0.007,
+            0.015
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0.005,
+            0.03
+          ],
+          [
+            0.01,
+            0.1
+          ],
+          [
+            0.015,
+            0.24
+          ],
+          [
+            0.018,
+            0.52
+          ],
+          [
+            0.018,
+            0.84
+          ],
+          [
+            0.014,
+            1
+          ],
+          [
+            0.004,
+            1
+          ]
+        ],
+        "rimContourSource": "src/components/three/earbudSleeveRim.json",
+        "innerRadiusNormalized": 0.0363,
+        "bendRadiusNormalized": 0.24,
+        "cableStartNormalized": [
+          0.026191040873527527,
+          -0.4651566743850708,
+          0.10693120211362839
+        ],
+        "cableDirectionNormalized": [
+          0.5513802170753479,
+          -0.8320828676223755,
+          0.060150567442178726
+        ],
+        "cableRadiusNormalized": 0.036,
+        "sleeveRadiusProfile": [
+          [
+            -0.007,
+            0.015
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0.005,
+            0.03
+          ],
+          [
+            0.01,
+            0.1
+          ],
+          [
+            0.015,
+            0.24
+          ],
+          [
+            0.018,
+            0.52
+          ],
+          [
+            0.018,
+            0.84
+          ],
+          [
+            0.014,
+            1
+          ],
+          [
+            0.004,
+            1
+          ]
+        ],
+        "sceneOnly": true,
+        "heroBendControlPoints": [
+          [
+            -0.581522524356842,
+            -0.3248845338821411,
+            0.09549389779567719
+          ],
+          [
+            -0.5659540891647339,
+            -0.3530729413032532,
+            0.09362573176622391
+          ],
+          [
+            -0.5577834248542786,
+            -0.3847956657409668,
+            0.09264527261257172
+          ],
+          [
+            -0.5577834248542786,
+            -0.4170517027378082,
+            0.09264527261257172
+          ]
+        ],
+        "heroCableLength": 2.176248034597638,
+        "originalGeometryAndTextureBytesUnchanged": true
+      }
+    },
+    {
+      "name": "Earbud · R · mirrored supplied textured mesh",
+      "triangles": 55435,
+      "worldMatrixGLTF": [
+        0.0008191519864626702,
+        -0.0005735766067582929,
+        0,
+        0,
+        0.0005735766067582929,
+        0.0008191519864626702,
+        0,
+        0,
+        0,
+        0,
+        0.0010000000474974513,
+        0,
+        -0.024000000208616257,
+        0.011090448126196861,
+        -0.02800000086426735,
+        1
+      ],
+      "frontMatrix": [
+        0.0008191519864626702,
+        -3.5121437776617175e-20,
+        -0.0005735766067582929,
+        0,
+        0.0005735766067582929,
+        5.015859291183525e-20,
+        0.0008191519864626702,
+        0,
+        0,
+        -0.0010000000474974513,
+        6.123234286574775e-20,
+        0,
+        -0.024000000208616257,
+        0.02800000086426735,
+        0.01109044812619686,
+        1
+      ],
+      "frontBoundsMetres": {
+        "min": [
+          -0.03408663794108719,
+          0.029233126609483184,
+          0.0006500360512159548
+        ],
+        "max": [
+          -0.01067259901146288,
+          0.05364033716512573,
+          0.01671221040075366
+        ]
+      },
+      "frontCenterMetres": [
+        -0.022379618476275037,
+        0.04143673188730446,
+        0.008681123225984808
+      ],
+      "frontSizeMetres": [
+        0.02341403892962431,
+        0.024407210555642544,
+        0.016062174349537706
+      ],
+      "heightNormalization": 40.97149888227668,
+      "cableStartNormalized": [
+        -0.011676480062305927,
+        -0.47320905327796936,
+        0.10892326384782791
+      ],
+      "cableDirectionFront": [
+        -0.4231996536254883,
+        -0.9055801630020142,
+        -0.0287510734051466
+      ],
+      "heroPosition": [
+        0.6,
+        0.78,
+        -0.05
+      ],
+      "heroScale": 0.79,
+      "presentationConnection": {
+        "trimRegionBelowNormalizedY": -0.3,
+        "sleeveEndNormalized": [
+          -0.021779999136924744,
+          -0.4584999978542328,
+          0.10644999891519547
+        ],
+        "trimOutwardNormal": [
+          -0.5513802170753479,
+          -0.8320828676223755,
+          0.060150567442178726
+        ],
+        "outletNormalized": [
+          -0.029499322175979614,
+          -0.4701491594314575,
+          0.10729210823774338
+        ],
+        "outletDirectionNormalized": [
+          -0.5513802170753479,
+          -0.8320828676223755,
+          0.060150567442178726
+        ],
+        "roundedRimProfile": [
+          [
+            -0.007,
+            0.015
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0.005,
+            0.03
+          ],
+          [
+            0.01,
+            0.1
+          ],
+          [
+            0.015,
+            0.24
+          ],
+          [
+            0.018,
+            0.52
+          ],
+          [
+            0.018,
+            0.84
+          ],
+          [
+            0.014,
+            1
+          ],
+          [
+            0.004,
+            1
+          ]
+        ],
+        "rimContourSource": "src/components/three/earbudSleeveRim.json",
+        "innerRadiusNormalized": 0.0363,
+        "bendRadiusNormalized": 0.24,
+        "cableStartNormalized": [
+          -0.026191040873527527,
+          -0.4651566743850708,
+          0.10693120211362839
+        ],
+        "cableDirectionNormalized": [
+          -0.5513802170753479,
+          -0.8320828676223755,
+          0.060150567442178726
+        ],
+        "cableRadiusNormalized": 0.036,
+        "sleeveRadiusProfile": [
+          [
+            -0.007,
+            0.015
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0.005,
+            0.03
+          ],
+          [
+            0.01,
+            0.1
+          ],
+          [
+            0.015,
+            0.24
+          ],
+          [
+            0.018,
+            0.52
+          ],
+          [
+            0.018,
+            0.84
+          ],
+          [
+            0.014,
+            1
+          ],
+          [
+            0.004,
+            1
+          ]
+        ],
+        "sceneOnly": true,
+        "heroBendControlPoints": [
+          [
+            0.581522524356842,
+            0.4151154160499573,
+            0.04549389332532883
+          ],
+          [
+            0.5659540891647339,
+            0.3869270086288452,
+            0.04362572729587555
+          ],
+          [
+            0.5577834248542786,
+            0.3552042841911316,
+            0.04264526441693306
+          ],
+          [
+            0.5577834248542786,
+            0.32294824719429016,
+            0.04264526441693306
+          ]
+        ],
+        "heroCableLength": 2.176248034660333,
+        "originalGeometryAndTextureBytesUnchanged": true
+      }
+    }
+  ],
+  "poster": {
+    "path": "/Users/suvangoel/VNS-earbuds-site/public/models/cymba-earbuds-hero-poster.webp",
+    "resolution": [
+      1200,
+      1344
+    ],
+    "cameraPosition": [
+      0,
+      -0.20000000298023224,
+      9.425334930419922
+    ],
+    "cameraVerticalFovDegrees": 28,
+    "transparent": true,
+    "sizeBytes": 85450,
+    "renderer": "Live Three.js scene with ACES tone mapping",
+    "source": "output/web-model/hero-live-poster.png",
+    "regenerateAt": "/dev/hero-poster",
+    "cableCheck": {
+      "scanline": 806,
+      "visibleSpans": [
+        [
+          428,
+          445
+        ],
+        [
+          754,
+          770
+        ]
+      ],
+      "noCentralCable": true
+    }
+  },
+  "sourceBlenderFilesUnchanged": true,
+  "presentationConnection": {
+    "sceneOnlyTrimAndSleeve": true,
+    "originalSourceFilesUnchanged": true,
+    "sourceSHA256": {
+      "/Users/suvangoel/VNS-earbuds-site/output/meshy-earbud-blender/cymba-wired-assembly.blend": "6df8644a6a8b458b6276469df69ebbb1330b38a04ec9ae8ffd604727f8fd4bf7",
+      "/Users/suvangoel/VNS-earbuds-site/public/models/cymba-earbuds-hero.glb": "f7494bc25d86759c8a61f6e6dab1e920d15ba90cd98fa31c864cb8b5ef9a2ae6"
+    }
+  },
+  "activeHeroModel": "/models/cymba-earbuds-hero.glb",
+  "presentationFinish": {
+    "bodyUsesOriginalColourAndReflectivityMaps": true,
+    "scratchNormalMapEnabled": false,
+    "sourceTextureBytesUnchanged": true,
+    "earTips": {
+      "color": "#b8bdb9",
+      "roughness": 0.38,
+      "metalness": 0,
+      "transmission": 0.78,
+      "ior": 1.41,
+      "normalizedThickness": 0.028,
+      "attenuationColor": "#d5d8d5",
+      "attenuationDistance": 0.75
+    }
+  }
+}

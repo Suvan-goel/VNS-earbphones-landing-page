@@ -1,0 +1,24 @@
+CYMBA image revision 2 — placement and camera variety
+
+User feedback: the previous photographs repeated the same two upright three-quarter earbuds with controller underneath. This revision changes the camera, product pose, object count, scale, and placement, not just the background.
+
+Retain the existing v1 hero, worn fit and inner-contact macro. Replace the three everyday scenes, outer detail and sound image.
+
+Geometry references only, NEVER composition references:
+/Users/suvangoel/VNS-earbuds-site/assets/cymba-locked-design-reference.png
+/Users/suvangoel/VNS-earbuds-site/assets/cymba-site-imagery-v1/06-outer-detail.png
+/Users/suvangoel/VNS-earbuds-site/assets/cymba-site-imagery-v1/07-inner-detail.png
+
+Locked design: small smoked charcoal resin shell, subtly oval satin black faceplate, very thin champagne rim, soft curved plain-black concha fin, short nozzle with smoke-grey silicone tip, two vertically arranged oval champagne contacts on inner body plus separate optical window, narrow tip contact insets when visible. Three-button charcoal inline controller, fine black braided cable, USB-C. Cable socket is at the DEVICE'S bottom. Entire buds may freely rotate, roll, lie down or invert in the photograph; do not force all fins up and cables toward the bottom of the frame. No contacts on the fin. Keep correct compact scale relative to pencils/keys. No invented hardware.
+
+03-study: TRUE 90-degree overhead flat lay. Two buds lie flat and point in clearly different directions, one rolled over to show back/inner side and the other face-up rotated clockwise. Loose asymmetric cable loop around notebook edge. Controller optional partially visible at frame edge. Notebook/pencil, morning light. Product smaller within wider context; no hero pair arrangement. Portrait 4:5.
+
+04-deep-work: Camera almost at DESK LEVEL, strong perspective and shallow depth. ONE earbud lying on its side in the lower foreground, nozzle/tip aimed LEFT, faceplate seen obliquely from side/back, second bud outside frame. Blurred keyboard and warm desk lamp recede into background; controller may be small and defocused farther away. Darker graphite/wood surface. Portrait 4:5.
+
+05-learning: WIDER high-oblique scene of music practice. Compact keyboard across rear diagonal; loosely coiled braided cable with two buds casually nestled on a closed music notebook in lower-right third, one facing away and other lying opposite, not upright. Most of frame describes setting and open breathing room, products at believable small scale. Afternoon neutral light. Portrait 4:5.
+
+06-outer-detail: EXTREME material macro, tight crop across oval faceplate's champagne perimeter, smoked shell, silicone edge. Much of full earbud outside frame; faceplate diagonal, dramatic grazing light. No full upright bud silhouette. Portrait 4:5.
+
+08-sound: Wide 16:9 editorial composition, one suspended earbud in a distinctly rotated diagonal pose, viewed almost straight-on to outer faceplate. Fin points toward frame-left, cable curves toward lower right. Earbud right of centre with generous negative space and subtle sound-inspired curved light/shadow in dark slate background. No tabletop, grey acoustic steps, water, text, people, brain/nerve effects or glowing product.
+
+Use built-in ImageGen, separate calls per asset. View references first. Preserve real material detail, restrained graphite/champagne palette. Inspect every result and reject any repetition of the prior upright pair. Save PNG and exact prompt/provenance JSON in this v2 directory. Generate only assigned assets; root integrates into site and creates optimized WebPs. Existing originals remain available.

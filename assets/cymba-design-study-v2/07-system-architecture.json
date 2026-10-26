@@ -1,0 +1,15 @@
+{
+  "key": "07-system-architecture",
+  "title": "Functional system architecture",
+  "prompt": "Use case: precise-object-edit. Edit the supplied CYMBA ONE system architecture plate. Preserve all layout, hardware design, typography, labels, colors and textures. Correct only the following clear mistakes:\n1. In the FIRST functional row, the arrow between \"Audio driver\" on LEFT and \"Audio playback\" on RIGHT must point LEFT, from the controller toward the audio driver.\n2. In the SECOND row, the arrow between \"2 taVNS contacts\" on LEFT and \"Stimulation control\" on RIGHT must point LEFT, from controller toward stimulation contacts.\n3. The THIRD and FOURTH arrows must stay pointing RIGHT, from EEG and PPG contacts toward acquisition electronics.\n4. The aggregate connector between the controller group and \"USB-C host connection\" must have arrowheads at BOTH ends to indicate bidirectional communication.\n5. Fix the physical braided cable: one single continuous cable leaves the BOTTOM strain relief of the earbud, curves gracefully along the open space above the functional rows, and connects to the LEFT end of the controller. Remove the misplaced cable appearing to emerge from the silicone tip/nozzle. No cable should end at a diagram box. The other controller cable connects to the USB-C plug on the right. No upper or over-ear loop.\n6. Correct the tiny stray vertical mark before the parenthetical controller label so it reads cleanly \"(USB-C, control & processing)\".\nEverything else exactly unchanged, including lower cable exit, electrode placements, sensor window, concept footer and all four row names. Sharp legible text, high native detail.",
+  "source": "/Users/suvangoel/.codex/generated_images/01a1537e-23b6-7252-b745-1026c63e33ff/exec-4fdee0d7-964e-41a8-86c3-c98f3db57eb2.png",
+  "references": [
+    "/Users/suvangoel/VNS-earbuds-site/assets/cymba-design-study-v2/07-system-architecture.png"
+  ],
+  "tool": "Built-in ImageGen",
+  "original": "07-system-architecture.png",
+  "web": "07-system-architecture.webp",
+  "width": 1536,
+  "height": 1024,
+  "upscaled": false
+}

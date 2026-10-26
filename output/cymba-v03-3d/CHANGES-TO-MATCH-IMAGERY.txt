@@ -1,0 +1,56 @@
+CYMBA — THIRD VISUAL REVISION
+Appearance reference and specification boundaries
+21 October 2026
+
+CHOSEN APPEARANCE REFERENCES
+1. assets/cymba-locked-design-reference.png
+   The locked device image: front champagne bezel, plain dark oval face,
+   smoked body, deep curled fin, smoke-grey tip, braided cables and slim hub.
+2. src/assets/earbuds/hero-premium-pair-v4.webp
+   The active site hero: mirrored three-quarter exterior views, tips inward,
+   compact tapered bodies and understated black/champagne styling.
+
+These names identify reference assets in the website project, not files
+necessarily included in this CAD package. They guide appearance; they are not
+orthographic drawings or measured dimensional evidence. The older, unmounted
+TechnologyTour imagery with a circular brushed face was not used as the target.
+
+CHANGES MADE TO THE MODEL
+- Replaced the branded front treatment with a plain crowned satin-black insert.
+- Moved the champagne accent to a visible chamfered bezel around that insert.
+- Tapered the body behind the bezel and introduced restrained smoked-shell
+  transmission in the viewer.
+- Reshaped the retention fin into a rounded, deeply curled horn. Its separate
+  black conductive-silicone active contact follows the actual curved surface.
+- Enlarged the five nominal tips to 12 / 13.2 / 14.4 / 15.6 / 16.8 mm, used
+  smoke-grey silicone, exposed more neck, and narrowed the two EEG inlays.
+- Slimmed the hub to a nominal 25 × 77 × 12 mm and reduced the trunk to 3 mm OD.
+- Added curve-following braid shading, retaining the actual full-length cable
+  solids, and posed the Product pair to combine the locked reference’s exterior/contact
+  presentation with the active hero’s inward-facing tips.
+- The assembled Product view shows leads derived from the first 80 mm of each
+  branch’s sampled centreline; only the first 22 mm contributes to framing,
+  allowing the rest to crop naturally at the stage edge. These are temporary
+  presentation meshes parented to the posed earbuds, excluded from part counts
+  and CAD exports, and hidden in exploded views. Full cables remain in System.
+
+DELIBERATE DIFFERENCES REQUIRED BY SPECIFICATION v0.3
+- The locked image shows multiple hub controls. This model retains ONE physical
+  stop control and one status indicator, as specified; no volume/call buttons
+  were added. The hub includes the specified rear clip and keyed breakaway.
+- The visible contact layout follows v0.3: fin active, separate body return,
+  two independent canal EEG contacts, separate concha EEG reference and the
+  shared right DRL. Artistic contact counts or placements in the images do
+  not override that architecture. The inactive mirrored left DRL remains an
+  explicit interpretation of the identical-hardware requirement.
+- The source's per-ear PPG, IMU and speaker, and hub electronics allocations,
+  remain inspectable even where the reference image does not reveal them.
+- Both full-length branches and the full trunk remain modeled. The complete
+  system uses a display coil; the Product pair uses display-only posing.
+
+BOUNDARIES
+The images do not establish size, fit, wall thickness, a connector design or
+an internal layout. Those remain documented design assumptions. Fine braid and finish grain are viewer shaders. GLB transmission uses standard
+material extensions where supported. These effects are not textile solid
+geometry or measured material properties. Reallocated hub packages are
+provisional spatial envelopes, not available-component selections.

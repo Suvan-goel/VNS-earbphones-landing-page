@@ -1,0 +1,34 @@
+{
+  "generatedOn": "2026-10-19",
+  "tool": "Built-in ImageGen",
+  "purpose": "Launch campaign inspired by the supplied Sennheiser studio references, preserving the CYMBA product design.",
+  "assets": [
+    {
+      "file": "hero-campaign.webp",
+      "source": "exec-38118a50-b8eb-40fa-8446-4e3833e63c54.png",
+      "references": [
+        "User-supplied silver Sennheiser hero screenshot",
+        "detail-transparent.webp",
+        "hero-transparent.webp"
+      ],
+      "transparentBackground": false,
+      "prompt": "Use case: ads-marketing\nAsset type: full-bleed premium earphone launch campaign photograph for a website hero; landscape 16:9, high resolution.\nInput images: Image 1 (website screenshot) is ONLY a reference for the sophisticated cinematic lighting, architectural studio staging, oversized product scale and immersive campaign quality. Do NOT recreate its headphones, branding, text or interface. Image 2 is the exact CYMBA earpiece product design reference. Image 3 is the exact pair of wired earbuds and matching inline controller reference.\nPrimary request: Create an original luxury audio brand campaign photograph featuring this pair of wired graphite CYMBA earbuds and their compact inline controller. The products should feel exquisitely engineered and physically present, rendered with the fidelity of a high-end commercial studio photograph. Preserve the design from images 2 and 3: radially brushed circular graphite metal faceplates, thin champagne-titanium rims, sculpted dark housings, soft curved contact wings with two small champagne pads, grey silicone ear tips, understated black braided cables, one compact dark inline controller with round button and tiny warm indicator.\nScene: a monolithic charcoal studio, broad curved architectural wall or circular backdrop and a low dark stone plinth with very fine smooth texture. Strong diagonal soft-edged light crosses the wall, casting an elegant long shadow. Graphite, pewter and black palette with only a subtle muted bronze highlight. Large left earpiece slightly forward at center-left, second slightly higher behind it at center-right, softly connected cables fall naturally toward the plinth with the smaller controller to the right. Product grouping centered horizontally, in the upper-middle portion of the composition. No tangled wires. Preserve realistic relation between body, tips and wings.\nFraming and intended layout: the product group occupies approximately the central 65 percent of image width, between 14 and 65 percent of image height. All earpiece bodies must remain inside the canvas. The top 12 percent needs dark quiet space for a website nav. The entire bottom 32 percent is dark, calm, mostly empty negative space reserved for centered headline and button that will be added in HTML later. Subtle product cables can trail toward the sides, not through the central text area. No written text of any kind in the actual image.\nLighting: broad directional cool-neutral studio key light catches precise brushed-metal circular reflections, warm champagne rim catches a restrained edge light, dark surfaces remain legible without looking grey and flat. Rich shadow depth, tactile satin silicone, no plastic sheen, no overexposure, no excessively glowing halo. Architectural studio perspective, shallow but credible product shadows, expensive editorial campaign art direction.\nConstraints: not headphones; only the exact wired earbud design and compact controller supplied as product references. No human, no leaves, no extra products, no abstract wave graphics, no labels, no graphic callouts, no logos, no text, no UI, no watermark, no borders. This is a completely finished atmospheric background photograph, not a screenshot. The lower edge should fall off to near-black #0d0e0f so it joins a dark website seamlessly."
+    },
+    {
+      "file": "hero-campaign-mobile.webp",
+      "source": "exec-182f5a17-42f7-473c-b523-962206e068e2.png",
+      "references": [
+        "hero-campaign.webp"
+      ],
+      "transparentBackground": false,
+      "prompt": "Use case: ads-marketing\nAsset type: portrait mobile adaptation of the attached CYMBA launch campaign image, 3:4 portrait composition.\nInput image: exact product identity, materials, lighting and campaign scene reference. Recompose the same scene for a narrow phone-screen hero, without changing product identity or introducing any text.\nPrimary request: Preserve the two graphite wired earbuds, champagne rims, soft silicone contact wings, grey tips and matching black inline controller, and the sophisticated charcoal curved architectural wall and low stone plinth with diagonal studio light. The earpieces should be grouped closely together in the central 75 percent of image width, one forward at left and the second slightly higher behind it at right. Place the small controller lower-right adjacent to them. Cables have coherent gentle curves.\nCritical mobile composition: portrait 3:4. The top 15 percent is quiet dark charcoal for navigation. Earphones and controller occupy the region between 18 and 59 percent of image height, fully visible within the central 85 percent of image width. Lower 40 percent is mostly empty near-black space with restrained plinth shadows, reserved for HTML headline and button; no product bodies there. It is essential that all main product bodies fit within narrow portrait framing. Background fades smoothly to #0d0e0f at the very bottom.\nLighting: match exact neutral dramatic softbox lighting, brushed graphite faceplates and understated champagne highlights of the input. Architectural shadow, realistic expensive audio campaign photography, rich dark tones with readable product texture.\nConstraints: same product and same scene, no logos, no text, no UI, no watermark, no extra devices or elements, no hands, no people. Finished opaque studio photograph, not a transparent cutout."
+    }
+  ],
+  "derivatives": [
+    {
+      "file": "hero-campaign-social.jpg",
+      "source": "exec-38118a50-b8eb-40fa-8446-4e3833e63c54.png",
+      "purpose": "JPEG copy for the matching Open Graph campaign card"
+    }
+  ]
+}

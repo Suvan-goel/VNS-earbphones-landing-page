@@ -1,0 +1,17 @@
+{
+  "webModel": "/Users/suvangoel/VNS-earbuds-site/public/models/cymba-neural-mannequin-organic.glb",
+  "bytes": 3840372,
+  "paths": 1129,
+  "triangles": 370395,
+  "clusters": 14,
+  "maxPathLength": 6.585585539243895,
+  "growthRange": [
+    0.018,
+    0.958
+  ],
+  "sourcePreserved": true,
+  "buildSteps": [
+    "build_organic_network.py (Blender)",
+    "optimize_stone_glb.py --organic-network (Python)"
+  ]
+}

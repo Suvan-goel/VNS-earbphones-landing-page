@@ -1,30 +1,84 @@
 import type { Metadata } from "next";
-import { site } from "@/config/site";
+import { reservation, site } from "@/config/site";
 import { LegalPage } from "@/components/LegalPage";
 
 export const metadata: Metadata = { title: `Terms · ${site.brand}`, robots: { index: false } };
 
 export default function Terms() {
   return (
-    <LegalPage title="Terms of use" updated="October 2026">
-      <h2>A product in development</h2>
+    <LegalPage title="Terms of use" updated="26 October 2026" showTemplateNotice={false}>
+      <h2>About these terms</h2>
       <p>
-        {site.product} is a concept under development. Nothing on this website is an offer to sell, a pre-order or a reservation, and joining
-        early access does not create any obligation for you or for us. Features, design, timing and pricing may change or may never be
-        offered.
+        These terms explain how you may use the {site.brand} website, join the {site.product} launch list and make a paid reservation when available. References to
+        {" "}&ldquo;{site.brand}&rdquo;, &ldquo;we&rdquo; and &ldquo;us&rdquo; mean {reservation.merchantName}, operating as {site.brand}.
+        For questions, contact <a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>.
       </p>
-      <h2>No medical or performance claims</h2>
+      <h2>The launch list</h2>
       <p>
-        {site.product} has not been shown to improve learning, memory, concentration or any other outcome, is not intended to diagnose or treat
-        any condition, and has not been evaluated by any regulator. Information on this site is for general interest only and is not medical
-        advice.
+        Joining the launch list is free. You are signing up for {site.product} product-development, launch, pricing and availability
+        updates. It is not a purchase, preorder, reservation or guarantee of availability, and there is no obligation to buy.
+        You can unsubscribe at any time using the instructions in our emails or by contacting
+        {" "}<a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>.
       </p>
-      <h2>Images</h2>
-      <p>Product images are concept illustrations, not photographs of a manufactured product.</p>
+      <h2>Product development and availability</h2>
+      <p>
+        {site.product} is in development and is not yet available to buy. The website describes the product, its technology and its
+        intended use. Design, specifications, compatibility, pricing and launch timing may change as development progresses.
+        Final product details and any purchase terms will be provided before orders open.
+      </p>
+      <h2 id="reservations" className="scroll-mt-24">Paid reservations</h2>
+      <p>
+        When paid reservations are available, a one-time {reservation.depositLabel} deposit in US dollars records your place in the
+        reservation queue for one pair of {site.product}. {reservation.merchantName} accepts the reservation deposit, with payment
+        processed by Stripe. A reservation is separate from the free launch
+        list; it is not a purchase of the finished product, a subscription or an obligation to buy. Your founder number is assigned when
+        we record confirmation of your successful payment, rather than the moment you start checkout. It is a reservation reference,
+        not a guaranteed shipping date.
+      </p>
+      <p>
+        The full deposit will be credited toward your product price if you decide to buy. The final price, specifications, shipping date,
+        shipping cost, applicable taxes and delivery availability are not yet confirmed. We will provide these details and the final
+        purchase terms before inviting you to pay the remaining balance. The remaining balance will not be charged automatically.
+      </p>
+      <h2>Reservation cancellation and refunds</h2>
+      <p>
+        You can cancel your reservation for a full refund at any time before your pair ships. Email
+        {" "}<a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a> from the address used for your reservation and include your
+        founder number or payment reference if available. We will return the deposit to the original payment method; your payment
+        provider may take additional time to show the refund. Please do not send card details by email.
+      </p>
+      <p>
+        If you decline the final purchase offer, or if we do not ship the product, your deposit will be refunded in full. A reservation
+        does not guarantee a particular launch price, product specification or delivery date. Changes to these website terms do not
+        remove the refund and deposit-credit commitments accepted when you reserved. Reservation terms version: {reservation.termsVersion}.
+      </p>
+      <h2>Product information</h2>
+      <p>
+        {site.product} brings together audio, brain and pulse sensing, and targeted non-invasive ear stimulation for cognition.
+        Individual experiences and results can vary. {site.product} is not intended to diagnose, treat, cure or prevent disease.
+        Information on this website is not medical advice or a substitute for advice from a qualified healthcare professional.
+      </p>
+      <h2>Using this website</h2>
+      <p>
+        Use this website lawfully. Do not interfere with its operation, attempt unauthorised access or submit someone else&rsquo;s
+        contact information without permission. Website text, branding and visuals belong to {site.brand} or their respective owners.
+        You may view and share links to this website; other use remains subject to applicable intellectual-property rights.
+      </p>
+      <h2>Privacy</h2>
+      <p>
+        Our <a href="/privacy">Privacy notice</a> explains how we handle information submitted through this website and our Facebook
+        and Instagram signup forms, including your choices about updates, analytics and advertising measurement.
+      </p>
+      <h2>Updates and your rights</h2>
+      <p>
+        We may update these terms as the website and product develop. The date above identifies the latest version. Nothing in these
+        terms excludes or limits rights or responsibilities that cannot lawfully be excluded or limited.
+      </p>
       <h2>Contact</h2>
       <p>
-        Questions: <a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>.
+        Questions about this website, the launch list or a reservation: <a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>.
       </p>
+      <p>{reservation.merchantName}, 2810 North Church Street, STE 89620, Wilmington, DE 19802, United States.</p>
     </LegalPage>
   );
 }

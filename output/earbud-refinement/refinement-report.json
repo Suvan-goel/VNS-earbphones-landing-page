@@ -1,0 +1,14 @@
+{
+  "source": "/Users/suvangoel/VNS-earbuds-site/public/models/cymba-earbuds-hero.glb",
+  "sourceSHA256": "f7494bc25d86759c8a61f6e6dab1e920d15ba90cd98fa31c864cb8b5ef9a2ae6",
+  "sourceUnchanged": true,
+  "webModel": "/Users/suvangoel/VNS-earbuds-site/public/models/cymba-earbuds-refined.glb",
+  "sizeBytes": 1340032,
+  "blend": "/Users/suvangoel/VNS-earbuds-site/output/earbud-refinement/cymba-earbuds-refined.blend",
+  "finish": "Smoke-grey silicone, satin champagne accents, graphite bronze housing, charcoal soft-touch rubber",
+  "triangles": 110870,
+  "textureResolution": [
+    2048,
+    2048
+  ]
+}

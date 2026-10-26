@@ -1,4 +1,4 @@
-import { Earpiece, EarpieceDefs } from "./Earpiece";
+import { CABLE_ANCHOR, Earpiece, EarpieceDefs } from "./Earpiece";
 
 /**
  * Line drawing of a left ear with the concept earpiece seated in the concha.
@@ -7,12 +7,13 @@ import { Earpiece, EarpieceDefs } from "./Earpiece";
  */
 export function EarView({ className = "", showLabels = true }: { className?: string; showLabels?: boolean }) {
   const p = "ear";
+  const cable = { x: 160 + CABLE_ANCHOR.x * 0.42, y: 215 + CABLE_ANCHOR.y * 0.42 };
   return (
     <svg
       viewBox="40 40 500 490"
       className={className}
       role="img"
-      aria-label="Line drawing of an outer ear with the concept earpiece seated in the bowl of the ear. A soft fin reaches up into the cymba conchae, a small hollow above the ear canal, where two contacts would rest."
+      aria-label="Line drawing of an outer ear with the earpiece seated in the bowl of the ear. A soft fin reaches up into the cymba conchae, a small hollow above the ear canal, where two contacts would rest."
     >
       <EarpieceDefs p={p} />
       <g fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -43,9 +44,8 @@ export function EarView({ className = "", showLabels = true }: { className?: str
         strokeWidth="1.2"
       />
 
-      {/* cable over the top of the ear, continuing behind it */}
-      <path d="M 278 250 C 290 190 318 122 334 86 C 342 66 360 60 376 68" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" opacity="0.9" />
-      <path d="M 376 68 C 404 88 420 180 418 300" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeDasharray="1 7" opacity="0.45" />
+      {/* Cable falls below the earpiece, matching the product concept images. */}
+      <path d={`M ${cable.x} ${cable.y} C ${cable.x + 10} ${cable.y + 25}, 294 402, 292 440 S 288 494, 296 520`} fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" opacity="0.9" />
 
       {/* earpiece */}
       <g transform="translate(160 215) scale(0.42)">

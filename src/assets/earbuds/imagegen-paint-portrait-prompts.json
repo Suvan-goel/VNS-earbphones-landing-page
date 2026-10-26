@@ -1,0 +1,22 @@
+{
+  "mode": "built-in ImageGen",
+  "intent": "edit",
+  "use_case": "precise-object-edit",
+  "created": "2026-10-19",
+  "source_generated_image": "/Users/suvangoel/.codex/generated_images/01a153ef-6b88-7220-9645-73e3c68dc03f/exec-98027460-e083-445d-b938-4490bbbe3b37.png",
+  "output": "src/assets/earbuds/listening-portrait-paint.webp",
+  "input_images": [
+    {
+      "path": "src/assets/earbuds/listening-portrait-charcoal.webp",
+      "role": "Approved portrait edit target; preserve person, subtle smile and earphone"
+    }
+  ],
+  "transparent_background": false,
+  "export": {
+    "format": "webp",
+    "quality": 93,
+    "resize": false
+  },
+  "presentation": "4:5 portrait at 90% column width, capped at 500px, with nested horizontal and vertical edge masks blending into the dark page.",
+  "prompt": "Use case: precise-object-edit.\nAsset type: premium audio website editorial portrait with an expressive painted backdrop.\nEdit target: the attached approved photograph.\nPrimary request: Keep this EXACT Black man, his recognizable facial features, natural skin texture, subtle smile, hairstyle, eye direction, pose, graphite wired earphone, earphone fit and fine black cable. Change the framing and background only.\nFraming: Pull the camera back modestly so the exact same head and shoulders occupy about 85% of their current size within a 4:5 portrait canvas. Give a little more breathing room around the top and sides of his head. Do not change his pose, face proportions or expression. Maintain the same natural photographic light on the man.\nBackground: Behind his head, add one conspicuous but tasteful abstract pink and purple PAINT SPLASH. It should be an irregular asymmetric sweep of dusty hot pink, berry-magenta and violet pigment, with organic brush edges, layered semi-dry paint texture and a handful of fine dispersed droplets. Think physical matte paint or ink on dark paper, photographed as a luxury editorial backdrop. The visible splash should extend above and to both sides of the head, a little more to the upper left, making the colour clearly noticeable in a dark webpage. Keep the paint entirely BEHIND him, with no paint on his face, hair, clothing, cable or earbud. Avoid a smooth radial neon glow, symmetrical halo, perfect circle, flames, smoke or large cartoon splatters.\nBlending: Underlying background and all four outermost edges stay very dark neutral charcoal approximately #111213. Fade the dispersed pigment gradually into the charcoal toward the perimeter, leaving dark breathing room at the edge so the image blends into a dark page. Lower clothing fades softly into charcoal too.\nInvariants: Preserve the exact subject identity and accepted realistic photography, earbud geometry and fit, original gentle closed-mouth smile, lighting and unretouched skin. Only zoom out a little and replace the background treatment. One person, no additional objects. No text, logos, borders or watermark. Opaque background."
+}

@@ -1,0 +1,71 @@
+{
+  "size_bytes": 3203320,
+  "meshes": 29,
+  "nodes": 29,
+  "triangles": 195448,
+  "vertices": 122498,
+  "images": [
+    {
+      "name": "Image_2",
+      "type": "image/jpeg",
+      "size": [
+        2048,
+        2048
+      ],
+      "bytes": 193126
+    },
+    {
+      "name": "Image_0",
+      "type": "image/jpeg",
+      "size": [
+        2048,
+        2048
+      ],
+      "bytes": 432255
+    },
+    {
+      "name": "Image_1",
+      "type": "image/jpeg",
+      "size": [
+        2048,
+        2048
+      ],
+      "bytes": 1671468
+    }
+  ],
+  "extensionsRequired": [
+    "KHR_draco_mesh_compression"
+  ],
+  "decoded_with_bundled_decoder": true,
+  "bounds_metres": {
+    "min": [
+      -0.08132760019369403,
+      1.0523942828299937e-11,
+      -0.054849177104707714
+    ],
+    "max": [
+      0.10675012377177029,
+      0.016712286981492634,
+      0.04284216130613361
+    ]
+  },
+  "front_rotated_bounds_metres": {
+    "min": [
+      -0.08132760019369403,
+      -0.04284216130613361,
+      1.0523939469756478e-11
+    ],
+    "max": [
+      0.10675012377177029,
+      0.054849177104707714,
+      0.016712286981492637
+    ]
+  },
+  "poster": {
+    "path": "/Users/suvangoel/VNS-earbuds-site/public/models/cymba-wired-assembly-poster.webp",
+    "size_bytes": 53972,
+    "width": 1600,
+    "height": 900,
+    "transparent": true
+  }
+}

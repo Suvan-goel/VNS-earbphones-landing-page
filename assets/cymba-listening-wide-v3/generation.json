@@ -1,0 +1,8 @@
+{
+  "tool": "built-in image_gen",
+  "prompt": "Edit this existing wide studio photo. Enlarge the man by approximately 25-30% compared with this reference while preserving the exact person, face, earbud, braided cable, lighting, gray backdrop and photograph style. He was made too small in this reference. Aim for a moderate size: the top of his hair at 12% of the frame height, bottom of chin at 64% height, head centered at x76% of the canvas. Head height about52% of frame. Keep the full head in frame with ample margin above and to the right. Extend the black sweater to the bottom edge. Keep left55% as empty grey studio background. Maintain the same 2.08:1 landscape composition. Sharply resolve skin, curls, knit fabric and metallic earbud details. Preserve identity; no changes to face or expression. No text, no UI, no logos. Requested output:3840x1840 pixels, highest available resolution.",
+  "requested_dimensions": "3840x1840",
+  "actual_dimensions": "1810x869",
+  "resolution_status": "Built-in tool did not honor requested dimensions.",
+  "output": "listening-portrait-studio-grey-wide-v3.png"
+}

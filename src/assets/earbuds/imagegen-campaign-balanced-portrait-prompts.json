@@ -1,0 +1,22 @@
+{
+  "mode": "built-in ImageGen",
+  "intent": "selection of existing image",
+  "created": "2026-10-19",
+  "source_generated_image": "/Users/suvangoel/.codex/generated_images/01a153ef-6b88-7220-9645-73e3c68dc03f/exec-f2161a34-587b-4823-a296-635477e5799e.png",
+  "output": "src/assets/earbuds/listening-portrait-campaign-balanced.png",
+  "selection": "User explicitly selected this original generated PNG after reviewing the stronger expression.",
+  "input_images": [
+    {
+      "path": "src/assets/earbuds/listening-portrait-campaign-charcoal.webp",
+      "role": "Campaign identity, pose, lighting and product reference"
+    }
+  ],
+  "transparent_background": false,
+  "export": {
+    "format": "png",
+    "conversion": false,
+    "resize": false,
+    "operation": "byte-for-byte copy"
+  },
+  "prompt": "Edit ONLY the facial expression of this exact portrait. The user finds the expression still too cheerful and wants a CLEARLY MORE SERIOUS look. Make the change unmistakable but realistic.\n\nKeep the SAME man with exactly the same facial identity, nose, lips, facial proportions, short coiled hair, beard, skin tone, pose, lifted chin and upward-right gaze. Keep the camera crop and all lighting. Keep the dark opaque charcoal background unchanged. Keep the graphite wired earbud, its position, faceplate, contact wing and cable EXACTLY as they are. Keep the black knit top.\n\nEXPRESSION: remove ALL trace of a smile, smirk or pleased expression. Lower the mouth corners from their current uplift, make the closed mouth rest in a firm neutral line, and release the raised cheek muscles. Give the jaw a slightly firmer set. Lower the brows very slightly and narrow the eyes just a little for a serious, intent, concentrated gaze. He should read as resolute, focused and self-assured, like a strong premium technology campaign portrait. Subtly stern is appropriate. Do not leave a soft half-smile. Do not create a comical scowl, clenched teeth, exaggerated angry forehead wrinkles, sadness or aggression. The eyes must still look upward-right with the same head angle.\n\nPreserve realistic photographic skin and natural imperfections. Do not sharpen or amplify skin texture or beard outlines. No beauty retouching, plastic skin or etched textures. Preserve the existing photo's dimensions and composition. No other changes, no typography, no logos. Fully opaque background, no transparency."
+}

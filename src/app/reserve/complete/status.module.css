@@ -1,0 +1,261 @@
+.layout {
+  width: min(100%, 620px);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.card {
+  padding: 40px;
+  border: 1px solid #dedee3;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 5px 24px rgb(29 29 31 / 3%);
+  color: #1d1d1f;
+}
+
+.previewNotice {
+  margin: 0 0 30px;
+  padding: 13px 16px;
+  border: 1px solid #e3e3e7;
+  border-radius: 10px;
+  background: #f7f7f8;
+  color: #686870;
+  font-size: 13px;
+  line-height: 1.6;
+  text-align: left;
+}
+
+.previewNotice strong {
+  display: block;
+  margin-bottom: 2px;
+  color: #1d1d1f;
+  font-weight: 500;
+}
+
+.statusMark {
+  display: inline-flex;
+  width: 50px;
+  height: 50px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e3e3e7;
+  border-radius: 50%;
+  background: #f7f7f8;
+  color: #686870;
+}
+
+.statusMark[data-confirmed] {
+  border-color: #e0e9e5;
+  background: #f4f8f5;
+  color: #527362;
+}
+
+.statusMark svg {
+  width: 25px;
+  height: 25px;
+}
+
+.eyebrow {
+  margin: 22px 0 10px;
+  color: #686870;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .12em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  color: #1d1d1f;
+  font-size: clamp(32px, 4vw, 40px);
+  font-weight: 500;
+  letter-spacing: -.035em;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.founder {
+  display: inline-flex;
+  gap: 8px;
+  margin: 20px 0 0;
+  padding: 8px 12px;
+  border: 1px solid #e3e3e7;
+  border-radius: 7px;
+  color: #686870;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.founder span {
+  color: #1d1d1f;
+  font-variant-numeric: tabular-nums;
+}
+
+.description {
+  margin: 20px 0 0;
+  color: #686870;
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.summary {
+  margin-top: 28px;
+  padding: 22px;
+  border: 1px solid #e3e3e7;
+  border-radius: 12px;
+  background: #f7f7f8;
+  text-align: left;
+}
+
+.details {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.details > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.details dt {
+  color: #686870;
+}
+
+.details dd {
+  margin: 0;
+  color: #1d1d1f;
+  font-weight: 500;
+  text-align: right;
+}
+
+.note {
+  margin: 20px 0 0;
+  padding-top: 17px;
+  border-top: 1px solid #e3e3e7;
+  color: #686870;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.primaryButton,
+.secondaryButton {
+  display: flex;
+  min-height: 50px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 18px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  text-decoration: none;
+  transition: background 150ms ease, border-color 150ms ease;
+}
+
+.primaryButton {
+  background: #202023;
+  color: #fff;
+}
+
+.primaryButton:hover {
+  background: #36363b;
+}
+
+.secondaryButton {
+  border-color: #dedee3;
+  background: #fff;
+  color: #686870;
+}
+
+.secondaryButton:hover {
+  border-color: #c5c5cb;
+  background: #f7f7f8;
+}
+
+.primaryButton:focus-visible,
+.secondaryButton:focus-visible,
+.support a:focus-visible {
+  outline: 2px solid #202023;
+  outline-offset: 4px;
+}
+
+.support {
+  margin: 22px 0 0;
+  color: #686870;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.support a {
+  color: #686870;
+  text-decoration: underline;
+  text-decoration-color: #e3e3e7;
+  text-underline-offset: 3px;
+}
+
+.support a:hover {
+  color: #1d1d1f;
+}
+
+.previewForm {
+  margin-top: 28px;
+  text-align: left;
+}
+
+.sectionTitle {
+  margin: 0;
+  color: #1d1d1f;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.smallDescription {
+  margin: 8px 0 0;
+  color: #686870;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+@media (max-width: 600px) {
+  .card {
+    padding: 28px 22px;
+  }
+
+  .title {
+    font-size: 34px;
+  }
+
+  .summary {
+    padding: 18px;
+  }
+
+  .details {
+    font-size: 13px;
+  }
+
+  .details > div {
+    gap: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .primaryButton,
+  .secondaryButton {
+    transition: none;
+  }
+}

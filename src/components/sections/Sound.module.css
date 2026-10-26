@@ -1,0 +1,54 @@
+.section {
+  position: relative;
+  padding-block: clamp(72px, 7vw, 104px);
+}
+
+.header {
+  margin-bottom: clamp(32px, 4vw, 56px);
+  text-align: center;
+}
+
+.title {
+  margin-top: 16px;
+  font-size: clamp(2.25rem, 4vw, 3.5rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.title span { color: var(--color-ivory-soft); }
+
+.lede {
+  max-width: 34rem;
+  margin: 16px auto 0;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
+/* The picture sits in the same plain frame as every other image on the page. */
+.figure {
+  width: min(100%, 1330px);
+  margin: 0 auto;
+  padding-inline: 20px;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-image);
+  background: var(--color-studio);
+}
+
+@media (min-width: 640px) {
+  .figure { padding-inline: 32px; }
+}
+@media (min-width: 1024px) {
+  .figure { padding-inline: 48px; }
+}
+@media (max-width: 767px) {
+  .title { max-width: 18ch; margin-inline: auto; }
+  .title span { display: block; }
+}

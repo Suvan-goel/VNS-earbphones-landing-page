@@ -1,0 +1,21 @@
+{
+  "asset": "03-study.png",
+  "date": "2026-10-20",
+  "tool": "image_gen.imagegen",
+  "mode": "built-in",
+  "intent": "generate from reference",
+  "prompt": "Use case: product-mockup\nAsset type: portrait 4:5 website lifestyle product photograph, study scene, single image.\nPrimary request: Create a beautifully composed editorial photograph of the exact wired CYMBA earbuds shown in the references, resting beside an open notebook, a simple graphite pencil and the cropped edge of one closed textbook. Quiet morning study desk, subtle signs of use, tactile pale grey tabletop, notebook ivory paper. No person or hands. The product is the focus; props provide scale and context.\nInput images: Image 1 is the authoritative product geometry reference; Image 2 is supporting commercial finish reference. Preserve the hardware, shape, physical construction and colors.\nSubject: Two compact in-ear earpieces at believable earbud scale, approximately 2.5 cm housings and fins, subtly domed satin-black oval outer faceplates with thin pale champagne bezels, smoked translucent charcoal housings, soft plain black curved concha fins, smoke-grey silicone tips with slim champagne insets. Two oval champagne body contacts and one recessed optical window only on the inward side below the plain fin, only when naturally visible. One black braided cable exits the bottom of each housing. Both branches join one slim cable with the exact rounded charcoal inline controller: minus, central, plus buttons and small status light; USB-C plug. Natural connected cable routing, do not invent additional components. Show one outer face clearly and a subtle oblique inner view of the other.\nComposition: Portrait 4:5. Three-quarter overhead view, medium close framing; pair of earbuds in the central foreground on the tabletop, open notebook across the upper-left, pencil resting naturally along the notebook edge. Controller placed to the lower-right of the earbuds, cable makes a gentle loose curve with natural tension. Textbook only a cropped quiet edge. Restrained negative space. Natural scale in relation to pencil and notebook. Scene feels someone has just stepped away. Do not recreate the giant product scale of the reference.\nLighting: Soft directional morning window light, delicate long shadows, mild warm highlight, rich realistic charcoal detail. Premium editorial product photography, photorealistic fine material texture, very light grain, controlled depth of field, no overprocessed CGI gloss.\nPalette: Graphite, soft grey, pale champagne, ivory, muted warm daylight.\nConstraints: No people, hands, faces, logos, labels, captions, watermarks, readable generated text, packaging or charging cases. Notebook may have faint nonsemantic small pencil marks but no words. No over-ear cable routing, no metallic contact pads on fins, no invented electronics or neon effects. Output a single full-bleed 4:5 portrait photograph.",
+  "references": [
+    "/Users/suvangoel/VNS-earbuds-site/assets/cymba-locked-design-reference.png",
+    "/Users/suvangoel/VNS-earbuds-site/src/assets/earbuds/hero-premium-pair-v2.webp"
+  ],
+  "transparent_background": false,
+  "generated_source": "/Users/suvangoel/.codex/generated_images/01a159ca-cd34-71e2-99ff-18aeeb2233e0/exec-070c9df8-4bc4-4956-8a7d-792e5e7b2efd.png",
+  "qa_notes": [
+    "Inspected generated image at full displayed resolution.",
+    "Portrait 4:5 composition; no people or readable text.",
+    "Product faceplate, plain black fins, inner contacts, optical window, smoke-grey tips and bottom-exit braided cable match the locked reference.",
+    "Morning study scene includes notebook, pencil and textbook edge; controller and USB-C visible.",
+    "Accepted first generation; no postprocessing."
+  ]
+}

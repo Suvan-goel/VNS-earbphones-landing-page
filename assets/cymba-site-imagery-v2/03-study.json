@@ -1,0 +1,22 @@
+{
+  "asset": "03-study.png",
+  "tool": "image_gen.imagegen (built-in)",
+  "intent": "generate new photo from product geometry reference images",
+  "source": "/Users/suvangoel/.codex/generated_images/01a15ada-c5b1-76c2-8aee-474bea5ba45e/exec-d06245fb-2df4-45b4-b355-e228101655df.png",
+  "prompt": "Use case: photorealistic-natural\nAsset type: CYMBA website study lifestyle image, portrait 4:5.\nPrimary request: A true 90-degree overhead editorial flatlay photograph of a quiet study desk with an open ivory notebook, a graphite pencil and TWO SMALL wired CYMBA earbuds casually put down after use. The camera is exactly vertical above the table, no horizon, no perspective looking toward the table. A wider environment with realistic small earbuds, each approximately 3 cm long alongside a normal 17 cm pencil. The earbuds occupy less than 15% of the image area together.\n\nInput image 1 is a GEOMETRY AND MATERIAL reference for the outside of the earbud only. Input image 2 is a GEOMETRY AND MATERIAL reference for the inside only. DO NOT copy their upright orientation, camera angle, lighting or scale. You must rotate and reposition each earbud physically in the scene.\n\nComposition: open notebook set diagonally across the central and upper-left area of the frame. One earbud rests FACE-UP on the lower-right notebook page, rotated CLOCKWISE approximately 100 degrees from the reference so its curved black concha fin points RIGHT and its cable socket and black braided cable exit LEFT. The SECOND earbud lies flat on the desk to the lower-left of the notebook, ROLLED OVER showing its inner contact side, rotated approximately 210 degrees from the reference so its fin points DOWN-LEFT and its cable socket points UP-RIGHT. Both buds are physically resting horizontally on their sides, not standing upright on the cable. The two buds point in visibly different directions and are separated. Loose asymmetric cable loops lie flat and wander around the lower notebook edge; the small controller can be omitted outside the crop. The cable may lead any direction in the frame because each bud is rotated.\n\nLocked design: compact smoked charcoal resin shell, subtly oval satin black outer faceplate with very thin champagne perimeter, soft curved plain black concha fin, short nozzle with smoke grey silicone tip. Inner side has two oval champagne contact patches on body and separate optical window; no contacts on the fin. Preserve the reference's geometry with plausible foreshortening from above. Fine black braided cable connects at each device's local bottom socket. No invented hardware.\n\nMood: soft directional morning window light, delicate natural shadows, pale warm grey desktop, subtle paper texture, graphite and muted champagne product details. Quiet authentic editorial photography with restrained premium quality.\nAvoid: upright earbuds, matched parallel buds, a staged hero pair, two fins both pointing up, cable exits both pointing down, oversized products, overhead three-quarter fake view, perfect symmetry, duplicate product orientation, human, text overlays, branding, watermark. Unreadable faint note markings on paper are fine.",
+  "references": [
+    "/Users/suvangoel/VNS-earbuds-site/assets/cymba-site-imagery-v1/06-outer-detail.png",
+    "/Users/suvangoel/VNS-earbuds-site/assets/cymba-site-imagery-v1/07-inner-detail.png"
+  ],
+  "qa": {
+    "status": "accepted",
+    "camera": "90-degree overhead flatlay, no horizon; visible paper and cup directly from above.",
+    "pose": "Face-up right bud rotated with fin toward right and cable toward left; lower left bud inner side up with fin downward and cable toward upper right, mostly hidden beneath notebook.",
+    "placement": "Separated on notebook and desk with asymmetric loose cable loops. Clearly not upright hero pair.",
+    "scale": "Small against a normal notebook and pencil; two buds occupy modest part of frame.",
+    "geometry": "Smoked charcoal shells, champagne outer rim, curved black fin, grey silicone tips and fine black braided cables retained. Inner bud visibly shows two contact patches and an optical window; second contact appears rounder from projected view.",
+    "lighting": "Warm soft morning side light, credible paper and desktop texture.",
+    "people": "none",
+    "limitations": "AI generated depiction, not dimensionally validated product photography."
+  }
+}

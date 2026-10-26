@@ -1,0 +1,13 @@
+{
+  "webModel": "/Users/suvangoel/VNS-earbuds-site/public/models/cymba-neural-mannequin-premium.glb",
+  "bytes": 1200068,
+  "editableCurves": 544,
+  "triangles": 169203,
+  "originalPreserved": true,
+  "buildSteps": [
+    "premium_fibres.py (Blender)",
+    "trace_fibre_masks.py (Blender)",
+    "vectorize_fibres.py (Python with OpenCV/SciPy)",
+    "build_traced_fibres.py (Blender)"
+  ]
+}

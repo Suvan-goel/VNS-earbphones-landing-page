@@ -1,0 +1,63 @@
+"use client";
+
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useThree } from "@react-three/fiber";
+import { useMotionValue } from "motion/react";
+import { EarbudExperience } from "./EarbudExperience";
+import { NeuralGlow } from "./NeuralGlow";
+import { Scene } from "./Scene";
+import { ModelRecoveryNotice } from "../ModelRecoveryNotice";
+
+function FailureProbe({ fail }: { fail: boolean }) {
+  if (fail) throw new Error("Simulated scene failure");
+  return null;
+}
+
+function ContextControl({ onContext }: { onContext: (extension: WEBGL_lose_context | null) => void }) {
+  const gl = useThree((state) => state.gl);
+  useEffect(() => {
+    onContext(gl.getContext().getExtension("WEBGL_lose_context"));
+  }, [gl, onContext]);
+  return null;
+}
+
+/** Development-only controls for testing a real graphics reset, without reloading. */
+export function SceneRecoveryStudio() {
+  const progress = useMotionValue(0.57);
+  const context = useRef<WEBGL_lose_context | null>(null);
+  const [status, setStatus] = useState("loading");
+  const [supported, setSupported] = useState(false);
+  const [version, setVersion] = useState(0);
+  const [fail, setFail] = useState(false);
+  const onContext = useCallback((extension: WEBGL_lose_context | null) => {
+    context.current = extension;
+    setSupported(Boolean(extension));
+  }, []);
+  const onReady = useCallback(() => setStatus("ready"), []);
+  const onLoading = useCallback(() => setStatus("recovering"), []);
+  const onError = useCallback((error: Error) => setStatus(`failed: ${error.message}`), []);
+  const retry = () => { setFail(false); setStatus("loading"); setVersion((value) => value + 1); };
+  return <main style={{ padding: 24 }}>
+    <h1>3D recovery check</h1>
+    <p role="status">{status}</p>
+    <div style={{ display: "flex", gap: 24 }}>
+      <button disabled={!supported} onClick={() => context.current?.loseContext()}>Lose graphics context</button>
+      <button disabled={!supported} onClick={() => context.current?.restoreContext()}>Restore graphics context</button>
+      <button onClick={() => progress.set(0)}>Hero pose</button>
+      <button onClick={() => progress.set(0.28)}>Turning pose</button>
+      <button onClick={() => progress.set(0.46)}>Seated pose</button>
+      <button onClick={() => progress.set(0.57)}>Mannequin pose</button>
+      <button onClick={() => progress.set(0.84)}>Rotated pose</button>
+      <button onClick={() => setFail(true)}>Simulate scene failure</button>
+    </div>
+    <div style={{ position: "relative", width: "100%", height: "75vh" }}>
+      <Scene key={version} shadows={false} onReady={onReady} onLoading={onLoading} onError={onError}>
+        <FailureProbe fail={fail} />
+        <ContextControl onContext={onContext} />
+        <EarbudExperience modelUrl="/models/cymba-earbuds-hero.glb" progress={progress} />
+        <NeuralGlow progress={progress} />
+      </Scene>
+      {status.startsWith("failed:") && <ModelRecoveryNotice onRetry={retry} />}
+    </div>
+  </main>;
+}

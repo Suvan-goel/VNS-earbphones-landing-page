@@ -1,0 +1,81 @@
+.section {
+  position: relative;
+  padding-block: clamp(64px, 7vw, 104px);
+  scroll-margin-top: 76px;
+}
+
+.legacyAnchor { position: absolute; top: 0; width: 1px; height: 1px; scroll-margin-top: 76px; pointer-events: none; }
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  grid-template-areas: "intro illustration" "steps illustration";
+  column-gap: clamp(32px, 4vw, 64px);
+  row-gap: 30px;
+  align-items: center;
+}
+
+.intro { grid-area: intro; align-self: end; }
+.intro > p:first-child { color: var(--color-rose-deep); }
+.title { margin-top: 18px; font-size: clamp(2.25rem, 3.8vw, 3.5rem); }
+.lede {
+  max-width: 31rem;
+  margin-top: 20px;
+  color: var(--color-muted);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+.figure {
+  grid-area: illustration;
+  width: 100%;
+  max-width: 420px;
+  justify-self: center;
+}
+.image { display: block; width: 100%; height: auto; }
+.live {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: var(--radius-image);
+  background: var(--color-studio);
+  overflow: hidden;
+}
+.still { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .live { display: none; }
+  .still { display: block; }
+}
+
+.steps {
+  grid-area: steps;
+  align-self: start;
+  max-width: 30rem;
+  display: grid;
+  gap: 22px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.step { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 14px; }
+.number { padding-top: 4px; font-size: 0.6875rem; font-weight: 500; font-variant-numeric: tabular-nums; color: var(--color-rose); }
+.step h3 { font-size: 1.0625rem; font-weight: 500; line-height: 1.4; letter-spacing: -0.02em; }
+.step p { margin-top: 7px; color: var(--color-muted); font-size: 0.9375rem; line-height: 1.6; }
+
+@media (max-width: 1023px) {
+  .section > div { max-width: 640px; }
+  .layout { grid-template-columns: minmax(0, 1fr); grid-template-areas: "intro" "illustration" "steps"; row-gap: 32px; }
+  .title { font-size: clamp(2.25rem, 6vw, 3.25rem); }
+  .lede { max-width: 32rem; }
+  .figure { max-width: 380px; }
+  .steps { max-width: none; }
+}
+
+@media (max-width: 599px) {
+  .title { font-size: clamp(1.875rem, 8.8vw, 3rem); }
+  .lede { margin-top: 20px; font-size: 1rem; }
+  .layout { row-gap: 30px; }
+  .figure { max-width: 340px; }
+  .steps { gap: 26px; }
+  .step { gap: 10px; }
+  .step p { font-size: 1rem; }
+}

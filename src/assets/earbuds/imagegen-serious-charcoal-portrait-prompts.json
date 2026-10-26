@@ -1,0 +1,33 @@
+{
+  "mode": "built-in ImageGen",
+  "intent": "edit",
+  "use_case": "precise-object-edit",
+  "created": "2026-10-19",
+  "source_generated_image": "/Users/suvangoel/.codex/generated_images/01a153ef-6b88-7220-9645-73e3c68dc03f/exec-ca90dbc7-ba71-4561-a965-9f2fb5005d4d.png",
+  "output": "src/assets/earbuds/listening-portrait-serious-charcoal.webp",
+  "input_images": [
+    {
+      "path": "src/assets/earbuds/listening-portrait-charcoal.webp",
+      "role": "Earlier approved portrait preserving identity, composition and product"
+    }
+  ],
+  "transparent_background": false,
+  "background_color_target": "#141316",
+  "export": {
+    "format": "webp",
+    "quality": 93,
+    "resize": false,
+    "width": 1122,
+    "height": 1402
+  },
+  "prompt": "Make a restrained photographic edit to the supplied portrait for a premium earphone brand. Preserve this SAME man's identity and exact pose, proportions, hairline, curls, beard growth, clothing, framing and earphone. Keep the original 4:5 portrait composition.\n\nChange his faint closed-mouth smile to a calm serious, attentive neutral expression: relax the upturned corner of the mouth, subtly settle the cheek, and keep the brow relaxed. He should look thoughtful and self-assured, not angry or sad. Preserve his nose shape, eyes, lips, jaw and facial structure. Do not change the person.\n\nKeep a dark, opaque solid near-black charcoal background approximately #141316, without glow, pink/purple illumination, vignette, patterns, paint effects or transparency. Preserve natural photographic light on his face so it stands out against the dark backdrop. The backdrop should be flat and unobtrusive.\n\nCRITICAL PHOTO QUALITY: match the input's restrained photographic rendering. Natural small-scale pores with soft variation, ordinary warm skin, subtle imperfections. Do not enhance microcontrast or sharpening, do not exaggerate pores or render maze-like etched lines on skin. No waxy gloss, no plastic retouching, no stylized illustration, no crunchy hair highlights. Skin should look like a professional camera photograph at normal viewing distance with gentle tonal transitions, NOT a hyper-detailed CGI portrait. Keep natural beard stubble and hair without ink-like outlines.\n\nPreserve the small graphite earphone correctly fitted in the visible ear, its round brushed-metal outer disc and narrow champagne rim, upper curved soft wing/contact details, and thin black cable descending down the black knit top. Do not alter product scale or geometry. No text or logos. The desired difference is a slightly more serious expression against clean dark charcoal, with natural photographic realism.",
+  "previous_attempts": [
+    {
+      "source": "src/assets/earbuds/listening-portrait-solid-plum.webp",
+      "output": "/Users/suvangoel/.codex/generated_images/01a153ef-6b88-7220-9645-73e3c68dc03f/exec-476b00c3-1a96-4076-b6aa-330b4cfa5a77.png",
+      "selected": false,
+      "reason": "Skin microcontrast too pronounced; refined from earlier source.",
+      "prompt": "Edit the supplied portrait with ONLY TWO restrained changes for a premium audio product campaign: (1) change the man's faint smile to a calm, composed, more serious neutral expression, and (2) make the opaque studio background much darker.\n\nThe same Black man must remain recognisably the same individual. Preserve his exact facial structure, nose, eye shape, hairline, natural coiled hair, beard, skin tone, natural pores and facial imperfections, age, head orientation and three-quarter profile looking toward the right. Preserve the camera framing, head size, body pose, charcoal knit clothing and realistic soft directional lighting. Relax the mouth into a closed, neutral resting position with no upturned smile; keep his eyes quietly attentive. He should look self-assured and thoughtful, not stern, angry, sad or dramatically frowning. Avoid beauty retouching and synthetic glossy skin.\n\nPreserve the visible graphite wired earphone EXACTLY: the correct in-ear placement and scale, round brushed-metal disc, delicate champagne-coloured rim, upper soft fin/contact details, and thin black cable down his chest. Do not redesign, enlarge, duplicate or relocate it.\n\nReplace the existing smoky plum background with a clean opaque solid near-black charcoal studio backdrop, approximate colour #151316, with only a barely perceptible warm plum undertone. The background should feel substantially darker, quiet, neutral and premium, while the man's face and the earphone remain clearly lit. No coloured glow, no halo, no paint, no gradients, no texture, no transparency, no vignette or fading edges. Keep a natural photographic separation between hair and background. No text, logos or extra objects. Keep the existing 4:5 portrait composition and close crop. Produce a photorealistic professional editorial portrait."
+    }
+  ]
+}

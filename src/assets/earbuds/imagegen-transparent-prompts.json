@@ -1,0 +1,43 @@
+{
+  "generatedOn": "2026-10-19",
+  "tool": "Built-in ImageGen",
+  "purpose": "Transparent premium product imagery with consistent graphite materials and studio lighting.",
+  "assets": [
+    {
+      "file": "hero-transparent.webp",
+      "source": "exec-8555f591-8724-41ee-9b92-4b646abaf785.png",
+      "references": [
+        "hero.webp",
+        "detail.webp"
+      ],
+      "transparentBackground": true,
+      "prompt": "Use case: product-mockup\nAsset type: transparent premium technology website hero product image.\nInput images: Image 1 is the reference for the pair of wired earbuds and compact inline controller. Image 2 is the reference for the precise earpiece design and materials. Generate a newly art-directed product render with the same product identity.\nPrimary request: A beautiful high-end studio CGI packshot of two graphite wired in-ear earphones and their small matching inline controller, floating in a composed diagonal arrangement. Genuinely transparent alpha background, isolated product only. No surface, backdrop, or baked-in shadows.\nProduct: circular radially brushed graphite metal faceplates, thin muted champagne titanium rims, dark sculpted housings, curved silicone contact wings with two small subtle metal contacts, soft grey silicone ear tips. Two discreet black cables exit the bottom of the earbuds, flow in natural graceful curves and connect coherently to one compact rounded graphite inline controller with one circular button and one tiny amber indicator. No over-ear wire loops.\nComposition: landscape 3:2, premium launch campaign composition, earbuds dominant in upper half with one slightly forward, inline controller smaller below and to the right; breathing room around the whole product group. Preserve clear separation. All solid product bodies fully in frame; cable can exit the lower edge only. No crossing tangled cables. The product should fill about 80 percent of the canvas width and height.\nLighting and finish: exquisite photorealistic industrial design, broad cool-neutral softbox reflections on brushed metal, narrow soft warm rim highlights, rich graphite midtones with visible texture, crisp clean antialiased edges that read well over a near-black #131415 webpage. Controlled contrast, tactile satin silicone, subtle machining, no excessive bloom.\nConstraints: keep reference product identity and wired architecture. No stand, stone, table, floor, reflections underneath, environment, background gradients, cast shadows, lettering, branding, labels, watermark, border or fake checkerboard. Background must be transparent. This is a concept render."
+    },
+    {
+      "file": "detail-transparent.webp",
+      "source": "exec-8c5136d0-661d-468c-9cd3-71759eddd8c4.png",
+      "references": [
+        "detail.webp"
+      ],
+      "transparentBackground": true,
+      "prompt": "Use case: product-mockup\nAsset type: transparent product detail render for a high-end tech brand website.\nInput image: exact product identity reference. Re-render this same single earbud as a polished isolated studio object, preserving its physical design.\nPrimary request: Exquisite macro three-quarter view of the graphite wired earpiece, suspended against a genuinely transparent alpha background. The circular radially brushed graphite faceplate and thin muted champagne titanium rim face the viewer at a slight angle; sculpted black housing, curved silicone contact wing with two small champagne pads, tiny black optical window and soft grey silicone ear tip are all visible. Match the reference proportions and details. Cable exits down from its strain relief and curves gently toward the lower-right edge.\nComposition: landscape 4:3; single complete earbud centered, filling 75 percent of frame, all wing and tip edges inside the canvas with generous margin. No extreme perspective, no cropped earbud. Product only.\nLighting and finish: luxury industrial-design CGI, neutral broad studio softbox with delicate warm edge lights, fine concentric brushed metal detail, tactile matte silicone, rich graphite midtones readable against near-black #131415, crisp natural antialiased edges, strong three-dimensional form. Match a premium dark technology product campaign.\nConstraints: preserve product shape, do not add components or redesign. Remove the stone and all other surroundings. No surface, floor, background color, cast shadows, reflections, background glow, rectangle, checkerboard, text, logos, labels or watermark. Actual transparency in all empty pixels. Concept visualization."
+    },
+    {
+      "file": "exploded-transparent.webp",
+      "source": "exec-fb49434a-ab9e-470b-bcd0-4788ae22453e.png",
+      "references": [
+        "exploded.webp",
+        "detail.webp"
+      ],
+      "transparentBackground": true,
+      "prompt": "Use case: product-mockup\nAsset type: transparent exploded product render for a premium technology website.\nInput images: Image 1 is the target exploded assembly and composition reference. Image 2 establishes the assembled earbud design. Re-render the same six main component groups with clean premium lighting and actual transparent background.\nPrimary request: Beautiful precision studio CGI exploded view of one graphite wired in-ear earphone, isolated against genuine alpha transparency. Preserve circular brushed graphite faceplate with thin muted champagne rim, small silver audio diaphragm and copper coil, sculpted graphite acoustic housing with bottom cable stem and tiny black optical window, curved matte silicone contact wing with two small champagne contacts floating just above its mounting point, compact black optical module, and replaceable soft-grey silicone ear tip. The six groups must read as one coherent concept assembly.\nComposition: wide landscape 2:1. Faceplate at left, audio driver, acoustic shell center with detached wing above it, sensor module, ear tip right. Consistent three-quarter perspective, modest even separation, all components fully in frame with 8 percent outer margin. Short black cable falls down gently from the shell toward lower edge. Elegant and uncluttered, no extraneous parts.\nLighting and finish: same premium dark product-campaign treatment as reference design, broad cool-neutral softbox reflection, restrained warm rim light, rich graphite midtones readable on a near-black webpage, sharp microtexture in machined metal and copper, softly textured silicone, physically realistic and visually refined.\nConstraints: remove the entire backdrop, floor and all shadows outside the objects. Genuine transparency between components and around silhouette. No solid background, gradient, checkerboard, lines, labels, text, logos, watermark, arrows, stand or new components. Preserve the reference concept identity. This is an illustrative design concept, not a manufacturing drawing."
+    }
+  ],
+  "derivatives": [
+    {
+      "file": "hero-social-transparent.png",
+      "source": "hero-transparent.webp",
+      "purpose": "Sharing-card PNG with preserved alpha"
+    }
+  ]
+}

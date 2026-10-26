@@ -41,7 +41,7 @@ export function Exploded({ className = "" }: { className?: string }) {
       viewBox="60 20 740 560"
       className={className}
       role="img"
-      aria-label="Exploded concept view of one earpiece showing, from outside in: faceplate, audio driver, acoustic shell, a soft fin with two stimulation contacts, an optical sensor window and a silicone ear tip."
+      aria-label="Exploded view of one earpiece showing, from outside in: faceplate, audio driver, acoustic shell, a soft fin with two stimulation contacts, an optical sensor window and a silicone ear tip."
     >
       <EarpieceDefs p={p} />
       <defs>
@@ -79,7 +79,7 @@ export function Exploded({ className = "" }: { className?: string }) {
         <path d="M -116 10 C -116 -38 -74 -60 -14 -62 C 56 -64 126 -50 128 0 C 130 52 66 70 -10 68 C -76 66 -116 52 -116 10 Z" fill={`url(#${p}-shell)`} />
         <path d="M -94 8 C -93 -28 -60 -44 -12 -45 C 48 -47 108 -36 109 2 C 110 40 56 52 -9 51 C -63 50 -95 42 -94 8 Z" fill="#1A1A1B" />
         <path d="M -90 14 C -88 -18 -58 -32 -14 -33" stroke="#fff" strokeOpacity="0.08" strokeWidth="2" fill="none" />
-        <rect x="104" y="-74" width="20" height="36" rx="6" transform="rotate(24 114 -56)" fill={`url(#${p}-barrel)`} />
+        <rect x="7" y="58" width="20" height="42" rx="6" fill={`url(#${p}-barrel)`} />
       </g>
 
       {/* 4 stimulation fin */}
