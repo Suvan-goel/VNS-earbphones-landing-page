@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useRef, type ReactNode, type RefObject } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
 import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
@@ -49,7 +49,9 @@ function prepareEarbud(scene: THREE.Group, side: "L" | "R", mobile: boolean) {
   oriented.traverse((object) => {
     const part = object as THREE.Mesh;
     if (!part.isMesh) return;
-    part.geometry = smoothEarbudNormals(part.geometry);
+    // Delivery models already carry the same smoothed normals. Keep a private
+    // geometry copy without repeating the neighbourhood search on the phone.
+    part.geometry = part.userData.cymbaNormalsSmoothed ? part.geometry.clone() : smoothEarbudNormals(part.geometry);
     const sign = side === "L" ? 1 : -1;
     const centre = new THREE.Vector3(sign * SLEEVE_END.x, SLEEVE_END.y, SLEEVE_END.z);
     const inward = new THREE.Vector3(-sign * SLEEVE_AXIS.x, -SLEEVE_AXIS.y, -SLEEVE_AXIS.z);
@@ -267,15 +269,50 @@ function EarbudPair({ modelUrl, progress }: { modelUrl: string; progress: Motion
   </>;
 }
 
+function DeferredMannequin({ progress, reveal, stimulation, mannequinGate }: {
+  progress: MotionValue<number>;
+  reveal: MotionValue<number>;
+  stimulation: MotionValue<number>;
+  mannequinGate?: ReactNode;
+}) {
+  const { mobile } = useSceneQuality();
+  const [enabled, setEnabled] = useState(() => progress.get() >= 0.14);
+  const requested = useRef(enabled);
+  const committedFrames = useRef(0);
+  const heroReadyAt = useRef<number | null>(null);
+
+  useFrame(() => {
+    if (requested.current) return;
+    // This callback mounts only once the sibling earbuds have resolved the
+    // outer Suspense boundary. Two earlier frames have then drawn the hero.
+    committedFrames.current++;
+    const enteringSculpture = progress.get() >= 0.14;
+    if (!enteringSculpture) {
+      if (committedFrames.current < 3) return;
+      heroReadyAt.current ??= performance.now();
+      if (performance.now() - heroReadyAt.current < 1000) return;
+    }
+    requested.current = true;
+    setEnabled(true);
+  });
+
+  if (!enabled) return null;
+  // Start the head and its textures together, after the visible hero has had
+  // priority. Restored pages and fast scrolling bypass the short idle delay.
+  preloadMannequin(mobile);
+  return <Suspense fallback={<AssetLoading />}>
+    {mannequinGate}
+    <Mannequin reveal={reveal} stimulation={stimulation} />
+    <EarSensingCue progress={progress} reveal={reveal} />
+  </Suspense>;
+}
+
 export function EarbudExperience({ modelUrl, progress, mannequinGate }: {
   modelUrl: string;
   progress: MotionValue<number>;
   /** Used by the development fixture to hold only the mannequin's loading. */
   mannequinGate?: ReactNode;
 }) {
-  // Start both downloads together; the head must not hold the earbuds in Suspense.
-  const { mobile } = useSceneQuality();
-  preloadMannequin(mobile);
   const presentation = useRef<THREE.Group>(null);
   const reveal = useMotionValue(0);
   const stimulation = useMotionValue(0);
@@ -323,10 +360,6 @@ export function EarbudExperience({ modelUrl, progress, mannequinGate }: {
   }, -2.5);
   return <group ref={presentation}>
     <EarbudPair modelUrl={modelUrl} progress={progress} />
-    <Suspense fallback={<AssetLoading />}>
-      {mannequinGate}
-      <Mannequin reveal={reveal} stimulation={stimulation} />
-      <EarSensingCue progress={progress} reveal={reveal} />
-    </Suspense>
+    <DeferredMannequin progress={progress} reveal={reveal} stimulation={stimulation} mannequinGate={mannequinGate} />
   </group>;
 }

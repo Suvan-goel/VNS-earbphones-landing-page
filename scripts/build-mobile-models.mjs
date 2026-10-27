@@ -1,6 +1,6 @@
 /**
  * Produce mobile geometry without lowering texture resolution or changing the
- * original models. Run: node scripts/build-mobile-models.mjs
+ * original models. Run with Node 22.18+: node scripts/build-mobile-models.mjs
  * Draco and meshoptimizer are already dependencies of the 3D toolchain.
  */
 import fs from "node:fs";
@@ -9,6 +9,8 @@ import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
 import draco from "draco3d";
 import { MeshoptSimplifier } from "meshoptimizer";
+import * as THREE from "three";
+import { smoothEarbudNormals } from "../src/components/three/smoothEarbudNormals.ts";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const decoderModule = await draco.createDecoderModule({});
@@ -207,8 +209,57 @@ function bounds(values, size) {
   return { min, max };
 }
 
+function bakeEarbudNormals(decoded) {
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.Float32BufferAttribute(decoded.attributes.POSITION, 3));
+  geometry.setAttribute("normal", new THREE.Float32BufferAttribute(decoded.attributes.NORMAL, 3));
+  // Run the exact runtime smoothing against the decoded mobile coordinates.
+  // Baking this expensive neighbourhood pass removes it from the phone's main
+  // thread without changing the shell's intended smooth shading.
+  const smoothed = smoothEarbudNormals(geometry);
+  decoded.attributes.NORMAL = Float32Array.from(smoothed.getAttribute("normal").array);
+  smoothed.dispose();
+  geometry.dispose();
+  return decoded;
+}
+
+function removeUnusedTextures(document, earbud) {
+  // EarbudExperience discards the scan normal. Mannequin supplies its stone
+  // maps separately and overrides every embedded surface image. Do not decode
+  // or transfer maps that the renderer will immediately replace.
+  for (const material of document.materials) {
+    delete material.normalTexture;
+    if (!earbud && material.name !== "Purple neural fibres") {
+      delete material.pbrMetallicRoughness?.baseColorTexture;
+      delete material.pbrMetallicRoughness?.metallicRoughnessTexture;
+    }
+  }
+  const textureReferences = [];
+  function collect(value) {
+    if (!value || typeof value !== "object") return;
+    for (const [key, child] of Object.entries(value)) {
+      if (key.endsWith("Texture") && Number.isInteger(child?.index)) textureReferences.push(child);
+      else collect(child);
+    }
+  }
+  collect(document.materials);
+  const usedTextures = [...new Set(textureReferences.map((ref) => ref.index))].sort((a, b) => a - b);
+  const textureMap = new Map(usedTextures.map((index, next) => [index, next]));
+  const textures = usedTextures.map((index) => document.textures[index]);
+  for (const ref of textureReferences) ref.index = textureMap.get(ref.index);
+  const usedImages = [...new Set(textures.map((texture) => texture.source))].sort((a, b) => a - b);
+  const imageMap = new Map(usedImages.map((index, next) => [index, next]));
+  const removedViews = new Set(document.images.filter((_, index) => !imageMap.has(index)).map((image) => image.bufferView));
+  const images = usedImages.map((index) => document.images[index]);
+  for (const texture of textures) texture.source = imageMap.get(texture.source);
+  if (textures.length) { document.textures = textures; document.images = images; }
+  else { delete document.textures; delete document.images; delete document.samplers; }
+  return removedViews;
+}
+
 const reports = [];
 for (const name of ["cymba-earbuds-hero", "cymba-neural-mannequin-organic-detailed"]) {
+  const earbud = name.includes("earbuds");
   const source = path.join(root, `public/models/${name}.glb`);
   const destination = path.join(root, `public/models/${name}-mobile.glb`);
   const original = fs.readFileSync(source);
@@ -225,12 +276,17 @@ for (const name of ["cymba-earbuds-hero", "cymba-neural-mannequin-organic-detail
     for (const primitive of mesh.primitives) {
       const extension = primitive.extensions.KHR_draco_mesh_compression;
       const originalMesh = decode(originalViews[extension.bufferView], extension.attributes);
-      const settings = name.includes("earbuds")
+      const settings = earbud
           ? { ratio: 0.28, error: 0.0012, weights: [0.1, 0.1, 0.1, 1, 1] }
           : { ratio: 0.25, error: 0.001, weights: [0.1, 0.1, 0.1, 1, 1] };
       const mobileMesh = fibre ? simplifyFibres(originalMesh) : simplify(originalMesh, settings);
-      const encoded = encode(mobileMesh);
-      const verified = decode(encoded.bytes, encoded.ids);
+      let encoded = encode(mobileMesh);
+      let verified = decode(encoded.bytes, encoded.ids);
+      if (earbud) {
+        encoded = encode(bakeEarbudNormals(verified));
+        verified = decode(encoded.bytes, encoded.ids);
+        mesh.extras = { ...mesh.extras, cymbaNormalsSmoothed: true };
+      }
       const sourceComponents = componentCount(originalMesh.indices, originalMesh.attributes.POSITION.length / 3);
       const outputComponents = componentCount(verified.indices, verified.attributes.POSITION.length / 3);
       if (verified.indices.length !== mobileMesh.indices.length || (fibre && sourceComponents !== outputComponents))
@@ -254,15 +310,30 @@ for (const name of ["cymba-earbuds-hero", "cymba-neural-mannequin-organic-detail
         settings: fibre ? { method: "resample along original six-sided tubes", centreTolerance: 0.0015, radiusTolerance: 0.00025 } : settings });
     }
   }
+  const removedViews = removeUnusedTextures(document, earbud);
+  const viewMap = new Map();
   let offset = 0;
-  const chunks = originalViews.map((originalView, index) => {
+  const chunks = [];
+  const bufferViews = [];
+  originalViews.forEach((originalView, index) => {
+    if (removedViews.has(index)) return;
     const bytes = replacements.get(index) ?? originalView;
-    document.bufferViews[index].byteOffset = offset;
-    document.bufferViews[index].byteLength = bytes.length;
+    const view = document.bufferViews[index];
+    view.byteOffset = offset;
+    view.byteLength = bytes.length;
+    viewMap.set(index, bufferViews.length);
+    bufferViews.push(view);
     const padded = Buffer.concat([bytes, Buffer.alloc((4 - bytes.length % 4) % 4)]);
     offset += padded.length;
-    return padded;
+    chunks.push(padded);
   });
+  document.bufferViews = bufferViews;
+  for (const image of document.images ?? []) image.bufferView = viewMap.get(image.bufferView);
+  for (const accessor of document.accessors) if (accessor.bufferView !== undefined) accessor.bufferView = viewMap.get(accessor.bufferView);
+  for (const mesh of document.meshes) for (const primitive of mesh.primitives) {
+    const extension = primitive.extensions.KHR_draco_mesh_compression;
+    extension.bufferView = viewMap.get(extension.bufferView);
+  }
   document.buffers[0].byteLength = offset;
   const json = Buffer.from(JSON.stringify(document));
   const paddedJson = Buffer.concat([json, Buffer.alloc((4 - json.length % 4) % 4, 32)]);
@@ -274,11 +345,19 @@ for (const name of ["cymba-earbuds-hero", "cymba-neural-mannequin-organic-detail
   binaryHeader.writeUInt32LE(outputBinary.length, 0); binaryHeader.writeUInt32LE(0x004e4942, 4);
   const output = Buffer.concat([header, paddedJson, binaryHeader, outputBinary]);
   fs.writeFileSync(destination, output);
-  const texturesUnchanged = originalViews.every((bytes, index) => replacements.has(index) || bytes.equals(outputBinary.subarray(document.bufferViews[index].byteOffset, document.bufferViews[index].byteOffset + document.bufferViews[index].byteLength)));
+  const texturesUnchanged = originalViews.every((bytes, index) => {
+    if (replacements.has(index) || removedViews.has(index)) return true;
+    const view = document.bufferViews[viewMap.get(index)];
+    return bytes.equals(outputBinary.subarray(view.byteOffset, view.byteOffset + view.byteLength));
+  });
   if (!texturesUnchanged || !original.equals(fs.readFileSync(source))) throw new Error("Original asset preservation failed");
   reports.push({ source: path.relative(root, source), destination: path.relative(root, destination), sourceSha256: hash(original), sha256: hash(output),
     sourceBytes: original.length, bytes: output.length, trianglesBefore: meshes.reduce((n, m) => n + m.trianglesBefore, 0), triangles: meshes.reduce((n, m) => n + m.triangles, 0),
-    allTexturesByteIdentical: texturesUnchanged, originalUnchanged: true, meshes });
+    retainedTexturesByteIdentical: texturesUnchanged,
+    unusedEmbeddedTextureBytesRemoved: [...removedViews].reduce((n, index) => n + originalViews[index].length, 0),
+    embeddedImagesRetained: document.images?.length ?? 0,
+    normalsBaked: earbud ? "src/components/three/smoothEarbudNormals.ts" : false,
+    originalUnchanged: true, meshes });
 }
 fs.writeFileSync(path.join(root, "scripts/mobile-models-report.json"), JSON.stringify(reports, null, 2) + "\n");
 console.log(JSON.stringify(reports, null, 2));

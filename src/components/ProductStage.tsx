@@ -13,6 +13,8 @@ import { STORY_SCROLL_SCREENS, PORTRAIT_ENTRY_START, MODEL_SCROLL_SCREENS, CLOSI
 import { HeroSignup } from "./HeroSignup";
 import { AppPreview } from "./sections/AppPreview";
 import { ModelLoadingNotice, ModelRecoveryNotice } from "./ModelRecoveryNotice";
+import { ProductAssetHints } from "./ProductAssetHints";
+import { HeroPoster } from "./HeroPoster";
 import styles from "./ProductStage.module.css";
 
 /* The 3D stage only runs in the browser. */
@@ -239,6 +241,7 @@ export function ProductStage({
 
   return (
     <>
+      {modelUrl && <ProductAssetHints modelUrl={modelUrl} />}
       {/* The room, fixed behind the page. It appears for the last chapter and stays, blurred and dark, under everything after. */}
       <motion.div className={styles.scene} style={{ clipPath: sceneClip, y: sceneY, visibility: sceneVisibility }} aria-hidden="true">
         <motion.div className={styles.sceneVisual} style={{ filter: mobilePortrait ? "none" : sceneBlur, scale: sceneScale }}>
@@ -312,7 +315,7 @@ export function ProductStage({
               <div className={styles.flight}>
                 <motion.div className={styles.media} data-product-model={failed || !modelUrl ? "fallback" : ready ? "loaded" : "loading"}>
                   {!failed && modelUrl && <StageScene progress={p} readProgress={readProgress} modelUrl={modelUrl} onReady={onReady} onLoading={onLoading} onError={onError} />}
-                  {posterUrl && <Image src={posterUrl} alt="" fill sizes="50vw" quality={95} priority className={styles.poster} data-ready={ready || undefined} />}
+                  {posterUrl && <HeroPoster src={posterUrl} ready={ready} priority />}
                   {!ready && !failed && modelUrl && <ModelLoadingNotice />}
                   {failed && modelUrl && <ModelRecoveryNotice onRetry={retry} />}
                 </motion.div>

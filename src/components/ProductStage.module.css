@@ -263,13 +263,6 @@
   background: #d1d1d6;
   border-color: #d1d1d6;
 }
-/* The poster covers the canvas until the model is ready, then fades away. */
-.poster {
-  object-fit: contain;
-  transition: opacity 0.5s ease;
-}
-.poster[data-ready] { opacity: 0; }
-
 /* The stacked sections for phones, short screens and readers who prefer reduced motion. */
 .fallback {
   display: none;
