@@ -5,7 +5,8 @@ import { useGLTF, useTexture } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { type MotionValue } from "motion/react";
 import * as THREE from "three";
-import { MANNEQUIN_AO_URL, MANNEQUIN_STONE_NORMAL_URL, MANNEQUIN_STONE_ROUGHNESS_URL, MANNEQUIN_MODEL_URL } from "./productAssets";
+import { MANNEQUIN_AO_URL, MANNEQUIN_STONE_NORMAL_URL, MANNEQUIN_STONE_ROUGHNESS_URL, MANNEQUIN_MODEL_URL, MANNEQUIN_MOBILE_MODEL_URL } from "./productAssets";
+import { useSceneQuality } from "./sceneQuality";
 
 /** The supplied Meshy sculpture, with Blender-baked marble and surface fibres. */
 export function Mannequin({ reveal, stimulation, stimulationVisibility }: {
@@ -13,7 +14,8 @@ export function Mannequin({ reveal, stimulation, stimulationVisibility }: {
   stimulation: MotionValue<number>;
   stimulationVisibility?: MotionValue<number>;
 }) {
-  const { scene } = useGLTF(MANNEQUIN_MODEL_URL, "/draco/");
+  const { mobile } = useSceneQuality();
+  const { scene } = useGLTF(mobile ? MANNEQUIN_MOBILE_MODEL_URL : MANNEQUIN_MODEL_URL, "/draco/");
   const occlusion = useTexture(MANNEQUIN_AO_URL);
   const stoneNormal = useTexture(MANNEQUIN_STONE_NORMAL_URL);
   const stoneRoughness = useTexture(MANNEQUIN_STONE_ROUGHNESS_URL);
@@ -115,8 +117,8 @@ export function Mannequin({ reveal, stimulation, stimulationVisibility }: {
       mesh.material = Array.isArray(mesh.material) ? mesh.material.map(prepare) : prepare(mesh.material);
       const isNerveMesh = mesh.name.includes("Fibres");
       // Only the stone casts and receives the key light's self-shadow.
-      mesh.castShadow = !isNerveMesh;
-      mesh.receiveShadow = !isNerveMesh;
+      mesh.castShadow = !mobile && !isNerveMesh;
+      mesh.receiveShadow = !mobile && !isNerveMesh;
       mesh.renderOrder = isNerveMesh ? 2 : 1;
       if (isNerveMesh) { mesh.visible = false; nerveMeshes.push(mesh); }
       else surfaceMeshes.push(mesh);
@@ -139,19 +141,21 @@ export function Mannequin({ reveal, stimulation, stimulationVisibility }: {
     // The receiver turns with the model so the contact patch stays under its base.
     const shadowY = new THREE.Box3().setFromObject(model).min.y - 0.015;
     const shadowGeometry = new THREE.PlaneGeometry(3, 3);
-    const shadowMaterial = new THREE.ShadowMaterial({
-      color: "#26242a",
-      opacity: 0,
-      depthWrite: false,
-    });
+    // Phones keep the contact point without rendering the sculpture into a
+    // shadow map on every pose. The baked stone shading still defines its form.
+    const shadowMaterial = mobile
+      ? new THREE.MeshBasicMaterial({ color: "#26242a", transparent: true, opacity: 0, depthWrite: false })
+      : new THREE.ShadowMaterial({ color: "#26242a", opacity: 0, depthWrite: false });
     shadowMaterial.onBeforeCompile = (shader) => {
       shader.vertexShader = shader.vertexShader
         .replace("#include <common>", "#include <common>\nvarying vec2 vGroundPosition;")
         .replace("#include <begin_vertex>", "#include <begin_vertex>\nvGroundPosition = position.xy;");
+      if (!mobile) {
+        // Soften the floor independently of the sculpture's surface shadows.
+        shader.fragmentShader = shader.fragmentShader.replace("#include <shadowmask_pars_fragment>", THREE.ShaderChunk.shadowmask_pars_fragment.replace("directionalLight.shadowRadius,", "directionalLight.shadowRadius * 6.0,"));
+      }
       shader.fragmentShader = shader.fragmentShader
         .replace("#include <common>", "#include <common>\nvarying vec2 vGroundPosition;")
-        // Soften the floor independently of the sculpture's surface shadows.
-        .replace("#include <shadowmask_pars_fragment>", THREE.ShaderChunk.shadowmask_pars_fragment.replace("directionalLight.shadowRadius,", "directionalLight.shadowRadius * 6.0,"))
         .replace("#include <tonemapping_fragment>", `
           // Plane-local Y maps to model -Z. Centre the soft patch on the lowest stone.
           float contactRadius = length((vGroundPosition - vec2(0.0, -0.36)) / vec2(0.85, 0.32));
@@ -160,13 +164,13 @@ export function Mannequin({ reveal, stimulation, stimulationVisibility }: {
           #include <tonemapping_fragment>
         `);
     };
-    shadowMaterial.customProgramCacheKey = () => "cymba-contact-shadow-v2";
+    shadowMaterial.customProgramCacheKey = () => mobile ? "cymba-contact-patch-v1" : "cymba-contact-shadow-v2";
     return {
       model, materials: [...materials.values()], surfaceMaterials, nerveMaterials,
       surfaceDepth, depthMeshes, nerveMeshes, activity, shadowY, shadowGeometry, shadowMaterial,
       opaque: false, lastVisibility: Number.NaN,
     };
-  }, [scene, occlusion, stoneNormal, stoneRoughness]);
+  }, [scene, occlusion, stoneNormal, stoneRoughness, mobile]);
 
   useEffect(() => () => {
     prepared.materials.forEach((material) => material.dispose());
@@ -180,7 +184,7 @@ export function Mannequin({ reveal, stimulation, stimulationVisibility }: {
     if (root.current) root.current.visible = visibility > 0.001;
     if (visibility !== prepared.lastVisibility) {
       // Also refresh when a suspended sculpture first appears at a held pose.
-      gl.shadowMap.needsUpdate = true;
+      if (!mobile) gl.shadowMap.needsUpdate = true;
       prepared.lastVisibility = visibility;
     }
     const opaque = visibility === 1;
@@ -213,7 +217,7 @@ export function Mannequin({ reveal, stimulation, stimulationVisibility }: {
       material={prepared.shadowMaterial}
       position={[0, prepared.shadowY, 0]}
       rotation={[-Math.PI / 2, 0, 0]}
-      receiveShadow
+      receiveShadow={!mobile}
       renderOrder={0}
     />
     <primitive object={prepared.model} dispose={null} />

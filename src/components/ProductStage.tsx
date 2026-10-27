@@ -127,6 +127,7 @@ export function ProductStage({
   const portrait = useRef<HTMLDivElement>(null);
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [mobilePortrait, setMobilePortrait] = useState(false);
   const onReady = useCallback(() => setReady(true), []);
   const onLoading = useCallback(() => setReady(false), []);
   const onError = useCallback(() => { setFailed(true); setReady(false); }, []);
@@ -146,6 +147,14 @@ export function ProductStage({
     return measuredProductStageProgress(window.scrollY, geometry.top, geometry.height);
   }, [trackGeometry]);
   const portraitBounds = useMotionValue({ top: 72, right: 0, bottom: 0, left: 0, width: 1, height: 1 });
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 1023px)");
+    const update = () => setMobilePortrait(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
 
   useEffect(() => {
     const trackElement = track.current;
@@ -209,6 +218,9 @@ export function ProductStage({
   const expansion = useTransform(closingDistance, [0, STORY_SCROLL_SCREENS * (0.97 - PORTRAIT_ENTRY_START)], [0, 1]);
   const portraitRadius = useTransform(expansion, [0, 1], [12, 0]);
   const portraitFeather = useTransform(expansion, [0, 1], ["0px", "24px"]);
+  // A fixed mobile gradient can be composited by opacity, rather than painted
+  // again for every scroll position. Its final shading matches the desktop art.
+  const mobileSceneShade = useTransform(() => expansion.get() * sceneShade.get());
   /* Open from the live portrait's exact frame, keeping the photograph stationary. */
   const sceneClip = useTransform(() => {
     const remaining = 1 - expansion.get();
@@ -228,18 +240,18 @@ export function ProductStage({
   return (
     <>
       {/* The room, fixed behind the page. It appears for the last chapter and stays, blurred and dark, under everything after. */}
-      <motion.div className={styles.scene} style={{ clipPath: sceneClip, y: sceneY, visibility: sceneVisibility, "--portrait-expansion": expansion } as MotionStyle} aria-hidden="true">
-        <motion.div className={styles.sceneVisual} style={{ filter: sceneBlur, scale: sceneScale }}>
+      <motion.div className={styles.scene} style={{ clipPath: sceneClip, y: sceneY, visibility: sceneVisibility }} aria-hidden="true">
+        <motion.div className={styles.sceneVisual} style={{ filter: mobilePortrait ? "none" : sceneBlur, scale: sceneScale }}>
           {/* The existing extended shoulders sit behind the unchanged live portrait. */}
           <div className={styles.sceneExtensionTail} style={{ borderImageSource: `url(${listeningExtension.src})` }} />
           <div className={styles.sceneExtension}>
             <Image src={listeningExtension} alt="" fill sizes="1600px" quality={95} className={styles.extensionImage} />
           </div>
-          <motion.div ref={portrait} className={styles.sceneFrame} style={{ borderRadius: portraitRadius, "--portrait-feather": portraitFeather } as MotionStyle}>
+          <motion.div ref={portrait} className={styles.sceneFrame} style={{ borderRadius: mobilePortrait ? 0 : portraitRadius, "--portrait-feather": mobilePortrait ? "16px" : portraitFeather } as MotionStyle}>
             <Image src={scene.image} alt="" fill loading="eager" sizes="(min-width: 1248px) 540px, (min-width: 1024px) calc((94vw - 96px) / 2), 100vw" quality={95} className={styles.sceneImage} />
           </motion.div>
         </motion.div>
-        <motion.div className={styles.sceneShade} style={{ opacity: sceneShade }} />
+        <motion.div className={styles.sceneShade} style={{ opacity: mobilePortrait ? mobileSceneShade : sceneShade }} />
         <motion.div className={styles.sceneDark} style={{ opacity: sceneDark }} />
       </motion.div>
       {/* Phones and reduced motion get the same room, already blurred, behind the sections after the stacked ones. */}

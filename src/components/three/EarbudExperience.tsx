@@ -9,8 +9,9 @@ import { Mannequin } from "./Mannequin";
 import { EarSensingCue } from "./EarSensingCue";
 import { smoothEarbudNormals } from "./smoothEarbudNormals";
 import sleeveRim from "./earbudSleeveRim.json";
-import { preloadMannequin } from "./productAssets";
+import { EARBUD_MOBILE_MODEL_URL, preloadMannequin } from "./productAssets";
 import { AssetLoading } from "./Scene";
+import { useSceneQuality } from "./sceneQuality";
 
 const CABLE_RADIUS = 0.036;
 // Measured in the normalized earbud's sleeve, on its slanted end face.
@@ -23,7 +24,7 @@ const ease = (a: number, b: number, value: number) => {
   return t * t * (3 - 2 * t);
 };
 
-function prepareEarbud(scene: THREE.Group, side: "L" | "R") {
+function prepareEarbud(scene: THREE.Group, side: "L" | "R", mobile: boolean) {
   scene.updateMatrixWorld(true);
   let source: THREE.Object3D | undefined;
   scene.traverse((object) => {
@@ -57,7 +58,12 @@ function prepareEarbud(scene: THREE.Group, side: "L" | "R") {
     const region = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0.30).applyMatrix4(inverse);
     const trim = (sourceMaterial: THREE.Material) => {
       const material = sourceMaterial instanceof THREE.MeshStandardMaterial
-        ? new THREE.MeshPhysicalMaterial() : sourceMaterial.clone();
+        ? mobile ? new THREE.MeshStandardMaterial() : new THREE.MeshPhysicalMaterial() : sourceMaterial.clone();
+      if (mobile && material instanceof THREE.MeshStandardMaterial && sourceMaterial instanceof THREE.MeshStandardMaterial) {
+        // Preserve the atlas and metal reflections without capturing the whole
+        // scene again for the small silicone tips on every mobile frame.
+        THREE.MeshStandardMaterial.prototype.copy.call(material, sourceMaterial);
+      }
       if (material instanceof THREE.MeshPhysicalMaterial && sourceMaterial instanceof THREE.MeshStandardMaterial) {
         THREE.MeshStandardMaterial.prototype.copy.call(material, sourceMaterial);
         material.defines = { STANDARD: "", PHYSICAL: "" };
@@ -95,7 +101,7 @@ function prepareEarbud(scene: THREE.Group, side: "L" | "R") {
           .replace("#include <transmission_fragment>", THREE.ShaderChunk.transmission_fragment
             .replace("material.transmission = transmission;", "material.transmission = transmission * siliconeMask;"));
       };
-      material.customProgramCacheKey = () => "cymba-sleeve-trim-translucent-silicone-v8";
+      material.customProgramCacheKey = () => mobile ? "cymba-sleeve-mobile-silicone-v1" : "cymba-sleeve-trim-translucent-silicone-v8";
       return material;
     };
     part.material = Array.isArray(part.material) ? part.material.map(trim) : trim(part.material);
@@ -199,9 +205,10 @@ function TrailingCable({ side, anchor }: { side: "L" | "R"; anchor: RefObject<TH
 }
 
 function EarbudPair({ modelUrl, progress }: { modelUrl: string; progress: MotionValue<number> }) {
-  const { scene } = useGLTF(modelUrl, "/draco/");
-  const left = useMemo(() => prepareEarbud(scene, "L"), [scene]);
-  const right = useMemo(() => prepareEarbud(scene, "R"), [scene]);
+  const { mobile } = useSceneQuality();
+  const { scene } = useGLTF(mobile ? EARBUD_MOBILE_MODEL_URL : modelUrl, "/draco/");
+  const left = useMemo(() => prepareEarbud(scene, "L", mobile), [scene, mobile]);
+  const right = useMemo(() => prepareEarbud(scene, "R", mobile), [scene, mobile]);
   const leftGroup = useRef<THREE.Group>(null);
   const rightGroup = useRef<THREE.Group>(null);
   useEffect(() => () => {
@@ -267,7 +274,8 @@ export function EarbudExperience({ modelUrl, progress, mannequinGate }: {
   mannequinGate?: ReactNode;
 }) {
   // Start both downloads together; the head must not hold the earbuds in Suspense.
-  preloadMannequin();
+  const { mobile } = useSceneQuality();
+  preloadMannequin(mobile);
   const presentation = useRef<THREE.Group>(null);
   const reveal = useMotionValue(0);
   const stimulation = useMotionValue(0);
@@ -312,7 +320,7 @@ export function EarbudExperience({ modelUrl, progress, mannequinGate }: {
     const targetY = THREE.MathUtils.lerp(-0.2, -0.12, worn);
     camera.position.set(0, targetY + worn * 0.12, distance);
     camera.lookAt(target.current.set(0, targetY, 0));
-  });
+  }, -2.5);
   return <group ref={presentation}>
     <EarbudPair modelUrl={modelUrl} progress={progress} />
     <Suspense fallback={<AssetLoading />}>

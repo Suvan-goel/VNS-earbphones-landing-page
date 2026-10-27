@@ -3,9 +3,10 @@
 import { Component, Suspense, useCallback, useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
 import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { ContactShadows, Environment, Lightformer, PerformanceMonitor } from "@react-three/drei";
+import { ContactShadows, Environment, Lightformer } from "@react-three/drei";
 import { sceneRecoveryReason, type SceneHealth } from "@/lib/scene-health";
 import { SceneQualityContext } from "./sceneQuality";
+import { ScenePerformanceDiagnostics } from "./ScenePerformanceDiagnostics";
 
 type DrawHealth = SceneHealth & { draws: number };
 
@@ -174,8 +175,6 @@ export function Scene({
   const [pageVisible, setPageVisible] = useState(false);
   const [unavailable, setUnavailable] = useState(false);
   const [mobile, setMobile] = useState(false);
-  const [performanceLimited, setPerformanceLimited] = useState(false);
-  const reduceResolution = useCallback(() => setPerformanceLimited(true), []);
 
   const handleError = useCallback((error: Error) => {
     if (failed.current) return;
@@ -309,8 +308,8 @@ export function Scene({
           <SceneQualityContext.Provider value={{ mobile }}>
           <Canvas
             key={canvasVersion}
-            dpr={[1, mobile ? performanceLimited ? 1 : 1.25 : 2]}
-            shadows={sculptureShadows ? "percentage" : false}
+            dpr={[1, 2]}
+            shadows={sculptureShadows && !mobile ? "percentage" : false}
             frameloop={visible && pageVisible && !recovering ? "always" : "never"}
             camera={camera}
             gl={{ antialias: true, alpha: true, powerPreference: "high-performance", toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1 }}
@@ -318,14 +317,14 @@ export function Scene({
             style={{ background: "transparent" }}
           >
             <RendererGuard onLost={handleContextLost} onRestored={restart} onError={handleError} health={health} />
+            {process.env.NODE_ENV === "development" && <ScenePerformanceDiagnostics />}
             <RenderBudget mobile={mobile} sculptureShadows={sculptureShadows} />
             <Suspense fallback={<AssetLoading />}>
-              {mobile && !performanceLimited && <PerformanceMonitor bounds={() => [50, 65]} onDecline={reduceResolution} />}
               <StudioEnvironment />
               <directionalLight
                 position={[4, 6, 5]} intensity={1.4}
-                castShadow={sculptureShadows}
-                shadow-mapSize={mobile ? [512, 512] : [1024, 1024]}
+                castShadow={sculptureShadows && !mobile}
+                shadow-mapSize={[1024, 1024]}
                 shadow-camera-left={-3.3} shadow-camera-right={3.3}
                 shadow-camera-top={3.3} shadow-camera-bottom={-3.3}
                 shadow-camera-near={0.1} shadow-camera-far={20}

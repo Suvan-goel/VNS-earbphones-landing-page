@@ -410,6 +410,13 @@
     --portrait-top: calc((100svh + var(--portrait-nav-height) - var(--portrait-height)) / 2);
   }
   .closingPane { container-type: inline-size; }
+  /* Reuse composited artwork as the opening moves; avoid changing its masks,
+     gradient pixels and full-screen blur on every mobile scroll frame. */
+  .scene { will-change: clip-path, transform; }
+  .closingReveal { will-change: clip-path; }
+  .sceneVisual,
+  .scene .sceneFrame { will-change: transform; }
+  .sceneShade { will-change: opacity; }
   /* Keep the static backdrop full bleed; the scrolling portrait rests as a centered card. */
   .sceneFrame {
     left: 0;
@@ -433,13 +440,13 @@
     z-index: 1;
     /* A light, broad fade avoids a visible band between the copy and photograph. */
     background: linear-gradient(180deg,
-      rgb(11 10 9 / calc(var(--portrait-expansion, 0) * 0.2)) 0,
-      rgb(11 10 9 / calc(var(--portrait-expansion, 0) * 0.16)) calc(var(--portrait-top) - 24px),
+      rgb(11 10 9 / 0.2) 0,
+      rgb(11 10 9 / 0.16) calc(var(--portrait-top) - 24px),
       #0b0a0900 calc(var(--portrait-top) + var(--portrait-height) * 0.4)),
     linear-gradient(180deg,
       #0b0a0900 calc(var(--portrait-top) + var(--portrait-height) * 0.5),
-      rgb(11 10 9 / calc(var(--portrait-expansion, 0) * 0.8)) calc(var(--portrait-top) + var(--portrait-height) * 0.85),
-      rgb(11 10 9 / var(--portrait-expansion, 0)) calc(var(--portrait-top) + var(--portrait-height)));
+      rgb(11 10 9 / 0.8) calc(var(--portrait-top) + var(--portrait-height) * 0.85),
+      rgb(11 10 9) calc(var(--portrait-top) + var(--portrait-height)));
   }
   .copy.closingCopy {
     inset: 0;

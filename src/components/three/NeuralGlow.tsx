@@ -17,16 +17,22 @@ const vertexShader = `
 
 /** A small, selective HDR bloom. White marble and metal never feed the halo. */
 export function NeuralGlow({ progress }: { progress: MotionValue<number> }) {
-  const { size, viewport, gl } = useThree();
   const { mobile } = useSceneQuality();
+  // The fibres already emit their own light. Keep their crisp material on
+  // phones without an HDR scene copy and six full-screen processing passes.
+  return mobile ? null : <DesktopNeuralGlow progress={progress} />;
+}
+
+function DesktopNeuralGlow({ progress }: { progress: MotionValue<number> }) {
+  const { size, viewport, gl } = useThree();
   const pipeline = useMemo(() => {
     const target = (depthBuffer = false) => new THREE.WebGLRenderTarget(1, 1, {
       type: THREE.HalfFloatType, depthBuffer,
     });
     const beauty = target(true);
-    beauty.samples = Math.min(mobile ? 2 : 4, gl.capabilities.maxSamples);
+    beauty.samples = Math.min(4, gl.capabilities.maxSamples);
     const source = target();
-    const levels = Array.from({ length: mobile ? 2 : 3 }, () => ({ scratch: target(), output: target() }));
+    const levels = Array.from({ length: 3 }, () => ({ scratch: target(), output: target() }));
     const extract = new THREE.ShaderMaterial({
       vertexShader, depthTest: false, depthWrite: false, toneMapped: false,
       uniforms: { inputTexture: { value: beauty.texture } },
@@ -70,7 +76,7 @@ export function NeuralGlow({ progress }: { progress: MotionValue<number> }) {
         tightHalo: { value: levels[0].output.texture },
         softHalo: { value: levels[1].output.texture },
         wideHalo: { value: levels[levels.length - 1].output.texture },
-        wideStrength: { value: mobile ? 0 : 0.06 },
+        wideStrength: { value: 0.06 },
       },
       fragmentShader: `
         uniform sampler2D beauty;
@@ -100,7 +106,7 @@ export function NeuralGlow({ progress }: { progress: MotionValue<number> }) {
       `,
     });
     return { beauty, source, levels, extract, blur, composite, quad: new FullScreenQuad(extract) };
-  }, [gl, mobile]);
+  }, [gl]);
 
   useEffect(() => {
     const width = Math.max(1, Math.round(size.width * viewport.dpr));

@@ -1,0 +1,190 @@
+[
+  {
+    "source": "public/models/cymba-earbuds-hero.glb",
+    "destination": "public/models/cymba-earbuds-hero-mobile.glb",
+    "sourceSha256": "f7494bc25d86759c8a61f6e6dab1e920d15ba90cd98fa31c864cb8b5ef9a2ae6",
+    "sha256": "abe7739504f9a7a036463fc0d70f61c2e92945d421058f5594cdee8f69cac426",
+    "sourceBytes": 2926760,
+    "bytes": 2697900,
+    "trianglesBefore": 110870,
+    "triangles": 38720,
+    "allTexturesByteIdentical": true,
+    "originalUnchanged": true,
+    "meshes": [
+      {
+        "name": "Earbud · L · supplied textured mesh",
+        "trianglesBefore": 55435,
+        "triangles": 19327,
+        "verticesBefore": 35919,
+        "vertices": 17439,
+        "componentsBefore": 293,
+        "components": 292,
+        "relativeError": 0.0011959046823903918,
+        "uvBefore": {
+          "min": [
+            0.00002700000004551839,
+            0.0036299824714660645
+          ],
+          "max": [
+            0.9999960064888,
+            0.9999367594718933
+          ]
+        },
+        "uv": {
+          "min": [
+            0.00002700000004551839,
+            0.0036299824714660645
+          ],
+          "max": [
+            0.9999960064888,
+            0.9999369978904724
+          ]
+        },
+        "settings": {
+          "ratio": 0.28,
+          "error": 0.0012,
+          "weights": [
+            0.1,
+            0.1,
+            0.1,
+            1,
+            1
+          ]
+        }
+      },
+      {
+        "name": "Earbud · R · mirrored supplied textured mesh",
+        "trianglesBefore": 55435,
+        "triangles": 19393,
+        "verticesBefore": 35919,
+        "vertices": 17466,
+        "componentsBefore": 293,
+        "components": 293,
+        "relativeError": 0.0011958032846450806,
+        "uvBefore": {
+          "min": [
+            0.00002700000004551839,
+            0.0036299824714660645
+          ],
+          "max": [
+            0.9999960064888,
+            0.9999367594718933
+          ]
+        },
+        "uv": {
+          "min": [
+            0.00002700000004551839,
+            0.0036299824714660645
+          ],
+          "max": [
+            0.9999960064888,
+            0.9999369978904724
+          ]
+        },
+        "settings": {
+          "ratio": 0.28,
+          "error": 0.0012,
+          "weights": [
+            0.1,
+            0.1,
+            0.1,
+            1,
+            1
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "source": "public/models/cymba-neural-mannequin-organic-detailed.glb",
+    "destination": "public/models/cymba-neural-mannequin-organic-detailed-mobile.glb",
+    "sourceSha256": "157a36c28e75df10c3ab52214d421033dcdaf4f10fec255356bedbb87335d687",
+    "sha256": "e6a70e9c73b1f9af8ed7789960d856d67a1b4f21573ad0905beacc17ba962afe",
+    "sourceBytes": 3880596,
+    "bytes": 3011248,
+    "trianglesBefore": 370395,
+    "triangles": 81461,
+    "allTexturesByteIdentical": true,
+    "originalUnchanged": true,
+    "meshes": [
+      {
+        "name": "Cymba_Marble_Mannequin",
+        "trianglesBefore": 115923,
+        "triangles": 28973,
+        "verticesBefore": 68767,
+        "vertices": 22626,
+        "componentsBefore": 572,
+        "components": 605,
+        "relativeError": 0.0004227921017445624,
+        "uvBefore": {
+          "min": [
+            0.000012000000424450263,
+            0.00014901161193847656
+          ],
+          "max": [
+            0.9994655847549438,
+            0.9999840259552002
+          ]
+        },
+        "uv": {
+          "min": [
+            0.0000577695136598777,
+            0.00014901161193847656
+          ],
+          "max": [
+            0.9994655847549438,
+            0.9999840259552002
+          ]
+        },
+        "settings": {
+          "ratio": 0.25,
+          "error": 0.001,
+          "weights": [
+            0.1,
+            0.1,
+            0.1,
+            1,
+            1
+          ]
+        }
+      },
+      {
+        "name": "Purple_Surface_Nerve_Fibres",
+        "trianglesBefore": 254472,
+        "triangles": 52488,
+        "verticesBefore": 134010,
+        "vertices": 33018,
+        "componentsBefore": 1129,
+        "components": 1129,
+        "maxCentreError": 0.0014999503916373082,
+        "sourceRings": 22335,
+        "keptRings": 5503,
+        "uvBefore": {
+          "min": [
+            0.017999999225139618,
+            0.0030483603477478027
+          ],
+          "max": [
+            0.9580000042915344,
+            0.6996250152587891
+          ]
+        },
+        "uv": {
+          "min": [
+            0.017999999225139618,
+            0.0030483603477478027
+          ],
+          "max": [
+            0.9580000042915344,
+            0.6996250152587891
+          ]
+        },
+        "settings": {
+          "method": "resample along original six-sided tubes",
+          "centreTolerance": 0.0015,
+          "radiusTolerance": 0.00025
+        }
+      }
+    ]
+  }
+]
