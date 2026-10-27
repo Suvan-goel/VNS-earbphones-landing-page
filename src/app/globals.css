@@ -38,7 +38,7 @@
 }
 
 /* One model frame shared by every centred mobile section. */
-@media (min-height: 700px) and (max-height: 759px) {
+@media (min-height: 640px) and (max-height: 759px) {
   :root { --mobile-model-height: 35svh; }
 }
 
