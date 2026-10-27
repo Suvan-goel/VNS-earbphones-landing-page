@@ -5,6 +5,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { type MotionValue } from "motion/react";
 import * as THREE from "three";
 import { FullScreenQuad } from "three/addons/postprocessing/Pass.js";
+import { useSceneQuality } from "./sceneQuality";
 
 const vertexShader = `
   varying vec2 vUv;
@@ -17,14 +18,15 @@ const vertexShader = `
 /** A small, selective HDR bloom. White marble and metal never feed the halo. */
 export function NeuralGlow({ progress }: { progress: MotionValue<number> }) {
   const { size, viewport, gl } = useThree();
+  const { mobile } = useSceneQuality();
   const pipeline = useMemo(() => {
     const target = (depthBuffer = false) => new THREE.WebGLRenderTarget(1, 1, {
       type: THREE.HalfFloatType, depthBuffer,
     });
     const beauty = target(true);
-    beauty.samples = Math.min(4, gl.capabilities.maxSamples);
+    beauty.samples = Math.min(mobile ? 2 : 4, gl.capabilities.maxSamples);
     const source = target();
-    const levels = [0, 1, 2].map(() => ({ scratch: target(), output: target() }));
+    const levels = Array.from({ length: mobile ? 2 : 3 }, () => ({ scratch: target(), output: target() }));
     const extract = new THREE.ShaderMaterial({
       vertexShader, depthTest: false, depthWrite: false, toneMapped: false,
       uniforms: { inputTexture: { value: beauty.texture } },
@@ -67,20 +69,22 @@ export function NeuralGlow({ progress }: { progress: MotionValue<number> }) {
         beauty: { value: beauty.texture },
         tightHalo: { value: levels[0].output.texture },
         softHalo: { value: levels[1].output.texture },
-        wideHalo: { value: levels[2].output.texture },
+        wideHalo: { value: levels[levels.length - 1].output.texture },
+        wideStrength: { value: mobile ? 0 : 0.06 },
       },
       fragmentShader: `
         uniform sampler2D beauty;
         uniform sampler2D tightHalo;
         uniform sampler2D softHalo;
         uniform sampler2D wideHalo;
+        uniform float wideStrength;
         varying vec2 vUv;
         void main() {
           vec4 base = texture2D(beauty, vUv);
           vec3 nearLight = texture2D(tightHalo, vUv).rgb;
           vec3 softLight = texture2D(softHalo, vUv).rgb;
           vec3 wideLight = texture2D(wideHalo, vUv).rgb;
-          vec3 glow = nearLight * 0.65 + softLight * 0.22 + wideLight * 0.06;
+          vec3 glow = nearLight * 0.65 + softLight * 0.22 + wideLight * wideStrength;
           // A restrained tint within the tight halo keeps light legible on
           // white stone without staining broad patches of the sculpture.
           float localScatter = (1.0 - exp(-nearLight.b * 0.8)) * 0.20 * base.a;
@@ -96,7 +100,7 @@ export function NeuralGlow({ progress }: { progress: MotionValue<number> }) {
       `,
     });
     return { beauty, source, levels, extract, blur, composite, quad: new FullScreenQuad(extract) };
-  }, [gl]);
+  }, [gl, mobile]);
 
   useEffect(() => {
     const width = Math.max(1, Math.round(size.width * viewport.dpr));
@@ -123,7 +127,7 @@ export function NeuralGlow({ progress }: { progress: MotionValue<number> }) {
 
   useFrame(({ gl: renderer, scene, camera }) => {
     // The initial product hero needs no postprocessing at all.
-    if (progress.get() < 0.53) {
+    if (progress.get() < 0.57) {
       renderer.render(scene, camera);
       return;
     }

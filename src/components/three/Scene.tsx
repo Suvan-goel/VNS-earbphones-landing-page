@@ -3,8 +3,9 @@
 import { Component, Suspense, useCallback, useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
 import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { ContactShadows, Environment, Lightformer } from "@react-three/drei";
+import { ContactShadows, Environment, Lightformer, PerformanceMonitor } from "@react-three/drei";
 import { sceneRecoveryReason, type SceneHealth } from "@/lib/scene-health";
+import { SceneQualityContext } from "./sceneQuality";
 
 type DrawHealth = SceneHealth & { draws: number };
 
@@ -172,7 +173,9 @@ export function Scene({
   const [visible, setVisible] = useState(false);
   const [pageVisible, setPageVisible] = useState(false);
   const [unavailable, setUnavailable] = useState(false);
-  const [dpr, setDpr] = useState<[number, number]>([1, 2]);
+  const [mobile, setMobile] = useState(false);
+  const [performanceLimited, setPerformanceLimited] = useState(false);
+  const reduceResolution = useCallback(() => setPerformanceLimited(true), []);
 
   const handleError = useCallback((error: Error) => {
     if (failed.current) return;
@@ -266,17 +269,17 @@ export function Scene({
     const scheduleCheck = () => {
       if (!frame) frame = requestAnimationFrame(checkViewport);
     };
-    const screenSize = window.matchMedia("(max-width: 767px)");
-    const syncResolution = () => setDpr(screenSize.matches ? [1, 1.5] : [1, 2]);
+    const screenSize = window.matchMedia("(max-width: 1023px)");
+    const syncResolution = () => setMobile(screenSize.matches);
     syncResolution();
     checkViewport();
     screenSize.addEventListener("change", syncResolution);
     document.addEventListener("visibilitychange", checkViewport);
     window.addEventListener("pageshow", checkViewport);
     window.addEventListener("focus", checkViewport);
-    window.addEventListener("scroll", scheduleCheck, { passive: true });
     window.addEventListener("resize", scheduleCheck);
-    // Intersection alone can miss zero-size / CSS-hidden layout changes.
+    // Intersection handles scrolling; ResizeObserver handles CSS-hidden
+    // alternatives. Avoid reading every hidden canvas's layout on each scroll.
     const intersection = typeof IntersectionObserver !== "undefined" ? new IntersectionObserver(scheduleCheck) : null;
     const resize = typeof ResizeObserver !== "undefined" ? new ResizeObserver(scheduleCheck) : null;
     intersection?.observe(el);
@@ -289,7 +292,6 @@ export function Scene({
       document.removeEventListener("visibilitychange", checkViewport);
       window.removeEventListener("pageshow", checkViewport);
       window.removeEventListener("focus", checkViewport);
-      window.removeEventListener("scroll", scheduleCheck);
       window.removeEventListener("resize", scheduleCheck);
     };
   }, [handleError, cancelRecovery]);
@@ -304,23 +306,26 @@ export function Scene({
     <div ref={host} className={className} aria-hidden="true" data-scene-generation={canvasVersion} data-scene-state={unavailable ? "unavailable" : recovering ? "recovering" : !activated ? "idle" : visible && pageVisible ? "running" : "paused"} style={{ width: "100%", height: "100%", overflowAnchor: "none" }}>
       {activated && !unavailable && (
         <SceneBoundary onError={handleError}>
+          <SceneQualityContext.Provider value={{ mobile }}>
           <Canvas
             key={canvasVersion}
-            dpr={dpr}
-            shadows={sculptureShadows}
+            dpr={[1, mobile ? performanceLimited ? 1 : 1.25 : 2]}
+            shadows={sculptureShadows ? "percentage" : false}
             frameloop={visible && pageVisible && !recovering ? "always" : "never"}
             camera={camera}
-            gl={{ antialias: true, alpha: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1 }}
+            gl={{ antialias: true, alpha: true, powerPreference: "high-performance", toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1 }}
             fallback={null}
             style={{ background: "transparent" }}
           >
             <RendererGuard onLost={handleContextLost} onRestored={restart} onError={handleError} health={health} />
+            <RenderBudget mobile={mobile} sculptureShadows={sculptureShadows} />
             <Suspense fallback={<AssetLoading />}>
+              {mobile && !performanceLimited && <PerformanceMonitor bounds={() => [50, 65]} onDecline={reduceResolution} />}
               <StudioEnvironment />
               <directionalLight
                 position={[4, 6, 5]} intensity={1.4}
                 castShadow={sculptureShadows}
-                shadow-mapSize={[1024, 1024]}
+                shadow-mapSize={mobile ? [512, 512] : [1024, 1024]}
                 shadow-camera-left={-3.3} shadow-camera-right={3.3}
                 shadow-camera-top={3.3} shadow-camera-bottom={-3.3}
                 shadow-camera-near={0.1} shadow-camera-far={20}
@@ -334,8 +339,22 @@ export function Scene({
               {shadows && <ContactShadows position={[0, shadowY, 0]} opacity={0.35} scale={10} blur={2.4} far={4} color="#1d1d1f" />}
             </Suspense>
           </Canvas>
+          </SceneQualityContext.Provider>
         </SceneBoundary>
       )}
     </div>
   );
+}
+
+function RenderBudget({ mobile, sculptureShadows }: { mobile: boolean; sculptureShadows: boolean }) {
+  const gl = useThree((state) => state.gl);
+  useEffect(() => {
+    gl.transmissionResolutionScale = mobile ? 0.5 : 1;
+    // The key light is stationary. Pose/reveal changes invalidate the map;
+    // holding a chapter does not need another full sculpture shadow pass.
+    gl.shadowMap.autoUpdate = !sculptureShadows;
+    gl.shadowMap.needsUpdate = true;
+    return () => { gl.shadowMap.autoUpdate = true; };
+  }, [gl, mobile, sculptureShadows]);
+  return null;
 }

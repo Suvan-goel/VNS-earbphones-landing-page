@@ -29,9 +29,11 @@ export function Mannequin({ reveal, stimulation, stimulationVisibility }: {
     const model = scene.clone(true);
     const activity = { value: 0 };
     const materials = new Map<THREE.Material, THREE.MeshStandardMaterial>();
+    const surfaceMaterials = new Set<THREE.MeshStandardMaterial>();
     const nerveMaterials = new Set<THREE.MeshStandardMaterial>();
     const nerveMeshes: THREE.Mesh[] = [];
     const surfaceMeshes: THREE.Mesh[] = [];
+    const depthMeshes: THREE.Mesh[] = [];
     // Resolve the nearest marble surface before blending its reveal colour.
     // Without this pass, triangles inside the nose, ears and jaw show through
     // one another while opacity is below one, making the scan look fractured.
@@ -59,6 +61,7 @@ export function Mannequin({ reveal, stimulation, stimulationVisibility }: {
           material.roughness = 0.46;
           material.metalness = 0;
         } else {
+          surfaceMaterials.add(material);
           // Unveined white stone: the texture changes surface relief and sheen.
           material.map = null;
           material.color.set("#faf9f6");
@@ -130,6 +133,7 @@ export function Mannequin({ reveal, stimulation, stimulationVisibility }: {
       depthMesh.matrixAutoUpdate = mesh.matrixAutoUpdate;
       depthMesh.renderOrder = -1;
       mesh.parent?.add(depthMesh);
+      depthMeshes.push(depthMesh);
     }
     // Keep the shadow at the sculpture's contact point on an invisible floor.
     // The receiver turns with the model so the contact patch stays under its base.
@@ -157,7 +161,11 @@ export function Mannequin({ reveal, stimulation, stimulationVisibility }: {
         `);
     };
     shadowMaterial.customProgramCacheKey = () => "cymba-contact-shadow-v2";
-    return { model, materials: [...materials.values()], nerveMaterials, surfaceDepth, nerveMeshes, activity, shadowY, shadowGeometry, shadowMaterial };
+    return {
+      model, materials: [...materials.values()], surfaceMaterials, nerveMaterials,
+      surfaceDepth, depthMeshes, nerveMeshes, activity, shadowY, shadowGeometry, shadowMaterial,
+      opaque: false, lastVisibility: Number.NaN,
+    };
   }, [scene, occlusion, stoneNormal, stoneRoughness]);
 
   useEffect(() => () => {
@@ -167,9 +175,26 @@ export function Mannequin({ reveal, stimulation, stimulationVisibility }: {
     prepared.shadowMaterial.dispose();
   }, [prepared]);
 
-  useFrame((_, delta) => {
+  useFrame(({ gl }, delta) => {
     const visibility = THREE.MathUtils.clamp(reveal.get(), 0, 1);
     if (root.current) root.current.visible = visibility > 0.001;
+    if (visibility !== prepared.lastVisibility) {
+      // Also refresh when a suspended sculpture first appears at a held pose.
+      gl.shadowMap.needsUpdate = true;
+      prepared.lastVisibility = visibility;
+    }
+    const opaque = visibility === 1;
+    if (opaque !== prepared.opaque) {
+      // The extra depth pass is only needed while the stone fades. Once solid,
+      // normal depth writing provides occlusion and the silicone's backdrop.
+      for (const material of prepared.surfaceMaterials) {
+        material.transparent = !opaque;
+        material.depthWrite = opaque;
+        material.needsUpdate = true;
+      }
+      for (const mesh of prepared.depthMeshes) mesh.visible = !opaque;
+      prepared.opaque = opaque;
+    }
     prepared.shadowMaterial.opacity = visibility * 0.19;
     const targetActivity = THREE.MathUtils.clamp(stimulation.get(), 0, 1);
     const signalVisibility = THREE.MathUtils.clamp(stimulationVisibility?.get() ?? 1, 0, 1);

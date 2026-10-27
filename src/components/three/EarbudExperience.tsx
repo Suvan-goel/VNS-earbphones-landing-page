@@ -159,16 +159,19 @@ function CableSleeve({ side }: { side: "L" | "R" }) {
 
 /** The socket follows the product, while the cable hangs vertically under gravity. */
 function TrailingCable({ side, anchor }: { side: "L" | "R"; anchor: RefObject<THREE.Group | null> }) {
-  const { geometry, lastTransform } = useMemo(() => {
+  const cable = useRef<THREE.Mesh>(null);
+  const { geometry, lastTransform, socketOffset } = useMemo(() => {
+    // The cable is straight, so two rings describe the same surface as 97.
+    // Fade still interpolates continuously along uv.x in the fragment shader.
     const geometry = new THREE.TubeGeometry(new THREE.LineCurve3(
-      new THREE.Vector3(), new THREE.Vector3(0, -2.3, 0),
-    ), 96, CABLE_RADIUS, 16, false);
-    // Allocate the tube, but never draw its temporary centre-of-scene shape.
-    // Keep the transform cache with the geometry: Fast Refresh can recreate
-    // useMemo values while preserving refs from the previous geometry.
-    geometry.setDrawRange(0, 0);
-    return { geometry, lastTransform: new THREE.Matrix4().makeScale(0, 0, 0) };
-  }, []);
+      new THREE.Vector3(), new THREE.Vector3(0, -2.42, 0),
+    ), 1, CABLE_RADIUS, 16, false);
+    const sign = side === "L" ? 1 : -1;
+    const localTangent = new THREE.Vector3(sign * SLEEVE_AXIS.x, SLEEVE_AXIS.y, SLEEVE_AXIS.z);
+    const socketOffset = new THREE.Vector3(sign * OUTLET.x, OUTLET.y, OUTLET.z)
+      .addScaledVector(localTangent, -0.006);
+    return { geometry, socketOffset, lastTransform: new THREE.Matrix4().makeScale(0, 0, 0) };
+  }, [side]);
   const material = useMemo(() => {
     const value = new THREE.MeshStandardMaterial({ color: "#181a1c", roughness: 0.37, metalness: 0.1, transparent: true, depthWrite: false });
     value.onBeforeCompile = (shader) => {
@@ -180,28 +183,19 @@ function TrailingCable({ side, anchor }: { side: "L" | "R"; anchor: RefObject<TH
   }, []);
   useFrame(() => {
     const bud = anchor.current;
-    if (!bud) return;
+    const mesh = cable.current;
+    if (!bud || !mesh) return;
     bud.updateMatrix();
     if (bud.matrix.equals(lastTransform)) return;
-    const sign = side === "L" ? 1 : -1;
-    const localTangent = new THREE.Vector3(sign * SLEEVE_AXIS.x, SLEEVE_AXIS.y, SLEEVE_AXIS.z);
-    const socket = new THREE.Vector3(sign * OUTLET.x, OUTLET.y, OUTLET.z)
-      .addScaledVector(localTangent, -0.006).applyMatrix4(bud.matrix);
-    // Drop straight from the sleeve opening, with no sideways offset or bend.
-    const path = new THREE.LineCurve3(socket, socket.clone().add(new THREE.Vector3(0, -2.42, 0)));
-    const next = new THREE.TubeGeometry(path, 96, CABLE_RADIUS * bud.scale.x, 16, false);
-    for (const name of ["position", "normal"] as const) {
-      const attribute = geometry.getAttribute(name) as THREE.BufferAttribute;
-      attribute.copyArray(next.getAttribute(name).array);
-      attribute.needsUpdate = true;
-    }
-    geometry.computeBoundingSphere();
-    geometry.setDrawRange(0, Infinity);
+    // Move the fixed mesh instead of rebuilding and uploading its vertices.
+    // Only the radius follows the bud scale; the vertical drop stays 2.42 units.
+    mesh.position.copy(socketOffset).applyMatrix4(bud.matrix);
+    mesh.scale.set(bud.scale.x, 1, bud.scale.x);
+    mesh.visible = true;
     lastTransform.copy(bud.matrix);
-    next.dispose();
   }, -1);
   useEffect(() => () => { geometry.dispose(); material.dispose(); }, [geometry, material]);
-  return <mesh geometry={geometry} material={material} renderOrder={5} />;
+  return <mesh ref={cable} geometry={geometry} material={material} visible={false} renderOrder={5} />;
 }
 
 function EarbudPair({ modelUrl, progress }: { modelUrl: string; progress: MotionValue<number> }) {
@@ -279,6 +273,7 @@ export function EarbudExperience({ modelUrl, progress, mannequinGate }: {
   const stimulation = useMotionValue(0);
   const target = useRef(new THREE.Vector3());
   const framingZoom = useRef(1);
+  const shadowProgress = useRef<number | null>(null);
   useEffect(() => {
     // Use the page breakpoint: desktop canvases also occupy a narrow column.
     const mobile = window.matchMedia("(max-width: 1023px)");
@@ -287,13 +282,19 @@ export function EarbudExperience({ modelUrl, progress, mannequinGate }: {
     mobile.addEventListener("change", updateFraming);
     return () => mobile.removeEventListener("change", updateFraming);
   }, []);
-  useFrame(({ camera, size }) => {
+  useFrame(({ camera, size, gl }) => {
     // Enlarge the whole scene together, preserving the earbuds' fit on the head.
     if (camera.zoom !== framingZoom.current) {
       camera.zoom = framingZoom.current;
       camera.updateProjectionMatrix();
     }
     const p = progress.get();
+    if (p !== shadowProgress.current) {
+      // Refresh the stationary light's cached shadow only when this pose moves.
+      // Covers both the scroll story and the fixed-pose fallback/preview scenes.
+      gl.shadowMap.needsUpdate = true;
+      shadowProgress.current = p;
+    }
     const worn = THREE.MathUtils.smootherstep(p, 0.14, 0.46);
     // Let the product lead the turn before bringing in the mannequin.
     reveal.set(ease(0.27, 0.46, p));

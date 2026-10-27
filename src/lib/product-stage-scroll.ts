@@ -14,6 +14,12 @@ export function productStageProgress(distance: number) {
   return Math.min(PORTRAIT_ENTRY_START, stageDistance(distance) / STORY_SCROLL_SCREENS);
 }
 
+/** Native scroll plus resize-observed geometry avoids layout reads per frame. */
+export function measuredProductStageProgress(scrollY: number, trackTop: number, stageHeight: number) {
+  if (!Number.isFinite(stageHeight) || stageHeight <= 1 || !Number.isFinite(trackTop)) return null;
+  return productStageProgress((scrollY - trackTop) / stageHeight);
+}
+
 /** Read the current layout, including restored scroll and responsive changes. */
 export function readProductStageProgress(
   track: Pick<HTMLElement, "getBoundingClientRect"> | null,

@@ -9,7 +9,7 @@ import listeningExtension from "@/assets/earbuds/listening-portrait-studio-grey-
 import { closingCta, closingHeadline, reservation, type HeroVariant } from "@/config/site";
 import type { StorageMode } from "@/lib/storage";
 import { productStory } from "@/config/product-story";
-import { STORY_SCROLL_SCREENS, PORTRAIT_ENTRY_START, MODEL_SCROLL_SCREENS, CLOSING_SCROLL_SCREENS, productStageProgress, readProductStageProgress } from "@/lib/product-stage-scroll";
+import { STORY_SCROLL_SCREENS, PORTRAIT_ENTRY_START, MODEL_SCROLL_SCREENS, CLOSING_SCROLL_SCREENS, productStageProgress, measuredProductStageProgress } from "@/lib/product-stage-scroll";
 import { HeroSignup } from "./HeroSignup";
 import { AppPreview } from "./sections/AppPreview";
 import { ModelLoadingNotice, ModelRecoveryNotice } from "./ModelRecoveryNotice";
@@ -136,10 +136,15 @@ export function ProductStage({
     setReady(false);
     setFailed(false);
   }, [modelUrl]);
-  const readProgress = useCallback(() => readProductStageProgress(track.current, stage.current), []);
 
   const { scrollY } = useScroll();
   const trackGeometry = useMotionValue({ top: 0, closingTop: 1, width: 1, height: 1 });
+  const readProgress = useCallback(() => {
+    const geometry = trackGeometry.get();
+    // ResizeObserver keeps these measurements current. Reading native scroll
+    // here still handles restored pages without forcing layout every 3D frame.
+    return measuredProductStageProgress(window.scrollY, geometry.top, geometry.height);
+  }, [trackGeometry]);
   const portraitBounds = useMotionValue({ top: 72, right: 0, bottom: 0, left: 0, width: 1, height: 1 });
 
   useEffect(() => {

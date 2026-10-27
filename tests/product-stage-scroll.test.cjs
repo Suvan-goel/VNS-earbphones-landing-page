@@ -15,9 +15,26 @@ const {
   MODEL_SCROLL_SCREENS,
   CLOSING_SCROLL_SCREENS,
   productStageProgress,
+  measuredProductStageProgress,
   readProductStageProgress,
 } = moduleContext.exports;
 const near = (actual, expected) => assert.ok(Math.abs(actual - expected) < 1e-9, `${actual} != ${expected}`);
+
+test("cached layout follows native restored scroll, resize and reverse scrolling", () => {
+  // No Motion scroll event is needed after mounting midway through the story.
+  near(measuredProductStageProgress(2787.6, 120, 900), 0.57);
+  near(measuredProductStageProgress(2787.6, 120, 720), 0.7125);
+  near(measuredProductStageProgress(120, 120, 720), 0);
+  near(measuredProductStageProgress(10000, 120, 720), 0.85);
+  near(measuredProductStageProgress(0, 120, 720), 0);
+});
+
+test("unmeasured and hidden cached layouts defer to the source value", () => {
+  for (const height of [0, 1, -1, NaN, Infinity]) {
+    assert.equal(measuredProductStageProgress(2000, 0, height), null);
+  }
+  assert.equal(measuredProductStageProgress(2000, NaN, 720), null);
+});
 
 test("a late scene reads the restored page position without a scroll event", () => {
   const stage = { clientHeight: 900 };
