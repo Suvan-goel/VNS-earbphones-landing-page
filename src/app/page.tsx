@@ -3,7 +3,7 @@ import { join } from "node:path";
 import type { Metadata } from "next";
 import { defaultVariant, heroVariants, reservation, type HeroVariant } from "@/config/site";
 import { storageMode } from "@/lib/storage";
-import { reservationsOpen } from "@/lib/stripe";
+import { hostedReservationUrl, reservationsOpen } from "@/lib/stripe";
 import { Nav } from "@/components/Nav";
 import { ProductStage } from "@/components/ProductStage";
 import { RevealObserver } from "@/components/RevealObserver";
@@ -41,7 +41,8 @@ function pickVariant(raw: string | string[] | undefined): HeroVariant {
  */
 function findProductModel(): { modelUrl: string | null; posterUrl: string | null } {
   const dir = join(process.cwd(), "public/models");
-  const modelUrl = existsSync(join(dir, "cymba-earbuds-hero.glb")) ? "/models/cymba-earbuds-hero.glb" : null;
+  // The version key changes whenever the optimized file is regenerated, so no browser keeps a stale copy.
+  const modelUrl = existsSync(join(dir, "cymba-earbuds-hero.glb")) ? "/models/cymba-earbuds-hero.glb?v=839174eb" : null;
   // A content-hashed URL invalidates both browser and Next image caches
   // whenever the live-rendered loading still changes.
   const posterUrl = heroPoster.src;
@@ -51,7 +52,7 @@ function findProductModel(): { modelUrl: string | null; posterUrl: string | null
 export default async function Page({ searchParams }: { searchParams: SearchParams }) {
   const v = pickVariant((await searchParams).v);
   const mode = storageMode();
-  const reservations = reservationsOpen();
+  const reservations = reservationsOpen() || Boolean(hostedReservationUrl(v.id));
   const { modelUrl, posterUrl } = findProductModel();
 
   const faqLd = {
@@ -73,10 +74,9 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
           v={v}
           modelUrl={modelUrl}
           posterUrl={posterUrl}
-          reservations={reservations}
           fallback={
             <>
-              <Hero mode={mode} v={v} modelUrl={modelUrl} posterUrl={posterUrl} reservations={reservations} />
+              <Hero mode={mode} v={v} modelUrl={modelUrl} posterUrl={posterUrl} />
               <ProductReveal modelUrl={modelUrl} posterUrl={posterUrl} variant={v.id} />
               <HowItWorks modelUrl={modelUrl} posterUrl={posterUrl} variant={v.id} />
               <Evidence modelUrl={modelUrl} posterUrl={posterUrl} variant={v.id} />

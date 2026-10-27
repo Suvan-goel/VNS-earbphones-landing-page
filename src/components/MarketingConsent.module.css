@@ -1,0 +1,173 @@
+.panel,
+.settings {
+  position: fixed;
+  z-index: 90;
+  left: max(16px, env(safe-area-inset-left));
+  bottom: max(16px, env(safe-area-inset-bottom));
+  color: var(--consent-text, #1d1d1f);
+  font-family: var(--font-sans);
+  letter-spacing: -0.01em;
+}
+
+.panel {
+  width: min(360px, calc(100% - max(16px, env(safe-area-inset-left)) - max(16px, env(safe-area-inset-right))));
+  max-height: calc(100svh - 32px - env(safe-area-inset-bottom));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--consent-border, #1d1d1f12);
+  border-radius: 16px;
+  padding: 16px;
+  background: var(--consent-panel, #ffffffed);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 4px 24px #0000000a;
+}
+
+.heading {
+  display: flex;
+  min-height: 20px;
+  align-items: center;
+  gap: 8px;
+}
+
+.heading h2 {
+  margin-right: auto;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.current {
+  color: var(--consent-muted, #68686d);
+  font-size: 0.6875rem;
+  line-height: 1.4;
+}
+
+.description {
+  margin-top: 6px;
+  color: var(--consent-muted, #636368);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.privacy {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  color: var(--consent-muted, #68686d);
+  font-size: 0.75rem;
+  text-decoration: underline;
+  text-decoration-color: #b6b6bb;
+  text-underline-offset: 3px;
+}
+
+.actions {
+  display: flex;
+  gap: 6px;
+}
+
+.actions button {
+  min-width: 76px;
+  min-height: 44px;
+  border: 1px solid var(--consent-border, #1d1d1f12);
+  border-radius: 9px;
+  background: var(--consent-control, #1d1d1f05);
+  color: var(--consent-text, #343437);
+  padding: 10px 14px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+
+.settings {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  left: max(8px, env(safe-area-inset-left));
+  bottom: max(8px, env(safe-area-inset-bottom));
+  border: 0;
+  border-radius: 50%;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.settings span {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--consent-border, #1d1d1f0c);
+  border-radius: 50%;
+  background: var(--consent-panel, #fffffff2);
+  color: var(--consent-muted, #68686d);
+  box-shadow: 0 2px 8px #00000005;
+}
+
+.settings svg { width: 20px; height: 20px; }
+
+.close {
+  display: inline-flex;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  margin: -12px -12px -12px 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--consent-muted, #68686d);
+  cursor: pointer;
+}
+
+.close svg { width: 16px; height: 16px; }
+.panel:focus { outline: none; }
+.panel :focus-visible,
+.settings:focus-visible { outline: 2px solid var(--consent-focus, #1d1d1f); outline-offset: 3px; }
+
+@media (hover: hover) {
+  .actions button:hover { background: var(--consent-hover, #1d1d1f0b); border-color: var(--consent-hover-border, #1d1d1f26); }
+  .privacy:hover { color: var(--consent-text, #1d1d1f); text-decoration-color: currentColor; }
+  .settings:hover span { color: var(--consent-text, #1d1d1f); background: var(--consent-hover, #f7f7f8); }
+  .close:hover { color: var(--consent-text, #1d1d1f); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .actions button { transition: none; }
+}
+
+/* Phones: one compact row at the very bottom, so it costs the least screen while the question is open. */
+@media (max-width: 639px) {
+  .panel {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    border-radius: 16px 16px 0 0;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  }
+  .description {
+    margin-top: 4px;
+    font-size: 0.75rem;
+    line-height: 1.4;
+  }
+  .footer {
+    margin-top: 8px;
+  }
+  .privacy,
+  .actions button {
+    min-height: 40px;
+  }
+}

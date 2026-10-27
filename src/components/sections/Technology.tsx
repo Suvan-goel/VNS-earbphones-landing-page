@@ -12,7 +12,7 @@ const specs: { label: string; values: string[] }[] = [
   { label: "Audio", values: ["Dynamic driver, size TBC", "Frequency response TBC"] },
   { label: "Stimulation", values: ["Two conductive contacts on the inner housing", "Low-current pulses with a fixed ceiling", "20-minute sessions, one button to start and stop"] },
   { label: "Fit", values: ["Shaped housing with soft support wing", "Silicone tips in three sizes", "Weight per bud TBC"] },
-  { label: "Cable and controller", values: ["Braided cable, length TBC", "Inline controller with three buttons and an indicator light", "Connector TBC (3.5 mm or USB-C)"] },
+  { label: "Cable and controller", values: ["Braided cable, length TBC", "Inline controller with three buttons and an indicator light", "USB-C connector"] },
   { label: "In the box", values: [`${site.product} earbuds`, "Three sizes of silicone tips", "Carry pouch (TBC)"] },
 ];
 

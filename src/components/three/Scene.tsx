@@ -222,8 +222,20 @@ export function Scene({
     if (!activated || unavailable || recovering || !visible || !pageVisible) return;
     // Background tabs and offscreen pauses get a fresh grace period on return.
     health.current.lastDrawAt = health.current.loadingSince = performance.now();
+    // A browser that is not running animation frames (a covered window, a throttled view) draws
+    // nothing without anything being wrong. Only count stalled time while frames are flowing.
+    let lastFrameAt = performance.now();
+    let heartbeat = requestAnimationFrame(function tick() {
+      lastFrameAt = performance.now();
+      heartbeat = requestAnimationFrame(tick);
+    });
     const timer = setInterval(() => {
-      const reason = sceneRecoveryReason(health.current, performance.now(), !document.hidden);
+      const now = performance.now();
+      if (now - lastFrameAt > 1500) {
+        health.current.lastDrawAt = health.current.loadingSince = now;
+        return;
+      }
+      const reason = sceneRecoveryReason(health.current, now, !document.hidden);
       if (!reason || failed.current) return;
       loadingCallback.current?.();
       if (++recoveryAttempts.current > 2) {
@@ -233,7 +245,10 @@ export function Scene({
       if (reason === "loading") resetAssetsCallback.current?.();
       restart();
     }, 1000);
-    return () => clearInterval(timer);
+    return () => {
+      clearInterval(timer);
+      cancelAnimationFrame(heartbeat);
+    };
   }, [activated, unavailable, recovering, visible, pageVisible, canvasVersion, handleError, restart]);
 
   useEffect(() => {

@@ -56,7 +56,7 @@ export function getFaqGroups(reservations = false): FaqGroup[] {
       {
         id: "compatibility",
         q: "Will it work with my phone or laptop?",
-        a: `${P} uses a wired connection. The connector type and supported phones and computers are still to be confirmed.`,
+        a: `${P} is wired, with a USB-C connector, so it plugs straight into phones and computers that have a USB-C port. Which adapters we will offer for other ports will be confirmed closer to launch.`,
       },
     ],
   },
@@ -94,7 +94,7 @@ export function getFaqGroups(reservations = false): FaqGroup[] {
       {
         id: "reservation",
         q: `How does the ${reservation.depositLabel} reservation work?`,
-        a: `${reservations ? "Reservations are open." : "Paid reservations are coming soon; deposits are not being taken yet."} When you reserve, a one-time ${reservation.depositLabel} deposit holds your place. It is credited against the final price and refundable in full before your pair ships. A founder number is assigned when payment confirmation is recorded. There is no subscription or automatic charge for the balance.`,
+        a: `${reservations ? "Reservations are open." : "Paid reservations are coming soon; deposits are not being taken yet."} When you reserve, a one-time ${reservation.depositLabel} deposit holds your place. It is credited against the final price and refundable in full before your pair ships. A founder number is assigned when payment confirmation is recorded, and the first 50 paid reservations receive limited-edition Founders Buds at no extra cost. There is no subscription or automatic charge for the balance.`,
         links: [{ label: "Reservation details", href: reservation.path }],
       },
       {

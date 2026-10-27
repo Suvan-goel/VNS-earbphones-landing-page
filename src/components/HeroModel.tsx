@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { useCallback, useState } from "react";
 import type { HeroPose } from "./three/HeroScene";
-import { ModelLoadingNotice, ModelRecoveryNotice } from "./ModelRecoveryNotice";
+import { ModelRecoveryNotice } from "./ModelRecoveryNotice";
 import { HeroPoster } from "./HeroPoster";
 
 /* The 3D hero only runs in the browser; the frame holds its place until it loads. */
@@ -25,7 +25,6 @@ export function HeroModel({ modelUrl, posterUrl, pose = "hero", className = "" }
     <div className={className} style={{ position: "relative" }} data-product-model={failed || !modelUrl ? "fallback" : ready ? "loaded" : "loading"}>
       {!failed && modelUrl && <HeroScene modelUrl={modelUrl} pose={pose} onReady={onReady} onLoading={onLoading} onError={onError} />}
       {posterUrl && <HeroPoster src={posterUrl} ready={ready} priority={pose === "hero"} />}
-      {!ready && !failed && modelUrl && <ModelLoadingNotice />}
       {failed && modelUrl && <ModelRecoveryNotice onRetry={retry} />}
     </div>
   );

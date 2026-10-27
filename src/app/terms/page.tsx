@@ -40,6 +40,11 @@ export default function Terms() {
         shipping cost, applicable taxes and delivery availability are not yet confirmed. We will provide these details and the final
         purchase terms before inviting you to pay the remaining balance. The remaining balance will not be charged automatically.
       </p>
+      <p>
+        <strong>Founders Edition.</strong> The first 50 reservations, counted in the order we record payment confirmations, are offered
+        limited-edition Founders Buds at no extra cost when they buy the finished product. If a reservation in that group is cancelled,
+        its place passes to the next confirmed reservation. The Founders Edition differs from the standard product in finish only.
+      </p>
       <h2>Reservation cancellation and refunds</h2>
       <p>
         You can cancel your reservation for a full refund at any time before your pair ships. Email

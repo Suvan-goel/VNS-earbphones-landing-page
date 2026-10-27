@@ -168,18 +168,22 @@ function CableSleeve({ side }: { side: "L" | "R" }) {
 /** The socket follows the product, while the cable hangs vertically under gravity. */
 function TrailingCable({ side, anchor }: { side: "L" | "R"; anchor: RefObject<THREE.Group | null> }) {
   const cable = useRef<THREE.Mesh>(null);
+  const { mobile } = useSceneQuality();
   const { geometry, lastTransform, socketOffset } = useMemo(() => {
     // The cable is straight, so two rings describe the same surface as 97.
     // Fade still interpolates continuously along uv.x in the fragment shader.
+    // The drop is short enough for the fade to finish inside the hero frame
+    // (4.7 units tall on desktop, tighter on the phone band) instead of a flat cut.
+    const drop = mobile ? 1.6 : 2.0;
     const geometry = new THREE.TubeGeometry(new THREE.LineCurve3(
-      new THREE.Vector3(), new THREE.Vector3(0, -2.42, 0),
+      new THREE.Vector3(), new THREE.Vector3(0, -drop, 0),
     ), 1, CABLE_RADIUS, 16, false);
     const sign = side === "L" ? 1 : -1;
     const localTangent = new THREE.Vector3(sign * SLEEVE_AXIS.x, SLEEVE_AXIS.y, SLEEVE_AXIS.z);
     const socketOffset = new THREE.Vector3(sign * OUTLET.x, OUTLET.y, OUTLET.z)
       .addScaledVector(localTangent, -0.006);
     return { geometry, socketOffset, lastTransform: new THREE.Matrix4().makeScale(0, 0, 0) };
-  }, [side]);
+  }, [side, mobile]);
   const material = useMemo(() => {
     const value = new THREE.MeshStandardMaterial({ color: "#181a1c", roughness: 0.37, metalness: 0.1, transparent: true, depthWrite: false });
     value.onBeforeCompile = (shader) => {
@@ -196,7 +200,7 @@ function TrailingCable({ side, anchor }: { side: "L" | "R"; anchor: RefObject<TH
     bud.updateMatrix();
     if (bud.matrix.equals(lastTransform)) return;
     // Move the fixed mesh instead of rebuilding and uploading its vertices.
-    // Only the radius follows the bud scale; the vertical drop stays 2.42 units.
+    // Only the radius follows the bud scale; the vertical drop stays fixed.
     mesh.position.copy(socketOffset).applyMatrix4(bud.matrix);
     mesh.scale.set(bud.scale.x, 1, bud.scale.x);
     mesh.visible = true;
@@ -206,8 +210,13 @@ function TrailingCable({ side, anchor }: { side: "L" | "R"; anchor: RefObject<TH
   return <mesh ref={cable} geometry={geometry} material={material} visible={false} renderOrder={5} />;
 }
 
+/** The pair wakes once it has drawn: a short lift and turn, then a slow drift while the page rests at the top. */
+const WAKE_SECONDS = 1.3;
+const DRIFT_PERIOD = 6;
+
 function EarbudPair({ modelUrl, progress }: { modelUrl: string; progress: MotionValue<number> }) {
   const { mobile } = useSceneQuality();
+  const wakeStart = useRef<number | null>(null);
   const { scene } = useGLTF(mobile ? EARBUD_MOBILE_MODEL_URL : modelUrl, "/draco/");
   const left = useMemo(() => prepareEarbud(scene, "L", mobile), [scene, mobile]);
   const right = useMemo(() => prepareEarbud(scene, "R", mobile), [scene, mobile]);
@@ -224,12 +233,23 @@ function EarbudPair({ modelUrl, progress }: { modelUrl: string; progress: Motion
   }, [left, right]);
   // Position the earbuds before the cables read their sockets, including
   // the first frame and the frame used to generate the loading poster.
-  useFrame(() => {
+  useFrame((state) => {
     const p = progress.get();
-    // Start and finish with zero acceleration. Overlap the final approach
-    // with the flight so the earbuds glide into place without stopping first.
-    const shrink = THREE.MathUtils.smootherstep(p, 0.14, 0.39);
-    const travel = THREE.MathUtils.smootherstep(p, 0.14, 0.42);
+    // Arrival and idle life, only while the hero is on screen. The first drawn
+    // frame matches the poster exactly, so the crossfade shows no double image.
+    const now = state.clock.elapsedTime;
+    wakeStart.current ??= now;
+    const since = now - wakeStart.current;
+    const wake = THREE.MathUtils.smootherstep(since, 0, WAKE_SECONDS);
+    const resting = 1 - THREE.MathUtils.smootherstep(p, 0, 0.06);
+    const drift = wake >= 1 ? Math.sin(((since - WAKE_SECONDS) * 2 * Math.PI) / DRIFT_PERIOD) : 0;
+    const lift = (Math.sin(wake * Math.PI) * 0.07 + drift * 0.012) * resting;
+    const wakeTurn = (Math.sin(wake * Math.PI) * 0.05 + drift * 0.02) * resting;
+    // Start and finish with zero acceleration. The move begins while the
+    // headline is still fading, so the first scroll never meets a still frame.
+    // Overlap the final approach with the flight so the earbuds glide into place.
+    const shrink = THREE.MathUtils.smootherstep(p, 0.1, 0.39);
+    const travel = THREE.MathUtils.smootherstep(p, 0.1, 0.42);
     const seat = THREE.MathUtils.smootherstep(p, 0.35, 0.46);
     // Begin with a small hero turn, carry most of the rotation through the
     // flight, then finish aligning the nozzles as the earbuds slide into place.
@@ -247,7 +267,7 @@ function EarbudPair({ modelUrl, progress }: { modelUrl: string; progress: Motion
       // Finish lower, slightly inward, and toward the face (+Z) to seat the tips in the canals.
       group.position.set(
         sign * (THREE.MathUtils.lerp(0.60, -1.46, travel) + 0.34 * seat),
-        THREE.MathUtils.lerp(index === 0 ? 0.04 : 0.78, -0.06, travel) + arc * 0.12 - 0.06 * seat,
+        THREE.MathUtils.lerp(index === 0 ? 0.04 : 0.78, -0.06, travel) + arc * 0.12 - 0.06 * seat + lift,
         THREE.MathUtils.lerp(
           THREE.MathUtils.lerp(index === 0 ? 0 : -0.05, 0.36, travel) + arc * (index === 0 ? 2.3 : 2.1),
           0.15, seat,
@@ -256,7 +276,7 @@ function EarbudPair({ modelUrl, progress }: { modelUrl: string; progress: Motion
       group.scale.setScalar(THREE.MathUtils.lerp(0.79, 0.36, shrink));
       group.rotation.set(
         THREE.MathUtils.lerp(-0.06, 0, turn),
-        sign * THREE.MathUtils.lerp(-0.30, -Math.PI + 0.72, turn),
+        sign * THREE.MathUtils.lerp(-0.30, -Math.PI + 0.72, turn) + wakeTurn,
         sign * THREE.MathUtils.lerp(0.09, 0, turn),
       );
     });
@@ -340,7 +360,7 @@ export function EarbudExperience({ modelUrl, progress, mannequinGate }: {
       gl.shadowMap.needsUpdate = true;
       shadowProgress.current = p;
     }
-    const worn = THREE.MathUtils.smootherstep(p, 0.14, 0.46);
+    const worn = THREE.MathUtils.smootherstep(p, 0.1, 0.46);
     // Let the product lead the turn before bringing in the mannequin.
     reveal.set(ease(0.27, 0.46, p));
     // Give sensing its own quiet beat, then grow the signal toward the crown.

@@ -1,31 +1,31 @@
 .form { width: 100%; min-width: 0; }
 .details { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
 .details > div { min-width: 0; }
-.detailsLabel { display: block; margin-bottom: 4px; color: #707078; font-size: 0.8125rem; line-height: 1.5; }
-.email { display: block; color: #303036; font-size: 0.9375rem; line-height: 1.5; overflow-wrap: anywhere; }
-.edit, .retry { min-height: 44px; padding: 8px 0; border: 0; background: transparent; color: #303036; font: inherit; font-size: 0.875rem; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
+.detailsLabel { display: block; margin-bottom: 4px; color: var(--reservation-muted, #707078); font-size: 0.8125rem; line-height: 1.5; }
+.email { display: block; color: var(--reservation-text, #303036); font-size: 0.9375rem; line-height: 1.5; overflow-wrap: anywhere; }
+.edit, .retry { min-height: 44px; padding: 8px 0; border: 0; background: transparent; color: var(--reservation-text, #303036); font: inherit; font-size: 0.875rem; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
 .edit { flex-shrink: 0; }
 .edit:disabled { cursor: wait; opacity: 0.6; }
-.edit:focus-visible, .retry:focus-visible { outline: 2px solid #202023; outline-offset: 4px; }
-.heading { margin: 0 0 20px; color: #202023; font-size: 1.125rem; font-weight: 500; line-height: 1.4; outline: none; }
+.edit:focus-visible, .retry:focus-visible { outline: 2px solid var(--reservation-focus, #202023); outline-offset: 4px; }
+.heading { margin: 0 0 20px; color: var(--reservation-text, #202023); font-size: 1.125rem; font-weight: 500; line-height: 1.4; outline: none; }
 .wallets { width: 100%; }
 .walletsHidden { height: 0; overflow: hidden; visibility: hidden; }
-.divider { display: flex; align-items: center; gap: 12px; margin-block: 22px; color: #77777f; font-size: 0.75rem; line-height: 1.5; text-align: center; }
-.divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: #e7e7eb; }
-.total { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 26px; color: #626269; font-size: 0.9375rem; line-height: 1.5; }
-.total strong { color: #202023; font-size: 1.125rem; font-weight: 500; }
-.button { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 54px; margin-top: 16px; padding: 14px 20px; border: 1px solid #202023; border-radius: 12px; background: #202023; color: #fff; font: inherit; font-size: 1rem; font-weight: 500; line-height: 1.5; cursor: pointer; transition: background-color 160ms, opacity 160ms; }
-.button:hover:not(:disabled) { background: #36363b; }
-.button:active:not(:disabled) { background: #131316; }
-.button:focus-visible { outline: 2px solid #202023; outline-offset: 4px; }
+.divider { display: flex; align-items: center; gap: 12px; margin-block: 22px; color: var(--reservation-muted, #77777f); font-size: 0.75rem; line-height: 1.5; text-align: center; }
+.divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--reservation-divider, #e7e7eb); }
+.total { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 26px; color: var(--reservation-muted, #626269); font-size: 0.9375rem; line-height: 1.5; }
+.total strong { color: var(--reservation-text, #202023); font-size: 1.125rem; font-weight: 500; }
+.button { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 54px; margin-top: 16px; padding: 14px 20px; border: 1px solid var(--reservation-button, #202023); border-radius: 12px; background: var(--reservation-button, #202023); color: var(--reservation-button-text, #fff); font: inherit; font-size: 1rem; font-weight: 500; line-height: 1.5; cursor: pointer; transition: background-color 160ms, opacity 160ms; }
+.button:hover:not(:disabled) { background: var(--reservation-button-hover, #36363b); }
+.button:active:not(:disabled) { background: var(--reservation-button-active, #131316); }
+.button:focus-visible { outline: 2px solid var(--reservation-focus, #202023); outline-offset: 4px; }
 .button:disabled { cursor: default; opacity: 0.55; }
 .form[aria-busy="true"] .button { cursor: wait; }
-.error { margin-block: 16px 0; color: #a33225; font-size: 0.875rem; line-height: 1.6; outline: none; }
+.error { margin-block: 16px 0; color: var(--reservation-error, #a33225); font-size: 0.875rem; line-height: 1.6; outline: none; }
 .loadError { padding-block: 6px; }
 .loadError .error { margin-top: 0; }
 .retry { margin-top: 4px; }
-.loading { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 120px; color: #626269; font-size: 0.9375rem; line-height: 1.6; }
-.secureNote { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 14px; color: #707078; font-size: 0.75rem; line-height: 1.6; text-align: center; }
+.loading { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 120px; color: var(--reservation-muted, #626269); font-size: 0.9375rem; line-height: 1.6; }
+.secureNote { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 14px; color: var(--reservation-muted, #707078); font-size: 0.75rem; line-height: 1.6; text-align: center; }
 .secureNote svg { width: 15px; height: 15px; flex-shrink: 0; }
 .spinner { width: 16px; height: 16px; flex-shrink: 0; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: spin 800ms linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }

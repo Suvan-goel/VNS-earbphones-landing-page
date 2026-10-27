@@ -10,17 +10,17 @@ export function AppPreview() {
     <section className={styles.section} aria-labelledby={titleId} data-app-preview>
       <div className={styles.content}>
         <header className={styles.copy}>
-          <p className={styles.eyebrow}>Cymba app</p>
+          <p className={styles.eyebrow}>cymba app</p>
           <h2 id={titleId} className={`headline ${styles.title}`}>
-            <span className="block">Your deep work,</span>
-            <span className="soft block">in one place.</span>
+            <span className="block">For those who</span>
+            <span className="soft block">want their best</span>
           </h2>
-          <p className={styles.description}>See your signals, track your sessions and pick up where you left off.</p>
+          <p className={styles.description}>Go beyond tracking. Discover patterns in your brain activity, get personalised insights and let cymba’s AI optimise stimulation around what works for your brain.</p>
         </header>
         <figure className={styles.visual}>
           <Image
             src={appMockup}
-            alt="Cymba app concept on a laptop and phone, showing a work session timer, brain and pulse signals, stimulation activity and recent sessions."
+            alt="cymba app concept on a laptop and phone, showing a work session timer, brain and pulse signals, stimulation activity and recent sessions."
             sizes="(min-width: 1440px) 1000px, (min-width: 1024px) 68vw, (min-width: 768px) 90vw, 100vw"
             quality={90}
             className={styles.image}

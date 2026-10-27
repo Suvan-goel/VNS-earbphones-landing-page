@@ -33,6 +33,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   align-items: start;
+  align-content: start;
   gap: 18px;
 }
 

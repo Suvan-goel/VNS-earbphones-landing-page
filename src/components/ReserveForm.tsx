@@ -4,12 +4,19 @@ import { useEffect, useId, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { reservation } from "@/config/reservation";
 import { getAttribution, track } from "@/lib/analytics";
+import type { PreparedReservationPayment } from "./InlineReservationPayment";
 import styles from "./ReserveForm.module.css";
 import paymentStyles from "./ReservationPayment.module.css";
+import inlineStyles from "./InlineReservationPayment.module.css";
 
 const ReservationPayment = dynamic(() => import("./ReservationPayment").then((module) => module.ReservationPayment), {
   ssr: false,
   loading: () => <p role="status" className={paymentStyles.loading}>Loading secure payment…</p>,
+});
+
+const InlineReservationPayment = dynamic(() => import("./InlineReservationPayment").then((module) => module.InlineReservationPayment), {
+  ssr: false,
+  loading: () => <p role="status" className={inlineStyles.loading}>Loading secure payment…</p>,
 });
 
 type Phase = { k: "idle" } | { k: "submitting" } | { k: "redirecting" } | { k: "error"; message: string }
@@ -43,6 +50,8 @@ export function ReserveForm({ variant, open, preview = false, testMode = false, 
   const [touched, setTouched] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [inlineBusy, setInlineBusy] = useState(false);
+  const [inlineLocked, setInlineLocked] = useState(false);
   const startedAt = useRef(0);
   const inFlight = useRef(false);
   const attempts = useRef(new Map<string, string>());
@@ -82,26 +91,25 @@ export function ReserveForm({ variant, open, preview = false, testMode = false, 
   }, [phase]);
 
   const invalid = touched && !EMAIL_RE.test(email.trim());
-  const busy = phase.k === "submitting" || phase.k === "redirecting";
+  const busy = inlineBusy || phase.k === "submitting" || phase.k === "redirecting";
+  const detailsDisabled = busy || inlineLocked;
   const errId = `${id}-err`;
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    if (!open || inFlight.current) return;
+  function validateDetails(): string | null {
     setTouched(true);
     setSubmitted(true);
+    if (!EMAIL_RE.test(email.trim())) return "Please enter a valid email address.";
+    if (!termsAccepted) return "Please accept the reservation terms before continuing.";
+    return null;
+  }
+
+  async function preparePayment(form: HTMLFormElement): Promise<PreparedReservationPayment> {
+    const validationError = validateDetails();
+    if (validationError) throw new Error(validationError);
+    if (!open || inFlight.current) throw new Error("Please wait while we prepare your reservation.");
     const normalizedEmail = email.trim().toLowerCase();
-    if (!EMAIL_RE.test(normalizedEmail)) {
-      setPhase({ k: "error", message: "Please enter a valid email address." });
-      return;
-    }
-    if (!termsAccepted) {
-      setPhase({ k: "error", message: "Please accept the reservation terms before continuing." });
-      return;
-    }
-    const company = (new FormData(e.currentTarget).get("company") as string) ?? "";
+    const company = (new FormData(form).get("company") as string) ?? "";
     inFlight.current = true;
-    setPhase({ k: "submitting" });
     track("reserve_click", { location: "reserve_page" });
     try {
       const attemptId = getAttempt(normalizedEmail, attempts.current);
@@ -114,31 +122,53 @@ export function ReserveForm({ variant, open, preview = false, testMode = false, 
       const data = (await res.json().catch(() => ({}))) as { status?: string; message?: string; url?: string; clientSecret?: string; sessionId?: string; resetAttempt?: boolean };
       if (res.ok && data.status === "ok" && data.clientSecret && data.sessionId && publishableKey) {
         track("reserve_checkout_started", { location: "reserve_page" });
-        setPhase({ k: "payment", clientSecret: data.clientSecret, sessionId: data.sessionId, email: normalizedEmail });
-        inFlight.current = false;
-        return;
+        return { kind: "inline", clientSecret: data.clientSecret, sessionId: data.sessionId, email: normalizedEmail };
       }
       if (res.ok && data.status === "ok" && data.url) {
         const destination = new URL(data.url, window.location.origin);
         if (destination.origin !== window.location.origin && !(destination.protocol === "https:" && destination.hostname === "checkout.stripe.com")) {
-          throw new Error("Invalid checkout destination");
+          throw new Error("We couldn't open checkout. Please try again.");
         }
         track("reserve_checkout_started", { location: "reserve_page" });
-        setPhase({ k: "redirecting" });
-        window.location.assign(destination.href);
-        return;
+        return { kind: "redirect", url: destination.href };
       }
       if (data.resetAttempt === true) {
         attempts.current.delete(normalizedEmail);
         try { sessionStorage.removeItem(`${ATTEMPT_KEY}:${normalizedEmail}`); } catch { /* Memory has already been reset. */ }
       }
       track("reserve_error", { location: "reserve_page", code: res.status });
-      setPhase({ k: "error", message: data.message ?? "We couldn't open checkout. Please try again." });
-    } catch {
-      track("reserve_error", { location: "reserve_page", code: 0 });
-      setPhase({ k: "error", message: "We couldn't open checkout. Check your connection and try again; we'll reuse your checkout attempt." });
+      throw new Error(data.message ?? "We couldn't open checkout. Please try again.");
+    } catch (error) {
+      if (error instanceof TypeError) {
+        track("reserve_error", { location: "reserve_page", code: 0 });
+        throw new Error("We couldn't open checkout. Check your connection and try again; we'll reuse your checkout attempt.");
+      }
+      throw error;
+    } finally {
+      inFlight.current = false;
     }
-    inFlight.current = false;
+  }
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!open || inFlight.current) return;
+    const validationError = validateDetails();
+    if (validationError) {
+      setPhase({ k: "error", message: validationError });
+      return;
+    }
+    setPhase({ k: "submitting" });
+    try {
+      const prepared = await preparePayment(e.currentTarget);
+      if (prepared.kind === "inline") {
+        setPhase({ k: "payment", clientSecret: prepared.clientSecret, sessionId: prepared.sessionId, email: prepared.email });
+      } else {
+        setPhase({ k: "redirecting" });
+        window.location.assign(prepared.url);
+      }
+    } catch (error) {
+      setPhase({ k: "error", message: error instanceof Error ? error.message : "We couldn't open checkout. Please try again." });
+    }
   }
 
   if (!open && hostedUrl) {
@@ -148,7 +178,6 @@ export function ReserveForm({ variant, open, preview = false, testMode = false, 
           {reservation.cta}
           <svg aria-hidden="true" viewBox="0 0 20 20" fill="none"><path d="M3 10h14m-5-5 5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
         </a>
-        <p className={styles.checkoutNote}>Checkout on trycymba.com</p>
       </div>
     );
   }
@@ -181,8 +210,8 @@ export function ReserveForm({ variant, open, preview = false, testMode = false, 
     );
   }
 
-  return (
-    <form onSubmit={onSubmit} noValidate aria-label="Reservation details" aria-busy={busy}>
+  const details = (
+    <>
       {testMode && <p className={styles.testNotice}><strong>Test mode</strong> Use test cards only. No real charge.</p>}
       <label htmlFor={`${id}-email`} className={styles.label}>Email address</label>
       <input
@@ -203,7 +232,7 @@ export function ReserveForm({ variant, open, preview = false, testMode = false, 
         onBlur={() => setTouched(true)}
         aria-invalid={invalid || undefined}
         aria-describedby={phase.k === "error" ? errId : undefined}
-        disabled={busy}
+        disabled={detailsDisabled}
         className={`${styles.field} ${invalid ? styles.invalid : ""}`}
       />
 
@@ -218,7 +247,7 @@ export function ReserveForm({ variant, open, preview = false, testMode = false, 
             setTermsAccepted(e.target.checked);
             if (phase.k === "error") setPhase({ k: "idle" });
           }}
-          disabled={busy}
+          disabled={detailsDisabled}
           aria-invalid={(submitted && !termsAccepted) || undefined}
           aria-describedby={phase.k === "error" ? errId : undefined}
           className={styles.checkbox}
@@ -230,14 +259,38 @@ export function ReserveForm({ variant, open, preview = false, testMode = false, 
         <label>Company<input type="text" name="company" tabIndex={-1} autoComplete="off" /></label>
       </div>
 
+    </>
+  );
+
+  if (publishableKey && !preview) {
+    return (
+      <InlineReservationPayment
+        publishableKey={publishableKey}
+        email={email.trim().toLowerCase()}
+        details={details}
+        validate={validateDetails}
+        prepare={preparePayment}
+        onBusyChange={setInlineBusy}
+        onConfirmationStart={() => setInlineLocked(true)}
+      />
+    );
+  }
+
+  return (
+    <form onSubmit={onSubmit} noValidate aria-label="Reservation details" aria-busy={busy}>
+      {details}
       <div aria-live="polite">
         {phase.k === "error" && <p id={errId} ref={errorRef} tabIndex={-1} className={styles.error}>{phase.message}</p>}
         {busy && <p className="sr-only">{phase.k === "redirecting" ? "Opening checkout." : "Preparing your reservation checkout."}</p>}
       </div>
       <button type="submit" data-cta="reserve" disabled={busy} className={styles.button}>
-        {busy ? <><span className={styles.spinner} aria-hidden="true" />{phase.k === "redirecting" ? "Opening checkout…" : "One moment…"}</> : preview ? "Preview reservation" : publishableKey ? "Continue to payment" : reservation.cta}
+        {busy ? <><span className={styles.spinner} aria-hidden="true" />{phase.k === "redirecting" ? "Opening checkout…" : "One moment…"}</> : preview ? "Preview reservation" : "Reserve now"}
       </button>
-      {preview && <p className={styles.checkoutNote}>Local preview — no payment or reservation is made.</p>}
+      <p className={styles.checkoutNote}>{preview ? "Local preview — no payment or reservation is made." : <>
+        <svg aria-hidden="true" viewBox="0 0 20 20" fill="none"><rect x="4.5" y="9" width="11" height="8" rx="2" stroke="currentColor" strokeWidth="1.4" /><path d="M7 9V6a3 3 0 0 1 6 0v3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" /></svg>
+        Secure payment with Stripe
+      </>}</p>
+      {!preview && <p className={styles.checkoutNote}>Your card statement will show {reservation.merchantName}.</p>}
     </form>
   );
 }

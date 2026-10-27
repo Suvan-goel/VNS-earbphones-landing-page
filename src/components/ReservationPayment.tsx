@@ -25,24 +25,24 @@ type ReservationPaymentProps = {
 };
 
 const appearance: Appearance = {
-  theme: "stripe",
+  theme: "night",
   variables: {
-    colorPrimary: "#202023",
-    colorBackground: "#ffffff",
-    colorText: "#202023",
-    colorTextSecondary: "#707078",
-    colorDanger: "#a33225",
+    colorPrimary: "#cfae7c",
+    colorBackground: "#2b2b2d",
+    colorText: "#f5f5f7",
+    colorTextSecondary: "#b9b9bb",
+    colorDanger: "#ffb8ad",
     fontFamily: "Arial, Helvetica, sans-serif",
     fontSizeBase: "16px",
     spacingUnit: "4px",
-    borderRadius: "12px",
+    borderRadius: "9px",
   },
   rules: {
-    ".Input": { borderColor: "#d7d7dc", boxShadow: "none", padding: "14px" },
-    ".Input:focus": { borderColor: "#62626b", boxShadow: "0 0 0 3px #ededf1" },
+    ".Input": { borderColor: "#7e7e74", boxShadow: "none", padding: "14px" },
+    ".Input:focus": { borderColor: "#cfae7c", boxShadow: "0 0 0 2px #cfae7c40" },
     ".Label": { fontWeight: "500", fontSize: "14px", marginBottom: "9px" },
-    ".Tab": { borderColor: "#d7d7dc", boxShadow: "none" },
-    ".Tab--selected": { borderColor: "#202023", boxShadow: "0 0 0 1px #202023" },
+    ".Tab": { borderColor: "#7e7e74", boxShadow: "none" },
+    ".Tab--selected": { borderColor: "#cfae7c", boxShadow: "0 0 0 1px #cfae7c" },
   },
 };
 
@@ -212,7 +212,7 @@ function PaymentForm({ sessionId, email, onEditDetails, onRetry, onConfirmationS
         <>
           <div className={walletsAvailable ? styles.wallets : styles.walletsHidden} inert={submitting || undefined}>
             <ExpressCheckoutElement
-              options={{ buttonHeight: 52, buttonTheme: { applePay: "black", googlePay: "black" }, buttonType: { applePay: "check-out", googlePay: "checkout" }, layout: { maxColumns: 2, maxRows: 2 }, paymentMethodOrder: ["apple_pay", "google_pay", "link"], paymentMethods: { applePay: "auto", googlePay: "auto" } }}
+              options={{ buttonHeight: 52, buttonTheme: { applePay: "white", googlePay: "white" }, buttonType: { applePay: "check-out", googlePay: "checkout" }, layout: { maxColumns: 2, maxRows: 2 }, paymentMethodOrder: ["apple_pay", "google_pay", "link"], paymentMethods: { applePay: "auto", googlePay: "auto" } }}
               onReady={({ availablePaymentMethods }) => setWalletsAvailable(Object.values(availablePaymentMethods ?? {}).some(Boolean))}
               onAvailablePaymentMethodsChange={({ paymentMethods }) => setWalletsAvailable(Object.values(paymentMethods ?? {}).some((method) => method?.available))}
               onLoadError={() => setWalletsAvailable(false)}

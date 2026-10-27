@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { reservation, site } from "@/config/site";
 import { LegalPage } from "@/components/LegalPage";
+import { MetaMeasurementDescription } from "@/components/MarketingConsent";
 
 export const metadata: Metadata = { title: `Privacy notice · ${site.brand}`, robots: { index: false } };
 
 export default function Privacy() {
   return (
-    <LegalPage title="Privacy notice" updated="26 October 2026" showTemplateNotice={false}>
+    <LegalPage title="Privacy notice" updated="27 October 2026" showTemplateNotice={false}>
       <p>
         This notice explains what {site.brand} (&ldquo;we&rdquo;) collects through this website and our Facebook and Instagram signup forms
         as we prepare to launch {site.product}, why, and what you can do about it.
@@ -60,11 +61,23 @@ export default function Privacy() {
         ask us to stop sending updates at any time by emailing <a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>.
         Joining is free and is not a preorder or an obligation to buy.
       </p>
-      <h2>Website advertising measurement</h2>
+      <h2 id="advertising-cookies">Website advertising measurement</h2>
+      <MetaMeasurementDescription />
       <p>
-        Meta Pixel is disabled on this website. We do not load its advertising script or send website visits or signup events to
-        Meta, including for visitors who previously accepted marketing cookies. This does not affect the Facebook and Instagram
-        instant forms described above.
+        Meta receives event information and ordinary browser, network and cookie information, such as your IP address, browser
+        information, page address and advertising identifiers. Advertising cookies, including <code>_fbp</code> and
+        {" "}<code>_fbc</code>, can help Meta connect a website action with an ad visit or a Meta account. We do not send your email
+        address, name, optional survey answers, health information, card details or private reservation references through the Pixel.
+        We do not use automatic advanced matching or automatic form-event collection.
+      </p>
+      <p>
+        We only load Meta&rsquo;s advertising script and send these events after you accept advertising cookies. Your choice is
+        saved in this browser separately from website analytics, email updates and research invitations. You can change it at any
+        time using <strong>Cookie settings</strong> on the home, reservation or privacy page. Choosing <strong>Decline</strong> stops
+        future Pixel events and removes the Meta advertising cookies this website can access; it does not undo information
+        already sent to Meta. Meta may process information internationally under its
+        {" "}<a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.
+        Facebook and Instagram instant forms are handled separately as described above.
       </p>
       <h2>Why we use it</h2>
       <p>
@@ -94,6 +107,11 @@ export default function Privacy() {
         may process it internationally.
       </p>
       <h2>Reservation details in your browser</h2>
+      <p>
+        After checkout, we store an essential reservation receipt cookie in your browser for up to 30 days so you can view
+        and refresh the status of the reservation you requested. The cookie is secure and readable only by our server. It is
+        separate from advertising cookies and does not depend on marketing consent.
+      </p>
       <p>
         If you choose to reserve after joining the free list, we temporarily keep your email in your browser tab to fill in the
         reservation form. It is removed when the form reads it and only used if it was saved within the last 30 minutes. We also keep

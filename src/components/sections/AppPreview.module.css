@@ -11,7 +11,8 @@
   display: grid;
   grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.65fr);
   align-items: center;
-  padding-inline: var(--desktop-gutter) 24px;
+  /* The copy starts on the same content edge as the hero and the cards below. */
+  padding-inline: var(--desktop-content-edge) 24px;
   gap: clamp(16px, 2vw, 40px);
 }
 .copy { position: relative; z-index: 1; }

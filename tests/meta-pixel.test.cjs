@@ -11,8 +11,29 @@ const created = () => ({ status: "created", surveyToken: "private-survey-token",
 
 // Exercise the real module with a delayed, locally simulated Meta SDK. No
 // script is fetched, no request is sent, and each test gets a fresh document.
-function pixel({ id = PIXEL_ID, leadEnabled, origin = "https://trycymba.com", pathname = "/", search = "", stored = {}, storageUnavailable = false } = {}) {
+function pixel({ id = PIXEL_ID, leadEnabled, purchaseEnabled, origin = "https://trycymba.com", pathname = "/", search = "", stored = {}, storageUnavailable = false } = {}) {
   const scripts = [];
+  const timers = new Map();
+  let now = 0;
+  let timerId = 0;
+  const setTimer = (callback, delay) => {
+    const id = ++timerId;
+    timers.set(id, { callback, at: now + delay });
+    return id;
+  };
+  const clearTimer = (id) => timers.delete(id);
+  const advance = (duration) => {
+    const end = now + duration;
+    while (true) {
+      const next = [...timers].filter(([, timer]) => timer.at <= end).sort((a, b) => a[1].at - b[1].at)[0];
+      if (!next) break;
+      const [id, timer] = next;
+      now = timer.at;
+      timers.delete(id);
+      timer.callback();
+    }
+    now = end;
+  };
   const calls = [];
   const values = new Map(Object.entries(stored));
   const listeners = new Map();
@@ -69,8 +90,8 @@ function pixel({ id = PIXEL_ID, leadEnabled, origin = "https://trycymba.com", pa
     dispatchEvent(event) { for (const listener of listeners.get(event.type) ?? []) listener(event); return true; },
   };
   const context = vm.createContext({
-    process: { env: { NODE_ENV: "test", NEXT_PUBLIC_META_PIXEL_ID: id === null ? undefined : id, NEXT_PUBLIC_META_LEAD_TRACKING_ENABLED: leadEnabled } },
-    window, document, localStorage: storage, Event, CustomEvent, URL,
+    process: { env: { NODE_ENV: "test", NEXT_PUBLIC_META_PIXEL_ID: id === null ? undefined : id, NEXT_PUBLIC_META_LEAD_TRACKING_ENABLED: leadEnabled, NEXT_PUBLIC_META_PURCHASE_TRACKING_ENABLED: purchaseEnabled } },
+    window, document, localStorage: storage, Event, CustomEvent, URL, URLSearchParams, setTimeout: setTimer, clearTimeout: clearTimer,
     console: { error() {}, warn() {} },
   });
   const filename = path.resolve(__dirname, "../src/lib/meta-pixel.ts");
@@ -84,7 +105,7 @@ function pixel({ id = PIXEL_ID, leadEnabled, origin = "https://trycymba.com", pa
   }, module, module.exports);
   const queue = () => Array.from(window.fbq?.queue ?? [], (args) => Array.from(args));
   return {
-    api: module.exports, window, scripts, calls, values, cookies, cookieWrites,
+    api: module.exports, window, scripts, calls, values, cookies, cookieWrites, advance,
     pendingCalls: queue,
     load(script = scripts.at(-1)) {
       assert.ok(script, "Expected an injected script to load");
@@ -194,7 +215,7 @@ test("the SDK loads once, with configuration and events deferred until load", ()
   assert.equal(events(app, "PageView").length, 1);
 });
 
-test("tracking is restricted to the homepage", () => {
+test("tracking is restricted to explicit public funnel paths", () => {
   for (const pathname of ["/privacy", "/terms", "/thank-you"]) {
     const app = pixel({ pathname, leadEnabled: "true" });
     app.api.setMarketingConsent("granted");
@@ -215,7 +236,6 @@ test("consent and configuration never enable tracking on a disallowed origin", (
   for (const origin of [
     "http://trycymba.com",
     "http://localhost:3000",
-    "https://www.trycymba.com",
     "https://cymba-preview.chatgpt.site",
     "https://unrelated.example",
     "https://trycymba.com:8443",
@@ -363,6 +383,36 @@ test("withdrawal after load revokes consent, removes advertising cookies, and bl
   assert.equal(events(app, "PageView").length, 1, "A new grant does not count the same document twice");
 });
 
+test("re-accepting consent resumes the SDK on an already measured page without another PageView", () => {
+  const app = pixel();
+  app.api.setMarketingConsent("granted");
+  app.api.trackMetaPageView();
+  app.load();
+  app.api.setMarketingConsent("denied");
+  assert.deepEqual(app.calls.at(-1), ["consent", "revoke"]);
+
+  // Match MarketingConsent's effect after a changed preference.
+  app.api.setMarketingConsent("granted");
+  app.api.trackMetaPageView();
+  assert.deepEqual(app.calls.at(-1), ["consent", "grant"]);
+  assert.equal(events(app, "PageView").length, 1);
+  assert.equal(app.scripts.length, 1);
+
+  // A grant made on the privacy page must resume only when returning to an
+  // eligible page, including one already measured in this document.
+  app.api.setMarketingConsent("denied");
+  app.window.location.pathname = "/privacy";
+  const deniedCalls = app.calls.length;
+  app.api.setMarketingConsent("granted");
+  app.api.trackMetaPageView();
+  assert.equal(app.calls.length, deniedCalls);
+  app.window.location.pathname = "/";
+  app.api.trackMetaPageView();
+  assert.deepEqual(app.calls.at(-1), ["consent", "grant"]);
+  assert.equal(events(app, "PageView").length, 1);
+  assert.equal(app.calls.filter((args) => args[0] === "init").length, 1);
+});
+
 test("an SDK load failure never throws into successful signup handling", () => {
   const app = pixel({ leadEnabled: "true" });
   app.api.setMarketingConsent("granted");
@@ -415,4 +465,183 @@ test("Lead tracking requires its separate explicit enable flag; PageView does no
     assert.deepEqual(events(app), [["trackSingle", PIXEL_ID, "PageView"]]);
   }
   assert.equal(pixel({ leadEnabled: "true" }).api.isMetaLeadTrackingEnabled(), true);
+});
+
+
+const purchase = (changes = {}) => ({ eventId: "a".repeat(64), value: 50, currency: "USD", ...changes });
+const purchaseOptions = { pathname: "/reserve/complete", purchaseEnabled: "true" };
+
+test("canonical and www production hosts allow each explicit funnel page once per document", () => {
+  for (const origin of ["https://trycymba.com", "https://www.trycymba.com"]) {
+    const app = pixel({ origin });
+    app.api.setMarketingConsent("granted");
+    app.api.trackMetaPageView();
+    app.load();
+    for (const pathname of ["/reserve", "/reserve/complete", "/reserve", "/"]) {
+      app.window.location.pathname = pathname;
+      app.api.trackMetaPageView();
+      app.api.trackMetaPageView();
+    }
+    assert.equal(app.scripts.length, 1);
+    assert.equal(events(app, "PageView").length, 3);
+  }
+});
+
+test("private receipt, survey and form query fields never reach the SDK", () => {
+  for (const search of ["?session_id=cs_live_secret", "?client_secret=cs_secret", "?token=private", "?surveyToken=private", "?email=private%40example.com"]) {
+    const app = pixel({ ...purchaseOptions, search, leadEnabled: "true" });
+    app.api.setMarketingConsent("granted");
+    app.api.trackMetaPageView();
+    app.api.trackMetaLead(201, created());
+    app.api.trackMetaPurchase(purchase());
+    assert.equal(app.scripts.length, 0, search);
+    assert.equal(app.calls.length, 0);
+  }
+});
+
+test("pending events cannot acquire the URL of another page while the SDK loads", () => {
+  const app = pixel({ leadEnabled: "true" });
+  app.api.setMarketingConsent("granted");
+  app.api.trackMetaPageView();
+  app.api.trackMetaLead(201, created());
+  app.window.location.pathname = "/reserve";
+  app.api.trackMetaPageView();
+  app.load();
+  assert.deepEqual(events(app), [["trackSingle", PIXEL_ID, "PageView"]]);
+  app.api.trackMetaLead(201, created());
+  assert.equal(events(app, "Lead").length, 0, "Leads are observed only by the homepage signup form");
+});
+
+test("signup navigation waits briefly after dispatch but never more than 800 ms for the SDK", async () => {
+  const loaded = pixel({ leadEnabled: "true" });
+  loaded.api.setMarketingConsent("granted");
+  let finished = false;
+  const waiting = loaded.api.trackMetaLead(201, created()).then(() => { finished = true; });
+  loaded.advance(100);
+  loaded.load();
+  assert.equal(events(loaded, "Lead").length, 1);
+  loaded.advance(149);
+  await Promise.resolve();
+  assert.equal(finished, false);
+  loaded.advance(1);
+  await waiting;
+  assert.equal(finished, true);
+
+  const blocked = pixel({ leadEnabled: "true" });
+  blocked.api.setMarketingConsent("granted");
+  let timedOut = false;
+  const timeout = blocked.api.trackMetaLead(201, created()).then(() => { timedOut = true; });
+  blocked.advance(799);
+  await Promise.resolve();
+  assert.equal(timedOut, false);
+  blocked.advance(1);
+  await timeout;
+  assert.equal(timedOut, true);
+  blocked.load();
+  assert.equal(events(blocked, "Lead").length, 0, "Timed-out events cannot be sent later with a different navigation context");
+});
+
+test("revocation and SDK failure release signup navigation immediately", async () => {
+  for (const end of ["revoke", "fail"]) {
+    const app = pixel({ leadEnabled: "true" });
+    app.api.setMarketingConsent("granted");
+    const waiting = app.api.trackMetaLead(201, created());
+    if (end === "revoke") app.api.setMarketingConsent("denied");
+    else app.fail();
+    await waiting;
+    assert.equal(events(app).length, 0);
+  }
+});
+
+test("Purchase has its own explicit flag and is restricted to clean production completion pages", () => {
+  for (const options of [
+    { purchaseEnabled: undefined }, { purchaseEnabled: "false" }, { purchaseEnabled: "1" },
+    { pathname: "/" }, { pathname: "/reserve" }, { pathname: "/reserve/preview" },
+    { origin: "http://localhost:3015" }, { origin: "https://cymba-preview.chatgpt.site" },
+  ]) {
+    const app = pixel({ ...purchaseOptions, ...options });
+    app.api.setMarketingConsent("granted");
+    app.api.trackMetaPurchase(purchase());
+    assert.equal(app.scripts.length, 0, JSON.stringify(options));
+  }
+  assert.equal(pixel(purchaseOptions).api.isMetaPurchaseTrackingEnabled(), true);
+});
+
+test("Purchase sends only the deposit value, currency and opaque hash event ID", () => {
+  const app = pixel(purchaseOptions);
+  app.api.setMarketingConsent("granted");
+  const input = purchase({ email: "private@example.com", sessionId: "cs_live_private", surveyToken: "private-token" });
+  app.api.trackMetaPurchase(input);
+  app.api.trackMetaPurchase({ ...input });
+  assert.equal(app.scripts.length, 1);
+  app.load();
+  assert.deepEqual(JSON.parse(JSON.stringify(events(app, "Purchase"))), [
+    ["trackSingle", PIXEL_ID, "Purchase", { value: 50, currency: "USD" }, { eventID: "a".repeat(64) }],
+  ]);
+  assert.equal(JSON.stringify(app.calls).includes("private"), false);
+  assert.equal(JSON.stringify([...app.values]).includes("private"), false);
+  app.api.trackMetaPurchase({ ...input });
+  assert.equal(events(app, "Purchase").length, 1);
+});
+
+test("Purchase rejects invalid IDs, prices, currencies and unauthorised form identity", () => {
+  for (const input of [
+    null, {}, purchase({ eventId: "cs_live_private" }), purchase({ eventId: "private@example.com" }),
+    purchase({ eventId: "123e4567-e89b-42d3-a456-426614174000" }), purchase({ value: 0 }),
+    purchase({ value: -1 }), purchase({ value: Infinity }), purchase({ value: NaN }),
+    purchase({ value: "50" }), purchase({ currency: "usd" }), purchase({ currency: "US" }),
+  ]) {
+    const app = pixel(purchaseOptions);
+    app.api.setMarketingConsent("granted");
+    app.api.trackMetaPurchase(input);
+    assert.equal(app.scripts.length, 0, JSON.stringify(input));
+  }
+});
+
+test("a confirmed Purchase is not counted again after a refresh", () => {
+  const app = pixel(purchaseOptions);
+  app.api.setMarketingConsent("granted");
+  app.api.trackMetaPurchase(purchase());
+  app.load();
+  const refreshed = pixel({ ...purchaseOptions, stored: Object.fromEntries(app.values) });
+  refreshed.api.trackMetaPurchase(purchase());
+  assert.equal(refreshed.scripts.length, 0);
+  refreshed.api.trackMetaPageView();
+  refreshed.load();
+  assert.equal(events(refreshed, "Purchase").length, 0);
+  refreshed.api.trackMetaPurchase(purchase({ eventId: "b".repeat(64) }));
+  assert.equal(events(refreshed, "Purchase").length, 1, "A different confirmed reservation is eligible");
+});
+
+test("Purchase observed without consent cannot replay when consent is later granted", () => {
+  const app = pixel(purchaseOptions);
+  app.api.trackMetaPurchase(purchase());
+  app.api.setMarketingConsent("granted");
+  app.api.trackMetaPurchase(purchase());
+  assert.equal(app.scripts.length, 0);
+  app.api.trackMetaPurchase(purchase({ eventId: "b".repeat(64) }));
+  app.load();
+  assert.equal(events(app, "Purchase").length, 1);
+});
+
+test("withdrawing consent during loading permanently drops the pending Purchase", () => {
+  const app = pixel(purchaseOptions);
+  app.api.setMarketingConsent("granted");
+  app.api.trackMetaPurchase(purchase());
+  app.api.setMarketingConsent("denied");
+  app.api.setMarketingConsent("granted");
+  app.load();
+  app.api.trackMetaPurchase(purchase());
+  assert.equal(events(app, "Purchase").length, 0);
+  assert.equal(app.calls.some((args) => args[0] === "init"), true, "Page remains eligible, but the revoked event is gone");
+  assert.equal([...app.values.keys()].some((key) => key.startsWith("cymba-meta-purchases")), false);
+});
+
+test("Purchase tracking works without storage and never breaks the reservation page", () => {
+  const app = pixel({ ...purchaseOptions, storageUnavailable: true });
+  app.api.setMarketingConsent("granted");
+  assert.doesNotThrow(() => app.api.trackMetaPurchase(purchase()));
+  app.load();
+  app.api.trackMetaPurchase(purchase());
+  assert.equal(events(app, "Purchase").length, 1);
 });

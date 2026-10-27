@@ -1,7 +1,17 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { reservation, site } from "@/config/site";
-import { lookupReservation, type ReservationRow, type ReservationStatus } from "@/lib/storage";
-import { PREVIEW_SESSION_PREFIX, localReservationTestMode, previewMode } from "@/lib/stripe";
+import { localReservationTestMode } from "@/lib/stripe";
+import {
+  reservationReceiptCookie,
+  reservationReceiptUrl,
+  reservationPurchase,
+  resolveReservationReceipt,
+  validReservationReceiptHandle,
+  type ReservationOutcome,
+} from "@/lib/reservation-receipt";
+import { ReservationConversion } from "@/components/ReservationConversion";
 import { ReservationShell } from "@/components/ReservationShell";
 import { ReservationStatusRefresh } from "@/components/ReservationStatusRefresh";
 import styles from "./status.module.css";
@@ -14,18 +24,6 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
-type Outcome = { kind: ReservationStatus; row: ReservationRow; demo: boolean } | { kind: "missing" | "unavailable" };
-
-/** This page only reads our recorded status. Signed webhook events confirm real payments. */
-async function resolve(sessionId: string | undefined): Promise<Outcome> {
-  if (!sessionId || sessionId.length > 255 || !/^cs_[A-Za-z0-9_-]+$/.test(sessionId)) return { kind: "missing" };
-  const demo = sessionId.startsWith(PREVIEW_SESSION_PREFIX);
-  if (demo && !previewMode()) return { kind: "missing" };
-  const result = await lookupReservation(sessionId);
-  if (result.status === "unavailable") return { kind: "unavailable" };
-  if (result.status === "not_found") return { kind: "missing" };
-  return { kind: result.reservation.status, row: result.reservation, demo };
-}
 
 const messages = {
   pending: {
@@ -71,7 +69,7 @@ const messages = {
   missing: {
     label: "Reservation status",
     title: "We couldn’t find that reservation.",
-    description: "Check that you opened the complete confirmation link. If you recently completed checkout or see a charge, contact us with your payment reference so we can check the status before you make another payment.",
+    description: "The saved receipt may have expired, or this link may be open in a different browser. Reopen your original checkout confirmation link, or contact us with your payment reference so we can check the status before you make another payment.",
   },
   unavailable: {
     label: "Status temporarily unavailable",
@@ -80,7 +78,7 @@ const messages = {
   },
 } as const;
 
-function StatusMark({ kind }: { kind: Outcome["kind"] }) {
+function StatusMark({ kind }: { kind: ReservationOutcome["kind"] }) {
   const confirmed = kind === "paid";
   const waiting = kind === "pending" || kind === "processing";
   const refunded = kind === "refunded" || kind === "partially_refunded";
@@ -99,9 +97,20 @@ function StatusMark({ kind }: { kind: Outcome["kind"] }) {
 
 export default async function ReserveComplete({ searchParams }: { searchParams: SearchParams }) {
   const params = await searchParams;
-  const raw = params.session_id;
-  const sessionId = Array.isArray(raw) ? raw[0] : raw;
-  const outcome = await resolve(sessionId);
+  // Old checkout links remain valid, but no page with marketing scripts renders
+  // the receipt credential in its URL. The exchange route also drops its referrer.
+  if ("session_id" in params) {
+    const sessions = Array.isArray(params.session_id) ? params.session_id : [params.session_id ?? ""];
+    const query = new URLSearchParams();
+    for (const session of sessions) query.append("session_id", session);
+    redirect(`/api/reserve/receipt?${query.toString()}`);
+  }
+  const receiptHandle = validReservationReceiptHandle(params.receipt) ? params.receipt : undefined;
+  const receiptUrl = reservationReceiptUrl(receiptHandle);
+  if (Object.keys(params).some((key) => key !== "receipt") || ("receipt" in params && !receiptHandle)) redirect(receiptUrl);
+  const sessionId = receiptHandle ? (await cookies()).get(reservationReceiptCookie(receiptHandle))?.value : undefined;
+  const outcome = await resolveReservationReceipt(sessionId, receiptHandle);
+  const purchase = reservationPurchase(outcome);
   const copy = messages[outcome.kind];
   const row = "row" in outcome ? outcome.row : null;
   const demo = "demo" in outcome && outcome.demo;
@@ -119,7 +128,8 @@ export default async function ReserveComplete({ searchParams }: { searchParams: 
 
   return (
     <ReservationShell>
-      {(outcome.kind === "pending" || outcome.kind === "processing") && <ReservationStatusRefresh key={sessionId} />}
+      {purchase && <ReservationConversion {...purchase} />}
+      {(outcome.kind === "pending" || outcome.kind === "processing") && <ReservationStatusRefresh key={receiptHandle} />}
       <div className={styles.layout}>
         <section className={styles.card} aria-labelledby="reservation-status-title">
           {demo && <p className={styles.previewNotice}><strong>Demo result</strong> No payment was taken and no real place has been reserved.</p>}
@@ -148,7 +158,7 @@ export default async function ReserveComplete({ searchParams }: { searchParams: 
           </div>}
 
           <div className={styles.actions}>
-            {canRefresh && <a href={`/reserve/complete?session_id=${encodeURIComponent(sessionId!)}`} className={styles.primaryButton}>Check status again</a>}
+            {canRefresh && <a href={receiptUrl} className={styles.primaryButton}>Check status again</a>}
             {canRetry && <a href={reservation.path} className={styles.primaryButton}>Return to reservations</a>}
             <a href="/" className={canRefresh || canRetry ? styles.secondaryButton : styles.primaryButton}>Back to {site.brand}</a>
           </div>

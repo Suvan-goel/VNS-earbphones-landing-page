@@ -7,7 +7,7 @@ import { HeroSignup } from "../HeroSignup";
 import { Container } from "../ui";
 import styles from "./Hero.module.css";
 
-export function Hero({ mode, v, modelUrl = null, posterUrl = null, reservations = false }: { mode: StorageMode; v: HeroVariant; modelUrl?: string | null; posterUrl?: string | null; reservations?: boolean }) {
+export function Hero({ mode, v, modelUrl = null, posterUrl = null }: { mode: StorageMode; v: HeroVariant; modelUrl?: string | null; posterUrl?: string | null }) {
   return (
     <section id="top" aria-labelledby="hero-title" data-hero className={styles.hero}>
       <Container className={styles.layout}>
@@ -27,7 +27,7 @@ export function Hero({ mode, v, modelUrl = null, posterUrl = null, reservations 
             )}
           </div>
           <div className={`hero-in ${styles.signup}`} style={{ ["--d" as string]: "240ms" }}>
-            <HeroSignup mode={mode} v={v} reservations={reservations} />
+            <HeroSignup mode={mode} v={v} />
           </div>
         </div>
 

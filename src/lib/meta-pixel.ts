@@ -7,9 +7,13 @@ export type MarketingConsent = "granted" | "denied" | null;
 const configuredId = process.env.NEXT_PUBLIC_META_PIXEL_ID?.trim() ?? "";
 const PIXEL_ID = /^[1-9]\d*$/.test(configuredId) ? configuredId : "";
 const LEAD_ENABLED = process.env.NEXT_PUBLIC_META_LEAD_TRACKING_ENABLED === "true";
-// Only the canonical production origin may contact Meta, even if a preview
-// inherits the public Pixel ID. Never derive this permission from query strings.
-const ALLOWED_ORIGIN = "https://trycymba.com";
+const PURCHASE_ENABLED = process.env.NEXT_PUBLIC_META_PURCHASE_TRACKING_ENABLED === "true";
+const ALLOWED_ORIGINS = new Set(["https://trycymba.com", "https://www.trycymba.com"]);
+const ALLOWED_PATHS = new Set(["/", "/reserve", "/reserve/complete"]);
+const PRIVATE_QUERY_KEYS = /^(?:session_id|checkout_session_id|client_secret|payment_intent_client_secret|token|survey_token|surveyToken|email)$/i;
+const PURCHASE_HISTORY_KEY = `cymba-meta-purchases-v1:${PIXEL_ID}`;
+const NAVIGATION_WAIT_MS = 800;
+const DISPATCH_GRACE_MS = 150;
 
 type PixelCommand = unknown[];
 type Pixel = {
@@ -29,22 +33,33 @@ declare global {
   }
 }
 
-type EventName = "PageView" | "Lead";
+export type MetaPurchase = { eventId: string; value: number; currency: string };
+type PendingEvent = {
+  name: "PageView" | "Lead" | "Purchase";
+  path: string;
+  purchase?: MetaPurchase;
+  finish?: (dispatched: boolean) => void;
+};
 let memoryConsent: MarketingConsent | undefined;
 let library: "idle" | "loading" | "ready" | "failed" = "idle";
 let initialized = false;
-let pageViewSent = false;
-let pending: EventName[] = [];
+let pending: PendingEvent[] = [];
+const pageViewsSent = new Set<string>();
 const observedLeadResponses = new WeakSet<object>();
+const observedPurchases = new Set<string>();
 const listeners = new Set<() => void>();
 
 export function isMetaPixelConfigured() {
   return Boolean(PIXEL_ID);
 }
 
-// Keep off until the dataset's category restrictions and permitted events are reviewed.
+// Conversions are explicitly enabled per deployment; Meta applies dataset restrictions.
 export function isMetaLeadTrackingEnabled() {
   return isMetaPixelConfigured() && LEAD_ENABLED;
+}
+
+export function isMetaPurchaseTrackingEnabled() {
+  return isMetaPixelConfigured() && PURCHASE_ENABLED;
 }
 
 function parseConsent(value: string | null): MarketingConsent {
@@ -73,8 +88,14 @@ function removeMarketingCookies() {
   }
 }
 
-function revoke() {
+function dropPending() {
+  const dropped = pending;
   pending = [];
+  for (const event of dropped) event.finish?.(false);
+}
+
+function revoke() {
+  dropPending();
   try {
     const pixel = window.fbq;
     // No pending initialization or event may survive withdrawal during SDK loading.
@@ -114,19 +135,45 @@ export function subscribeMarketingConsent(listener: () => void) {
 }
 
 function permitted() {
-  return typeof window !== "undefined" && isMetaPixelConfigured() &&
-    window.location.origin === ALLOWED_ORIGIN &&
-    window.location.pathname === "/" && getMarketingConsent() === "granted";
+  if (typeof window === "undefined" || !isMetaPixelConfigured() || getMarketingConsent() !== "granted") return false;
+  const location = window.location;
+  if (!ALLOWED_ORIGINS.has(location.origin) || !ALLOWED_PATHS.has(location.pathname)) return false;
+  // The SDK includes the page URL itself. Never initialize it on a receipt URL
+  // containing a Stripe session reference or another form/access credential.
+  return !Array.from(new URLSearchParams(location.search).keys()).some((key) => PRIVATE_QUERY_KEYS.test(key));
+}
+
+function purchaseHistory(): string[] {
+  try {
+    const value: unknown = JSON.parse(window.localStorage.getItem(PURCHASE_HISTORY_KEY) ?? "[]");
+    return Array.isArray(value) ? value.filter((id): id is string => typeof id === "string" && /^[a-f0-9]{64}$/.test(id)).slice(-100) : [];
+  } catch {
+    return [];
+  }
+}
+
+function rememberPurchase(eventId: string) {
+  try {
+    const previous = purchaseHistory().filter((id) => id !== eventId);
+    window.localStorage.setItem(PURCHASE_HISTORY_KEY, JSON.stringify([...previous, eventId].slice(-100)));
+  } catch {
+    // The in-memory guard and stable Meta event ID still prevent ordinary repeats.
+  }
 }
 
 function flush() {
   if (library !== "ready" || !permitted()) {
-    pending = [];
+    dropPending();
     return;
   }
+  const events = pending;
+  pending = [];
   try {
     const pixel = window.fbq;
-    if (!pixel?.callMethod) return;
+    if (!pixel?.callMethod) {
+      for (const event of events) event.finish?.(false);
+      return;
+    }
     pixel("consent", "grant");
     if (!initialized) {
       pixel("set", "autoConfig", false, PIXEL_ID);
@@ -135,17 +182,29 @@ function flush() {
       pixel("init", PIXEL_ID);
       initialized = true;
     }
-    const events = pending;
-    pending = [];
-    for (const name of events) {
-      if (!permitted()) break;
-      if (name === "PageView" && pageViewSent) continue;
-      // No custom parameters, email, survey data, token or other form contents.
-      pixel("trackSingle", PIXEL_ID, name);
-      if (name === "PageView") pageViewSent = true;
+    for (const event of events) {
+      if (!permitted() || event.path !== window.location.pathname) {
+        event.finish?.(false);
+        continue;
+      }
+      if (event.name === "PageView") {
+        if (pageViewsSent.has(event.path)) continue;
+        pixel("trackSingle", PIXEL_ID, "PageView");
+        pageViewsSent.add(event.path);
+      } else if (event.name === "Purchase" && event.purchase) {
+        const { eventId, value, currency } = event.purchase;
+        if (purchaseHistory().includes(eventId)) continue;
+        pixel("trackSingle", PIXEL_ID, "Purchase", { value, currency }, { eventID: eventId });
+        rememberPurchase(eventId);
+      } else if (event.name === "Lead") {
+        // Never send email, survey answers, survey tokens or checkout references.
+        pixel("trackSingle", PIXEL_ID, "Lead");
+      }
+      event.finish?.(true);
     }
   } catch {
-    pending = [];
+    for (const event of events) event.finish?.(false);
+    dropPending();
   }
 }
 
@@ -163,11 +222,9 @@ function loadLibrary() {
       window.fbq = pixel;
       window._fbq = pixel;
     }
-    // We dispatch homepage PageView explicitly; SDK history listeners must not
-    // emit automatic events when navigation moves to privacy or other pages.
+    // Route changes are measured explicitly; never let SDK history listeners
+    // expose the completion page's private query string or untracked pages.
     window.fbq.disablePushState = true;
-    // The SDK starts revoked. Initialization waits for its load and a fresh
-    // permission check; our own queue only contains events observed after consent.
     window.fbq("consent", "revoke");
     const script = document.createElement("script");
     script.id = "cymba-meta-pixel";
@@ -179,29 +236,77 @@ function loadLibrary() {
     };
     script.onerror = () => {
       library = "failed";
-      pending = [];
+      dropPending();
     };
     document.head.appendChild(script);
   } catch {
     library = "failed";
-    pending = [];
+    dropPending();
   }
 }
 
 export function trackMetaPageView() {
-  if (library === "failed" || !permitted() || pageViewSent || pending.includes("PageView")) return;
-  pending.push("PageView");
+  if (!permitted()) {
+    dropPending();
+    return;
+  }
+  const path = window.location.pathname;
+  if (library === "failed") return;
+  if (pageViewsSent.has(path)) {
+    // Consent may have been revoked since this page was measured. Resume the
+    // loaded SDK after a new grant without counting the same view again.
+    if (library === "ready") flush();
+    return;
+  }
+  if (pending.some((event) => event.name === "PageView" && event.path === path)) return;
+  pending.push({ name: "PageView", path });
   loadLibrary();
 }
 
 /** Only a confirmed, new signup is eligible; observing one without consent drops it. */
-export function trackMetaLead(httpStatus: number, result: unknown) {
-  if (httpStatus !== 201 || !result || typeof result !== "object") return;
+export function trackMetaLead(httpStatus: number, result: unknown): Promise<void> {
+  if (httpStatus !== 201 || !result || typeof result !== "object") return Promise.resolve();
   const response = result as { status?: unknown; surveyToken?: unknown };
-  if (response.status !== "created" || typeof response.surveyToken !== "string" || !response.surveyToken.trim()) return;
-  if (observedLeadResponses.has(result)) return;
+  if (response.status !== "created" || typeof response.surveyToken !== "string" || !response.surveyToken.trim()) return Promise.resolve();
+  if (observedLeadResponses.has(result)) return Promise.resolve();
   observedLeadResponses.add(result);
-  if (library === "failed" || !isMetaLeadTrackingEnabled() || !permitted()) return;
-  pending.push("Lead");
+  if (library === "failed" || !isMetaLeadTrackingEnabled() || !permitted() || window.location.pathname !== "/") return Promise.resolve();
+
+  // Give a consented event a bounded chance to dispatch before the signup flow
+  // performs a full-page redirect. An unavailable SDK can never block navigation.
+  return new Promise((resolve) => {
+    let finished = false;
+    let grace: ReturnType<typeof setTimeout> | undefined;
+    const event: PendingEvent = { name: "Lead", path: "/" };
+    const done = () => {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timeout);
+      clearTimeout(grace);
+      pending = pending.filter((item) => item !== event);
+      resolve();
+    };
+    const timeout = setTimeout(done, NAVIGATION_WAIT_MS);
+    event.finish = (dispatched) => {
+      if (finished) return;
+      if (dispatched) grace ??= setTimeout(done, DISPATCH_GRACE_MS);
+      else done();
+    };
+    pending.push(event);
+    loadLibrary();
+  });
+}
+
+/** The caller supplies only a server-confirmed live paid reservation's opaque identity and deposit. */
+export function trackMetaPurchase(input: MetaPurchase) {
+  if (!input || typeof input.eventId !== "string" || !/^[a-f0-9]{64}$/.test(input.eventId)
+    || typeof input.value !== "number" || !Number.isFinite(input.value) || input.value <= 0
+    || typeof input.currency !== "string" || !/^[A-Z]{3}$/.test(input.currency)) return;
+  if (observedPurchases.has(input.eventId)) return;
+  observedPurchases.add(input.eventId);
+  if (library === "failed" || !isMetaPurchaseTrackingEnabled() || !permitted()
+    || window.location.pathname !== "/reserve/complete" || purchaseHistory().includes(input.eventId)) return;
+  pending.push({ name: "Purchase", path: window.location.pathname,
+    purchase: { eventId: input.eventId, value: input.value, currency: input.currency } });
   loadLibrary();
 }

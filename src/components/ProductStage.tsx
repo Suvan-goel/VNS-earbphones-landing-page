@@ -12,7 +12,7 @@ import { productStory } from "@/config/product-story";
 import { STORY_SCROLL_SCREENS, PORTRAIT_ENTRY_START, MODEL_SCROLL_SCREENS, CLOSING_SCROLL_SCREENS, productStageProgress, measuredProductStageProgress } from "@/lib/product-stage-scroll";
 import { HeroSignup } from "./HeroSignup";
 import { AppPreview } from "./sections/AppPreview";
-import { ModelLoadingNotice, ModelRecoveryNotice } from "./ModelRecoveryNotice";
+import { ModelRecoveryNotice } from "./ModelRecoveryNotice";
 import { ProductAssetHints } from "./ProductAssetHints";
 import { HeroPoster } from "./HeroPoster";
 import styles from "./ProductStage.module.css";
@@ -110,7 +110,6 @@ export function ProductStage({
   v,
   modelUrl,
   posterUrl = null,
-  reservations = false,
   fallback,
 }: {
   mode: StorageMode;
@@ -118,8 +117,6 @@ export function ProductStage({
   modelUrl: string | null;
   /** A still of the model shown until the 3D scene is ready. */
   posterUrl?: string | null;
-  /** Deposits are open: the signup form offers the reservation. */
-  reservations?: boolean;
   fallback: ReactNode;
 }) {
   const track = useRef<HTMLDivElement>(null);
@@ -219,7 +216,8 @@ export function ProductStage({
   /* Four times the previous scroll distance, with no wait or ease-in dead zone. */
   const expansion = useTransform(closingDistance, [0, STORY_SCROLL_SCREENS * (0.97 - PORTRAIT_ENTRY_START)], [0, 1]);
   const portraitRadius = useTransform(expansion, [0, 1], [12, 0]);
-  const portraitFeather = useTransform(expansion, [0, 1], ["0px", "24px"]);
+  // A wide feather once the portrait is open, so the join with the extended background never reads as a rectangle.
+  const portraitFeather = useTransform(expansion, [0, 1], ["0px", "56px"]);
   // A fixed mobile gradient can be composited by opacity, rather than painted
   // again for every scroll position. Its final shading matches the desktop art.
   const mobileSceneShade = useTransform(() => expansion.get() * sceneShade.get());
@@ -244,7 +242,7 @@ export function ProductStage({
       {modelUrl && <ProductAssetHints modelUrl={modelUrl} />}
       {/* The room, fixed behind the page. It appears for the last chapter and stays, blurred and dark, under everything after. */}
       <motion.div className={styles.scene} style={{ clipPath: sceneClip, y: sceneY, visibility: sceneVisibility }} aria-hidden="true">
-        <motion.div className={styles.sceneVisual} style={{ filter: mobilePortrait ? "none" : sceneBlur, scale: sceneScale }}>
+        <motion.div className={styles.sceneVisual} style={{ filter: sceneBlur, scale: sceneScale }}>
           {/* The existing extended shoulders sit behind the unchanged live portrait. */}
           <div className={styles.sceneExtensionTail} style={{ borderImageSource: `url(${listeningExtension.src})` }} />
           <div className={styles.sceneExtension}>
@@ -276,6 +274,10 @@ export function ProductStage({
                 {/* Chapter 1: headline, product and actions share the first screen. */}
                 <Fade progress={p} range={[0, 0.03, 0.07, 0.14]} holdStart className={`${styles.copy} ${styles.heroCopy}`}>
                   <div className={styles.heroIntro}>
+                    <p className={`hero-in ${styles.heroStatus}`}>
+                      <span className={styles.statusDot} aria-hidden="true" />
+                      {v.eyebrow}
+                    </p>
                     <h1 id="stage-title" className={`headline ${styles.heroTitle}`}>
                       {v.headline.map((line, i) => (
                         <span key={line} className={"hero-in block " + (i > 0 ? "soft" : "")} style={{ ["--d" as string]: `${120 + i * 80}ms` }}>
@@ -307,7 +309,7 @@ export function ProductStage({
 
                 {/* One persistent form keeps the same action and entered email across chapters. */}
                 <div className={styles.storySignup}>
-                  <HeroSignup mode={mode} v={v} reservations={reservations} />
+                  <HeroSignup mode={mode} v={v} />
                 </div>
               </div>
 
@@ -315,8 +317,8 @@ export function ProductStage({
               <div className={styles.flight}>
                 <motion.div className={styles.media} data-product-model={failed || !modelUrl ? "fallback" : ready ? "loaded" : "loading"}>
                   {!failed && modelUrl && <StageScene progress={p} readProgress={readProgress} modelUrl={modelUrl} onReady={onReady} onLoading={onLoading} onError={onError} />}
+                  {/* The poster covers loading; no label is needed over it. */}
                   {posterUrl && <HeroPoster src={posterUrl} ready={ready} priority />}
-                  {!ready && !failed && modelUrl && <ModelLoadingNotice />}
                   {failed && modelUrl && <ModelRecoveryNotice onRetry={retry} />}
                 </motion.div>
               </div>

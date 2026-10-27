@@ -65,6 +65,24 @@
   overflow-y: auto;
   background: var(--color-paper);
 }
+/* A status line above the headline: a champagne dot and where the product is. */
+.heroStatus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-rose);
+}
 .heroTitle {
   font-size: clamp(3rem, 5.4vw, 5rem);
   font-weight: 600;
@@ -294,6 +312,7 @@
   .copy {
     text-align: left;
   }
+  .heroStatus { justify-content: flex-start; }
   .storyContent > .copy {
     position: relative;
     grid-area: 1 / 1;
@@ -338,7 +357,7 @@
 
 /* Text, a fixed-size model frame and actions occupy consistent areas on phones. */
 @media (max-width: 1023px), (max-height: 639px) {
-  .storyPane { --mobile-model-top: calc((100svh - var(--mobile-model-height)) / 2 + 16px); }
+  .storyPane { --mobile-model-top: calc((100svh - var(--mobile-model-height)) / 2 + 4px); }
   .technologyAnchor { top: calc(var(--story-scroll-screens) * 0.51 * 100svh); }
   .flight {
     left: 0;
@@ -370,6 +389,7 @@
     max-width: 30rem;
     margin-inline: auto;
   }
+  .heroStatus { margin-bottom: 12px; }
   .heroText {
     margin-top: 14px;
     margin-inline: auto;
@@ -379,7 +399,9 @@
   .storySignup {
     left: 20px;
     right: 20px;
-    bottom: max(32px, env(safe-area-inset-bottom));
+    /* Lift above the cookie panel while it is open, so the first screen always shows the form. */
+    --form-inset: max(32px, env(safe-area-inset-bottom));
+    bottom: calc(var(--form-inset) + var(--consent-height, 0px));
     width: auto;
     max-width: 28rem;
     margin-inline: auto;
@@ -403,11 +425,10 @@
     --portrait-top: calc((100svh + var(--portrait-nav-height) - var(--portrait-height)) / 2);
   }
   .closingPane { container-type: inline-size; }
-  /* Reuse composited artwork as the opening moves; avoid changing its masks,
-     gradient pixels and full-screen blur on every mobile scroll frame. */
+  /* Keep masks and shading stable as the portrait opens. The backdrop blurs
+     only during the half-screen transition into the sections below. */
   .scene { will-change: clip-path, transform; }
   .closingReveal { will-change: clip-path; }
-  .sceneVisual,
   .scene .sceneFrame { will-change: transform; }
   .sceneShade { will-change: opacity; }
   /* Keep the static backdrop full bleed; the scrolling portrait rests as a centered card. */
@@ -500,6 +521,29 @@
   .copy, .heroCopy, .closingIntro { top: 72px; }
   .heroTitle { font-size: clamp(1.875rem, 8.6vw, 2.5rem); }
   .lede { margin-top: 10px; font-size: 0.875rem; line-height: 1.45; }
-  .storySignup,
+  .storySignup { --form-inset: max(20px, env(safe-area-inset-bottom)); }
   .closingCopy .sceneActions { bottom: max(20px, env(safe-area-inset-bottom)); }
+}
+
+/* Portrait tablets: the phone shape with room to breathe. A taller band sits under the copy, the form beneath it.
+   Declared after the phone rules so its sizes win at equal specificity. */
+@media (min-width: 768px) and (max-width: 1023px) and (min-height: 760px) {
+  .storyPane {
+    --mobile-model-height: 45svh;
+    --mobile-model-top: 33svh;
+  }
+  .copy,
+  .heroCopy {
+    left: 48px;
+    right: 48px;
+    top: 112px;
+  }
+  .heroTitle { font-size: clamp(2.75rem, 6vw, 3.5rem); }
+  .heroText { font-size: 1.125rem; }
+  .title { font-size: clamp(2.25rem, 5vw, 2.75rem); }
+  .lede { font-size: 1.0625rem; }
+  .storySignup {
+    max-width: 32rem;
+    --form-inset: 48px;
+  }
 }

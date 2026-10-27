@@ -32,7 +32,7 @@ export function Footer() {
           </nav>
         </div>
         <p className="mt-5 max-w-[60rem] text-[0.6875rem] leading-relaxed">
-          {site.product} is not yet available to buy. It is not a medical device, and benefits for learning or memory have not been
+          {site.product} is not yet shipping. It is not a medical device, and benefits for learning or memory have not been
           independently demonstrated.
         </p>
       </Container>

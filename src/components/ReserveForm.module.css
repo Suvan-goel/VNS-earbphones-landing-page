@@ -1,4 +1,4 @@
-.label { display: block; color: #303036; font-size: 0.875rem; font-weight: 500; line-height: 1.5; }
+.label { display: block; color: var(--reservation-text, #303036); font-size: 0.875rem; font-weight: 500; line-height: 1.5; }
 .field {
   display: block;
   width: 100%;
@@ -8,24 +8,26 @@
   border: 1px solid #cfcfd6;
   border-radius: 9px;
   background: #fff;
+  color-scheme: light;
   color: #1d1d1f;
   font: inherit;
   font-size: 1rem;
   line-height: 1.5;
   transition: border-color 160ms, box-shadow 160ms;
 }
-.field::placeholder { color: #8a8a92; }
+.field::placeholder { color: #6e6e73; }
 .field:hover { border-color: #a9a9b3; }
 .field:focus-visible { border-color: #62626b; outline: none; box-shadow: 0 0 0 3px #ededf1; }
 .field:disabled { opacity: 0.65; }
 .field.invalid { border-color: #b34234; }
 .field.invalid:focus-visible { box-shadow: 0 0 0 3px #b3423414; }
 
-.terms { display: flex; align-items: flex-start; gap: 10px; min-height: 44px; padding-block: 10px; margin-top: 12px; cursor: pointer; color: #626269; font-size: 0.8125rem; line-height: 1.6; }
-.checkbox { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; accent-color: #242428; cursor: pointer; }
-.terms a { color: #303036; text-decoration: underline; text-decoration-color: #aaaab2; text-underline-offset: 3px; }
-.terms a:hover { text-decoration-color: #303036; }
-.error { margin-top: 18px; color: #a33225; font-size: 0.8125rem; line-height: 1.6; outline: none; }
+.terms { display: flex; align-items: flex-start; gap: 10px; min-height: 44px; padding-block: 10px; margin-top: 12px; cursor: pointer; color: var(--reservation-muted, #626269); font-size: 0.8125rem; line-height: 1.6; }
+.checkbox { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; accent-color: var(--reservation-accent, #242428); cursor: pointer; }
+.terms a { color: var(--reservation-link, #303036); text-decoration: underline; text-decoration-color: #aaaab2; text-underline-offset: 3px; }
+.checkbox:focus-visible, .terms a:focus-visible { outline: 2px solid var(--reservation-focus, #202023); outline-offset: 3px; }
+.terms a:hover { text-decoration-color: var(--reservation-text, #303036); }
+.error { margin-top: 18px; color: var(--reservation-error, #a33225); font-size: 0.8125rem; line-height: 1.6; outline: none; }
 
 .button {
   display: flex;
@@ -36,10 +38,10 @@
   gap: 12px;
   margin-top: 16px;
   padding: 14px 20px;
-  border: 1px solid #202023;
+  border: 1px solid var(--reservation-button, #202023);
   border-radius: 12px;
-  background: #202023;
-  color: #fff;
+  background: var(--reservation-button, #202023);
+  color: var(--reservation-button-text, #fff);
   font-size: 0.9375rem;
   font-weight: 500;
   line-height: 1.5;
@@ -48,13 +50,13 @@
   transition: background-color 160ms, box-shadow 160ms;
 }
 .button svg { width: 18px; height: 18px; }
-.button:hover { background: #36363b; box-shadow: 0 3px 8px #00000012; }
-.button:active { background: #131316; box-shadow: none; }
-.button:focus-visible { outline: 2px solid #202023; outline-offset: 4px; }
+.button:hover { background: var(--reservation-button-hover, #36363b); box-shadow: 0 3px 8px #00000012; }
+.button:active { background: var(--reservation-button-active, #131316); box-shadow: none; }
+.button:focus-visible { outline: 2px solid var(--reservation-focus, #202023); outline-offset: 4px; }
 .button:disabled { cursor: wait; opacity: 0.7; }
-.checkoutNote { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 16px; color: #707078; font-size: 0.75rem; line-height: 1.6; text-align: center; }
+.checkoutNote { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 16px; color: var(--reservation-muted, #707078); font-size: 0.75rem; line-height: 1.6; text-align: center; }
 .checkoutNote svg { width: 15px; height: 15px; flex-shrink: 0; }
-.spinner { width: 16px; height: 16px; border: 2px solid #ffffff40; border-top-color: white; border-radius: 50%; animation: spin 800ms linear infinite; }
+.spinner { width: 16px; height: 16px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: spin 800ms linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .closedButton { margin-top: 0; }

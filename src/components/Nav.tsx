@@ -39,6 +39,7 @@ function goTo(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
 
 export function Nav({ cta, ctaHref = "#signup" }: { cta: string; ctaHref?: string }) {
   const [scrolled, setScrolled] = useState(false);
+  const [pastHero, setPastHero] = useState(false);
   const [dark, setDark] = useState(false);
   const [open, setOpen] = useState(false);
   const header = useRef<HTMLElement>(null);
@@ -49,6 +50,8 @@ export function Nav({ cta, ctaHref = "#signup" }: { cta: string; ctaHref?: strin
     const update = () => {
       frame = 0;
       setScrolled(window.scrollY > 8);
+      // The hero carries its own black button; the header's turns black once the hero has gone.
+      setPastHero(window.scrollY > window.innerHeight * 0.6);
       // The active layout supplies its own start marker. Hidden responsive
       // alternatives cannot change the header, and scrolling back reverses it.
       setDark([...document.querySelectorAll<HTMLElement>("[data-nav-dark-start]")]
@@ -173,7 +176,7 @@ export function Nav({ cta, ctaHref = "#signup" }: { cta: string; ctaHref?: strin
 
   return (
     /* Wordmark left, links centred, and one clear action on the right. */
-    <header ref={header} role={open ? "dialog" : undefined} aria-modal={open || undefined} aria-label={open ? "Navigation menu" : undefined} data-scrolled={scrolled || open} data-theme={dark ? "dark" : "light"} data-menu-open={open || undefined} className="site-header">
+    <header ref={header} role={open ? "dialog" : undefined} aria-modal={open || undefined} aria-label={open ? "Navigation menu" : undefined} data-scrolled={scrolled || open} data-past-hero={pastHero || open || dark} data-theme={dark ? "dark" : "light"} data-menu-open={open || undefined} className="site-header">
       <nav aria-label="Primary" className="site-nav">
         <a href="/#top" className="site-nav__brand" aria-label={`${site.brand}, back to top`} onClick={(e) => { setOpen(false); goTo(e, "/#top"); }}>
           <Wordmark className="site-nav__wordmark" size="text-[1.125rem] sm:text-[1.375rem]" />

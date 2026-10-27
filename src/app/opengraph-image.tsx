@@ -5,7 +5,7 @@ import { site, heroVariants, defaultVariant } from "@/config/site";
 
 /* The share card: the page's light studio, headline on the left, the pair on the right. */
 
-export const alt = `${site.product} — The earbuds for cognition. Coming soon.`;
+export const alt = `${site.seo.title}. Coming Q4 2027.`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

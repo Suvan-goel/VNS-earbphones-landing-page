@@ -20,9 +20,9 @@ export const site = {
   /** Add real destinations only. Empty entries are not rendered. */
   social: [] as { label: string; href: string }[],
   seo: {
-    title: `${product} — The earbuds for cognition`,
+    title: `${product} — The earbuds for deep work`,
     description:
-      `${product}: targeted nerve stimulation in everyday earbuds, built for focus, learning and memory. Coming soon. Join waitlist.`,
+      `${product}: gentle nerve stimulation built into everyday earbuds, for longer focus. Coming Q4 2027. Reserve from US$50, fully refundable, or join the waitlist.`,
   },
 };
 
@@ -44,16 +44,16 @@ export const heroVariants: Record<HeroVariant["id"], HeroVariant> = {
   learn: {
     id: "learn",
     hypothesis: "A. Cognitive outcomes",
-    eyebrow: `${product} · Coming soon`,
+    eyebrow: "Coming Q4 2027",
     headline: ["The earbuds", "for deep work."],
-    subhead: "Do your best thinking for longer.",
+    subhead: "Focus on the tasks you care about for longer.",
     primaryCta: "Join the waitlist",
   },
   // B. Focus and deep work
   focus: {
     id: "focus",
     hypothesis: "B. Focus and deep work",
-    eyebrow: `${product} · Launching soon`,
+    eyebrow: "Coming Q4 2027",
     headline: ["For your most", "demanding work."],
     subhead:
       "Cognitive technology built around deeper focus, faster learning and stronger memory.",
@@ -63,7 +63,7 @@ export const heroVariants: Record<HeroVariant["id"], HeroVariant> = {
   audio: {
     id: "audio",
     hypothesis: "C. Cognitive ambition",
-    eyebrow: `${product} · Launching soon`,
+    eyebrow: "Coming Q4 2027",
     headline: ["More from", "your mind."],
     subhead:
       `Meet ${product}. Targeted nerve stimulation in everyday earbuds, built for focus, learning and memory.`,

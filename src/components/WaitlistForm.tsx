@@ -1,18 +1,18 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { survey } from "@/config/site";
+import { defaultVariant, heroVariants, reservation, survey } from "@/config/site";
 import { getAttribution, track } from "@/lib/analytics";
-import { ReserveStep } from "./ReserveStep";
+import { trackMetaLead } from "@/lib/meta-pixel";
 import styles from "./WaitlistForm.module.css";
 
 type Mode = "supabase" | "file" | "demo";
 type Phase =
   | { k: "idle" }
   | { k: "submitting" }
+  | { k: "redirecting" }
   | { k: "error"; message: string }
-  | { k: "created"; token: string }
-  | { k: "duplicate" }
+  | { k: "created"; token: string | null }
   | { k: "demo" };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -22,37 +22,60 @@ export function WaitlistForm({
   variant,
   cta,
   placement = "early_access",
-  reservations = false,
+  redirectToReservation = true,
 }: {
   mode: Mode;
   variant: string;
   cta: string;
   placement?: "hero" | "early_access";
-  /** Offer the refundable deposit after joining. */
-  reservations?: boolean;
+  /** Continue to the reservation page after a saved signup. */
+  redirectToReservation?: boolean;
 }) {
   const compact = placement === "hero";
   const [phase, setPhase] = useState<Phase>({ k: "idle" });
   const [email, setEmail] = useState("");
   const [touched, setTouched] = useState(false);
   const startedAt = useRef(0);
+  const inFlight = useRef(false);
   const statusRef = useRef<HTMLDivElement>(null);
   const id = useId();
 
   useEffect(() => {
     startedAt.current = Date.now();
+    const restore = (event: PageTransitionEvent) => {
+      if (event.persisted) {
+        inFlight.current = false;
+        setPhase({ k: "idle" });
+      }
+    };
+    window.addEventListener("pageshow", restore);
+    return () => window.removeEventListener("pageshow", restore);
   }, []);
 
   const invalid = touched && !EMAIL_RE.test(email.trim());
 
+  function openReservation() {
+    // Keep the email out of URLs and reuse the reservation form's short-lived prefill.
+    try {
+      sessionStorage.setItem("cymba.reservation-prefill", JSON.stringify({ email: email.trim().toLowerCase(), savedAt: Date.now() }));
+    } catch {
+      // Navigation still works when browser storage is unavailable.
+    }
+    const selectedVariant = Object.hasOwn(heroVariants, variant) ? variant : defaultVariant;
+    setPhase({ k: "redirecting" });
+    window.location.assign(`${reservation.path}?v=${encodeURIComponent(selectedVariant)}`);
+  }
+
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (inFlight.current) return;
     setTouched(true);
     if (!EMAIL_RE.test(email.trim())) {
       setPhase({ k: "error", message: "Please enter a valid email address." });
       return;
     }
     const company = (new FormData(e.currentTarget).get("company") as string) ?? "";
+    inFlight.current = true;
     setPhase({ k: "submitting" });
     track("waitlist_submit_attempt", { location: placement });
 
@@ -70,13 +93,24 @@ export function WaitlistForm({
         }),
       });
       const data = (await res.json().catch(() => ({}))) as { status?: string; message?: string; surveyToken?: string };
-      if (data.status === "created" && data.surveyToken) {
+      if (res.ok && data.status === "created" && data.surveyToken) {
         track("waitlist_signup_success", { location: placement, research_opt_in: false });
+        // Give a consented conversion a bounded opportunity to dispatch before
+        // leaving this document. Tracking failure must never block signup.
+        await trackMetaLead(res.status, data);
+        if (redirectToReservation) {
+          openReservation();
+          return;
+        }
         setPhase({ k: "created", token: data.surveyToken });
-      } else if (data.status === "duplicate") {
+      } else if (res.ok && data.status === "duplicate") {
         track("waitlist_signup_duplicate", { location: placement });
-        setPhase({ k: "duplicate" });
-      } else if (data.status === "demo") {
+        if (redirectToReservation) {
+          openReservation();
+          return;
+        }
+        setPhase({ k: "created", token: null });
+      } else if (res.ok && data.status === "demo") {
         setPhase({ k: "demo" });
       } else {
         track("waitlist_signup_error", { location: placement, code: res.status });
@@ -86,34 +120,23 @@ export function WaitlistForm({
       track("waitlist_signup_error", { location: placement, code: 0 });
       setPhase({ k: "error", message: "We couldn't reach our server. Check your connection and try again." });
     }
+    inFlight.current = false;
   }
 
   useEffect(() => {
-    if (phase.k !== "idle" && phase.k !== "submitting") statusRef.current?.focus();
+    if (phase.k !== "idle" && phase.k !== "submitting" && phase.k !== "redirecting") statusRef.current?.focus();
   }, [phase.k]);
 
   if (phase.k === "created" || phase.k === "demo") {
     return (
       <div ref={statusRef} tabIndex={-1} className="outline-none">
         <Confirmation demo={phase.k === "demo"} compact={compact} />
-        {reservations && phase.k === "created" && <ReserveStep email={email} variant={variant} compact={compact} />}
-        {!compact && <Survey token={phase.k === "created" ? phase.token : null} demo={phase.k === "demo"} />}
+        {!compact && (phase.k === "demo" || phase.token) && <Survey token={phase.k === "created" ? phase.token : null} demo={phase.k === "demo"} />}
       </div>
     );
   }
 
-  if (phase.k === "duplicate") {
-    return (
-      <div ref={statusRef} tabIndex={-1} className={compact ? styles.confirmation : "rounded-2xl border border-[var(--line)] bg-surface p-6 outline-none sm:p-8"} role="status">
-        <p className="eyebrow">Already on the list</p>
-        <p className="mt-2 text-2xl font-normal tracking-[-0.035em] text-ivory">You&rsquo;re already on the list.</p>
-        <p className="mt-2 text-muted">Nothing more to do. We&rsquo;ll be in touch.</p>
-        {reservations && <ReserveStep email={email} variant={variant} compact={compact} />}
-      </div>
-    );
-  }
-
-  const busy = phase.k === "submitting";
+  const busy = phase.k === "submitting" || phase.k === "redirecting";
   const errId = `${id}-err`;
   const noteId = `${id}-note`;
   const showNote = mode === "demo";
@@ -154,7 +177,7 @@ export function WaitlistForm({
           {busy ? (
             <>
               <span className="size-4 animate-spin rounded-full border-2 border-paper/25 border-t-paper" aria-hidden="true" />
-              Joining…
+              {phase.k === "redirecting" ? "Continuing…" : "Joining…"}
             </>
           ) : (
             cta
@@ -171,8 +194,9 @@ export function WaitlistForm({
       </div>
 
       <div className="px-1" aria-live="polite">
+        {phase.k === "redirecting" && <p className="sr-only">You’re on the waitlist. Opening device reservations.</p>}
         {phase.k === "error" && (
-          <p id={errId} ref={statusRef} tabIndex={-1} className="mt-2 text-sm text-[#a33d2b] outline-none">
+          <p id={errId} ref={statusRef} tabIndex={-1} className="mt-2 text-sm text-[var(--form-error)] outline-none">
             {phase.message}
           </p>
         )}
@@ -351,7 +375,7 @@ function Survey({ token, demo }: { token: string | null; demo: boolean }) {
             type="button"
             onClick={send}
             disabled={state === "sending"}
-            className="inline-flex h-11 items-center rounded-xl bg-ivory px-5 text-sm font-medium text-paper hover:bg-[#2b2b2b] disabled:cursor-progress disabled:opacity-70"
+            className="inline-flex h-11 items-center rounded-xl bg-ivory px-5 text-sm font-medium text-paper hover:bg-[var(--btn-hover)] disabled:cursor-progress disabled:opacity-70"
           >
             {state === "sending" ? "Sending…" : "Send answers"}
           </button>
@@ -362,7 +386,7 @@ function Survey({ token, demo }: { token: string | null; demo: boolean }) {
         )}
       </div>
       {state === "error" && (
-        <p role="alert" className="mt-3 text-sm text-[#a33d2b]">
+        <p role="alert" className="mt-3 text-sm text-[var(--form-error)]">
           {error}
         </p>
       )}
