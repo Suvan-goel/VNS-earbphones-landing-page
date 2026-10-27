@@ -11,10 +11,11 @@ const test = require("node:test");
 const ROOT = path.resolve(__dirname, "..");
 const account = "acct_launcherSynthetic";
 const testKey = "rkcs_test_launcher_synthetic_only";
+const testPublishableKey = "pk_test_launcher_synthetic_only";
 const future = () => new Date(Date.now() + 86400000).toISOString();
 const manifest = (changes = {}) => ({ account_id: account, sandbox_expires_at: future(), ...changes });
-const toml = (key = testKey, quote = "'", accountId = account) =>
-  `[default]\naccount_id = ${quote}${accountId}${quote}\ntest_mode_api_key = ${quote}${key}${quote}\n`;
+const toml = (key = testKey, quote = "'", accountId = account, publishableKey = testPublishableKey) =>
+  `[default]\naccount_id = ${quote}${accountId}${quote}\ntest_mode_api_key = ${quote}${key}${quote}\ntest_mode_pub_key = ${quote}${publishableKey}${quote}\n`;
 
 async function fixture() {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), "cymba-launcher-test-"));
@@ -44,11 +45,14 @@ test("launcher reads Stripe's quoted default profile and requires the manifest a
       const value = await f.config.localConfig();
       assert.equal(value.accountId, account);
       assert.equal(value.key, testKey);
+      assert.equal(value.publishableKey, testPublishableKey);
       assert.ok(Date.parse(value.expiresAt) > Date.now());
       assert.equal((await fs.stat(f.configFile)).mode & 0o777, 0o600);
     }
-    await f.write(`${toml()}\n[personal]\naccount_id='acct_other'\ntest_mode_api_key='sk_live_other_synthetic'\n`);
-    assert.equal((await f.config.localConfig()).key, testKey, "unrelated personal profile is ignored");
+    await f.write(`${toml()}\n[personal]\naccount_id='acct_other'\ntest_mode_api_key='sk_live_other_synthetic'\ntest_mode_pub_key='pk_live_other_synthetic'\n`);
+    const selected = await f.config.localConfig();
+    assert.equal(selected.key, testKey, "unrelated personal profile is ignored");
+    assert.equal(selected.publishableKey, testPublishableKey, "publishable key stays with the selected sandbox profile");
     await f.write(toml(testKey, "'", "acct_wrong"));
     await assert.rejects(f.config.localConfig(), /account does not match/);
     await f.write(toml().replace("[default]", "[personal]"));
@@ -67,6 +71,19 @@ test("launcher rejects live keys and invalid or expired temporary sandboxes", as
       await f.write(toml(), manifest({ sandbox_expires_at: expiry }));
       await assert.rejects(f.config.localConfig(), /expired|expiry|expiration/i);
     }
+  } finally { await f.close(); }
+});
+
+test("launcher requires a test publishable key in the selected sandbox profile", async () => {
+  const f = await fixture();
+  try {
+    for (const key of ["pk_live_synthetic", "sk_test_synthetic", "invalid", ""]) {
+      await f.write(toml(testKey, "'", account, key));
+      await assert.rejects(f.config.localConfig(), /test publishable key/);
+    }
+    await f.write(toml().replace(/^test_mode_pub_key.*\n/m, "")
+      + "\n[personal]\ntest_mode_pub_key='pk_test_other_synthetic'\n");
+    await assert.rejects(f.config.localConfig(), /test publishable key/, "another profile cannot fill a missing sandbox key");
   } finally { await f.close(); }
 });
 
@@ -101,12 +118,12 @@ test("launcher replaces inherited production settings and redacts supported cred
       process.env = {
         NODE_ENV: "production", SUPABASE_URL: "https://production.example.com",
         SUPABASE_SECRET_KEY: "synthetic_database_secret", SUPABASE_SERVICE_ROLE_KEY: "synthetic_legacy_secret",
-        STRIPE_API_KEY: "sk_live_synthetic_old", STRIPE_SECRET_KEY: "rk_live_synthetic_old",
+        STRIPE_API_KEY: "sk_live_synthetic_old", STRIPE_SECRET_KEY: "rk_live_synthetic_old", STRIPE_PUBLISHABLE_KEY: "pk_live_synthetic_old",
         STRIPE_WEBHOOK_SECRET: "whsec_synthetic_old", RESERVATIONS_PREVIEW: "true",
         NEXT_PUBLIC_SITE_URL: "https://production.example.com", NEXT_PUBLIC_META_PIXEL_ID: "12345",
         NEXT_PUBLIC_META_LEAD_TRACKING_ENABLED: "true", NEXT_PUBLIC_ANALYTICS_ENDPOINT: "https://analytics.example.com",
       };
-      isolated = f.config.isolatedEnv(testKey);
+      isolated = f.config.isolatedEnv(testKey, testPublishableKey);
     } finally { process.env = originalEnv; }
     assert.equal(isolated.NODE_ENV, "development");
     assert.equal(isolated.RESERVATIONS_LOCAL_TEST, "true");
@@ -118,12 +135,13 @@ test("launcher replaces inherited production settings and redacts supported cred
     }
     assert.equal(isolated.STRIPE_API_KEY, testKey);
     assert.equal(isolated.STRIPE_SECRET_KEY, testKey);
+    assert.equal(isolated.STRIPE_PUBLISHABLE_KEY, testPublishableKey);
     assert.equal(isolated.NEXT_PUBLIC_SITE_URL, "http://127.0.0.1:3015");
     assert.equal(isolated.NEXT_PUBLIC_META_LEAD_TRACKING_ENABLED, "false");
     assert.equal(isolated.NEXT_PUBLIC_ANALYTICS_ENDPOINT, "none");
     assert.equal(isolated.NEXT_TELEMETRY_DISABLED, "1");
     const credentials = ["sk_test_synthetic", "rk_test_synthetic", "rkcs_test_synthetic", "pk_test_synthetic",
-      "sk_live_synthetic", "rk_live_synthetic", "whsec_synthetic"];
+      "sk_live_synthetic", "rk_live_synthetic", "pk_live_synthetic", "whsec_synthetic"];
     const output = f.config.redact(`Normal output ${credentials.join(" ")} acct_safe`);
     for (const credential of credentials) assert.equal(output.includes(credential), false);
     assert.match(output, /Normal output/);
@@ -151,12 +169,22 @@ async function launcherHarness(root, options = {}) {
     root, configPath: path.join(root, ".data/stripe-local/config.toml"), localOrigin: "http://127.0.0.1:3015",
     webhookEvents: ["checkout.session.completed"], path,
     process: syntheticProcess,
-    localConfig: () => options.configPromise ?? Promise.resolve({ accountId: account, key: testKey, expiresAt: future() }),
-    isolatedEnv: () => ({ RESERVATIONS_LOCAL_TEST: "true" }),
+    localConfig: () => options.configPromise ?? Promise.resolve({ accountId: account, key: testKey, publishableKey: testPublishableKey, expiresAt: future() }),
+    isolatedEnv: (key, publishableKey) => ({ RESERVATIONS_LOCAL_TEST: "true", STRIPE_SECRET_KEY: key, STRIPE_PUBLISHABLE_KEY: publishableKey }),
     redact: (value) => String(value).replace(/\b(?:rkcs_test_|whsec_)[A-Za-z0-9_]+/g, "[hidden]"),
     readFile: async () => { throw Object.assign(new Error("No database lock"), { code: "ENOENT" }); },
     unlink: async () => { throw new Error("No lock should be removed"); },
-    net: { createServer: () => ({ once() {}, listen(port, host, ready) { ready(); }, close(done) { done(); } }) },
+    net: { createServer: () => {
+      let onError;
+      return {
+        once(event, handler) { if (event === "error") onError = handler; },
+        listen(port, host, ready) {
+          if (options.bindError) onError(Object.assign(new Error("Synthetic bind failure"), { code: options.bindError }));
+          else ready();
+        },
+        close(done) { done(); },
+      };
+    } },
     spawn: (command, args, options) => {
       const child = new EventEmitter();
       Object.assign(child, { pid: 9000 + children.length, command, args, options, stdout: new PassThrough(), stderr: new PassThrough() });
@@ -184,6 +212,8 @@ test("launcher buffers split signing secrets and stops surviving child groups af
     assert.equal(h.children.length, 2);
     const app = h.children[1];
     assert.equal(app.options.env.STRIPE_WEBHOOK_SECRET, "whsec_split_synthetic");
+    assert.equal(app.options.env.STRIPE_SECRET_KEY, testKey);
+    assert.equal(app.options.env.STRIPE_PUBLISHABLE_KEY, testPublishableKey);
     assert.equal(h.logs.some((line) => line.includes("whsec_")), false);
     assert.equal(h.timers.find((timer) => timer.delay === 30000).active, false);
     app.stderr.write("Failure with rkcs_test_split_");
@@ -204,9 +234,27 @@ test("cancelling startup while configuration is pending never spawns a service",
   try {
     const h = await launcherHarness(f.root, { configPromise });
     h.handlers.get("SIGINT")();
-    resolveConfig({ accountId: account, key: testKey, expiresAt: future() });
+    resolveConfig({ accountId: account, key: testKey, publishableKey: testPublishableKey, expiresAt: future() });
     await h.running;
     assert.equal(h.children.length, 0);
     assert.equal(h.signals.length, 0);
+  } finally { await f.close(); }
+});
+
+test("launcher distinguishes an occupied port from denied local network access", async () => {
+  const f = await fixture();
+  try {
+    for (const code of ["EADDRINUSE", "EPERM", "EACCES", "EADDRNOTAVAIL"]) {
+      const h = await launcherHarness(f.root, { bindError: code });
+      await h.running;
+      assert.equal(h.children.length, 0);
+      assert.equal(h.process.exitCode, 1);
+      const output = h.logs.join("\n");
+      if (code === "EADDRINUSE") assert.match(output, /already in use/);
+      else {
+        assert.doesNotMatch(output, /already in use/);
+        assert.match(output, code === "EPERM" || code === "EACCES" ? /Permission.*denied/ : /Could not check.*EADDRNOTAVAIL/);
+      }
+    }
   } finally { await f.close(); }
 });

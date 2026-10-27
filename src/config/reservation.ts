@@ -7,5 +7,6 @@ export const reservation = {
   cta: "Reserve for US$50",
   navCta: "Reserve",
   path: "/reserve",
+  hostedUrl: "https://trycymba.com/reserve",
   termsVersion: "2026-10-25",
 } as const;

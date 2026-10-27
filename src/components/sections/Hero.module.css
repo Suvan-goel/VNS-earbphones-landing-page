@@ -6,9 +6,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 28px;
-  padding-top: clamp(112px, 10vw, 144px);
-  padding-bottom: 64px;
+  gap: 24px;
+  padding-top: 104px;
+  padding-bottom: 32px;
 }
 
 .copy {
@@ -24,7 +24,7 @@
 
 .title {
   font-size: clamp(2.5rem, 5.4vw, 5rem);
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.03;
   letter-spacing: -0.05em;
 }
@@ -60,9 +60,19 @@
 /* The live model fills a fixed-height frame; the still takes over only under reduced motion. */
 .live {
   width: 100%;
-  height: clamp(300px, 52svh, 440px);
+  height: clamp(220px, 34svh, 360px);
 }
 .still { display: none; }
+@media (max-width: 1023px) {
+  .layout { max-width: 640px; min-height: 100svh; justify-content: space-between; }
+  .copy { display: contents; }
+  .intro { order: 1; text-align: center; }
+  .description { margin-inline: auto; }
+  .media { order: 2; flex-shrink: 0; }
+  .live { height: var(--mobile-model-height); }
+  .signup { order: 3; max-width: none; margin: 0; }
+  .still { height: var(--mobile-model-height); object-fit: contain; }
+}
 @media (prefers-reduced-motion: reduce) {
   .live { display: none; }
   .still { display: block; }
@@ -72,11 +82,12 @@
   .layout {
     gap: 24px;
     padding-top: 96px;
-    padding-bottom: 48px;
+    padding-bottom: 32px;
   }
 
   .title {
-    font-size: clamp(2.125rem, 7.5vw, 3rem);
+    font-size: clamp(2.125rem, 9.2vw, 2.75rem);
+    letter-spacing: -0.03em;
   }
 
   .description {
@@ -87,7 +98,7 @@
   }
 
   .signup {
-    margin-top: 24px;
+    margin-top: 0;
   }
 }
 

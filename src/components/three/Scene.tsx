@@ -136,6 +136,7 @@ export function Scene({
   camera = { position: [0, 0.6, 8.5] as [number, number, number], fov: 28 },
   shadowY = -3.1,
   shadows = true,
+  sculptureShadows = false,
   onReady,
   onLoading,
   onError,
@@ -146,6 +147,7 @@ export function Scene({
   camera?: { position: [number, number, number]; fov: number };
   shadowY?: number;
   shadows?: boolean;
+  sculptureShadows?: boolean;
   onReady?: () => void;
   onLoading?: () => void;
   onError?: (error: Error) => void;
@@ -305,6 +307,7 @@ export function Scene({
           <Canvas
             key={canvasVersion}
             dpr={dpr}
+            shadows={sculptureShadows}
             frameloop={visible && pageVisible && !recovering ? "always" : "never"}
             camera={camera}
             gl={{ antialias: true, alpha: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1 }}
@@ -314,7 +317,16 @@ export function Scene({
             <RendererGuard onLost={handleContextLost} onRestored={restart} onError={handleError} health={health} />
             <Suspense fallback={<AssetLoading />}>
               <StudioEnvironment />
-              <directionalLight position={[4, 6, 5]} intensity={1.4} />
+              <directionalLight
+                position={[4, 6, 5]} intensity={1.4}
+                castShadow={sculptureShadows}
+                shadow-mapSize={[1024, 1024]}
+                shadow-camera-left={-3.3} shadow-camera-right={3.3}
+                shadow-camera-top={3.3} shadow-camera-bottom={-3.3}
+                shadow-camera-near={0.1} shadow-camera-far={20}
+                shadow-normalBias={0.025} shadow-bias={-0.0002}
+                shadow-radius={3}
+              />
               <directionalLight position={[-5, 2, -3]} intensity={0.5} color="#dfe6ff" />
               <directionalLight position={[0, -2, 6]} intensity={0.3} />
               {children}

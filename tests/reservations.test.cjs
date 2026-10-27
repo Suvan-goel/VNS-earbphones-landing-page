@@ -58,6 +58,7 @@ function backend(options = {}) {
   const calls = { create: [], retrieve: [], refunds: [], db: [], rpc: [], logs: [] };
   const rows = (options.rows ?? []).map(clone);
   const sessions = new Map();
+  const sessionParameters = new Map();
   let rpcResult = options.rpcResult ?? "applied";
   const currentSession = options.session ?? session();
   const stripe = {
@@ -70,10 +71,19 @@ function backend(options = {}) {
       create: async (params, opts) => {
         calls.create.push(clone({ params, opts }));
         if (options.createError) throw new Error("Customer person@example.com rk_test_private");
+        if (options.createException) throw options.createException;
+        if (sessionParameters.has(opts.idempotencyKey)
+          && JSON.stringify(sessionParameters.get(opts.idempotencyKey)) !== JSON.stringify(params)) {
+          throw Object.assign(new Error("Same key has different parameters"), { type: "StripeIdempotencyError" });
+        }
         if (!sessions.has(opts.idempotencyKey)) sessions.set(opts.idempotencyKey, session({
           metadata: params.metadata, client_reference_id: params.client_reference_id, status: "open", payment_status: "unpaid", payment_intent: null,
-          expires_at: params.expires_at,
+          expires_at: params.expires_at, ui_mode: params.ui_mode ?? "hosted_page",
+          url: params.ui_mode === "elements" ? null : "https://checkout.stripe.com/test_checkout",
+          client_secret: params.ui_mode === "elements" ? "cs_test_reservation_secret_private" : null,
         }));
+        sessionParameters.set(opts.idempotencyKey, clone(params));
+        if (options.createResponseLost) throw new Error("Creation response lost after Stripe saved the session");
         return clone(sessions.get(opts.idempotencyKey));
       },
       retrieve: async (id, params) => {
@@ -120,7 +130,7 @@ function backend(options = {}) {
   const cache = new Map();
   const context = vm.createContext({
     process: { env: { NODE_ENV: "test", ...env, ...options.env }, cwd: () => options.cwd ?? ROOT },
-    fetch, Request, Response, Headers, AbortSignal, TextDecoder, Uint8Array, FormData, URL,
+    fetch, Request, Response, Headers, AbortSignal, TextDecoder, Uint8Array, FormData, URL, URLSearchParams,
     console: { error: (...args) => calls.logs.push(args) },
   });
   function load(filename) {
@@ -144,7 +154,7 @@ function backend(options = {}) {
     route: (name) => load(path.resolve(ROOT, `src/app/api/${name}/route.ts`)).POST,
     storage: () => load(path.resolve(ROOT, "src/lib/storage.ts")),
     stripe: () => load(path.resolve(ROOT, "src/lib/stripe.ts")),
-    calls, rows, setRpcResult: (value) => { rpcResult = value; },
+    calls, rows, sessions, env: context.process.env, setRpcResult: (value) => { rpcResult = value; },
   };
 }
 
@@ -158,6 +168,54 @@ test("real checkout is closed unless explicit activation, webhook and durable st
   }
   assert.equal(backend({ env: { WAITLIST_STORAGE: "file" } }).stripe().reservationsOpen(), false);
   assert.equal(backend({ env: { NODE_ENV: "production", WAITLIST_STORAGE: "file", SUPABASE_URL: "", SUPABASE_SECRET_KEY: "", RESERVATIONS_PREVIEW: "true" } }).stripe().reservationsOpen(), false);
+});
+
+test("unconfigured development can link to live reservations without enabling local checkout", async () => {
+  const app = backend({ env: {
+    NODE_ENV: "development", RESERVATIONS_ENABLED: "", STRIPE_SECRET_KEY: "", STRIPE_WEBHOOK_SECRET: "",
+  } });
+  assert.equal(app.stripe().hostedReservationUrl("learn"), "https://trycymba.com/reserve?v=learn");
+  assert.equal(app.stripe().reservationsOpen(), false);
+  assert.equal((await app.route("reserve")(request(submission()))).status, 503);
+  assert.equal(app.calls.db.length, 0);
+  assert.equal(app.calls.create.length, 0);
+  assert.equal(app.storage().storageMode(), "supabase");
+});
+
+test("hosted reservation handoff preserves the variant as data and uses the canonical live origin", () => {
+  const app = backend({ env: {
+    NODE_ENV: "development", STRIPE_SECRET_KEY: "", STRIPE_WEBHOOK_SECRET: "",
+    NEXT_PUBLIC_SITE_URL: "http://127.0.0.1:3015",
+  } });
+  const variant = "learn & focus/#?next=https://example.com";
+  const destination = new URL(app.stripe().hostedReservationUrl(variant));
+  assert.equal(destination.origin, "https://trycymba.com");
+  assert.equal(destination.pathname, "/reserve");
+  assert.equal(destination.hash, "");
+  assert.deepEqual([...destination.searchParams], [["v", variant]]);
+});
+
+test("hosted handoff never overrides closure, configured checkout, or a broken preview or sandbox", () => {
+  const unconfigured = {
+    NODE_ENV: "development", RESERVATIONS_ENABLED: "", STRIPE_SECRET_KEY: "", STRIPE_WEBHOOK_SECRET: "",
+  };
+  for (const [label, overrides] of [
+    ["production", { NODE_ENV: "production" }],
+    ["test runtime", { NODE_ENV: "test" }],
+    ["explicit closure", { RESERVATIONS_ENABLED: "false" }],
+    ["incomplete sandbox", { RESERVATIONS_LOCAL_TEST: "true" }],
+    ["incomplete preview", { RESERVATIONS_PREVIEW: "true" }],
+    ["key without webhook", { STRIPE_SECRET_KEY: env.STRIPE_SECRET_KEY }],
+    ["webhook without key", { STRIPE_WEBHOOK_SECRET: secret }],
+    ["configured checkout", env],
+    ["configured preview", { RESERVATIONS_PREVIEW: "true", WAITLIST_STORAGE: "file" }],
+    ["configured sandbox", { ...env, RESERVATIONS_LOCAL_TEST: "true" }],
+  ]) {
+    const app = backend({ env: { ...unconfigured, ...overrides } });
+    assert.equal(app.stripe().hostedReservationUrl("learn"), null, label);
+    assert.equal(app.calls.db.length, 0, label);
+    assert.equal(app.calls.create.length, 0, label);
+  }
 });
 
 test("consent, current terms and attempt UUID are required before a payment attempt", async () => {
@@ -192,6 +250,202 @@ test("checkout stores consent first and derives the exact price server-side with
   const unavailable = backend({ insertError: true });
   assert.equal((await unavailable.route("reserve")(request(submission()))).status, 503);
   assert.equal(unavailable.calls.create.length, 0);
+});
+
+test("inline Checkout requires a valid publishable key matching the server credential mode", () => {
+  for (const [privateKey, publicKey, expected] of [
+    ["rk_test_synthetic", "pk_test_synthetic", true],
+    ["sk_test_synthetic", "pk_test_synthetic", true],
+    ["rkcs_test_synthetic", "pk_test_synthetic", true],
+    ["rk_live_synthetic", "pk_live_synthetic", true],
+    ["sk_live_synthetic", "pk_live_synthetic", true],
+    ["rk_test_synthetic", "pk_live_synthetic", false],
+    ["rk_live_synthetic", "pk_test_synthetic", false],
+    ["rk_test_synthetic", "sk_test_private", false],
+    ["rk_test_synthetic", "pk_test_", false],
+    ["rk_test_synthetic", "pk_test_bad key", false],
+    ["rk_test_synthetic", "", false],
+    ["invalid", "pk_test_synthetic", false],
+    ["sk_test_", "pk_test_synthetic", false],
+    ["rkcs_live_synthetic", "pk_live_synthetic", false],
+  ]) {
+    const app = backend({ env: { STRIPE_SECRET_KEY: privateKey, STRIPE_PUBLISHABLE_KEY: publicKey } });
+    assert.equal(app.stripe().stripePublishableKey(), expected ? publicKey : null);
+    assert.equal(app.stripe().inlineCheckoutEnabled(), expected);
+  }
+  for (const change of [{ RESERVATIONS_ENABLED: "false" }, { STRIPE_WEBHOOK_SECRET: "" }, { WAITLIST_STORAGE: "file" }]) {
+    const app = backend({ env: { STRIPE_PUBLISHABLE_KEY: "pk_test_synthetic", ...change } });
+    assert.equal(app.stripe().inlineCheckoutEnabled(), false);
+  }
+  const preview = backend({ env: { RESERVATIONS_PREVIEW: "true", WAITLIST_STORAGE: "file", STRIPE_PUBLISHABLE_KEY: "pk_test_synthetic" } });
+  assert.equal(preview.stripe().previewMode(), true);
+  assert.equal(preview.stripe().inlineCheckoutEnabled(), false);
+});
+
+test("inline Checkout returns only its client secret and keeps the exact server-priced consented deposit pending", async () => {
+  const app = backend({ env: { STRIPE_PUBLISHABLE_KEY: "pk_test_synthetic" } });
+  const response = await app.route("reserve")(request(submission({ amount: 1, currency: "gbp" })));
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("cache-control"), "no-store");
+  const result = await response.json();
+  assert.deepEqual(result, { status: "ok", clientSecret: "cs_test_reservation_secret_private", sessionId: "cs_test_reservation" });
+  const params = app.calls.create[0].params;
+  assert.equal(params.ui_mode, "elements");
+  assert.equal(params.return_url, "http://localhost/reserve/complete?session_id={CHECKOUT_SESSION_ID}");
+  assert.equal(params.success_url, undefined);
+  assert.equal(params.cancel_url, undefined);
+  assert.equal(params.branding_settings, undefined);
+  assert.equal(params.submit_type, undefined, "Stripe does not allow submit_type for Elements sessions");
+  assert.equal(params.line_items[0].price_data.unit_amount, 5000);
+  assert.equal(params.line_items[0].price_data.currency, "usd");
+  assert.equal(params.mode, "payment");
+  assert.equal(params.payment_method_types, undefined);
+  assert.equal(params.payment_intent_data.setup_future_usage, undefined);
+  assert.equal(params.adaptive_pricing.enabled, false);
+  assert.equal(app.rows[0].status, "pending");
+  assert.equal(app.rows[0].founder_number, null);
+  assert.equal(app.calls.rpc.length, 0);
+  assert.ok(app.rows[0].terms_accepted_at);
+  assert.equal(JSON.stringify(app.rows).includes(result.clientSecret), false);
+  assert.equal(JSON.stringify(app.calls.logs).includes(result.clientSecret), false);
+  const retried = await (await app.route("reserve")(request(submission()))).json();
+  assert.deepEqual(retried, result);
+  assert.equal(app.calls.create.length, 1);
+});
+
+test("invalid or missing public keys retain hosted Checkout and malformed server keys stay closed", async () => {
+  for (const key of ["", "pk_live_wrong_mode", "not-a-key", "sk_test_private"]) {
+    const app = backend({ env: { STRIPE_PUBLISHABLE_KEY: key } });
+    const result = await (await app.route("reserve")(request(submission()))).json();
+    assert.match(result.url, /^https:\/\/checkout\.stripe\.com\//);
+    assert.equal(result.clientSecret, undefined);
+    assert.equal(app.calls.create[0].params.ui_mode, undefined, "legacy request shape stays unchanged");
+  }
+  for (const key of ["invalid", "sk_test_", "sk_live_bad key", "rkcs_live_synthetic"]) {
+    const app = backend({ env: { STRIPE_SECRET_KEY: key, STRIPE_PUBLISHABLE_KEY: "pk_test_synthetic" } });
+    assert.equal((await app.route("reserve")(request(submission()))).status, 503);
+    assert.equal(app.stripe().stripe(), null);
+    assert.equal(app.calls.db.length, 0);
+  }
+});
+
+test("existing hosted, Elements and completed sessions retain their original checkout without a replacement", async () => {
+  const open = { status: "open", payment_status: "unpaid", payment_intent: null };
+  const hosted = backend({ rows: [row()], env: { STRIPE_PUBLISHABLE_KEY: "pk_test_synthetic" }, session: session({ ...open, ui_mode: "hosted_page" }) });
+  assert.match((await (await hosted.route("reserve")(request(submission()))).json()).url, /^https:\/\/checkout\.stripe\.com/);
+  assert.equal(hosted.calls.create.length, 0);
+  for (const changes of [open, { status: "complete" }]) {
+    const app = backend({ rows: [row()], env: { STRIPE_PUBLISHABLE_KEY: "pk_test_synthetic" },
+      session: session({ ui_mode: "elements", client_secret: "cs_test_reservation_secret_private", url: null, ...changes }) });
+    const result = await (await app.route("reserve")(request(submission()))).json();
+    if (changes.status === "open") assert.equal(result.clientSecret, "cs_test_reservation_secret_private");
+    else {
+      assert.equal(result.clientSecret, undefined);
+      assert.match(result.url, /^\/reserve\/complete\?/);
+    }
+    assert.equal(app.calls.create.length, 0);
+    assert.equal(app.calls.rpc.length, 0, "only signed webhooks may confirm payment");
+    assert.equal(app.rows[0].status, "pending");
+  }
+  const missingKey = backend({ rows: [row()], session: session({ ...open, ui_mode: "elements", client_secret: "cs_test_reservation_secret_private", url: null }) });
+  assert.equal((await missingKey.route("reserve")(request(submission()))).status, 502);
+  assert.equal(missingKey.calls.create.length, 0, "do not replace an existing Elements session when its key disappears");
+});
+
+test("a lost creation response survives switching checkout modes with the same idempotency key", async () => {
+  for (const startedInline of [false, true]) {
+    const options = { createResponseLost: true, env: { STRIPE_PUBLISHABLE_KEY: startedInline ? "pk_test_synthetic" : "" } };
+    const app = backend(options);
+    assert.equal((await app.route("reserve")(request(submission()))).status, 502);
+    assert.equal(app.rows[0].stripe_session_id, null);
+    assert.equal(app.sessions.size, 1);
+    options.createResponseLost = false;
+    app.env.STRIPE_PUBLISHABLE_KEY = startedInline ? "" : "pk_test_synthetic";
+    const recovered = await app.route("reserve")(request(submission()));
+    assert.equal(recovered.status, startedInline ? 502 : 200);
+    assert.equal(app.sessions.size, 1);
+    assert.equal(app.rows[0].stripe_session_id, "cs_test_reservation");
+    assert.equal(app.calls.create.length, 3);
+    assert.deepEqual(app.calls.create[0], app.calls.create[2], "recovery replays the original parameters and key");
+    assert.equal(app.calls.create[1].opts.idempotencyKey, app.calls.create[0].opts.idempotencyKey);
+    if (startedInline) {
+      app.env.STRIPE_PUBLISHABLE_KEY = "pk_test_synthetic";
+      assert.equal((await (await app.route("reserve")(request(submission()))).json()).clientSecret, "cs_test_reservation_secret_private");
+      assert.equal(app.calls.create.length, 3);
+    } else assert.match((await recovered.json()).url, /^https:\/\/checkout\.stripe\.com/);
+  }
+});
+
+test("arbitrary Stripe failures and a request still processing never trigger alternate-mode creation", async () => {
+  for (const error of [
+    Object.assign(new Error("network"), { type: "StripeConnectionError" }),
+    Object.assign(new Error("in progress"), { type: "StripeIdempotencyError", code: "idempotency_key_in_use" }),
+    Object.assign(new Error("invalid parameters"), { type: "StripeInvalidRequestError" }),
+  ]) {
+    const app = backend({ env: { STRIPE_PUBLISHABLE_KEY: "pk_test_synthetic" }, createException: error });
+    assert.equal((await app.route("reserve")(request(submission()))).status, 502);
+    assert.equal(app.calls.create.length, 1);
+  }
+});
+
+test("cross-site requests cannot create checkout or disclose a client secret", async () => {
+  for (const headers of [{ origin: "https://another.example" }, { origin: "null" }, { "sec-fetch-site": "cross-site" }]) {
+    const app = backend({ env: { STRIPE_PUBLISHABLE_KEY: "pk_test_synthetic" } });
+    const req = request(submission());
+    for (const [key, value] of Object.entries(headers)) req.headers.set(key, value);
+    assert.equal((await app.route("reserve")(req)).status, 403);
+    assert.equal(app.calls.create.length, 0);
+    assert.equal(app.calls.db.length, 0);
+  }
+  const sameSite = backend({ env: { STRIPE_PUBLISHABLE_KEY: "pk_test_synthetic" } });
+  const req = request(submission());
+  req.headers.set("origin", "http://localhost");
+  req.headers.set("sec-fetch-site", "same-origin");
+  assert.equal((await sameSite.route("reserve")(req)).status, 200);
+});
+
+test("origin validation uses the incoming Host when Next normalizes the request URL", async () => {
+  for (const [runtime, host, origin, expected] of [
+    ["development", "127.0.0.1:3015", "http://127.0.0.1:3015", 200],
+    ["development", "localhost:3015", "http://localhost:3015", 200],
+    ["development", "127.0.0.1:3015", "http://localhost:3015", 403],
+    ["development", "127.0.0.1:3015", "https://127.0.0.1:3015", 403],
+    ["development", "127.0.0.1:3015", "http://another.example", 403],
+    ["production", "trycymba.com", "https://trycymba.com", 200],
+    ["production", "trycymba.com", "http://trycymba.com", 403],
+    ["production", "trycymba.com", "https://another.example", 403],
+    ["production", "trycymba.com/path", "https://trycymba.com", 403],
+    ["production", "evil@example.com", "https://example.com", 403],
+    ["production", "trycymba.com,example.com", "https://trycymba.com", 403],
+  ]) {
+    const app = backend({ env: { NODE_ENV: runtime, STRIPE_PUBLISHABLE_KEY: "pk_test_synthetic" } });
+    const req = new Request("http://localhost:3015/api/reserve", {
+      method: "POST", headers: { "content-type": "application/json", host, origin, "sec-fetch-site": "same-origin" },
+      body: JSON.stringify(submission()),
+    });
+    assert.equal((await app.route("reserve")(req)).status, expected, `${runtime}: ${host} / ${origin}`);
+    if (expected === 403) {
+      assert.equal(app.calls.db.length, 0);
+      assert.equal(app.calls.create.length, 0);
+    }
+  }
+});
+
+test("client secrets are withheld when retrieved session details differ from the durable reservation", async () => {
+  for (const change of [
+    { amount_total: 1 }, { currency: "gbp" }, { livemode: true }, { mode: "setup" },
+    { client_reference_id: "other" }, { metadata: { ...metadata(), attempt_id: "other" } },
+    { metadata: { ...metadata(), terms_version: "old" } }, { client_secret: null },
+  ]) {
+    const app = backend({ rows: [row()], env: { STRIPE_PUBLISHABLE_KEY: "pk_test_synthetic" }, session: session({
+      status: "open", ui_mode: "elements", client_secret: "cs_test_reservation_secret_private", url: null, ...change,
+    }) });
+    const response = await app.route("reserve")(request(submission()));
+    assert.equal(response.status, 502);
+    assert.equal((await response.json()).clientSecret, undefined);
+    assert.equal(JSON.stringify(app.calls.logs).includes("secret_private"), false);
+    assert.equal(app.calls.create.length, 0);
+  }
 });
 
 test("network retry reuses the durable session and concurrent retries send identical Stripe parameters", async () => {

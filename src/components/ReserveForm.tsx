@@ -1,11 +1,19 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import { reservation } from "@/config/reservation";
 import { getAttribution, track } from "@/lib/analytics";
 import styles from "./ReserveForm.module.css";
+import paymentStyles from "./ReservationPayment.module.css";
 
-type Phase = { k: "idle" } | { k: "submitting" } | { k: "redirecting" } | { k: "error"; message: string };
+const ReservationPayment = dynamic(() => import("./ReservationPayment").then((module) => module.ReservationPayment), {
+  ssr: false,
+  loading: () => <p role="status" className={paymentStyles.loading}>Loading secure payment…</p>,
+});
+
+type Phase = { k: "idle" } | { k: "submitting" } | { k: "redirecting" } | { k: "error"; message: string }
+  | { k: "payment"; clientSecret: string; sessionId: string; email: string };
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const ATTEMPT_KEY = "cymba.reservation-attempt";
@@ -29,7 +37,7 @@ function getAttempt(email: string, memory: Map<string, string>): string {
   return next;
 }
 
-export function ReserveForm({ variant, open, preview = false, testMode = false }: { variant: string; open: boolean; preview?: boolean; testMode?: boolean }) {
+export function ReserveForm({ variant, open, preview = false, testMode = false, hostedUrl = null, publishableKey = null }: { variant: string; open: boolean; preview?: boolean; testMode?: boolean; hostedUrl?: string | null; publishableKey?: string | null }) {
   const [phase, setPhase] = useState<Phase>({ k: "idle" });
   const [email, setEmail] = useState("");
   const [touched, setTouched] = useState(false);
@@ -39,6 +47,9 @@ export function ReserveForm({ variant, open, preview = false, testMode = false }
   const inFlight = useRef(false);
   const attempts = useRef(new Map<string, string>());
   const errorRef = useRef<HTMLParagraphElement>(null);
+  const paymentRef = useRef<HTMLDivElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const focusEmailOnReturn = useRef(false);
   const id = useId();
 
   useEffect(() => {
@@ -63,12 +74,16 @@ export function ReserveForm({ variant, open, preview = false, testMode = false }
 
   useEffect(() => {
     if (phase.k === "error") errorRef.current?.focus();
+    if (phase.k === "payment") paymentRef.current?.focus({ preventScroll: true });
+    if (phase.k === "idle" && focusEmailOnReturn.current) {
+      focusEmailOnReturn.current = false;
+      emailRef.current?.focus();
+    }
   }, [phase]);
 
   const invalid = touched && !EMAIL_RE.test(email.trim());
   const busy = phase.k === "submitting" || phase.k === "redirecting";
   const errId = `${id}-err`;
-  const noteId = `${id}-note`;
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -96,7 +111,13 @@ export function ReserveForm({ variant, open, preview = false, testMode = false }
         body: JSON.stringify({ email: normalizedEmail, company, startedAt: startedAt.current, variant,
           attribution: getAttribution(), attemptId, termsAccepted: true, termsVersion: reservation.termsVersion }),
       });
-      const data = (await res.json().catch(() => ({}))) as { status?: string; message?: string; url?: string; resetAttempt?: boolean };
+      const data = (await res.json().catch(() => ({}))) as { status?: string; message?: string; url?: string; clientSecret?: string; sessionId?: string; resetAttempt?: boolean };
+      if (res.ok && data.status === "ok" && data.clientSecret && data.sessionId && publishableKey) {
+        track("reserve_checkout_started", { location: "reserve_page" });
+        setPhase({ k: "payment", clientSecret: data.clientSecret, sessionId: data.sessionId, email: normalizedEmail });
+        inFlight.current = false;
+        return;
+      }
       if (res.ok && data.status === "ok" && data.url) {
         const destination = new URL(data.url, window.location.origin);
         if (destination.origin !== window.location.origin && !(destination.protocol === "https:" && destination.hostname === "checkout.stripe.com")) {
@@ -120,6 +141,18 @@ export function ReserveForm({ variant, open, preview = false, testMode = false }
     inFlight.current = false;
   }
 
+  if (!open && hostedUrl) {
+    return (
+      <div>
+        <a href={hostedUrl} data-cta="reserve_hosted" className={`${styles.button} ${styles.hostedButton}`}>
+          {reservation.cta}
+          <svg aria-hidden="true" viewBox="0 0 20 20" fill="none"><path d="M3 10h14m-5-5 5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+        </a>
+        <p className={styles.checkoutNote}>Checkout on trycymba.com</p>
+      </div>
+    );
+  }
+
   if (!open) {
     return (
       <div role="status">
@@ -130,11 +163,30 @@ export function ReserveForm({ variant, open, preview = false, testMode = false }
     );
   }
 
+  if (phase.k === "payment" && publishableKey) {
+    return (
+      <div ref={paymentRef} tabIndex={-1} className={styles.paymentStage} aria-label="Reservation payment">
+        {testMode && <p className={styles.testNotice}><strong>Test mode</strong> Use test cards only. No real charge.</p>}
+        <ReservationPayment
+          publishableKey={publishableKey}
+          clientSecret={phase.clientSecret}
+          sessionId={phase.sessionId}
+          email={phase.email}
+          onEditDetails={() => {
+            focusEmailOnReturn.current = true;
+            setPhase({ k: "idle" });
+          }}
+        />
+      </div>
+    );
+  }
+
   return (
     <form onSubmit={onSubmit} noValidate aria-label="Reservation details" aria-busy={busy}>
-      {testMode && <p className={styles.testNotice}><strong>Stripe test mode</strong> No real money is charged. Use test card details only.</p>}
+      {testMode && <p className={styles.testNotice}><strong>Test mode</strong> Use test cards only. No real charge.</p>}
       <label htmlFor={`${id}-email`} className={styles.label}>Email address</label>
       <input
+        ref={emailRef}
         id={`${id}-email`}
         type="email"
         name="email"
@@ -150,11 +202,10 @@ export function ReserveForm({ variant, open, preview = false, testMode = false }
         }}
         onBlur={() => setTouched(true)}
         aria-invalid={invalid || undefined}
-        aria-describedby={[noteId, phase.k === "error" ? errId : ""].filter(Boolean).join(" ")}
+        aria-describedby={phase.k === "error" ? errId : undefined}
         disabled={busy}
         className={`${styles.field} ${invalid ? styles.invalid : ""}`}
       />
-      <p id={noteId} className={styles.helper}>This won’t add you to our marketing list.</p>
 
       <label className={styles.terms}>
         <input
@@ -184,12 +235,9 @@ export function ReserveForm({ variant, open, preview = false, testMode = false }
         {busy && <p className="sr-only">{phase.k === "redirecting" ? "Opening checkout." : "Preparing your reservation checkout."}</p>}
       </div>
       <button type="submit" data-cta="reserve" disabled={busy} className={styles.button}>
-        {busy ? <><span className={styles.spinner} aria-hidden="true" />{phase.k === "redirecting" ? "Opening checkout…" : "One moment…"}</> : preview ? "Preview reservation" : "Reserve yours"}
-        {!busy && <svg aria-hidden="true" viewBox="0 0 20 20" fill="none"><path d="M3 10h14m-5-5 5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>}
+        {busy ? <><span className={styles.spinner} aria-hidden="true" />{phase.k === "redirecting" ? "Opening checkout…" : "One moment…"}</> : preview ? "Preview reservation" : publishableKey ? "Continue to payment" : reservation.cta}
       </button>
-      <p className={styles.checkoutNote}>
-        {preview ? "Local preview — no payment or reservation is made." : <><svg aria-hidden="true" viewBox="0 0 16 16" fill="none"><rect x="3.5" y="7" width="9" height="6.5" rx="1.5" stroke="currentColor" /><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" stroke="currentColor" strokeLinecap="round" /></svg>Secure checkout with Stripe</>}
-      </p>
+      {preview && <p className={styles.checkoutNote}>Local preview — no payment or reservation is made.</p>}
     </form>
   );
 }

@@ -1,20 +1,15 @@
 /** Keep the animated mannequin story and the stacked fallback in sync. */
 export const productStory = {
-  work: {
-    headline: ["For your most", "demanding work."] as [string, string],
-    examples: [
-      "For the code you’re untangling.",
-      "The paper you’re making sense of.",
-      "The idea you want to understand.",
-    ],
+  product: {
+    headline: ["Sound meets", "neurotechnology."],
+    description: "Premium audio and targeted nerve stimulation in one pair of earbuds.",
   },
-  technology: {
-    headline: ["Premium sound", "x Neurotech"] as [string, string],
-    description: "Premium audio and targeted nerve stimulation, together in one pair of earbuds.",
-    steps: [
-      { title: "Sense your state.", line: "EEG sensors measure brain activity. PPG sensors track your pulse." },
-      { title: "Time the stimulation.", line: "The system is designed to use those signals to time stimulation at the outer ear." },
-      { title: "You’re in control.", line: "Listen with stimulation off, or start a session when you choose." },
-    ],
+  personalisation: {
+    headline: ["Tuned to", "your brain."],
+    description: "Cymba reads your brain activity and pulse to personalise stimulation timing.",
   },
-};
+  evidence: {
+    headline: ["Backed by science."],
+    description: "Peer-reviewed research supports the tech that Cymba relies on for better learning and cognitive control.",
+  },
+} as const;

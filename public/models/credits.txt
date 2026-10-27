@@ -4,12 +4,22 @@ Current neural mannequin
 User-supplied Meshy AI neural head bust, supplied 25 October 2026.
 Source filename: Meshy_AI_neural_head_bust_fron_1025174930_image-to-3d-texture.glb
 Refined in Blender: retained the supplied sculpture, reduced mesh density,
-baked mineral colour, surface grain and matte roughness for a honed stone finish,
+baked surface grain and matte roughness for a honed stone finish,
 smoothed the original scalp relief and rebuilt the purple neural network as
 connected, tapered fibres across the scalp, crown and back, with continuous
 neck routes and a scroll-driven growth reveal. Compressed for web display.
 The neural highlights are schematic artistic
 projections, not anatomically exact pathways or measured activation.
+
+Current white stone surface
+Adapted from "Marble 01" by Rob Tuytel, downloaded from Poly Haven.
+Source: https://polyhaven.com/a/marble_01
+License: CC0 1.0 Universal, https://polyhaven.com/license
+https://creativecommons.org/publicdomain/zero/1.0/
+An interior patch of the downloaded displacement and roughness maps is
+adapted and baked to the sculpture's existing UVs. Tile joints, broad colour
+variation and grey veins are excluded. The surface uses a uniform white
+base colour, fine relief and restrained satin roughness.
 
 Previous sculpted mannequin (retained asset, no longer displayed)
 Adapted from “Infinite, 3D Head Scan” by Lee Perry-Smith,

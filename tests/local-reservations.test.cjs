@@ -37,7 +37,9 @@ function application(cwd, overrides = {}) {
           id, object: "checkout.session", mode: "payment", status: "open", payment_status: "unpaid",
           livemode: false, amount_total: 5000, currency: "usd", client_reference_id: params.client_reference_id,
           metadata: params.metadata, payment_intent: null, customer: "cus_local_test", expires_at: params.expires_at,
-          url: `https://checkout.stripe.com/${id}`, idempotencyKey: options.idempotencyKey,
+          ui_mode: params.ui_mode ?? "hosted_page", return_url: params.return_url,
+          client_secret: params.ui_mode === "elements" ? `${id}_secret_synthetic` : null,
+          url: params.ui_mode === "elements" ? null : `https://checkout.stripe.com/${id}`, idempotencyKey: options.idempotencyKey,
         });
         return structuredClone(sessions.get(id));
       },
@@ -142,6 +144,55 @@ test("local test mode rejects live/malformed keys and production without falling
     assert.ok(app.stripe().stripe());
     app.env.STRIPE_SECRET_KEY = "sk_live_synthetic";
     assert.equal(app.stripe().stripe(), null, "cached client cannot bypass the guard");
+  }
+});
+
+test("local Elements checkout keeps its secret ephemeral and only signed webhooks record payment and refunds", async () => {
+  const cwd = temporarySite();
+  const app = application(cwd, { STRIPE_PUBLISHABLE_KEY: "pk_test_synthetic" });
+  const body = input();
+  try {
+    assert.equal(app.stripe().inlineCheckoutEnabled(), true);
+    assert.equal(app.stripe().stripePublishableKey(), "pk_test_synthetic");
+    const response = await app.route("reserve")(request(body));
+    assert.equal(response.status, 200);
+    const result = await response.json();
+    assert.match(result.sessionId, /^cs_test_/);
+    assert.equal(result.clientSecret, `${result.sessionId}_secret_synthetic`);
+    assert.equal(result.url, undefined);
+    assert.equal(response.headers.get("cache-control"), "no-store");
+    const cs = app.sessions.get(result.sessionId);
+    assert.equal(cs.ui_mode, "elements");
+    assert.equal(cs.return_url, "http://127.0.0.1:3015/reserve/complete?session_id={CHECKOUT_SESSION_ID}");
+    let saved = (await app.storage().lookupReservation(result.sessionId)).reservation;
+    assert.equal(saved.status, "pending");
+    assert.equal(saved.amount, 5000);
+    assert.equal(saved.currency, "usd");
+    assert.ok(saved.terms_accepted_at);
+    assert.equal(JSON.stringify(saved).includes(result.clientSecret), false);
+    assert.deepEqual(await (await app.route("reserve")(request(body))).json(), result);
+    assert.equal(app.calls.creates, 1);
+
+    const pi = settle(app, result.sessionId);
+    const completed = await (await app.route("reserve")(request(body))).json();
+    assert.match(completed.url, /^\/reserve\/complete\?/);
+    assert.equal(completed.clientSecret, undefined);
+    assert.equal((await app.storage().lookupReservation(result.sessionId)).reservation.status, "pending");
+    assert.equal((await app.route("stripe/webhook")(webhook("checkout.session.completed", cs, { secret: "wrong" }))).status, 400);
+    assert.equal((await app.storage().lookupReservation(result.sessionId)).reservation.status, "pending");
+    assert.equal((await app.route("stripe/webhook")(webhook("checkout.session.completed", cs))).status, 200);
+    saved = (await app.storage().lookupReservation(result.sessionId)).reservation;
+    assert.equal(saved.status, "paid");
+    assert.equal(saved.founder_number, 1);
+    const refund = { id: "re_elements_test", payment_intent: pi.id, amount: 5000, currency: "usd", status: "succeeded" };
+    app.refunds.set(pi.id, [refund]);
+    assert.equal((await app.route("stripe/webhook")(webhook("refund.updated", refund))).status, 200);
+    assert.equal((await app.storage().lookupReservation(result.sessionId)).reservation.status, "refunded");
+    assert.equal(JSON.stringify(app.calls.logs).includes(result.clientSecret), false);
+    assert.equal(app.calls.remote, 0);
+  } finally {
+    await app.local().closeLocalReservationDatabase();
+    fs.rmSync(cwd, { recursive: true, force: true });
   }
 });
 

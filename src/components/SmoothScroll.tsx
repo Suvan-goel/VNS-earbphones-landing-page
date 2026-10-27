@@ -23,6 +23,15 @@ export function SmoothScroll() {
     let current = window.scrollY;
     let frame = 0;
     let last = 0;
+    const menuHeader = document.querySelector<HTMLElement>(".site-header");
+    const menuIsOpen = () => menuHeader?.dataset.menuOpen === "true";
+    const stopGlide = () => {
+      cancelAnimationFrame(frame);
+      frame = 0;
+      current = target = window.scrollY;
+    };
+    const menuObserver = new MutationObserver(stopGlide);
+    if (menuHeader) menuObserver.observe(menuHeader, { attributes: true, attributeFilter: ["data-menu-open"] });
 
     const maxScroll = () => root.scrollHeight - window.innerHeight;
 
@@ -37,6 +46,10 @@ export function SmoothScroll() {
     };
 
     const step = (now: number) => {
+      if (menuIsOpen()) {
+        stopGlide();
+        return;
+      }
       const dt = Math.min(0.05, (now - last) / 1000 || 1 / 60);
       last = now;
       current += (target - current) * (1 - Math.exp(-EASE_RATE * dt));
@@ -46,6 +59,10 @@ export function SmoothScroll() {
     };
 
     const onWheel = (event: WheelEvent) => {
+      if (menuIsOpen()) {
+        stopGlide();
+        return;
+      }
       if (event.ctrlKey || event.defaultPrevented) return;
       if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
       if (document.querySelector("dialog[open]") || canScrollInside(event.target, event.deltaY)) return;
@@ -76,6 +93,7 @@ export function SmoothScroll() {
     const hero = document.querySelector<HTMLElement>("[data-hero]");
     const copy = hero?.querySelector<HTMLElement>("[data-hero-copy]");
     const media = hero?.querySelector<HTMLElement>("[data-hero-media]");
+    const desktopHero = window.matchMedia("(min-width: 1024px)");
     let heroFrame = 0;
     const scrubHero = () => {
       heroFrame = 0;
@@ -83,7 +101,7 @@ export function SmoothScroll() {
       const scrolled = Math.min(1, Math.max(0, -hero.getBoundingClientRect().top / hero.offsetHeight));
       copy.style.translate = scrolled ? `0 ${(scrolled * 6).toFixed(2)}vh` : "";
       copy.style.opacity = scrolled ? Math.max(0, 1 - scrolled * 0.9).toFixed(3) : "";
-      media.style.scale = scrolled ? (1 + scrolled * 0.03).toFixed(4) : "";
+      media.style.scale = scrolled && desktopHero.matches ? (1 + scrolled * 0.03).toFixed(4) : "";
     };
     const scheduleHero = () => {
       if (!heroFrame) heroFrame = requestAnimationFrame(scrubHero);
@@ -99,6 +117,7 @@ export function SmoothScroll() {
     return () => {
       cancelAnimationFrame(frame);
       cancelAnimationFrame(heroFrame);
+      menuObserver.disconnect();
       window.removeEventListener("wheel", onWheel);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("scroll", scheduleHero);

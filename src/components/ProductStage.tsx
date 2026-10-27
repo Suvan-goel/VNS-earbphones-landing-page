@@ -6,11 +6,12 @@ import { useCallback, useEffect, useRef, useState, type CSSProperties, type Reac
 import { motion, useMotionValue, useScroll, useTransform, type MotionStyle, type MotionValue } from "motion/react";
 import listeningScene from "@/assets/earbuds/listening-portrait-selected-retouch-v2.webp";
 import listeningExtension from "@/assets/earbuds/listening-portrait-studio-grey-wide-v3.webp";
-import { closingHeadline, closingLine, reservation, site, type HeroVariant } from "@/config/site";
+import { closingCta, closingHeadline, reservation, type HeroVariant } from "@/config/site";
 import type { StorageMode } from "@/lib/storage";
 import { productStory } from "@/config/product-story";
-import { STORY_SCROLL_SCREENS, PORTRAIT_ENTRY_START, PORTRAIT_ENTRY_SCREENS, productStageProgress, readProductStageProgress } from "@/lib/product-stage-scroll";
+import { STORY_SCROLL_SCREENS, PORTRAIT_ENTRY_START, MODEL_SCROLL_SCREENS, CLOSING_SCROLL_SCREENS, productStageProgress, readProductStageProgress } from "@/lib/product-stage-scroll";
 import { HeroSignup } from "./HeroSignup";
+import { AppPreview } from "./sections/AppPreview";
 import { ModelLoadingNotice, ModelRecoveryNotice } from "./ModelRecoveryNotice";
 import styles from "./ProductStage.module.css";
 
@@ -24,19 +25,27 @@ const StageScene = dynamic(() => import("./three/StageScene").then((m) => m.Stag
  *
  * Progress (0..1) along the track:
  *   0.00–0.12  hero: copy left, product full size on the right, turning from the first scroll
- *   0.17–0.46  outcomes: a slower turn, then the mannequin appears and the pair settles
- *   0.46–0.72  how it works: live signals travel from the ears to the brain
- *   0.73–0.85  a closer view of the animated neural network
- *   0.85–1.00  the portrait: scroll into place, then expand with continued scrolling
+ *   0.17–0.45  product: the mannequin appears and the earbuds settle
+ *   0.46–0.73  personalisation: sensing cues precede the stimulation illustration
+ *   0.74–0.85  evidence: the signal holds while the research is introduced
+ *   0.85       the model releases into the normally scrolling app section
+ * The closing portrait has its own track after the app, so its expansion
+ * does not pin the app or depend on the app's responsive height.
  *
  * One stage, two shapes: on desktop the copy sits left and the product right;
- * on phones the product sits in a sticky band across the top and the same
- * chapters pass beneath it. Readers who prefer reduced motion, and very short
+ * on phones each chapter groups its text above the product, with shared
+ * signup controls below it. Readers who prefer reduced motion, and very short
  * screens, get `fallback` (the stacked sections) via CSS instead.
  */
 
 /* Keep the ending photograph identical to the live portrait. */
 const scene = { image: listeningScene };
+
+const storyChapters = [
+  { copy: productStory.product, range: [0.17, 0.23, 0.4, 0.45] },
+  { copy: productStory.personalisation, range: [0.46, 0.50, 0.69, 0.73] },
+  { copy: productStory.evidence, range: [0.74, 0.77, 0.85, 0.86] },
+] satisfies { copy: { headline: readonly string[]; description: string }; range: [number, number, number, number] }[];
 
 function Fade({
   progress,
@@ -62,23 +71,9 @@ function Fade({
   );
 }
 
-/* A list item that rises in when the reader reaches it and stays. */
-function Rise({ progress, at, children }: { progress: MotionValue<number>; at: number; children: ReactNode }) {
-  const opacity = useTransform(progress, [at - 0.02, at + 0.01], [0, 1]);
-  const y = useTransform(progress, [at - 0.02, at + 0.01], [16, 0]);
-  return <motion.li style={{ opacity, y }}>{children}</motion.li>;
-}
-
-/* The current beat stays bright; the others sit back. */
-function Highlight({ progress, start, end, children }: { progress: MotionValue<number>; start: number; end: number; children: ReactNode }) {
-  const opacity = useTransform(progress, [start - 0.03, start, end, end + 0.03], [0.32, 1, 1, 0.32]);
-  return <motion.li style={{ opacity }}>{children}</motion.li>;
-}
-
 /* One layout for both ink colours keeps the reveal aligned down to each letter. */
-function ClosingCopy({ reservations, cta, visualOnly = false }: { reservations: boolean; cta: string; visualOnly?: boolean }) {
+function ClosingCopy({ variant, visualOnly = false }: { variant: HeroVariant["id"]; visualOnly?: boolean }) {
   const Heading = visualOnly ? "div" : "h2";
-  const label = reservations ? reservation.cta : cta;
   return (
     <div className={`${styles.copy} ${styles.closingCopy} ${visualOnly ? styles.copyOnScene : ""}`}>
       <div className={styles.closingIntro}>
@@ -86,15 +81,24 @@ function ClosingCopy({ reservations, cta, visualOnly = false }: { reservations: 
           <span className="block">{closingHeadline[0]}</span>
           <span className="soft block">{closingHeadline[1]}</span>
         </Heading>
-        <p className={styles.lede}>{closingLine(reservations)}</p>
       </div>
-      {visualOnly ? (
-        <span className={`btn-primary ${styles.sceneCta}`}>{label}</span>
-      ) : (
-        <a href={reservations ? reservation.path : "#signup"} data-cta="stage" className={`btn-primary ${styles.sceneCta}`}>
-          {label}
-        </a>
-      )}
+      <div className={styles.sceneActions}>
+        {visualOnly ? (
+          <>
+            <span className={`btn-primary ${styles.sceneCta}`}>{closingCta}</span>
+            <span className={styles.sceneReserve}>Reserve yours <span aria-hidden="true">→</span></span>
+          </>
+        ) : (
+          <>
+            <a href="#signup" data-cta="stage" className={`btn-primary ${styles.sceneCta}`}>
+              {closingCta}
+            </a>
+            <a href={`${reservation.path}?v=${variant}`} data-cta="stage_reserve" className={styles.sceneReserve}>
+              Reserve yours <span aria-hidden="true">→</span>
+            </a>
+          </>
+        )}
+      </div>
     </div>
   );
 }
@@ -112,12 +116,14 @@ export function ProductStage({
   modelUrl: string | null;
   /** A still of the model shown until the 3D scene is ready. */
   posterUrl?: string | null;
-  /** Deposits are open: the closing chapter and the form offer the reservation. */
+  /** Deposits are open: the signup form offers the reservation. */
   reservations?: boolean;
   fallback: ReactNode;
 }) {
   const track = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
+  const appSection = useRef<HTMLDivElement>(null);
+  const closingTrack = useRef<HTMLDivElement>(null);
   const portrait = useRef<HTMLDivElement>(null);
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -133,15 +139,17 @@ export function ProductStage({
   const readProgress = useCallback(() => readProductStageProgress(track.current, stage.current), []);
 
   const { scrollY } = useScroll();
-  const trackGeometry = useMotionValue({ top: 0, width: 1, height: 1 });
+  const trackGeometry = useMotionValue({ top: 0, closingTop: 1, width: 1, height: 1 });
   const portraitBounds = useMotionValue({ top: 72, right: 0, bottom: 0, left: 0, width: 1, height: 1 });
 
   useEffect(() => {
     const trackElement = track.current;
     const stageElement = stage.current;
+    const appElement = appSection.current;
+    const closingElement = closingTrack.current;
     const frame = portrait.current;
     const sceneElement = frame?.parentElement;
-    if (!trackElement || !stageElement || !frame || !sceneElement) return;
+    if (!trackElement || !stageElement || !appElement || !closingElement || !frame || !sceneElement) return;
     let active = true;
     const measure = () => {
       // A queued resize can arrive after React has cleared or replaced refs.
@@ -153,6 +161,7 @@ export function ProductStage({
       const height = parseFloat(frameStyle.height) || 0;
       trackGeometry.set({
         top: trackElement.getBoundingClientRect().top + window.scrollY,
+        closingTop: closingElement.getBoundingClientRect().top + window.scrollY,
         width: stageElement.clientWidth,
         height: Math.max(1, stageElement.clientHeight),
       });
@@ -169,6 +178,8 @@ export function ProductStage({
     const observer = new ResizeObserver(measure);
     observer.observe(trackElement);
     observer.observe(stageElement);
+    observer.observe(appElement);
+    observer.observe(closingElement);
     observer.observe(frame);
     observer.observe(sceneElement);
     return () => { active = false; observer.disconnect(); };
@@ -176,22 +187,21 @@ export function ProductStage({
 
   /* Match the page's actual scroll pixels, including when mobile browser chrome changes size. */
   const distance = useTransform(() => Math.max(0, scrollY.get() - trackGeometry.get().top) / trackGeometry.get().height);
-  const entry = useTransform(() => Math.min(PORTRAIT_ENTRY_SCREENS, Math.max(0, distance.get() - STORY_SCROLL_SCREENS * PORTRAIT_ENTRY_START)));
-  const storyY = useTransform(() => -entry.get() * trackGeometry.get().height);
-  const sceneY = useTransform(() => (PORTRAIT_ENTRY_SCREENS - entry.get()) * trackGeometry.get().height);
-  const sceneVisibility = useTransform(entry, (value) => value > 0 ? "visible" : "hidden");
+  const closingDistance = useTransform(() => (scrollY.get() - trackGeometry.get().closingTop) / trackGeometry.get().height);
+  const sceneY = useTransform(() => Math.min(trackGeometry.get().height, Math.max(0, trackGeometry.get().closingTop - scrollY.get())));
+  const sceneVisibility = useTransform(closingDistance, (value) => value > -1 ? "visible" : "hidden");
 
   /* Freeze the last model pose during entry; continued scroll immediately opens the backdrop. */
   const p = useTransform(() => productStageProgress(distance.get()));
   /* After the stage: the room blurs and darkens over one more screen, then stays behind the rest of the page. */
-  const q = useTransform(() => Math.max(0, distance.get() - STORY_SCROLL_SCREENS - PORTRAIT_ENTRY_SCREENS));
+  const q = useTransform(() => Math.max(0, closingDistance.get() - CLOSING_SCROLL_SCREENS));
   const sceneBlur = useTransform(q, [0, 0.5], ["blur(0px)", "blur(18px)"]);
   const sceneScale = useTransform(q, [0, 0.5], [1, 1.06]);
   const sceneDark = useTransform(q, [0, 0.5], [0, 0.72]);
   const sceneShade = useTransform(q, [0, 0.3], [1, 0]);
 
   /* Four times the previous scroll distance, with no wait or ease-in dead zone. */
-  const expansion = useTransform(p, [PORTRAIT_ENTRY_START, 0.97], [0, 1]);
+  const expansion = useTransform(closingDistance, [0, STORY_SCROLL_SCREENS * (0.97 - PORTRAIT_ENTRY_START)], [0, 1]);
   const portraitRadius = useTransform(expansion, [0, 1], [12, 0]);
   const portraitFeather = useTransform(expansion, [0, 1], ["0px", "24px"]);
   /* Open from the live portrait's exact frame, keeping the photograph stationary. */
@@ -208,14 +218,6 @@ export function ProductStage({
     const right = bounds.right * remaining + size.width - bounds.width;
     const bottom = bounds.bottom * remaining + size.height - bounds.height;
     return `inset(${bounds.top * remaining}px ${right}px ${bottom}px ${bounds.left * remaining}px round ${12 * remaining}px)`;
-  });
-  const introCaptionOpacity = useTransform(p, [0.28, 0.44], [1, 0]);
-
-  /* The room changes tone with the chapter, with no borders. */
-  const paperTone = useTransform(p, [0.15, 0.25, 0.7, 0.8], [0, 1, 1, 0]);
-  const background = useTransform(() => {
-    const tone = paperTone.get();
-    return `rgb(${245 + 10 * tone}, ${245 + 10 * tone}, ${247 + 8 * tone})`;
   });
 
   return (
@@ -242,101 +244,81 @@ export function ProductStage({
         </div>
       </div>
 
-      <div ref={track} className={styles.track} style={{ "--story-scroll-screens": STORY_SCROLL_SCREENS, "--portrait-entry-start": PORTRAIT_ENTRY_START, "--portrait-entry-screens": PORTRAIT_ENTRY_SCREENS } as CSSProperties}>
-        {/* Switch the header as the expanding backdrop reaches the navigation. */}
-        <span data-nav-dark-start className={`${styles.anchor} ${styles.closingThemeAnchor}`} aria-hidden="true" />
-        {/* Anchors for the header links, at the scroll positions where each chapter is on screen. */}
-        <span data-anchor="idea" className={styles.anchor} style={{ top: `${STORY_SCROLL_SCREENS * 0.245 * 100}svh` }} aria-hidden="true" />
-        <span data-anchor="how-it-works" className={styles.anchor} style={{ top: `${STORY_SCROLL_SCREENS * 0.572 * 100}svh` }} aria-hidden="true" />
+      <div className={styles.animatedStory} style={{ "--story-scroll-screens": STORY_SCROLL_SCREENS, "--model-scroll-screens": MODEL_SCROLL_SCREENS, "--closing-scroll-screens": CLOSING_SCROLL_SCREENS, "--portrait-expansion-screens": STORY_SCROLL_SCREENS * (0.97 - PORTRAIT_ENTRY_START) } as CSSProperties}>
+        <div ref={track} className={styles.track}>
+          {/* Anchors for the header links, at the scroll positions where each chapter is on screen. */}
+          <span data-anchor="idea" className={styles.anchor} style={{ top: `${STORY_SCROLL_SCREENS * 0.245 * 100}svh` }} aria-hidden="true" />
+          <span data-anchor="how-it-works" className={`${styles.anchor} ${styles.technologyAnchor}`} aria-hidden="true" />
 
-        <div ref={stage} className={styles.stage}>
-          <motion.div className={styles.storyPane} style={{ backgroundColor: background, y: storyY }}>
-            {/* Chapter 1: the hero, the first frame of the same system, with more air. The words rise in once on load. */}
-            <Fade progress={p} range={[0, 0.03, 0.07, 0.14]} holdStart className={`${styles.copy} ${styles.heroCopy}`}>
-              <h1 id="stage-title" className={`headline ${styles.heroTitle}`}>
-                {v.headline.map((line, i) => (
-                  <span key={line} className={"hero-in block " + (i > 0 ? "soft" : "")} style={{ ["--d" as string]: `${120 + i * 80}ms` }}>
-                    {line}
-                  </span>
+          <div ref={stage} className={styles.stage}>
+            <div className={styles.storyPane}>
+              <div className={styles.storyContent}>
+                {/* Chapter 1: headline, product and actions share the first screen. */}
+                <Fade progress={p} range={[0, 0.03, 0.07, 0.14]} holdStart className={`${styles.copy} ${styles.heroCopy}`}>
+                  <div className={styles.heroIntro}>
+                    <h1 id="stage-title" className={`headline ${styles.heroTitle}`}>
+                      {v.headline.map((line, i) => (
+                        <span key={line} className={"hero-in block " + (i > 0 ? "soft" : "")} style={{ ["--d" as string]: `${120 + i * 80}ms` }}>
+                          {line}
+                        </span>
+                      ))}
+                    </h1>
+                    {v.subhead && (
+                      <p className={`hero-in whitespace-pre-line ${styles.heroText}`} style={{ ["--d" as string]: "300ms" }}>
+                        {v.subhead}
+                      </p>
+                    )}
+                  </div>
+                </Fade>
+
+                {/* Chapters 2–4: one clear message for each model state. */}
+                {storyChapters.map(({ copy, range }) => (
+                  <Fade key={copy.headline[0]} progress={p} range={range} className={`${styles.copy} ${styles.heroCopy}`}>
+                    <header className={styles.storyIntro}>
+                      <h2 className={`headline ${styles.heroTitle}`}>
+                        {copy.headline.map((line, i) => (
+                          <span key={line} className={i === 0 ? "block" : "soft block"}>{line}</span>
+                        ))}
+                      </h2>
+                      <p className={styles.lede}>{copy.description}</p>
+                    </header>
+                  </Fade>
                 ))}
-              </h1>
-              {v.subhead && (
-                <p className={`hero-in whitespace-pre-line ${styles.heroText}`} style={{ ["--d" as string]: "300ms" }}>
-                  {v.subhead}
-                </p>
-              )}
-              <div className={`hero-in ${styles.heroForm}`} style={{ ["--d" as string]: "400ms" }}>
-                <HeroSignup mode={mode} v={v} reservations={reservations} />
+
+                {/* One persistent form keeps the same action and entered email across chapters. */}
+                <div className={styles.storySignup}>
+                  <HeroSignup mode={mode} v={v} reservations={reservations} />
+                </div>
               </div>
-            </Fade>
 
-            {/* Chapter 2: the work that calls for sustained thinking. */}
-            <Fade progress={p} range={[0.17, 0.23, 0.4, 0.45]} className={styles.copy}>
-              <h2 className={`headline ${styles.title}`}>
-                {productStory.work.headline.map((line, i) => (
-                  <span key={line} className={i === 0 ? "block" : "soft block"}>{line}</span>
-                ))}
-              </h2>
-              <ul role="list" className={styles.outcomes}>
-                {productStory.work.examples.map((example, i) => (
-                  <Rise key={example} progress={p} at={0.25 + i * 0.05}>
-                    <p className={styles.itemTitle}>{example}</p>
-                  </Rise>
-                ))}
-              </ul>
-            </Fade>
+              {/* The pair moves onto the mannequin; further scrolling progressively lights the surface fibres. */}
+              <div className={styles.flight}>
+                <motion.div className={styles.media} data-product-model={failed || !modelUrl ? "fallback" : ready ? "loaded" : "loading"}>
+                  {!failed && modelUrl && <StageScene progress={p} readProgress={readProgress} modelUrl={modelUrl} onReady={onReady} onLoading={onLoading} onError={onError} />}
+                  {posterUrl && <Image src={posterUrl} alt="" fill sizes="50vw" quality={95} priority className={styles.poster} data-ready={ready || undefined} />}
+                  {!ready && !failed && modelUrl && <ModelLoadingNotice />}
+                  {failed && modelUrl && <ModelRecoveryNotice onRetry={retry} />}
+                </motion.div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-            {/* Chapter 3: how it works. */}
-            <Fade progress={p} range={[0.46, 0.51, 0.68, 0.72]} className={styles.copy}>
-              <p className={styles.eyebrow}>How it works</p>
-              <h2 className={`headline ${styles.title}`}>
-                {productStory.technology.headline.map((line, i) => (
-                  <span key={line} className={i === 0 ? "block" : "soft block"}>{line}</span>
-                ))}
-              </h2>
-              <p className={styles.lede}>{productStory.technology.description}</p>
-              <ol role="list" className={styles.beats}>
-                {productStory.technology.steps.map((b, i) => (
-                  <Highlight key={b.title} progress={p} start={0.52 + i * 0.055} end={0.52 + (i + 1) * 0.055}>
-                    <h3 className={styles.itemTitle}>{b.title}</h3>
-                    <p className={styles.itemLine}>{b.line}</p>
-                  </Highlight>
-                ))}
-              </ol>
-            </Fade>
+        <div ref={appSection} className={styles.appSection}>
+          <AppPreview />
+        </div>
 
-            {/* Chapter 4: the live signal illustration. */}
-            <Fade progress={p} range={[0.73, 0.77, 0.85, 0.86]} className={styles.copy}>
-              <h2 className={`headline ${styles.title}`}>
-                <span className="block">Follow</span>
-                <span className="soft block">the signal.</span>
-              </h2>
-              <p className={styles.lede}>
-                Sound, sensing and gentle stimulation come together at the ear.
-              </p>
-            </Fade>
-
-            {/* The pair moves onto the mannequin; further scrolling progressively lights the surface fibres. */}
-            <div className={styles.flight}>
-              <motion.div className={styles.media} data-product-model={failed || !modelUrl ? "fallback" : ready ? "loaded" : "loading"}>
-                {!failed && modelUrl && <StageScene progress={p} readProgress={readProgress} modelUrl={modelUrl} onReady={onReady} onLoading={onLoading} onError={onError} />}
-                {posterUrl && <Image src={posterUrl} alt="" fill sizes="50vw" quality={95} priority className={styles.poster} data-ready={ready || undefined} />}
-                {!ready && !failed && modelUrl && <ModelLoadingNotice />}
-                {failed && modelUrl && <ModelRecoveryNotice onRetry={retry} />}
+        <div ref={closingTrack} className={styles.closingTrack}>
+          <span data-nav-dark-start className={`${styles.anchor} ${styles.closingThemeAnchor}`} aria-hidden="true" />
+          <div className={styles.stage}>
+            {/* Only the portrait pins here; the app above remains in normal flow. */}
+            <div className={styles.closingPane}>
+              <ClosingCopy variant={v.id} />
+              <motion.div className={styles.closingReveal} style={{ clipPath: closingClip }} aria-hidden="true" inert>
+                <ClosingCopy variant={v.id} visualOnly />
               </motion.div>
             </div>
-            <motion.p className={styles.caption} style={{ opacity: introCaptionOpacity }}>
-              {`Scroll to explore ${site.product}`}
-            </motion.p>
-          </motion.div>
-
-          {/* Chapter 5 enters beside the portrait, with light ink only inside the expanding image. */}
-          <motion.div className={styles.closingPane} style={{ y: sceneY, visibility: sceneVisibility }}>
-            <ClosingCopy reservations={reservations} cta={v.primaryCta} />
-            <motion.div className={styles.closingReveal} style={{ clipPath: closingClip }} aria-hidden="true" inert>
-              <ClosingCopy reservations={reservations} cta={v.primaryCta} visualOnly />
-            </motion.div>
-          </motion.div>
+          </div>
         </div>
       </div>
 

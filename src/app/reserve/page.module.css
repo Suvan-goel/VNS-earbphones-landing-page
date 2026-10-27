@@ -1,96 +1,70 @@
-.layout { width: 100%; max-width: 960px; }
+.layout { width: 100%; max-width: 448px; }
 
 .panel {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  overflow: hidden;
-  border: 1px solid #dedee3;
-  border-radius: 20px;
+  min-width: 0;
+  padding: 28px 32px;
+  border: 1px solid #e5e5e9;
+  border-radius: 24px;
   background: #fff;
-  box-shadow: 0 14px 40px -28px #20202b30, 0 2px 6px #20202b03;
+  box-shadow: 0 8px 32px -16px #1d1d1f12;
 }
-
-.summary { padding: 40px; background: #f0f0f2; }
-.eyebrow {
-  color: #686870;
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  line-height: 1.4;
-  text-transform: uppercase;
-}
+.summary { min-width: 0; text-align: center; }
 .title {
-  margin-top: 12px;
+  margin-top: 16px;
   font-size: 2.5rem;
   font-weight: 500;
-  letter-spacing: -0.045em;
-  line-height: 1.12;
+  letter-spacing: -0.05em;
+  line-height: 1.08;
+  text-wrap: balance;
 }
-.subtitle { margin-top: 12px; color: #626269; font-size: 0.9375rem; line-height: 1.5; }
-
-.visual { position: relative; height: 182px; margin: 10px 0 24px; }
+.subtitle { max-width: 310px; margin: 14px auto 0; color: #6b6b72; font-size: 0.9375rem; line-height: 1.6; text-wrap: balance; }
+.subtitle strong { color: #303036; font-weight: 500; }
+.subtitle span { display: block; }
+.visual {
+  position: relative;
+  height: 116px;
+  overflow: hidden;
+  mask-image: linear-gradient(#000 58%, transparent 100%);
+}
 .visual img {
   display: block;
-  width: 280px;
-  height: 182px;
-  max-width: 100%;
+  width: 220px;
+  height: 220px;
+  max-width: none;
   margin-inline: auto;
   object-fit: cover;
-  object-position: center 38%;
-  mask-image: linear-gradient(#000 70%, transparent 98%);
+  transform: translateY(-34px);
 }
-
-.deposit {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  padding-top: 24px;
-  border-top: 1px solid #dcdce1;
-}
-.depositLabel { font-size: 0.875rem; font-weight: 500; line-height: 1.4; }
-.refundable { margin-top: 5px; color: #626269; font-size: 0.8125rem; line-height: 1.5; }
-.amount { flex-shrink: 0; font-size: 2rem; font-weight: 500; letter-spacing: -0.045em; line-height: 1; text-align: right; }
-.amount span { display: block; margin-top: 8px; color: #6d6d75; font-size: 0.625rem; font-weight: 500; letter-spacing: 0.08em; }
-
-.benefits { display: grid; gap: 10px; margin-top: 24px; color: #49494f; font-size: 0.8125rem; line-height: 1.5; }
-.benefits li { display: flex; align-items: flex-start; gap: 9px; }
-.benefits svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; color: #565c55; }
-.details { margin-top: 22px; color: #686870; font-size: 0.8125rem; line-height: 1.6; }
-
-.checkout { display: flex; align-items: center; padding: 40px; border-left: 1px solid #e3e3e7; }
-.checkoutInner { width: 100%; }
+.checkout { min-width: 0; margin-top: 28px; }
+.details { margin-top: 20px; color: #74747b; font-size: 0.75rem; line-height: 1.7; text-align: center; text-wrap: pretty; }
+.details a { text-decoration: underline; text-underline-offset: 3px; }
 .formTitle { font-size: 1.25rem; font-weight: 500; line-height: 1.4; letter-spacing: -0.025em; }
-.formIntro { margin: 8px 0 30px; color: #686870; font-size: 0.875rem; line-height: 1.6; }
-.notice { margin-bottom: 24px; padding: 12px 14px; border: 1px solid #e2e2e6; border-radius: 8px; background: #f7f7f8; color: #4c4c54; font-size: 0.8125rem; line-height: 1.6; }
-
-.waitlist { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 7px; margin-top: 24px; color: #686870; font-size: 0.8125rem; line-height: 1.6; }
-.waitlist a { color: #36363b; font-weight: 500; }
-.waitlist a:hover { text-decoration: underline; text-underline-offset: 4px; }
-.waitlist span { padding-left: 4px; }
-
-@media (max-width: 839px) {
-  .summary, .checkout { padding: 32px; }
-  .title { font-size: 2.125rem; }
-  .deposit { gap: 12px; }
+.waitlistForm { margin-top: 22px; }
+.waitlistForm [data-placement="hero"] {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
+.waitlistForm [data-placement="hero"] input[type="email"] { height: 52px; border: 1px solid #cfcfd6; border-radius: 12px; background: #fff; }
+.waitlistForm [data-placement="hero"] input[type="email"]:focus-visible { outline: 2px solid #62626b; outline-offset: 2px; }
+.waitlistForm [data-placement="hero"] input[aria-invalid="true"] { border-color: #a33d2b; }
+.waitlistForm [data-placement="hero"] button[type="submit"] { height: 52px; border-radius: 12px; }
+.notice { margin-bottom: 24px; padding: 12px 14px; border: 1px solid #e2e2e6; border-radius: 8px; background: #fafafa; color: #4c4c54; font-size: 0.8125rem; line-height: 1.6; }
+.waitlist { margin-top: 16px; text-align: center; font-size: 0.75rem; line-height: 1.6; }
+.waitlist a { display: inline-flex; min-height: 44px; align-items: center; color: #626269; text-decoration: underline; text-decoration-color: #c9c9ce; text-underline-offset: 4px; }
+.waitlist a:hover { text-decoration: underline; text-underline-offset: 4px; }
 
-@media (max-width: 699px) {
-  .layout { max-width: 480px; }
-  .panel { grid-template-columns: 1fr; border-radius: 16px; }
-  .summary, .checkout { padding: 28px; }
-  .summary { position: relative; }
-  .visual { display: none; }
-  .title { margin-top: 10px; }
-  .subtitle { margin-top: 10px; font-size: 0.875rem; }
-  .deposit { margin-top: 24px; padding-top: 22px; }
-  .benefits { margin-top: 20px; gap: 8px; }
-  .details { margin-top: 16px; }
-  .checkout { border-top: 1px solid #dedee3; border-left: 0; }
-  .formIntro { margin-bottom: 24px; }
+@media (max-width: 599px) {
+  .panel { padding: 20px; border-radius: 20px; }
+  .title { font-size: 2.25rem; }
+  .checkout { margin-top: 24px; }
 }
 
 @media (max-width: 359px) {
-  .summary, .checkout { padding: 24px; }
-  .refundable { max-width: 160px; }
+  .panel { padding: 18px 10px 22px; }
+  .title { font-size: 2rem; }
 }

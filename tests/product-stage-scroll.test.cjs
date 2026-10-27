@@ -9,7 +9,14 @@ const source = fs.readFileSync(path.join(__dirname, "../src/lib/product-stage-sc
 const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText;
 const moduleContext = { exports: {} };
 vm.runInNewContext(compiled, moduleContext);
-const { productStageProgress, readProductStageProgress } = moduleContext.exports;
+const {
+  STORY_SCROLL_SCREENS,
+  PORTRAIT_ENTRY_START,
+  MODEL_SCROLL_SCREENS,
+  CLOSING_SCROLL_SCREENS,
+  productStageProgress,
+  readProductStageProgress,
+} = moduleContext.exports;
 const near = (actual, expected) => assert.ok(Math.abs(actual - expected) < 1e-9, `${actual} != ${expected}`);
 
 test("a late scene reads the restored page position without a scroll event", () => {
@@ -38,12 +45,48 @@ test("hidden or unmounted layouts cannot create bogus progress", () => {
   assert.equal(readProductStageProgress(track, null), null);
 });
 
-test("the existing portrait entry holds the model, then resumes the closing chapter", () => {
-  near(productStageProgress(4.42), 0.85);
-  near(productStageProgress(4.92), 0.85);
-  near(productStageProgress(5.42), 0.85);
-  near(productStageProgress(5.68), 0.9);
-  near(productStageProgress(6.2), 1);
-  near(productStageProgress(10), 1);
-  near(productStageProgress(-2), 0);
+test("the two pinned tracks retain the original model and closing scroll distances", () => {
+  near(MODEL_SCROLL_SCREENS, 4.42);
+  near(CLOSING_SCROLL_SCREENS, 0.78);
+  near(MODEL_SCROLL_SCREENS + CLOSING_SCROLL_SCREENS, STORY_SCROLL_SCREENS);
+  near(MODEL_SCROLL_SCREENS / STORY_SCROLL_SCREENS, PORTRAIT_ENTRY_START);
+});
+
+test("the original story timing is unchanged throughout the model track", () => {
+  for (const [distance, progress] of [[0, 0], [1.3, 0.25], [2.6, 0.5], [3.9, 0.75], [4.42, 0.85]]) {
+    near(productStageProgress(distance), progress);
+  }
+});
+
+test("the model holds its final pose after its track regardless of later page length", () => {
+  for (const distance of [4.42, 4.92, 5.42, 7.68, 8.2, 10, 100]) {
+    near(productStageProgress(distance), 0.85);
+  }
+});
+
+test("restoring below the model clamps its pose and resizing samples the new geometry", () => {
+  const stage = { clientHeight: 800 };
+  let top = -6 * stage.clientHeight;
+  const track = { getBoundingClientRect: () => ({ top }) };
+  near(readProductStageProgress(track, stage), 0.85);
+  stage.clientHeight = 1000;
+  near(readProductStageProgress(track, stage), 0.85);
+  top = -3.9 * stage.clientHeight;
+  near(readProductStageProgress(track, stage), 0.75);
+  stage.clientHeight = 1200;
+  near(readProductStageProgress(track, stage), 0.625);
+});
+
+test("scrolling back from later sections restores every model pose without retained state", () => {
+  const distances = [0, 1.3, 2.6, 3.9, 4.42, 5.42, 8.2];
+  const forward = distances.map((distance) => productStageProgress(distance));
+  for (let index = distances.length - 1; index >= 0; index -= 1) {
+    near(productStageProgress(distances[index]), forward[index]);
+  }
+});
+
+test("invalid scroll distances leave the initial story visible", () => {
+  for (const distance of [-1, NaN, Infinity, -Infinity]) {
+    near(productStageProgress(distance), 0);
+  }
 });

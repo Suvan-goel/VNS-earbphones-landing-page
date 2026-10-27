@@ -1,0 +1,29 @@
+{
+  "source": "/Users/suvangoel/VNS-earbuds-site/public/models/cymba-neural-mannequin-organic.glb",
+  "destination": "/Users/suvangoel/VNS-earbuds-site/public/models/cymba-neural-mannequin-organic-detailed.glb",
+  "sourceSha256": "bc32ed6c0507abddfd08c3ea4c40a5aa2a4bffa5cf8f02f201dd42acecb8f2ab",
+  "sha256": "157a36c28e75df10c3ab52214d421033dcdaf4f10fec255356bedbb87335d687",
+  "sourceBytes": 3840372,
+  "bytes": 3880596,
+  "paths": 1129,
+  "rings": 22335,
+  "sourceFibreVertices": 156345,
+  "fibreVertices": 134010,
+  "fibreTriangles": 254472,
+  "meshes": 2,
+  "materials": 2,
+  "mainRadiusScale": 1.55,
+  "fineRadiusScale": 1.3,
+  "appliedScaleRange": [
+    1.2312047099833756,
+    1.666440588848427
+  ],
+  "maxVertexDisplacement": 0.005070921363779659,
+  "maxUvError": 5.364418029785156e-7,
+  "headGeometryAndAllTexturesByteIdentical": true,
+  "originalGlbUnchanged": true,
+  "originalBlendUnchanged": "Not opened or written",
+  "centreLinesUnchangedBeforeCompression": true,
+  "topologyUnchanged": true,
+  "notes": "UV.x remains inherited growth distance, UV.y remains fibre energy. Identical seam vertices are welded by Draco after normal averaging. No new branches or render passes."
+}

@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import type { Metadata } from "next";
-import { closingLine, defaultVariant, heroVariants, reservation, type HeroVariant } from "@/config/site";
+import { defaultVariant, heroVariants, reservation, type HeroVariant } from "@/config/site";
 import { storageMode } from "@/lib/storage";
 import { reservationsOpen } from "@/lib/stripe";
 import { Nav } from "@/components/Nav";
@@ -19,6 +19,8 @@ import { Research } from "@/components/sections/Research";
 import { Glance } from "@/components/sections/Glance";
 import { Worn } from "@/components/sections/Worn";
 import { HowItWorks } from "@/components/sections/HowItWorks";
+import { Evidence } from "@/components/sections/Evidence";
+import { AppPreview } from "@/components/sections/AppPreview";
 import heroPoster from "../../public/models/cymba-earbuds-hero-poster.webp";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
@@ -65,7 +67,7 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
       </a>
       <Nav cta={reservations ? reservation.navCta : v.primaryCta} ctaHref={reservations ? reservation.path : "#signup"} />
       <main id="main">
-        {/* Desktop: one pinned product stage carries the first three chapters. Phones and reduced motion get the stacked sections. */}
+        {/* The pinned product story has a stacked alternative for shorter screens and reduced motion. */}
         <ProductStage
           mode={mode}
           v={v}
@@ -75,9 +77,11 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
           fallback={
             <>
               <Hero mode={mode} v={v} modelUrl={modelUrl} posterUrl={posterUrl} reservations={reservations} />
-              <ProductReveal />
-              <HowItWorks modelUrl={modelUrl} posterUrl={posterUrl} />
-              <Worn cta={reservations ? reservation.cta : v.primaryCta} href={reservations ? reservation.path : "#signup"} line={closingLine(reservations)} />
+              <ProductReveal modelUrl={modelUrl} posterUrl={posterUrl} variant={v.id} />
+              <HowItWorks modelUrl={modelUrl} posterUrl={posterUrl} variant={v.id} />
+              <Evidence modelUrl={modelUrl} posterUrl={posterUrl} variant={v.id} />
+              <AppPreview />
+              <Worn variant={v.id} />
             </>
           }
         />

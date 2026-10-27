@@ -47,7 +47,14 @@ function lines(stream, callback) {
 async function checkLocalResources() {
   await new Promise((resolve, reject) => {
     const probe = net.createServer();
-    probe.once("error", () => reject(new Error("Port 3015 is already in use. Stop the previous local reservation server first.")));
+    probe.once("error", (error) => {
+      const message = error.code === "EADDRINUSE"
+        ? "Port 3015 is already in use. Stop the previous local reservation server first."
+        : error.code === "EPERM" || error.code === "EACCES"
+          ? "Permission to listen on 127.0.0.1:3015 was denied. Allow local network access before starting reservation checkout."
+          : `Could not check local reservation port 3015 (${error.code ?? "unknown error"}).`;
+      reject(new Error(message));
+    });
     probe.listen(3015, "127.0.0.1", () => probe.close(resolve));
   });
   const lockPath = path.join(root, ".data/reservations-test-db.lock");
@@ -69,7 +76,7 @@ try {
   const config = await localConfig();
   await checkLocalResources();
   if (stopping) process.exit(process.exitCode ?? 0);
-  const env = isolatedEnv(config.key);
+  const env = isolatedEnv(config.key, config.publishableKey);
   console.log(`cymba local checkout · Stripe sandbox ${config.accountId}`);
   console.log(`Test payments only. Local database. ${config.expiresAt ? `Temporary sandbox expires ${config.expiresAt}.` : "Claimed sandbox."}`);
   console.log("Connecting Stripe webhook forwarding…");

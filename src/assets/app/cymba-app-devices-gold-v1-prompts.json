@@ -1,0 +1,9 @@
+{
+  "mode": "built-in image_gen",
+  "use_case": "precise-object-edit",
+  "created_at": "2026-10-27",
+  "reference": "/Users/suvangoel/VNS-earbuds-site/src/assets/app/cymba-app-devices-concept-v2.png",
+  "prompt": "Use case: precise-object-edit. This is a colour-replacement edit only of the attached approved cymba paired laptop-and-phone mockup.\nChange ONLY the purple/lavender UI accent pixels into a coordinated warm, muted champagne-gold / bronze palette, with the primary light-gold accent approximately #c8ad78. Apply consistently to both device screens: Pause buttons, selected Session sidebar and bottom navigation icons/highlights, Brain activity waveform, the small waveform in the laptop session timeline, Stimulation timeline segments and legend, and weekly session bar chart. Darker translucent selected backgrounds should become subtle deep bronze; brighter purple controls and traces should become readable light champagne gold. Keep black button text legible.\nStrict invariants: preserve the exact original paired composition, laptop and phone positions, device geometry, perspective, screen layout, panel sizes, original 1536-by-1024 landscape dimensions, white background, lighting, contact shadows and all text/data/labels. Keep EVERY cyan/teal pulse trace and status indicator unchanged. Keep white and grey typography unchanged. Keep the dark charcoal interface unchanged. Keep all curves, waveform shapes, numbers and chart bar heights unchanged. Do not move or crop anything. No redesign, no added features, no content changes, no new text, no watermark. The only visible difference from the reference should be replacing all purple/lavender accents with champagne gold.",
+  "output": "/Users/suvangoel/VNS-earbuds-site/src/assets/app/cymba-app-devices-gold-v1.png",
+  "source": "/Users/suvangoel/.codex/generated_images/01a17adc-0fbc-78a0-b686-fcd5843c99ac/exec-aa8f09b4-4816-4ed1-83b0-f7f8dc60f1f5.png"
+}

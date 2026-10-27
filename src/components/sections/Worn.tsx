@@ -1,11 +1,11 @@
 import Image from "next/image";
 import listeningScene from "@/assets/earbuds/listening-portrait-selected-retouch-v2.webp";
 import listeningExtension from "@/assets/earbuds/listening-portrait-studio-grey-wide-v3.webp";
-import { closingHeadline, site } from "@/config/site";
+import { closingCta, closingHeadline, reservation, site, type HeroVariant } from "@/config/site";
 import styles from "./Worn.module.css";
 
 /* The ending of the desktop story as a single frame, for the stacked layout. */
-export function Worn({ cta, href = "#signup", line }: { cta: string; href?: string; line: string }) {
+export function Worn({ variant }: { variant: HeroVariant["id"] }) {
   return (
     <section aria-labelledby="worn-title" data-nav-dark-start className={styles.section}>
       <div className={styles.extensionTail} style={{ borderImageSource: `url(${listeningExtension.src})` }} aria-hidden="true" />
@@ -28,10 +28,14 @@ export function Worn({ cta, href = "#signup", line }: { cta: string; href?: stri
           <span className="block">{closingHeadline[0]}</span>
           <span className={`block ${styles.soft}`}>{closingHeadline[1]}</span>
         </h2>
-        <p className={styles.lede}>{line}</p>
-        <a href={href} data-cta="worn" className={`btn-primary ${styles.cta}`}>
-          {cta}
-        </a>
+        <div className={styles.actions}>
+          <a href="#signup" data-cta="worn" className={`btn-primary ${styles.cta}`}>
+            {closingCta}
+          </a>
+          <a href={`${reservation.path}?v=${variant}`} data-cta="worn_reserve" className={styles.reserve}>
+            Reserve yours <span aria-hidden="true">→</span>
+          </a>
+        </div>
       </div>
     </section>
   );

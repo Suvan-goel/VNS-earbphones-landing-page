@@ -3,6 +3,7 @@ import { reservation, site } from "@/config/site";
 import { lookupReservation, type ReservationRow, type ReservationStatus } from "@/lib/storage";
 import { PREVIEW_SESSION_PREFIX, localReservationTestMode, previewMode } from "@/lib/stripe";
 import { ReservationShell } from "@/components/ReservationShell";
+import { ReservationStatusRefresh } from "@/components/ReservationStatusRefresh";
 import styles from "./status.module.css";
 
 export const metadata: Metadata = {
@@ -118,6 +119,7 @@ export default async function ReserveComplete({ searchParams }: { searchParams: 
 
   return (
     <ReservationShell>
+      {(outcome.kind === "pending" || outcome.kind === "processing") && <ReservationStatusRefresh key={sessionId} />}
       <div className={styles.layout}>
         <section className={styles.card} aria-labelledby="reservation-status-title">
           {demo && <p className={styles.previewNotice}><strong>Demo result</strong> No payment was taken and no real place has been reserved.</p>}

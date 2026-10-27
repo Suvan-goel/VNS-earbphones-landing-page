@@ -1,6 +1,38 @@
 The local hero uses a two-earbud presentation:
 
-- cymba-neural-mannequin-premium.glb: active mannequin, about 1.2 MB.
+- cymba-neural-mannequin-organic-detailed.glb: active mannequin, about 3.9 MB.
+  Original organic network with fuller tapered fibres, subtle variations in
+  bundle thickness and smooth seam normals. Existing 1,129 paths, growth UVs,
+  head geometry and texture bytes are preserved; no added triangles or draws.
+  Rebuild: node output/neural-mannequin/refine_organic_fibres.mjs
+  Validation: output/neural-mannequin/organic-fibres-detailed-report.json.
+  Original organic GLB and editable Blender source are retained unchanged.
+- cymba-sculpture-ao.png: 1024px, 368 KB linear cavity occlusion baked from
+  the active head's exact UV0; fibres and earbuds are excluded from the bake.
+  Rebuild: Blender --background --python output/neural-mannequin/bake_sculpture_occlusion.py
+  Validation: output/neural-mannequin/sculpture-occlusion-report.json.
+  Mannequin.tsx combines it with fine stone grain, restrained satin
+  highlights and reduced environment fill. The head alone casts/receives the
+  studio key's 1024px self-shadow; its geometry and fibre alignment are unchanged.
+- cymba-sculpture-stone-normal.png and cymba-sculpture-stone-roughness.png:
+  active surface treatment, adapted from Poly Haven's CC0 "Marble 01" by
+  Rob Tuytel (https://polyhaven.com/a/marble_01). A tile-interior patch of
+  the downloaded surface maps is baked onto the exact head UV0, preserving
+  geometry and fibre alignment. Uniform white base colour; no albedo map,
+  grey veins or tile joints. Linear OpenGL normal and roughness maps use
+  flipY=false. Original downloads are in assets/sculpture-surface/marble_01.
+  Normal map: 2048px, 2.63 MB; roughness: 1024px, 320 KB, range 0.46-0.58.
+  Rebuild: Blender --background --python output/neural-mannequin/bake_sculpture_stone.py
+  Validation: output/neural-mannequin/sculpture-stone-report.json.
+- cymba-sculpture-marble-color.jpg and cymba-sculpture-marble-roughness.png:
+  retained previous treatment, no longer displayed. Carrara-style mineral veins
+  baked onto the same head UV0, with
+  cool white stone, grey mineral variation and a satin-polished finish.
+  Albedo is 2048px sRGB; roughness is 1024px linear grayscale. Both use
+  flipY=false. AO, head geometry and neural fibre geometry are preserved.
+  Rebuild: Blender --background --python output/neural-mannequin/bake_sculpture_marble.py
+  Validation: output/neural-mannequin/sculpture-marble-report.json.
+- cymba-neural-mannequin-premium.glb: retained previous mannequin, about 1.2 MB.
   User-supplied Meshy sculpture with clean Blender-baked ivory marble and
   continuous 3D neural filaments traced from its original cranial pattern.
   Finer posterior and neck curves; two mesh/material draws, Draco geometry.
@@ -40,7 +72,7 @@ Mannequin.tsx, then rotates the head and fitted earbuds through only 45 degrees
 in total, finishing at a slight angle to the front.
 One continuous scroll curve keeps the rotation in the same direction during
 the earbud landing and stimulation chapters, then holds the final angle.
-The closed, opaque head uses Blender-baked ivory marble. Purple highlights
+The closed, opaque head uses white stone with baked surface relief. Purple highlights
 progressively illuminate from the ears/neck to the crown as scroll advances
 through 36–84% of the stage. A smooth ear-centred leading wave settles into steady violet radiance,
 with a short damped response to scrolling and a reversible reveal.

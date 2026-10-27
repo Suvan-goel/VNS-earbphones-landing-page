@@ -6,6 +6,7 @@ import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useMotionValue, type MotionValue } from "motion/react";
 import { Mannequin } from "./Mannequin";
+import { EarSensingCue } from "./EarSensingCue";
 import { smoothEarbudNormals } from "./smoothEarbudNormals";
 import sleeveRim from "./earbudSleeveRim.json";
 import { preloadMannequin } from "./productAssets";
@@ -224,9 +225,9 @@ function EarbudPair({ modelUrl, progress }: { modelUrl: string; progress: Motion
     const p = progress.get();
     // Start and finish with zero acceleration. Overlap the final approach
     // with the flight so the earbuds glide into place without stopping first.
-    const shrink = THREE.MathUtils.smootherstep(p, 0.14, 0.44);
-    const travel = THREE.MathUtils.smootherstep(p, 0.14, 0.46);
-    const seat = THREE.MathUtils.smootherstep(p, 0.40, 0.56);
+    const shrink = THREE.MathUtils.smootherstep(p, 0.14, 0.39);
+    const travel = THREE.MathUtils.smootherstep(p, 0.14, 0.42);
+    const seat = THREE.MathUtils.smootherstep(p, 0.35, 0.46);
     // Begin with a small hero turn, carry most of the rotation through the
     // flight, then finish aligning the nozzles as the earbuds slide into place.
     const lead = Math.sin(THREE.MathUtils.clamp(p / 0.16, 0, 1) * Math.PI / 2);
@@ -238,12 +239,14 @@ function EarbudPair({ modelUrl, progress }: { modelUrl: string; progress: Motion
       // Turn the mirrored pair in flight and exchange sides so the
       // silicone nozzles point into the canals as they settle. The two
       // paths pass in front of the face at different heights and depths.
+      // Clear the nose and chin before the cables descend; the mannequin's
+      // depth pass is active even while its marble surface is fading in.
       // Finish lower, slightly inward, and toward the face (+Z) to seat the tips in the canals.
       group.position.set(
         sign * (THREE.MathUtils.lerp(0.60, -1.46, travel) + 0.34 * seat),
         THREE.MathUtils.lerp(index === 0 ? 0.04 : 0.78, -0.06, travel) + arc * 0.12 - 0.06 * seat,
         THREE.MathUtils.lerp(
-          THREE.MathUtils.lerp(index === 0 ? 0 : -0.05, 0.36, travel) + arc * (index === 0 ? 1.3 : 1.1),
+          THREE.MathUtils.lerp(index === 0 ? 0 : -0.05, 0.36, travel) + arc * (index === 0 ? 2.3 : 2.1),
           0.15, seat,
         ),
       );
@@ -275,17 +278,32 @@ export function EarbudExperience({ modelUrl, progress, mannequinGate }: {
   const reveal = useMotionValue(0);
   const stimulation = useMotionValue(0);
   const target = useRef(new THREE.Vector3());
+  const framingZoom = useRef(1);
+  useEffect(() => {
+    // Use the page breakpoint: desktop canvases also occupy a narrow column.
+    const mobile = window.matchMedia("(max-width: 1023px)");
+    const updateFraming = () => { framingZoom.current = mobile.matches ? 1.15 : 1; };
+    updateFraming();
+    mobile.addEventListener("change", updateFraming);
+    return () => mobile.removeEventListener("change", updateFraming);
+  }, []);
   useFrame(({ camera, size }) => {
+    // Enlarge the whole scene together, preserving the earbuds' fit on the head.
+    if (camera.zoom !== framingZoom.current) {
+      camera.zoom = framingZoom.current;
+      camera.updateProjectionMatrix();
+    }
     const p = progress.get();
-    const worn = THREE.MathUtils.smootherstep(p, 0.14, 0.56);
+    const worn = THREE.MathUtils.smootherstep(p, 0.14, 0.46);
     // Let the product lead the turn before bringing in the mannequin.
-    reveal.set(ease(0.32, 0.52, p));
-    // Build the signal throughout the turn, reaching the crown at the end.
-    stimulation.set(ease(0.54, 0.84, p));
+    reveal.set(ease(0.27, 0.46, p));
+    // Give sensing its own quiet beat, then grow the signal toward the crown.
+    // Hold the completed signal while the research chapter is shown.
+    stimulation.set(ease(0.57, 0.71, p));
     if (presentation.current) {
       // Rotate only 45 degrees in total, then hold that pose.
       // The slower opening keeps the face visible while the pair settles in.
-      presentation.current.rotation.y = -THREE.MathUtils.degToRad(45) * ease(0.28, 0.84, p) ** 1.7;
+      presentation.current.rotation.y = -THREE.MathUtils.degToRad(45) * ease(0.28, 0.74, p) ** 1.7;
     }
     const frameHeight = THREE.MathUtils.lerp(4.7, 5.9, worn);
     const frameWidth = THREE.MathUtils.lerp(4.2, 4.5, worn);
@@ -299,6 +317,7 @@ export function EarbudExperience({ modelUrl, progress, mannequinGate }: {
     <Suspense fallback={<AssetLoading />}>
       {mannequinGate}
       <Mannequin reveal={reveal} stimulation={stimulation} />
+      <EarSensingCue progress={progress} reveal={reveal} />
     </Suspense>
   </group>;
 }

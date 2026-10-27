@@ -1,0 +1,29 @@
+{
+  "source": "public/models/cymba-neural-mannequin-organic-detailed.glb",
+  "sourceSha256": "157a36c28e75df10c3ab52214d421033dcdaf4f10fec255356bedbb87335d687",
+  "texture": "public/models/cymba-sculpture-ao.png",
+  "textureSha256": "eee221d8f17c80abd742c36e81ec8a526bcb2a5a57ddafc8978b77d2aad62f90",
+  "bytes": 367987,
+  "resolution": [
+    1024,
+    1024
+  ],
+  "channels": "RGB, equal linear grayscale values",
+  "colorSpace": "Non-Color / THREE.NoColorSpace",
+  "flipY": false,
+  "uvChannel": 0,
+  "aoDistance": 0.28,
+  "aoSamples": 64,
+  "cyclesSamples": 16,
+  "marginPixels": 16,
+  "headVertices": 68767,
+  "headTriangles": 115923,
+  "geometryAndUvSha256": "9dd58cc64523c57c68808a1da4b8f31eec6369324d2428c2299bbc605c07d67a",
+  "uvSha256": "33b467442726f3cbe254388d50a9f16dcc766507affa10a7157a3e81796760ce",
+  "geometryAndUvsUnchanged": true,
+  "originalGlbUnchanged": true,
+  "excludedObjects": [
+    "Purple_Surface_Nerve_Fibres"
+  ],
+  "notes": "Head-only short-range cavity AO. No fibre or earbud shadows. Baked directly from the active Draco GLB with its original UV0. No source or authoring asset was written."
+}

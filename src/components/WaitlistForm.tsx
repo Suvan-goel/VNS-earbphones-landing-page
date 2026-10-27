@@ -116,7 +116,8 @@ export function WaitlistForm({
   const busy = phase.k === "submitting";
   const errId = `${id}-err`;
   const noteId = `${id}-note`;
-  const descriptionId = [phase.k === "error" ? errId : null, noteId].filter(Boolean).join(" ");
+  const showNote = mode === "demo";
+  const descriptionId = [phase.k === "error" ? errId : null, showNote ? noteId : null].filter(Boolean).join(" ") || undefined;
 
   return (
     <form onSubmit={onSubmit} noValidate aria-label={cta} aria-busy={busy}>
@@ -177,13 +178,11 @@ export function WaitlistForm({
         )}
       </div>
 
-      <p id={noteId} className="mt-3 text-center text-xs leading-relaxed text-muted">
-        {!compact && "Unsubscribe anytime. "}
-        <a href="/privacy" className="decoration-muted/35 underline underline-offset-[3px] transition-colors hover:text-ivory">
-          Privacy
-        </a>
-        {mode === "demo" && <DemoNotice compact={compact} />}
-      </p>
+      {showNote && (
+        <p id={noteId} className="mt-3 text-center text-xs leading-relaxed text-muted">
+          <DemoNotice compact={compact} />
+        </p>
+      )}
     </form>
   );
 }

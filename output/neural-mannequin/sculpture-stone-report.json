@@ -1,0 +1,70 @@
+{
+  "source": "public/models/cymba-neural-mannequin-organic-detailed.glb",
+  "sourceSha256": "157a36c28e75df10c3ab52214d421033dcdaf4f10fec255356bedbb87335d687",
+  "downloadedSource": "Poly Haven marble_01 (CC0), downloaded displacement and roughness maps",
+  "sourceFiles": {
+    "public/models/cymba-neural-mannequin-organic-detailed.glb": "157a36c28e75df10c3ab52214d421033dcdaf4f10fec255356bedbb87335d687",
+    "assets/sculpture-surface/marble_01/marble_01_disp_2k.png": "d27d667db4e63e49c109f1afe74c00fcc7d9f579af8d611a441380985ab11587",
+    "assets/sculpture-surface/marble_01/marble_01_rough_2k.png": "c7a83a393227ba62104e51c0ea2cd38413538e7d71e1e543360a53946a8047d4"
+  },
+  "sourceUrl": "https://polyhaven.com/a/marble_01",
+  "cropPixels": [
+    160,
+    60,
+    490,
+    390
+  ],
+  "cropAvoidsTileEdges": true,
+  "sourceStatistics": {
+    "cropHeightDetailStd": 0.0026874728570426007,
+    "cropRoughnessDetailStd": 0.004461075650646944,
+    "heightOutputStd": 0.06585804790572605,
+    "roughnessOutputStd": 0.01704215395287598
+  },
+  "processing": "Interior crop; remove broad height slope; retain real fine grain; mirror-repeat crop to avoid seams. Height normalized to0.07std and softly filtered. No synthetic procedural noise, no albedo map, no painted veins.",
+  "projection": "World-space box projection, blend0.35, rotated consistently, baked back to originalUV0",
+  "repeatDensityPerSceneUnit": 0.6,
+  "bumpDistance": 0.014,
+  "bumpStrength": 0.75,
+  "normalTexture": {
+    "path": "public/models/cymba-sculpture-stone-normal.png",
+    "sha256": "fbb14961b38f71582f1eefc46d22b023e2289ce8196a816c4c277c01e786734b",
+    "bytes": 2628947,
+    "resolution": [
+      2048,
+      2048
+    ],
+    "colorSpace": "THREE.NoColorSpace",
+    "flipY": false,
+    "uvChannel": 0,
+    "bakeType": "NORMAL"
+  },
+  "roughnessTexture": {
+    "path": "public/models/cymba-sculpture-stone-roughness.png",
+    "sha256": "df993c68e7693699d0b7d5a5059daf8ef292b64d57aacdaaabff2f5c0ea8b90a",
+    "bytes": 319802,
+    "resolution": [
+      1024,
+      1024
+    ],
+    "colorSpace": "THREE.NoColorSpace",
+    "flipY": false,
+    "uvChannel": 0,
+    "bakeType": "EMIT"
+  },
+  "roughnessRange": [
+    0.46,
+    0.58
+  ],
+  "headVertices": 68767,
+  "headTriangles": 115923,
+  "geometryAndUvSha256": "9dd58cc64523c57c68808a1da4b8f31eec6369324d2428c2299bbc605c07d67a",
+  "uvSha256": "33b467442726f3cbe254388d50a9f16dcc766507affa10a7157a3e81796760ce",
+  "geometryAndUvsUnchanged": true,
+  "originalGlbUnchanged": true,
+  "sourceTextureFilesUnchanged": true,
+  "excludedObjects": [
+    "Purple_Surface_Nerve_Fibres"
+  ],
+  "notes": "Tangent-space OpenGL normal. Only surface shading changes; no displacement is applied to geometry. No fibres or earbud shadows baked. Existing AO remains untouched."
+}

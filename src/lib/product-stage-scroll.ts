@@ -1,13 +1,17 @@
-// Scroll distances are in sticky-stage heights, including the portrait entry.
+// The model and closing portrait use separate tracks, measured in stage heights.
 export const STORY_SCROLL_SCREENS = 5.2;
 export const PORTRAIT_ENTRY_START = 0.85;
 export const PORTRAIT_ENTRY_SCREENS = 1;
+export const MODEL_SCROLL_SCREENS = STORY_SCROLL_SCREENS * PORTRAIT_ENTRY_START;
+export const CLOSING_SCROLL_SCREENS = STORY_SCROLL_SCREENS * (1 - PORTRAIT_ENTRY_START);
 
+function stageDistance(distance: number) {
+  return Number.isFinite(distance) ? Math.max(0, distance) : 0;
+}
+
+/** Preserve the original model timing and hold its last pose as its track exits. */
 export function productStageProgress(distance: number) {
-  if (!Number.isFinite(distance)) return 0;
-  const travelled = Math.max(0, distance);
-  const entry = Math.min(PORTRAIT_ENTRY_SCREENS, Math.max(0, travelled - STORY_SCROLL_SCREENS * PORTRAIT_ENTRY_START));
-  return Math.min(1, (travelled - entry) / STORY_SCROLL_SCREENS);
+  return Math.min(PORTRAIT_ENTRY_START, stageDistance(distance) / STORY_SCROLL_SCREENS);
 }
 
 /** Read the current layout, including restored scroll and responsive changes. */

@@ -39,6 +39,9 @@ export async function localConfig() {
   if (!/^(?:[sr]k|rkcs)_test_[A-Za-z0-9_]+$/.test(profile.test_mode_api_key ?? "")) {
     throw new Error("Local checkout requires a Stripe test key. Live keys are never accepted.");
   }
+  if (!/^pk_test_[A-Za-z0-9_]+$/.test(profile.test_mode_pub_key ?? "")) {
+    throw new Error("Local checkout requires a test publishable key from the same sandbox profile. Live keys are never accepted.");
+  }
   const permanent = manifest.claimed === true && manifest.sandbox_expires_at === null
     && /^[sr]k_test_/.test(profile.test_mode_api_key);
   const expiresAt = Date.parse(manifest.sandbox_expires_at);
@@ -47,15 +50,15 @@ export async function localConfig() {
   }
   await chmod(configPath, 0o600);
   return { accountId: manifest.account_id, expiresAt: manifest.sandbox_expires_at,
-    claimUrl: manifest.sandbox_claim_url, key: profile.test_mode_api_key };
+    claimUrl: manifest.sandbox_claim_url, key: profile.test_mode_api_key, publishableKey: profile.test_mode_pub_key };
 }
-export function isolatedEnv(key) {
+export function isolatedEnv(key, publishableKey) {
   return {
     ...process.env, NODE_ENV: "development",
     RESERVATIONS_LOCAL_TEST: "true", RESERVATIONS_ENABLED: "true", RESERVATIONS_PREVIEW: "false",
     WAITLIST_STORAGE: "file",
     SUPABASE_URL: "", SUPABASE_SECRET_KEY: "", SUPABASE_SERVICE_ROLE_KEY: "",
-    STRIPE_API_KEY: key, STRIPE_SECRET_KEY: key, STRIPE_WEBHOOK_SECRET: "",
+    STRIPE_API_KEY: key, STRIPE_SECRET_KEY: key, STRIPE_PUBLISHABLE_KEY: publishableKey, STRIPE_WEBHOOK_SECRET: "",
     NEXT_PUBLIC_SITE_URL: localOrigin,
     NEXT_PUBLIC_META_PIXEL_ID: "", NEXT_PUBLIC_META_LEAD_TRACKING_ENABLED: "false",
     NEXT_PUBLIC_ANALYTICS_ENDPOINT: "none", NEXT_TELEMETRY_DISABLED: "1",

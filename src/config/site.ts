@@ -5,7 +5,6 @@
  * Keep the company and product identity here so every page stays consistent.
  */
 
-import { reservation } from "./reservation";
 export { reservation } from "./reservation";
 
 const brand = "cymba";
@@ -46,7 +45,8 @@ export const heroVariants: Record<HeroVariant["id"], HeroVariant> = {
     id: "learn",
     hypothesis: "A. Cognitive outcomes",
     eyebrow: `${product} · Coming soon`,
-    headline: ["Do your best thinking", "for longer."],
+    headline: ["The earbuds", "for deep work."],
+    subhead: "Do your best thinking for longer.",
     primaryCta: "Join the waitlist",
   },
   // B. Focus and deep work
@@ -76,12 +76,8 @@ export const heroVariants: Record<HeroVariant["id"], HeroVariant> = {
 /* -------------------------------------------------------------------------- */
 
 /** Shared copy for the closing portrait in the animated and stacked layouts. */
-export const closingHeadline = ["Made for", "curious minds."] as const;
-
-export const closingLine = (reservations: boolean) =>
-  reservations
-    ? `Reserve your pair for ${reservation.depositLabel}, fully refundable until it ships.`
-    : `For the work you care about and the ideas you want to explore. Be first to hear when ${product} launches.`;
+export const closingHeadline = ["Give your brain", "an edge"] as const;
+export const closingCta = "Join the waitlist";
 
 /** Variant served when no `?v=` query parameter is present. */
 export const defaultVariant: HeroVariant["id"] = "learn";

@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { site } from "@/config/site";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { reservation, site } from "@/config/site";
 import { Wordmark } from "./Wordmark";
 
 const links = [
@@ -28,9 +28,9 @@ function goTo(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
   const target = candidates.find((el) => el.getClientRects().length > 0);
   if (!target) return;
   e.preventDefault();
-  // Measure after the mobile sheet closes so its height is not included.
+  // Wait for the menu's scroll lock to release; only the compact bar is an offset.
   requestAnimationFrame(() => {
-    const headerBottom = document.querySelector(".site-header")?.getBoundingClientRect().bottom ?? 72;
+    const headerBottom = document.querySelector(".site-nav")?.getBoundingClientRect().bottom ?? 48;
     const top = target.getBoundingClientRect().top + window.scrollY - (target.dataset.anchor ? 0 : headerBottom + 16);
     window.scrollTo({ top, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
     history.replaceState(null, "", href);
@@ -70,36 +70,110 @@ export function Nav({ cta, ctaHref = "#signup" }: { cta: string; ctaHref?: strin
     };
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!open) return;
+    const headerElement = header.current;
+    if (!headerElement) return;
     const desktop = window.matchMedia("(min-width: 768px)");
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key !== "Escape") return;
+    if (desktop.matches) {
       setOpen(false);
-      menuButton.current?.focus({ preventScroll: true });
+      return;
+    }
+
+    // Keep the document at its current position while the panel scrolls independently.
+    const overflowStyles = [document.documentElement, document.body].map((element) => ({
+      element,
+      x: element.style.getPropertyValue("overflow-x"),
+      xPriority: element.style.getPropertyPriority("overflow-x"),
+      y: element.style.getPropertyValue("overflow-y"),
+      yPriority: element.style.getPropertyPriority("overflow-y"),
+    }));
+    const rootStyle = document.documentElement.style;
+    const scrollbarGutter = rootStyle.getPropertyValue("scrollbar-gutter");
+    const scrollbarGutterPriority = rootStyle.getPropertyPriority("scrollbar-gutter");
+    if (!getComputedStyle(document.documentElement).getPropertyValue("scrollbar-gutter").includes("stable")) {
+      rootStyle.setProperty("scrollbar-gutter", "stable");
+    }
+    window.scrollTo({ top: window.scrollY, left: window.scrollX, behavior: "instant" });
+    for (const { element } of overflowStyles) element.style.setProperty("overflow", "hidden");
+
+    // Inert every branch outside the dialog, including when a layout wraps the header.
+    const backgroundElements = new Map<HTMLElement, boolean>();
+    let branch: HTMLElement = headerElement;
+    while (branch.parentElement) {
+      const parent = branch.parentElement;
+      for (const sibling of parent.children) {
+        if (sibling === branch || !(sibling instanceof HTMLElement)) continue;
+        backgroundElements.set(sibling, sibling.inert);
+        sibling.inert = true;
+      }
+      if (parent === document.body) break;
+      branch = parent;
+    }
+
+    const focusableElements = () => [...headerElement.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+    )].filter((element) => element.tabIndex >= 0
+      && !element.closest('[inert], [aria-hidden="true"]')
+      && element.getClientRects().length > 0
+      && getComputedStyle(element).visibility !== "hidden");
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        setOpen(false);
+        menuButton.current?.focus({ preventScroll: true });
+        return;
+      }
+      if (e.key !== "Tab") return;
+      const controls = focusableElements();
+      const first = controls[0];
+      const last = controls.at(-1);
+      if (!first || !last) {
+        e.preventDefault();
+        return;
+      }
+      if (e.shiftKey && (document.activeElement === first || !headerElement.contains(document.activeElement))) {
+        e.preventDefault();
+        last.focus({ preventScroll: true });
+      } else if (!e.shiftKey && (document.activeElement === last || !headerElement.contains(document.activeElement))) {
+        e.preventDefault();
+        first.focus({ preventScroll: true });
+      }
     };
-    const onOutside = (e: PointerEvent | FocusEvent) => {
-      if (e.target instanceof Node && !header.current?.contains(e.target)) setOpen(false);
+    const onFocus = (e: FocusEvent) => {
+      if (e.target instanceof Node && !headerElement.contains(e.target)) {
+        menuButton.current?.focus({ preventScroll: true });
+      }
     };
     const onBreakpoint = () => {
       if (desktop.matches) setOpen(false);
     };
-    onBreakpoint();
+    menuButton.current?.focus({ preventScroll: true });
     window.addEventListener("keydown", onKey);
-    document.addEventListener("pointerdown", onOutside);
-    document.addEventListener("focusin", onOutside);
+    document.addEventListener("focusin", onFocus);
     desktop.addEventListener("change", onBreakpoint);
     return () => {
       window.removeEventListener("keydown", onKey);
-      document.removeEventListener("pointerdown", onOutside);
-      document.removeEventListener("focusin", onOutside);
+      document.removeEventListener("focusin", onFocus);
       desktop.removeEventListener("change", onBreakpoint);
+      for (const [element, inert] of backgroundElements) element.inert = inert;
+      for (const { element, x, xPriority, y, yPriority } of overflowStyles) {
+        element.style.removeProperty("overflow");
+        if (x) element.style.setProperty("overflow-x", x, xPriority);
+        if (y) element.style.setProperty("overflow-y", y, yPriority);
+      }
+      rootStyle.removeProperty("scrollbar-gutter");
+      if (scrollbarGutter) rootStyle.setProperty("scrollbar-gutter", scrollbarGutter, scrollbarGutterPriority);
+      if (desktop.matches && headerElement.contains(document.activeElement)) {
+        headerElement.querySelector<HTMLAnchorElement>(".site-nav__brand")?.focus({ preventScroll: true });
+      }
     };
   }, [open]);
 
   return (
     /* Wordmark left, links centred, and one clear action on the right. */
-    <header ref={header} data-scrolled={scrolled || open} data-theme={dark ? "dark" : "light"} data-menu-open={open || undefined} className="site-header">
+    <header ref={header} role={open ? "dialog" : undefined} aria-modal={open || undefined} aria-label={open ? "Navigation menu" : undefined} data-scrolled={scrolled || open} data-theme={dark ? "dark" : "light"} data-menu-open={open || undefined} className="site-header">
       <nav aria-label="Primary" className="site-nav">
         <a href="/#top" className="site-nav__brand" aria-label={`${site.brand}, back to top`} onClick={(e) => { setOpen(false); goTo(e, "/#top"); }}>
           <Wordmark className="site-nav__wordmark" size="text-[1.125rem] sm:text-[1.375rem]" />
@@ -126,13 +200,17 @@ export function Nav({ cta, ctaHref = "#signup" }: { cta: string; ctaHref?: strin
           </button>
         </div>
       </nav>
-      <div id="mobile-menu" hidden={!open} className="site-nav__sheet">
+      <div id="mobile-menu" inert={!open} aria-hidden={!open} className="site-nav__sheet">
         <ul>
-          {[...links, { href: ctaHref, label: cta }].map((l) => (
+          {[
+            ...links,
+            { href: ctaHref, label: cta },
+            ...(ctaHref === reservation.path ? [] : [{ href: reservation.path, label: "Reserve yours" }]),
+          ].map((l) => (
             <li key={l.href}>
               <a
                 href={l.href}
-                data-cta={l.href === ctaHref ? "nav" : undefined}
+                data-cta={l.href === ctaHref || l.href === reservation.path ? "nav" : undefined}
                 onClick={(e) => {
                   setOpen(false);
                   menuButton.current?.focus({ preventScroll: true });
@@ -141,9 +219,6 @@ export function Nav({ cta, ctaHref = "#signup" }: { cta: string; ctaHref?: strin
                 className="site-nav__sheet-link"
               >
                 {l.label}
-                <svg className="site-nav__sheet-arrow" aria-hidden="true" focusable="false" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="m7.5 5 5 5-5 5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
               </a>
             </li>
           ))}

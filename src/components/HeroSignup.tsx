@@ -16,7 +16,6 @@ export function HeroSignup({
     <div className={styles.signup}>
       <WaitlistForm mode={mode} variant={v.id} cta={v.primaryCta} placement="hero" reservations={reservations} />
       <div className={styles.footer}>
-        <p className={styles.proof}>Join <strong>1000+</strong> people on the waitlist</p>
         <a href={`${reservation.path}?v=${v.id}`} data-cta="hero_reserve" className={styles.reserve}>
           Reserve yours <span aria-hidden="true" className={styles.arrow}>→</span>
         </a>
