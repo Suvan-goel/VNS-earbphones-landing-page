@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { BackLink } from "./BackLink";
 import { Wordmark } from "./Wordmark";
 
 export function LegalPage({ title, updated, children, showTemplateNotice = true }: { title: string; updated: string; children: ReactNode; showTemplateNotice?: boolean }) {
@@ -9,9 +10,7 @@ export function LegalPage({ title, updated, children, showTemplateNotice = true 
           <a href="/" aria-label="Back to home">
             <Wordmark />
           </a>
-          <a href="/" className="btn-secondary !min-h-10 !px-4 !py-2 text-sm">
-            Back to site
-          </a>
+          <BackLink />
         </div>
       </header>
       <main className="mx-auto max-w-3xl px-5 py-16 sm:px-8 sm:py-20">

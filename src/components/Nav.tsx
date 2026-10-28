@@ -2,6 +2,7 @@
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { reservation, site } from "@/config/site";
+import { BackLink } from "./BackLink";
 import { Wordmark } from "./Wordmark";
 
 const links = [
@@ -37,7 +38,7 @@ function goTo(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
   });
 }
 
-export function Nav({ cta, ctaHref = "#signup" }: { cta: string; ctaHref?: string }) {
+export function Nav({ cta, ctaHref = "#signup", ctaVariant = "button" }: { cta: string; ctaHref?: string; ctaVariant?: "button" | "link" }) {
   const [scrolled, setScrolled] = useState(false);
   const [pastHero, setPastHero] = useState(false);
   const [dark, setDark] = useState(false);
@@ -189,7 +190,9 @@ export function Nav({ cta, ctaHref = "#signup" }: { cta: string; ctaHref?: strin
           ))}
         </ul>
         <div className="site-nav__actions">
-          <a href={ctaHref} data-cta="nav" onClick={() => setOpen(false)} className="site-nav__cta">{cta}</a>
+          {ctaVariant === "link"
+            ? <BackLink href={ctaHref} data-cta="nav" onClick={() => setOpen(false)}>{cta}</BackLink>
+            : <a href={ctaHref} data-cta="nav" onClick={() => setOpen(false)} className="site-nav__cta">{cta}</a>}
           <button
             ref={menuButton}
             type="button"

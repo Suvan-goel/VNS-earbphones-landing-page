@@ -10,7 +10,7 @@ export const metadata: Metadata = { title: `Page not found · ${site.brand}`, ro
 export default function NotFound() {
   return (
     <>
-      <Nav cta="Back to site" ctaHref="/" />
+      <Nav cta="Back to site" ctaHref="/" ctaVariant="link" />
       <main id="main" className="pt-28 sm:pt-36">
         <Container className="pb-24 sm:pb-32">
           <div className="mx-auto max-w-[36rem] text-center">

@@ -48,20 +48,7 @@
 }
 .brand { display: inline-flex; align-items: center; min-height: 44px; }
 .cardPage .reservationNav { grid-template-columns: minmax(0, 1fr) auto; }
-.reservationBack { justify-self: end; gap: 8px; white-space: nowrap; }
-.reservationBack svg { width: 16px; height: 16px; flex-shrink: 0; }
-.back {
-  display: inline-flex;
-  min-height: 44px;
-  align-items: center;
-  gap: 9px;
-  color: #626269;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  transition: color 160ms;
-}
-.back svg { width: 17px; height: 17px; }
-.back:hover { color: #1d1d1f; }
+.reservationBack { justify-self: end; }
 
 .main {
   display: grid;
@@ -96,7 +83,6 @@
 @media (max-width: 767px) {
   .cardPage { padding-top: calc(48px + env(safe-area-inset-top)); }
   .cardPage .main { scroll-margin-top: calc(48px + env(safe-area-inset-top)); }
-  .reservationBack { padding-inline: 12px; }
 }
 
 @media (max-width: 639px) {
@@ -112,8 +98,4 @@
   .cardPage .main { padding-inline: 8px; }
   .footer { width: calc(100% - 40px); }
   .footer nav { gap: 12px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .back { transition: none; }
 }
