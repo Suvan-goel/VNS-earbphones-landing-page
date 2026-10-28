@@ -440,10 +440,11 @@
   .closingReveal { will-change: clip-path; }
   .scene .sceneFrame { will-change: transform; }
   .sceneShade { will-change: opacity; }
-  /* The full-bleed portrait covers the shoulder extension entirely; drawing its filtered copies
-     behind it was the main cost of the expansion on phones. */
+  /* The shoulders continue below the portrait here too, but without live filters: re-rendering
+     the filtered copies on every frame of the expansion was the main cost on phones, and on
+     this grey-and-black crop the desaturation makes no visible difference. */
   .sceneExtension,
-  .sceneExtensionTail { display: none; }
+  .sceneExtensionTail { filter: none; }
   /* Keep the static backdrop full bleed; the scrolling portrait rests as a centered card. */
   .sceneFrame {
     left: 0;
