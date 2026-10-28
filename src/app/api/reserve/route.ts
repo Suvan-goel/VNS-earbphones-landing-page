@@ -2,8 +2,9 @@ import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { site } from "@/config/site";
 import { reservation } from "@/config/reservation";
+import { defaultMarket, isMarket, markets } from "@/config/pricing";
 import { attachReservationSession, createReservation } from "@/lib/storage";
-import { CHECKOUT_INTEGRATION, DEPOSIT, PREVIEW_SESSION_PREFIX, RESERVATION_FLOW, inlineCheckoutEnabled, localReservationTestMode, previewMode, reservationsOpen, stripe, stripeLiveMode } from "@/lib/stripe";
+import { CHECKOUT_INTEGRATION, PREVIEW_SESSION_PREFIX, RESERVATION_FLOW, inlineCheckoutEnabled, localReservationTestMode, previewMode, reservationsOpen, stripe, stripeLiveMode } from "@/lib/stripe";
 import { clientKey, rateLimit } from "@/lib/rate-limit";
 import { cleanAttribution, cleanVariant, normaliseEmail } from "@/lib/validation";
 import { readJsonObject } from "@/lib/request-json";
@@ -67,10 +68,16 @@ export async function POST(req: Request) {
   if (typeof body.attemptId !== "string" || !ATTEMPT_ID.test(body.attemptId)) {
     return NextResponse.json({ status: "error", message: "Please refresh this page and try again." }, { status: 422 });
   }
+  // The page names the currency it displayed; the amount itself is never taken from the request.
+  const market = body.market === undefined ? defaultMarket : body.market;
+  if (!isMarket(market)) {
+    return NextResponse.json({ status: "error", message: "Please choose a currency and try again." }, { status: 422 });
+  }
+  const deposit = markets[market];
   const preview = previewMode();
   const stored = await createReservation({
     attemptId: body.attemptId.toLowerCase(), email, variant: cleanVariant(body.variant), attribution: cleanAttribution(body.attribution),
-    amount: DEPOSIT.amount, currency: DEPOSIT.currency, termsVersion: reservation.termsVersion, livemode: !preview && stripeLiveMode(),
+    amount: deposit.deposit, currency: deposit.currency, termsVersion: reservation.termsVersion, livemode: !preview && stripeLiveMode(),
   });
   if (stored.status === "conflict") return retryAttempt("conflict", "Your reservation details changed. Please review them and try again.");
   if (stored.status !== "ready") {

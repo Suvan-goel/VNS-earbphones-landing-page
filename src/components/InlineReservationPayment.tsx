@@ -12,16 +12,19 @@ import type {
   StripeElementsOptions,
   StripeExpressCheckoutElementConfirmEvent,
 } from "@stripe/stripe-js";
-import { reservation } from "@/config/reservation";
 import styles from "./InlineReservationPayment.module.css";
 
 export type PreparedReservationPayment =
   | { kind: "inline"; clientSecret: string; sessionId: string; email: string }
   | { kind: "redirect"; url: string };
 
+/** The deposit the page displayed, in the smallest unit of its currency, with its label. */
+export type ExpectedDeposit = { amount: number; currency: string; label: string };
+
 export type InlineReservationPaymentProps = {
   publishableKey: string;
   email: string;
+  expected: ExpectedDeposit;
   details: ReactNode;
   validate: () => string | null;
   prepare: (form: HTMLFormElement) => Promise<PreparedReservationPayment>;
@@ -57,14 +60,14 @@ const appearance: Appearance = {
   },
 };
 
-const elementOptions: StripeElementsOptions = {
+const elementOptions = (expected: ExpectedDeposit): StripeElementsOptions => ({
   mode: "payment",
-  amount: reservation.amount,
-  currency: reservation.currency,
+  amount: expected.amount,
+  currency: expected.currency,
   paymentMethodCreation: "manual",
   appearance,
   loader: "auto",
-};
+});
 
 /** Collect payment details first; the server still records consent before creating Checkout. */
 export function InlineReservationPayment(props: InlineReservationPaymentProps) {
@@ -84,6 +87,8 @@ export function InlineReservationPayment(props: InlineReservationPaymentProps) {
 function InlinePaymentProvider({ publishableKey, ...props }: InlineReservationPaymentProps & { checkoutCache: CheckoutCache; onReload: () => void }) {
   const [scriptFailed, setScriptFailed] = useState(false);
   const stripePromise = useMemo(() => loadStripe(publishableKey).catch(() => null), [publishableKey]);
+  // The parent remounts this component when the currency changes, so the options are fixed per mount.
+  const [options] = useState(() => elementOptions(props.expected));
   useEffect(() => {
     let active = true;
     void stripePromise.then((stripe) => { if (active && !stripe) setScriptFailed(true); });
@@ -91,13 +96,13 @@ function InlinePaymentProvider({ publishableKey, ...props }: InlineReservationPa
   }, [stripePromise]);
 
   return (
-    <Elements stripe={stripePromise} options={elementOptions}>
+    <Elements stripe={stripePromise} options={options}>
       <InlinePaymentForm {...props} scriptFailed={scriptFailed} />
     </Elements>
   );
 }
 
-function InlinePaymentForm({ email, details, validate, prepare, onBusyChange, onConfirmationStart, checkoutCache, onReload, scriptFailed }: Omit<InlineReservationPaymentProps, "publishableKey"> & { checkoutCache: CheckoutCache; onReload: () => void; scriptFailed: boolean }) {
+function InlinePaymentForm({ email, expected, details, validate, prepare, onBusyChange, onConfirmationStart, checkoutCache, onReload, scriptFailed }: Omit<InlineReservationPaymentProps, "publishableKey"> & { checkoutCache: CheckoutCache; onReload: () => void; scriptFailed: boolean }) {
   const stripe = useStripe();
   const elements = useElements();
   const [submitting, setSubmitting] = useState(false);
@@ -106,7 +111,7 @@ function InlinePaymentForm({ email, details, validate, prepare, onBusyChange, on
   const [paymentReady, setPaymentReady] = useState(false);
   const [paymentLoadError, setPaymentLoadError] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [amountLabel, setAmountLabel] = useState<string>(reservation.depositLabel);
+  const [amountLabel, setAmountLabel] = useState<string>(expected.label);
   const formRef = useRef<HTMLFormElement>(null);
   const errorRef = useRef<HTMLParagraphElement>(null);
   const inFlight = useRef(false);
@@ -229,8 +234,8 @@ function InlinePaymentForm({ email, details, validate, prepare, onBusyChange, on
       const checkout = actions.getSession();
       // The server also verifies Checkout mode, references and consent before releasing its secret.
       if (checkout.id !== prepared.sessionId
-        || checkout.currency.toLowerCase() !== reservation.currency
-        || checkout.total.total.minorUnitsAmount !== reservation.amount
+        || checkout.currency.toLowerCase() !== expected.currency
+        || checkout.total.total.minorUnitsAmount !== expected.amount
         || checkout.minorUnitsAmountDivisor !== 100
         || checkout.email?.trim().toLowerCase() !== submittedEmail) {
         throw new PaymentMessage("The payment details couldn’t be verified. Please try again.");

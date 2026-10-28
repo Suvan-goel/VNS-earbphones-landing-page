@@ -18,12 +18,12 @@ const reservationId = "23f44412-32e8-4e1d-a06f-b615f9ff1491";
 const attemptId = "39ba9645-6135-42f3-92a1-66c6c2f29b8e";
 const flow = "cymba_reservation_v1";
 const clone = (value) => JSON.parse(JSON.stringify(value));
-const metadata = () => ({ flow, reservation_id: reservationId, attempt_id: attemptId, terms_version: "2026-10-25" });
+const metadata = () => ({ flow, reservation_id: reservationId, attempt_id: attemptId, terms_version: "2026-10-28" });
 const row = (overrides = {}) => ({
   id: reservationId, attempt_id: attemptId, created_at: new Date().toISOString(), email: "person@example.com", variant: "learn",
   stripe_session_id: "cs_test_reservation", stripe_payment_intent: null, stripe_customer: null, checkout_expires_at: null,
   amount: 5000, currency: "usd", amount_refunded: 0, status: "pending", founder_number: null, paid_at: null, refunded_at: null,
-  terms_version: "2026-10-25", terms_accepted_at: new Date().toISOString(), livemode: false, ...overrides,
+  terms_version: "2026-10-28", terms_accepted_at: new Date().toISOString(), livemode: false, ...overrides,
 });
 const payment = (overrides = {}) => ({
   id: "pi_reservation", object: "payment_intent", amount: 5000, amount_received: 5000, currency: "usd", livemode: false,
@@ -42,7 +42,7 @@ const request = (body) => new Request("http://localhost/api/reserve", {
   method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body),
 });
 const submission = (overrides = {}) => ({
-  email: "person@example.com", variant: "learn", attemptId, termsAccepted: true, termsVersion: "2026-10-25",
+  email: "person@example.com", variant: "learn", attemptId, termsAccepted: true, termsVersion: "2026-10-28",
   startedAt: Date.now() - 5000, company: "", ...overrides,
 });
 function webhookRequest(value, raw = JSON.stringify(value), signingSecret = secret) {
@@ -78,6 +78,7 @@ function backend(options = {}) {
         }
         if (!sessions.has(opts.idempotencyKey)) sessions.set(opts.idempotencyKey, session({
           metadata: params.metadata, client_reference_id: params.client_reference_id, status: "open", payment_status: "unpaid", payment_intent: null,
+          amount_total: params.line_items[0].price_data.unit_amount, currency: params.line_items[0].price_data.currency,
           expires_at: params.expires_at, ui_mode: params.ui_mode ?? "hosted_page",
           url: params.ui_mode === "elements" ? null : "https://checkout.stripe.com/test_checkout",
           client_secret: params.ui_mode === "elements" ? "cs_test_reservation_secret_private" : null,
@@ -242,7 +243,7 @@ test("checkout stores consent first and derives the exact price server-side with
   assert.equal(created.opts.idempotencyKey, `reservation:${attemptId}`);
   assert.equal(created.params.metadata.reservation_id, app.rows[0].id);
   assert.equal(created.params.payment_intent_data.metadata.attempt_id, attemptId);
-  assert.equal(app.rows[0].terms_version, "2026-10-25");
+  assert.equal(app.rows[0].terms_version, "2026-10-28");
   assert.ok(app.rows[0].terms_accepted_at);
   assert.equal(app.rows[0].stripe_session_id, "cs_test_reservation");
   assert.equal(app.calls.db.some((c) => /waitlist/.test(c.url)), false);
@@ -280,6 +281,43 @@ test("inline Checkout requires a valid publishable key matching the server crede
   const preview = backend({ env: { RESERVATIONS_PREVIEW: "true", WAITLIST_STORAGE: "file", STRIPE_PUBLISHABLE_KEY: "pk_test_synthetic" } });
   assert.equal(preview.stripe().previewMode(), true);
   assert.equal(preview.stripe().inlineCheckoutEnabled(), false);
+});
+
+test("the displayed market selects the server-priced deposit: pounds for the UK, dollars by default", async () => {
+  const uk = backend();
+  const ukResponse = await uk.route("reserve")(request(submission({ market: "uk", amount: 1, currency: "usd" })));
+  assert.equal(ukResponse.status, 200);
+  assert.equal(uk.calls.create[0].params.line_items[0].price_data.unit_amount, 3500);
+  assert.equal(uk.calls.create[0].params.line_items[0].price_data.currency, "gbp");
+  assert.equal(uk.rows[0].amount, 3500);
+  assert.equal(uk.rows[0].currency, "gbp");
+
+  const us = backend();
+  assert.equal((await us.route("reserve")(request(submission({ market: "us" })))).status, 200);
+  assert.equal(us.calls.create[0].params.line_items[0].price_data.unit_amount, 5000);
+  assert.equal(us.calls.create[0].params.line_items[0].price_data.currency, "usd");
+
+  const legacy = backend();
+  assert.equal((await legacy.route("reserve")(request(submission()))).status, 200, "a page without a market keeps the US deposit");
+  assert.equal(legacy.calls.create[0].params.line_items[0].price_data.currency, "usd");
+
+  for (const market of ["eu", "GB", "", null, 1, { uk: true }, "__proto__"]) {
+    const app = backend();
+    const response = await app.route("reserve")(request(submission({ market })));
+    assert.equal(response.status, 422, `market ${JSON.stringify(market)}`);
+    assert.equal(app.calls.db.length, 0);
+    assert.equal(app.calls.create.length, 0);
+  }
+});
+
+test("a retry in a different currency is treated as changed details rather than repriced", async () => {
+  const app = backend();
+  assert.equal((await app.route("reserve")(request(submission({ market: "uk" })))).status, 200);
+  const response = await app.route("reserve")(request(submission({ market: "us" })));
+  assert.equal(response.status, 409);
+  assert.deepEqual(await response.json(), { status: "conflict", message: "Your reservation details changed. Please review them and try again.", resetAttempt: true });
+  assert.equal(app.calls.create.length, 1);
+  assert.equal(app.rows[0].currency, "gbp");
 });
 
 test("inline Checkout returns only its client secret and keeps the exact server-priced consented deposit pending", async () => {
@@ -660,13 +698,13 @@ test("Postgres migration and atomic payment transactions", async (t) => {
   const rpc = async (overrides = {}) => {
     const p = {
       event: "evt_sql_paid", type: "checkout.session.completed", id: reservationId, attempt: attemptId,
-      terms: "2026-10-25", session: "cs_sql_reservation", pi: "pi_sql_reservation", customer: "cus_sql",
+      terms: "2026-10-28", session: "cs_sql_reservation", pi: "pi_sql_reservation", customer: "cus_sql",
       status: "paid", amount: 5000, currency: "usd", refunded: 0, live: false, at: new Date().toISOString(), ...overrides,
     };
     return (await db.query(rpcSql, [p.event, p.type, p.id, p.attempt, p.terms, p.session, p.pi, p.customer, p.status, p.amount, p.currency, p.refunded, p.live, p.at])).rows[0].result;
   };
   const insert = async (id = reservationId, attempt = attemptId) => db.query(
-    "insert into public.reservations (id,attempt_id,email,amount,currency,terms_version,terms_accepted_at,livemode) values ($1,$2,'test@example.com',5000,'usd','2026-10-25',now(),false)", [id, attempt]);
+    "insert into public.reservations (id,attempt_id,email,amount,currency,terms_version,terms_accepted_at,livemode) values ($1,$2,'test@example.com',5000,'usd','2026-10-28',now(),false)", [id, attempt]);
   const saved = async (id = reservationId) => (await db.query("select * from public.reservations where id=$1", [id])).rows[0];
   try {
     await db.exec("create role anon; create role authenticated; create role service_role bypassrls;");

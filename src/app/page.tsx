@@ -4,6 +4,8 @@ import type { Metadata } from "next";
 import { defaultVariant, heroVariants, reservation, type HeroVariant } from "@/config/site";
 import { storageMode } from "@/lib/storage";
 import { hostedReservationUrl, reservationsOpen } from "@/lib/stripe";
+import { detectMarket } from "@/lib/market";
+import { MarketProvider } from "@/components/MarketProvider";
 import { Nav } from "@/components/Nav";
 import { ProductStage } from "@/components/ProductStage";
 import { RevealObserver } from "@/components/RevealObserver";
@@ -17,6 +19,7 @@ import { Hero } from "@/components/sections/Hero";
 import { ProductReveal } from "@/components/sections/ProductReveal";
 import { Research } from "@/components/sections/Research";
 import { Glance } from "@/components/sections/Glance";
+import { Pricing } from "@/components/sections/Pricing";
 import { Worn } from "@/components/sections/Worn";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { Evidence } from "@/components/sections/Evidence";
@@ -54,6 +57,7 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
   const mode = storageMode();
   const reservations = reservationsOpen() || Boolean(hostedReservationUrl(v.id));
   const { modelUrl, posterUrl } = findProductModel();
+  const { market } = await detectMarket();
 
   const faqLd = {
     "@context": "https://schema.org",
@@ -62,7 +66,7 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
   };
 
   return (
-    <>
+    <MarketProvider initial={market}>
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-ivory focus:px-4 focus:py-2 focus:text-paper">
         Skip to content
       </a>
@@ -89,6 +93,7 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
         <div className="on-scene">
           <Research />
           <Glance />
+          <Pricing reservations={reservations} />
           <EarlyAccess mode={mode} v={v} reservations={reservations} />
           <Faq reservations={reservations} />
         </div>
@@ -100,6 +105,6 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
       <SmoothScroll />
       <Tracker variant={v.id} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
-    </>
+    </MarketProvider>
   );
 }

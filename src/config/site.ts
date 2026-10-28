@@ -6,6 +6,8 @@
  */
 
 export { reservation } from "./reservation";
+export { launch, markets } from "./pricing";
+import { formatCompactMarkets, launch } from "./pricing";
 
 const brand = "cymba";
 const product = brand;
@@ -22,7 +24,7 @@ export const site = {
   seo: {
     title: `${product} — The earbuds for deep work`,
     description:
-      `${product}: gentle nerve stimulation built into everyday earbuds, for longer focus. Coming Q4 2027. Reserve from US$50, fully refundable, or join the waitlist.`,
+      `${product}: gentle nerve stimulation built into everyday earbuds, for longer focus. Launching ${launch.window} at ${formatCompactMarkets("retail")}. Reserve for ${formatCompactMarkets("deposit")}, fully refundable, or join the waitlist.`,
   },
 };
 
@@ -44,7 +46,7 @@ export const heroVariants: Record<HeroVariant["id"], HeroVariant> = {
   learn: {
     id: "learn",
     hypothesis: "A. Cognitive outcomes",
-    eyebrow: "Coming Q4 2027",
+    eyebrow: `Coming ${launch.window}`,
     headline: ["The earbuds", "for deep work."],
     subhead: "Focus on the tasks you care about for longer.",
     primaryCta: "Join the waitlist",
@@ -53,7 +55,7 @@ export const heroVariants: Record<HeroVariant["id"], HeroVariant> = {
   focus: {
     id: "focus",
     hypothesis: "B. Focus and deep work",
-    eyebrow: "Coming Q4 2027",
+    eyebrow: `Coming ${launch.window}`,
     headline: ["For your most", "demanding work."],
     subhead:
       "Cognitive technology built around deeper focus, faster learning and stronger memory.",
@@ -63,7 +65,7 @@ export const heroVariants: Record<HeroVariant["id"], HeroVariant> = {
   audio: {
     id: "audio",
     hypothesis: "C. Cognitive ambition",
-    eyebrow: "Coming Q4 2027",
+    eyebrow: `Coming ${launch.window}`,
     headline: ["More from", "your mind."],
     subhead:
       `Meet ${product}. Targeted nerve stimulation in everyday earbuds, built for focus, learning and memory.`,

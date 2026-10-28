@@ -1,4 +1,5 @@
 import { reservation, site, type HeroVariant } from "@/config/site";
+import { Price } from "../Price";
 import type { StorageMode } from "@/lib/storage";
 import { WaitlistForm } from "../WaitlistForm";
 import { Container, Headline } from "../ui";
@@ -13,7 +14,7 @@ export function EarlyAccess({ mode, v, reservations = false }: { mode: StorageMo
           <Headline id="ea-title" lines={["Be first to", `experience ${site.brand}.`]} className="reveal text-[clamp(2rem,3.6vw,3.25rem)]" />
           <p className="reveal mt-4 text-[1.0625rem] leading-relaxed text-muted sm:text-lg">
             {reservations
-              ? `Get launch dates and first access, free. Or hold a pair now for ${reservation.depositLabel}, fully refundable until it ships. The first 50 reservations get limited-edition Founders Buds at no extra cost.`
+              ? <>Get launch dates and first access, free. Or hold a pair now for <Price of="deposit" />, fully refundable until it ships. The first 50 reservations get limited-edition Founders Buds at no extra cost.</>
               : "Get launch dates, pricing and first-access details."}
           </p>
           <div id="signup" tabIndex={-1} aria-label="Launch updates signup" className="reveal mt-8 w-full max-w-[30rem] scroll-mt-28 text-left">

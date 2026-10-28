@@ -30,7 +30,7 @@ export function Glance() {
             </div>
           ))}
         </dl>
-        <p className="reveal mt-4 text-xs text-muted">Price and final specifications to be confirmed before launch.</p>
+        <p className="reveal mt-4 text-xs text-muted">Final specifications to be confirmed before launch.</p>
       </Container>
     </section>
   );

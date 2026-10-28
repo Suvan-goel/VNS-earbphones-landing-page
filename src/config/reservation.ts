@@ -1,12 +1,11 @@
-/** One source of truth for the deposit shown to customers and charged at checkout. */
+/**
+ * One source of truth for the reservation flow. The deposit itself is priced
+ * per market in `./pricing`: £35 for the UK, US$50 for the US.
+ */
 export const reservation = {
   merchantName: "Frame Wearable, Inc.",
-  amount: 5000,
-  currency: "usd",
-  depositLabel: "US$50",
-  cta: "Reserve for US$50",
   navCta: "Reserve",
   path: "/reserve",
   hostedUrl: "https://trycymba.com/reserve",
-  termsVersion: "2026-10-25",
+  termsVersion: "2026-10-28",
 } as const;

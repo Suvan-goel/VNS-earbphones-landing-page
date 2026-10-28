@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import { reservation, site } from "@/config/site";
+import { launch, reservation, site } from "@/config/site";
+import { formatBothMarkets } from "@/config/pricing";
 import { LegalPage } from "@/components/LegalPage";
 
 export const metadata: Metadata = { title: `Terms · ${site.brand}`, robots: { index: false } };
 
 export default function Terms() {
   return (
-    <LegalPage title="Terms of use" updated="26 October 2026" showTemplateNotice={false}>
+    <LegalPage title="Terms of use" updated="28 October 2026" showTemplateNotice={false}>
       <h2>About these terms</h2>
       <p>
         These terms explain how you may use the {site.brand} website, join the {site.product} launch list and make a paid reservation when available. References to
@@ -26,18 +27,28 @@ export default function Terms() {
         intended use. Design, specifications, compatibility, pricing and launch timing may change as development progresses.
         Final product details and any purchase terms will be provided before orders open.
       </p>
+      <h2 id="pricing" className="scroll-mt-24">Planned pricing and launch</h2>
+      <p>
+        We plan to launch {site.product} in {launch.window}. The planned price of the earbuds is {formatBothMarkets("retail")}, paid once,
+        and the {site.product} software subscription is planned at {formatBothMarkets("subscription", " a month")}. The website shows pounds
+        sterling to visitors in the United Kingdom and US dollars to visitors elsewhere, and you can switch between the two. Planned prices
+        exclude taxes and shipping, which depend on where your pair is delivered. We will confirm final pricing, taxes, shipping and the
+        subscription terms before orders open and before asking you to pay anything beyond a reservation deposit.
+      </p>
       <h2 id="reservations" className="scroll-mt-24">Paid reservations</h2>
       <p>
-        When paid reservations are available, a one-time {reservation.depositLabel} deposit in US dollars records your place in the
-        reservation queue for one pair of {site.product}. {reservation.merchantName} accepts the reservation deposit, with payment
-        processed by Stripe. A reservation is separate from the free launch
+        When paid reservations are available, a one-time deposit of {formatBothMarkets("deposit")} records your place in the
+        reservation queue for one pair of {site.product}. The deposit is charged in the currency shown at checkout, pounds sterling or
+        US dollars, and that is the currency in which it is credited or refunded. {reservation.merchantName} accepts the reservation
+        deposit, with payment processed by Stripe. A reservation is separate from the free launch
         list; it is not a purchase of the finished product, a subscription or an obligation to buy. Your founder number is assigned when
         we record confirmation of your successful payment, rather than the moment you start checkout. It is a reservation reference,
         not a guaranteed shipping date.
       </p>
       <p>
-        The full deposit will be credited toward your product price if you decide to buy. The final price, specifications, shipping date,
-        shipping cost, applicable taxes and delivery availability are not yet confirmed. We will provide these details and the final
+        The full deposit will be credited toward the price of the earbuds if you decide to buy; it does not cover the software
+        subscription. The final price, specifications, shipping date, shipping cost, applicable taxes and delivery availability are
+        not yet confirmed. We will provide these details and the final
         purchase terms before inviting you to pay the remaining balance. The remaining balance will not be charged automatically.
       </p>
       <p>

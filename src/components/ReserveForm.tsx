@@ -3,6 +3,8 @@
 import { useEffect, useId, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { reservation } from "@/config/reservation";
+import { formatPrice } from "@/config/pricing";
+import { useMarket } from "./MarketProvider";
 import { getAttribution, track } from "@/lib/analytics";
 import type { PreparedReservationPayment } from "./InlineReservationPayment";
 import styles from "./ReserveForm.module.css";
@@ -60,6 +62,9 @@ export function ReserveForm({ variant, open, preview = false, testMode = false, 
   const emailRef = useRef<HTMLInputElement>(null);
   const focusEmailOnReturn = useRef(false);
   const id = useId();
+  const { market, pricing, setLocked } = useMarket();
+  // Stripe verifies the live total too; this is what the page promised in the visitor's currency.
+  const expected = { amount: pricing.deposit, currency: pricing.currency, label: formatPrice(market, "deposit") };
 
   useEffect(() => {
     startedAt.current = Date.now();
@@ -93,6 +98,10 @@ export function ReserveForm({ variant, open, preview = false, testMode = false, 
   const invalid = touched && !EMAIL_RE.test(email.trim());
   const busy = inlineBusy || phase.k === "submitting" || phase.k === "redirecting";
   const detailsDisabled = busy || inlineLocked;
+  // A checkout is priced in one currency, so the switch waits until the visitor is back at the form.
+  const marketLocked = detailsDisabled || phase.k === "payment";
+  useEffect(() => { setLocked(marketLocked); }, [marketLocked, setLocked]);
+  useEffect(() => () => setLocked(false), [setLocked]);
   const errId = `${id}-err`;
 
   function validateDetails(): string | null {
@@ -116,7 +125,7 @@ export function ReserveForm({ variant, open, preview = false, testMode = false, 
       const res = await fetch("/api/reserve", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: normalizedEmail, company, startedAt: startedAt.current, variant,
+        body: JSON.stringify({ email: normalizedEmail, company, startedAt: startedAt.current, variant, market,
           attribution: getAttribution(), attemptId, termsAccepted: true, termsVersion: reservation.termsVersion }),
       });
       const data = (await res.json().catch(() => ({}))) as { status?: string; message?: string; url?: string; clientSecret?: string; sessionId?: string; resetAttempt?: boolean };
@@ -175,7 +184,7 @@ export function ReserveForm({ variant, open, preview = false, testMode = false, 
     return (
       <div>
         <a href={hostedUrl} data-cta="reserve_hosted" className={`${styles.button} ${styles.hostedButton}`}>
-          {reservation.cta}
+          Reserve for {expected.label}
           <svg aria-hidden="true" viewBox="0 0 20 20" fill="none"><path d="M3 10h14m-5-5 5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
         </a>
       </div>
@@ -201,6 +210,7 @@ export function ReserveForm({ variant, open, preview = false, testMode = false, 
           clientSecret={phase.clientSecret}
           sessionId={phase.sessionId}
           email={phase.email}
+          expected={expected}
           onEditDetails={() => {
             focusEmailOnReturn.current = true;
             setPhase({ k: "idle" });
@@ -265,8 +275,10 @@ export function ReserveForm({ variant, open, preview = false, testMode = false, 
   if (publishableKey && !preview) {
     return (
       <InlineReservationPayment
+        key={market}
         publishableKey={publishableKey}
         email={email.trim().toLowerCase()}
+        expected={expected}
         details={details}
         validate={validateDetails}
         prepare={preparePayment}

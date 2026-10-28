@@ -13,7 +13,7 @@ import type {
   StripeCheckoutElementsSdkOptions,
   StripeExpressCheckoutElementConfirmEvent,
 } from "@stripe/stripe-js";
-import { reservation } from "@/config/reservation";
+import type { ExpectedDeposit } from "./InlineReservationPayment";
 import styles from "./ReservationPayment.module.css";
 
 type ReservationPaymentProps = {
@@ -21,6 +21,7 @@ type ReservationPaymentProps = {
   clientSecret: string;
   sessionId: string;
   email: string;
+  expected: ExpectedDeposit;
   onEditDetails?: () => void;
 };
 
@@ -107,7 +108,7 @@ function PaymentLoadError({ message, onRetry }: { message: string; onRetry: () =
   );
 }
 
-function PaymentForm({ sessionId, email, onEditDetails, onRetry, onConfirmationStart }: Pick<ReservationPaymentProps, "sessionId" | "email" | "onEditDetails"> & { onRetry: () => void; onConfirmationStart: () => void }) {
+function PaymentForm({ sessionId, email, expected, onEditDetails, onRetry, onConfirmationStart }: Pick<ReservationPaymentProps, "sessionId" | "email" | "expected" | "onEditDetails"> & { onRetry: () => void; onConfirmationStart: () => void }) {
   const checkoutState = useCheckoutElements();
   const [submitting, setSubmitting] = useState(false);
   const [paymentReady, setPaymentReady] = useState(false);
@@ -140,8 +141,8 @@ function PaymentForm({ sessionId, email, onEditDetails, onRetry, onConfirmationS
   const { checkout } = checkoutState;
   const total = checkout.total.total;
   const amountMatches = checkout.id === sessionId
-    && checkout.currency.toLowerCase() === reservation.currency
-    && total.minorUnitsAmount === reservation.amount
+    && checkout.currency.toLowerCase() === expected.currency
+    && total.minorUnitsAmount === expected.amount
     && checkout.minorUnitsAmountDivisor === 100;
   // Reading and displaying the live Checkout total is also required by Stripe before confirm().
   const amountLabel = new Intl.NumberFormat("en-GB", {

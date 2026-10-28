@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { reservation, site } from "@/config/site";
+import { formatAmount, markets, type Market } from "@/config/pricing";
 import { getReservation } from "@/lib/storage";
 import { PREVIEW_SESSION_PREFIX, previewMode } from "@/lib/stripe";
 import { ReservationShell } from "@/components/ReservationShell";
@@ -20,6 +21,7 @@ export default async function PreviewCheckout({ searchParams }: { searchParams: 
   const row = await getReservation(sessionId);
   if (!row) notFound();
   const pending = row.status === "pending";
+  const market = (Object.keys(markets) as Market[]).find((id) => markets[id].currency === row.currency) ?? "us";
 
   return (
     <ReservationShell>
@@ -34,7 +36,7 @@ export default async function PreviewCheckout({ searchParams }: { searchParams: 
           <p className={styles.description}>Your deposit is fully refundable before shipping and credited toward the final price. Final price and shipping details are still to be confirmed.</p>
           <div className={styles.summary}>
             <dl className={styles.details}>
-              <div><dt>Demo reservation deposit</dt><dd>{reservation.depositLabel}</dd></div>
+              <div><dt>Demo reservation deposit</dt><dd>{formatAmount(market, row.amount, { explicit: true })}</dd></div>
               <div><dt>Payment details</dt><dd>Not required</dd></div>
             </dl>
           </div>

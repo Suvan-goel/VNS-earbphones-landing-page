@@ -10,8 +10,6 @@ import { reservation } from "@/config/reservation";
  * An unconfigured development page can link to the hosted reservation flow.
  */
 
-/** The deposit, in the smallest currency unit. */
-export const DEPOSIT = { amount: reservation.amount, currency: reservation.currency, label: reservation.depositLabel } as const;
 export const RESERVATION_FLOW = "cymba_reservation_v1";
 export const CHECKOUT_INTEGRATION = "cymba_reservations_fjqnrmvp";
 

@@ -1,5 +1,6 @@
 import { site } from "./site";
 import { reservation } from "./reservation";
+import { formatBothMarkets, launch } from "./pricing";
 
 type FaqLink = {
   label: string;
@@ -41,22 +42,22 @@ export function getFaqGroups(reservations = false): FaqGroup[] {
       {
         id: "what",
         q: `What is ${P}?`,
-        a: `${P} combines wired audio, brain-activity sensing (EEG), pulse sensing (PPG) and electrical stimulation at the outer ear. The product is currently in development.`,
+        a: `${P} brings audio, brain-activity sensing (EEG), pulse sensing (PPG) and targeted ear stimulation together in one pair of wired earbuds. We're developing it to make this technology a natural part of everyday listening.`,
       },
       {
         id: "how",
         q: "How does the nerve stimulation work?",
-        a: "Contacts on the earbuds deliver small electrical pulses through the skin of the outer ear, targeting a branch of the vagus nerve. This is called transcutaneous auricular vagus nerve stimulation (taVNS). No implant is required.",
+        a: "Small contacts on the earbuds deliver electrical pulses through the skin of your outer ear, targeting a branch of the vagus nerve. The technique is called transcutaneous auricular vagus nerve stimulation (taVNS). It is non-invasive and requires no implant.",
       },
       {
         id: "normal",
         q: "Can I listen without using stimulation?",
-        a: "Yes. Stimulation is off by default, so you can listen to audio without starting a stimulation session.",
+        a: `Absolutely. You can use ${P} just for audio whenever you like. Stimulation is off by default and only starts when you choose to begin a session.`,
       },
       {
         id: "compatibility",
         q: "Will it work with my phone or laptop?",
-        a: `${P} is wired, with a USB-C connector, so it plugs straight into phones and computers that have a USB-C port. Which adapters we will offer for other ports will be confirmed closer to launch.`,
+        a: `${P} uses USB-C for a straightforward wired connection to compatible phones and computers. We'll confirm supported devices and adapter options closer to launch, so you can check your setup before buying.`,
       },
     ],
   },
@@ -67,17 +68,17 @@ export function getFaqGroups(reservations = false): FaqGroup[] {
       {
         id: "benefit",
         q: `What is the science behind ${P}?`,
-        a: `Human studies have demonstrated improvements in learning and cognitive control with non-invasive vagus nerve stimulation. ${P} brings this science into everyday earbuds, combining targeted ear stimulation with brain and pulse sensing.`,
+        a: `${P} builds on human research into non-invasive vagus nerve stimulation. Studies have demonstrated improvements in learning and cognitive control with this approach. We're bringing that science into everyday earbuds, combining targeted ear stimulation with brain and pulse sensing.`,
       },
       {
         id: "safety",
         q: "Is it safe?",
-        a: `Non-invasive ear stimulation is generally well tolerated in human studies, with over two decades of research behind it. ${P} uses external contacts, requires no implant and keeps stimulation off until you choose to start. Reported side effects are usually mild and temporary, such as tingling or ear discomfort.`,
+        a: `Non-invasive ear stimulation has been studied for over two decades and is well tolerated in human research. ${P} uses contacts on the outer ear, with no implant required. You're in control: stimulation stays off until you choose to start a session.`,
       },
       {
         id: "sensor-data",
         q: "What happens to my brain and pulse data?",
-        a: `Brain and pulse signals guide stimulation timing. EEG sensors measure electrical brain activity, while PPG sensors track pulse. Details of how ${P} processes and stores those readings have not yet been published. This website does not collect brain or pulse data.`,
+        a: `The sensors have a clear purpose: EEG measures electrical brain activity and PPG tracks pulse to guide stimulation timing. This website does not collect either kind of reading. Product-specific details about how ${P} processes and stores sensor data have not yet been published.`,
         links: [{ label: "Website privacy notice", href: "/privacy" }],
       },
     ],
@@ -89,24 +90,24 @@ export function getFaqGroups(reservations = false): FaqGroup[] {
       {
         id: "when",
         q: "When will it launch, and what will it cost?",
-        a: "The launch date and retail price have not been announced. Both will be shared with the launch list by email. A reservation does not guarantee a shipping date or a final price.",
+        a: `We're launching in ${launch.window}. The earbuds will be ${formatBothMarkets("retail")}, paid once, and the ${P} software subscription will be ${formatBothMarkets("subscription", " a month")}. The site shows pounds to UK visitors and US dollars to US visitors; you can switch currency at any time. We'll confirm final pricing, taxes and shipping with the launch list before orders open, and if you reserve you'll see them before deciding whether to complete your purchase.`,
       },
       {
         id: "reservation",
-        q: `How does the ${reservation.depositLabel} reservation work?`,
-        a: `${reservations ? "Reservations are open." : "Paid reservations are coming soon; deposits are not being taken yet."} When you reserve, a one-time ${reservation.depositLabel} deposit holds your place. It is credited against the final price and refundable in full before your pair ships. A founder number is assigned when payment confirmation is recorded, and the first 50 paid reservations receive limited-edition Founders Buds at no extra cost. There is no subscription or automatic charge for the balance.`,
+        q: "How does the reservation deposit work?",
+        a: `${reservations ? "Reservations are open." : "Paid reservations are coming soon; deposits are not being taken yet."} Your one-time deposit of ${formatBothMarkets("deposit")} holds your place and comes off the ${formatBothMarkets("retail")} price of the earbuds. It is fully refundable before your pair ships, with no subscription or automatic charge for the balance. Your founder number is assigned once we record payment confirmation. The first 50 paid reservations qualify for limited-edition Founders Buds at no extra cost when they buy the finished product.`,
         links: [{ label: "Reservation details", href: reservation.path }],
       },
       {
         id: "refund",
         q: "Can I cancel my reservation?",
-        a: `Yes. Email ${site.contactEmail} before your pair ships to request a full refund to your original payment method. If you decline the final offer, or we cancel the product, your deposit will be refunded in full.`,
+        a: `Yes. Your deposit is fully refundable at any time before your pair ships. Email ${site.contactEmail} from your reservation email address and we'll return it to your original payment method. If you decline the final offer, or the product does not ship, you'll receive a full refund.`,
         links: [{ label: "Reservation terms", href: "/terms#reservations" }],
       },
       {
         id: "signup",
         q: "What am I signing up for?",
-        a: "Email updates about launch timing, pricing and availability. Joining the list is free, creates no obligation to buy and does not reserve a pair. A paid reservation is a separate, optional step. You can unsubscribe from the list at any time.",
+        a: "You'll receive email updates about launch timing, pricing and availability. Joining is free, there's no obligation to buy, and you can unsubscribe at any time. If you'd like to reserve a pair, a paid reservation is a separate, optional step.",
       },
     ],
   },

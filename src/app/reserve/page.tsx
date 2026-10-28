@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { defaultVariant, heroVariants, reservation, site } from "@/config/site";
+import { defaultVariant, heroVariants, launch, reservation, site } from "@/config/site";
+import { formatCompactMarkets } from "@/config/pricing";
+import { detectMarket } from "@/lib/market";
+import { MarketProvider } from "@/components/MarketProvider";
+import { MarketToggle } from "@/components/MarketToggle";
+import { Price } from "@/components/Price";
 import { hostedReservationUrl, inlineCheckoutEnabled, localReservationTestMode, previewMode, reservationsOpen, stripePublishableKey } from "@/lib/stripe";
 import { ReserveForm } from "@/components/ReserveForm";
 import { ReservationShell } from "@/components/ReservationShell";
@@ -10,7 +15,7 @@ import styles from "./page.module.css";
 
 export const metadata: Metadata = {
   title: `Reserve your pair · ${site.brand}`,
-  description: `Reserve ${site.product} with a ${reservation.depositLabel} deposit. Fully refundable before shipping and credited toward the final price.`,
+  description: `Reserve ${site.product} with a ${formatCompactMarkets("deposit")} deposit. Fully refundable before shipping and taken off the ${formatCompactMarkets("retail")} price. Launching ${launch.window}.`,
   alternates: { canonical: reservation.path },
 };
 export const dynamic = "force-dynamic";
@@ -29,8 +34,10 @@ export default async function ReservePage({ searchParams }: { searchParams: Sear
   const preview = previewMode();
   const publishableKey = inlineCheckoutEnabled() ? stripePublishableKey() : null;
   const home = `/?v=${variant}`;
+  const { market } = await detectMarket();
 
   return (
+    <MarketProvider initial={market}>
     <ReservationShell home={home} card>
       <div className={styles.layout}>
         <div className={styles.panel}>
@@ -47,15 +54,28 @@ export default async function ReservePage({ searchParams }: { searchParams: Sear
                   <h2>Reservation deposit</h2>
                   <p>Due today</p>
                 </div>
-                <strong>{reservation.depositLabel}</strong>
+                <strong><Price of="deposit" /></strong>
+              </div>
+              <div className={styles.currency}>
+                <p>Pay in</p>
+                <MarketToggle compact />
               </div>
               <ul className={styles.benefits}>
-                {["Fully refundable before shipping", "Deducted from your final price"].map((benefit) => <li key={benefit}>
+                {[
+                  <>Fully refundable before shipping</>,
+                  <>Taken off the <Price of="retail" /> price of the earbuds</>,
+                  <>Launching {launch.window}</>,
+                ].map((benefit, index) => <li key={index}>
                   <svg aria-hidden="true" viewBox="0 0 20 20" fill="none"><path d="m4.5 10 3.5 3.5 7.5-7.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                  {benefit}
+                  <span>{benefit}</span>
                 </li>)}
               </ul>
-              <p className={styles.productStatus}>In development. Final price and shipping date to be confirmed. No automatic balance charge.</p>
+              <dl className={styles.launchPricing} aria-label="Launch pricing">
+                <div><dt>Earbuds</dt><dd><Price of="retail" /></dd></div>
+                <div><dt>Software</dt><dd><Price of="subscription" suffix="/month" /></dd></div>
+                <div><dt>Due at launch</dt><dd><Price of="balance" /></dd></div>
+              </dl>
+              <p className={styles.productStatus}>In development. Final pricing, taxes and shipping are confirmed before you buy. No automatic balance charge.</p>
             </section>}
           </section>
 
@@ -68,7 +88,7 @@ export default async function ReservePage({ searchParams }: { searchParams: Sear
                   <summary>Reservation details<svg aria-hidden="true" viewBox="0 0 20 20" fill="none"><path d="m6 8 4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg></summary>
                   <div className={styles.nextStepsContent}>
                     <p><strong>Your reservation.</strong> Your deposit reserves one pair, with Founders Buds available to the first 50 paid reservations. You’ll receive your reservation reference after payment is confirmed.</p>
-                    <p><strong>Your choice.</strong> We’ll confirm the edition details, final price, shipping costs and taxes before you decide whether to complete your purchase.</p>
+                    <p><strong>Your choice.</strong> We’ll confirm the edition details, final pricing, shipping costs and taxes before you decide whether to complete your purchase. Your deposit comes off the price of the earbuds; the software subscription is separate.</p>
                     <p><strong>Full refunds.</strong> Cancel before shipping by emailing <a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a> from your reservation email. We’ll refund your original payment method.</p>
                   </div>
                 </details>
@@ -85,5 +105,6 @@ export default async function ReservePage({ searchParams }: { searchParams: Sear
         {available && <p className={styles.waitlist}><a href={`${home}#signup`}>Join the waitlist instead</a></p>}
       </div>
     </ReservationShell>
+    </MarketProvider>
   );
 }

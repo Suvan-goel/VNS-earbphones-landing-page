@@ -42,6 +42,7 @@ The earbuds can render and respond to scrolling while the mannequin loads separa
 | Contact email, site URL | `.env` (`NEXT_PUBLIC_CONTACT_EMAIL`, `NEXT_PUBLIC_SITE_URL`) |
 | Social links (only real ones are rendered) | `src/config/site.ts` → `site.social` |
 | Section copy | `src/components/sections/*.tsx` |
+| Launch window, retail price, software subscription and reservation deposit per currency | `src/config/pricing.ts` (`launch`, `markets`); the market detection order is in `src/lib/market.ts` |
 | FAQ questions, answers and supporting links | `src/config/faq.ts` |
 | FAQ layout | `src/components/sections/Faq.tsx` |
 | Product, lifestyle and technology images | `src/assets/earbuds/*.webp` (rendered in `Hero.tsx`, `ProductReveal.tsx`, `Story.tsx` and `Technology.tsx`) |
@@ -168,7 +169,15 @@ Hosted runtime values `SUPABASE_URL` and `SUPABASE_SECRET_KEY` are configured th
 - `npm run typecheck` — TypeScript
 - `node --test tests/backend.test.cjs` — request validation, storage failures, duplicate handling, survey tokens, secret-key headers, and rate limits using a mocked Supabase response (no credentials or network required)
 
-## Reservations (US$50 refundable deposit)
+## Pricing and currencies
+
+`src/config/pricing.ts` holds the planned launch (Q4 2027), the retail price (£400 / US$449), the software subscription (£15 / US$15 a month) and the reservation deposit (£35 / US$50), all in minor units, with one `markets` entry per currency. The same numbers drive the homepage Pricing section, the reservation page, the FAQ, the terms, the metadata and the Stripe checkout amount; nothing is hard-coded in copy.
+
+A visitor's currency is chosen server-side once per request in `src/lib/market.ts`: a `cymba_market` cookie saved by the currency switch wins, then the country reported by the host (`cf-ipcountry` on Cloudflare, with `x-vercel-ip-country`, `cloudfront-viewer-country`, `x-country-code` and `x-geo-country` also read), otherwise US dollars. The UK and its Crown Dependencies see pounds; the US and its territories see dollars; everyone else sees dollars until they switch. `MarketProvider` carries the choice to the client, `MarketToggle` switches it in place and saves the cookie, and `Price` renders any amount. The hosted Worker copies `request.cf.country` into `cf-ipcountry` so detection does not depend on zone settings.
+
+The reservation page sends the market it displayed to `/api/reserve`; the server prices the deposit from `markets` and never from the request. An attempt retried in a different currency is a changed-details conflict, and the payment components verify Stripe's live total against the displayed currency and amount. The currency switch is disabled while a checkout is being prepared or confirmed. Reservation terms version `2026-10-28` names both deposits; attempts started under the US-dollar-only wording must be refreshed and re-accepted.
+
+## Reservations (£35 / US$50 refundable deposit)
 
 **Current status.** Paid reservations opened on the live site with the user's explicit approval on 26 October 2026, as recorded below. Subsequent design and inline-payment work is local only; do not publish it or change live payment settings without an explicit request. Keep payment testing in the isolated Stripe sandbox.
 
@@ -448,3 +457,11 @@ Published Sites version **34**, source `bfdb5dea63f28f2a0840101674fabc693ec5925e
 Moved the deposit, refund benefits and development disclosure beneath the Founders offer in the left column. Desktop headline maximum is now 44px (previously 56px), with 15px offer copy (previously 17px). The right column begins with email and payment; mobile retains the existing type sizes and offer → deposit → payment order. No payment logic or copy changed.
 
 Root and hosted TypeScript, whitespace checks, hosted build and independent review passed. Desktop and 390px mobile browser checks confirmed the new placement, unchanged mobile spacing and no horizontal overflow. Published Sites version **35**, source `0acef9818ca4d69ee4e3edfd548e53f5bb9f9609`, saved version `appgprj_6ad8da86c44c8191adebbfb1f67c376f~appgver_244bc172b57c8191a3ab55742bf12aaf`. Deployment `appgdep_6ae0e9514f108191920f27f640c73acd` succeeded at 18:11:44 UTC with environment revision **5** unchanged. Live at https://trycymba.com/reserve. Proof: `output/reservation-left-details-live.jpg`. No checkout session or payment was created during verification.
+
+### Pricing, launch window and currencies — local, 28 October 2026
+
+Added the planned launch pricing to the site: £400 / US$449 for the earbuds, £15 / US$15 a month for the software subscription, and a reservation deposit of £35 / US$50, with the Q4 2027 launch window stated alongside. `src/config/pricing.ts` is the single source for these amounts. A new Pricing chapter sits between At a glance and the signup section; the reservation page shows the deposit, a currency switch, the launch prices and the balance due at launch; the FAQ, terms (now version `2026-10-28`, updated 28 October 2026), metadata and signup copy name both currencies or follow the visitor's currency.
+
+UK visitors see pounds and US visitors see dollars, chosen server-side from the host's country header (`cf-ipcountry`; the hosted Worker now copies `request.cf.country` into it); everyone else sees dollars; a `cymba_market` cookie remembers a manual switch. `/api/reserve` prices the deposit from the market the page displayed and still never trusts an amount from the browser; a retry in another currency is a changed-details conflict, the payment components verify Stripe's live total against the displayed currency, and the switch is disabled while a checkout is being prepared or confirmed. Pound deposits are presented in GBP on the existing US-dollar Stripe account.
+
+Validation: all 133 root checks (including new market tests), root TypeScript and production build; hosted TypeScript and hosted reservation, receipt, Meta and market tests. Browser checks covered the homepage and reservation page with GB, US, DE and absent country headers, the switch, the saved cookie across a reload, and 390px mobile layouts. The hosted source in `sites/cymba` is synced but not yet published; no payment or checkout session was created.

@@ -97,7 +97,7 @@ function temporarySite() {
 }
 const input = (changes = {}) => ({
   attemptId: randomUUID(), email: "local-test@example.com", variant: "learn", termsAccepted: true,
-  termsVersion: "2026-10-25", company: "", startedAt: Date.now() - 5000, ...changes,
+  termsVersion: "2026-10-28", company: "", startedAt: Date.now() - 5000, ...changes,
 });
 const request = (body) => new Request("http://localhost:3010/api/reserve", {
   method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body),
@@ -217,7 +217,7 @@ test("real local PostgreSQL records Checkout, signed webhook payments, refunds, 
       saved = (await app.storage().lookupReservation(sessionId)).reservation;
       assert.equal(saved.status, "pending");
       assert.equal(saved.attempt_id, body.attemptId);
-      assert.equal(saved.terms_version, "2026-10-25");
+      assert.equal(saved.terms_version, "2026-10-28");
       assert.equal(typeof saved.terms_accepted_at, "string");
       assert.equal(saved.livemode, false);
       assert.equal(fs.existsSync(path.join(cwd, ".data/reservations-test-db/PG_VERSION")), true);
@@ -279,7 +279,7 @@ test("real local PostgreSQL records Checkout, signed webhook payments, refunds, 
     await t.test("concurrent confirmations stay unique and failed transactions remain retryable", async () => {
       const attempts = await Promise.all(Array.from({ length: 8 }, () => app.storage().createReservation({
         attemptId: randomUUID(), email: "parallel-local@example.com", variant: "learn", attribution: {},
-        amount: 5000, currency: "usd", termsVersion: "2026-10-25", livemode: false,
+        amount: 5000, currency: "usd", termsVersion: "2026-10-28", livemode: false,
       })));
       assert.ok(attempts.every((attempt) => attempt.status === "ready"));
       const events = attempts.map(({ reservation }) => ({
@@ -295,7 +295,7 @@ test("real local PostgreSQL records Checkout, signed webhook payments, refunds, 
       assert.ok(numbers.every((number) => number > 1));
       const failedAttempt = await app.storage().createReservation({
         attemptId: randomUUID(), email: "retry-local@example.com", variant: "learn", attribution: {},
-        amount: 5000, currency: "usd", termsVersion: "2026-10-25", livemode: false,
+        amount: 5000, currency: "usd", termsVersion: "2026-10-28", livemode: false,
       });
       const target = failedAttempt.reservation;
       const failedEvent = { ...events[0], eventId: "evt_transaction_failure", reservationId: target.id,

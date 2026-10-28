@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { reservation, site } from "@/config/site";
+import { defaultMarket, formatPrice, markets } from "@/config/pricing";
 import { localReservationTestMode } from "@/lib/stripe";
 import {
   reservationReceiptCookie,
@@ -39,7 +40,7 @@ const messages = {
   paid: {
     label: "Reservation confirmed",
     title: "Your place is reserved.",
-    description: `Your ${reservation.depositLabel} deposit is recorded and fully refundable before shipping. When ${site.product} is ready to order, we’ll share the final price and shipping details. If you choose to buy, your deposit comes off the price.`,
+    description: `Your deposit is recorded and fully refundable before shipping. When ${site.product} is ready to order, we’ll share the final price and shipping details. If you choose to buy, your deposit comes off the price.`,
   },
   partially_refunded: {
     label: "Partial refund recorded",
@@ -118,12 +119,11 @@ export default async function ReserveComplete({ searchParams }: { searchParams: 
   const canRefresh = ["pending", "processing", "unavailable"].includes(outcome.kind) && Boolean(sessionId);
   const canRetry = outcome.kind === "expired" || outcome.kind === "failed";
   const founderNumber = row?.founder_number;
-  const depositLabel = row ? new Intl.NumberFormat("en-US", {
-    style: "currency", currency: row.currency.toUpperCase(), currencyDisplay: "code",
-  }).format(row.amount / 100) : reservation.depositLabel;
-  const money = (value: number) => new Intl.NumberFormat("en-US", {
-    style: "currency", currency: row?.currency.toUpperCase() ?? reservation.currency.toUpperCase(), currencyDisplay: "code",
+  // The recorded currency names the amount (US$50.00 or £35.00); a missing row falls back to the default market.
+  const money = (value: number) => new Intl.NumberFormat("en-GB", {
+    style: "currency", currency: row?.currency.toUpperCase() ?? markets[defaultMarket].code,
   }).format(value / 100);
+  const depositLabel = row ? money(row.amount) : formatPrice(defaultMarket, "deposit", { explicit: true });
   const showFounder = (outcome.kind === "paid" || outcome.kind === "partially_refunded") && founderNumber != null;
 
   return (
