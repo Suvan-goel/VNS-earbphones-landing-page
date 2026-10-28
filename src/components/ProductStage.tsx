@@ -210,7 +210,8 @@ export function ProductStage({
   const posterOpacity = useTransform(p, (value) => (value > 0.14 ? 0 : 1));
   /* After the stage: the room blurs and darkens over one more screen, then stays behind the rest of the page. */
   const q = useTransform(() => Math.max(0, closingDistance.get() - CLOSING_SCROLL_SCREENS));
-  const sceneBlur = useTransform(q, [0, 0.5], ["blur(0px)", "blur(18px)"]);
+  // The blurred copy takes over a little ahead of the scale, so the mixed stage is short.
+  const sceneBlurOpacity = useTransform(q, [0, 0.35], [0, 1]);
   const sceneScale = useTransform(q, [0, 0.5], [1, 1.06]);
   const sceneDark = useTransform(q, [0, 0.5], [0, 0.72]);
   const sceneShade = useTransform(q, [0, 0.3], [1, 0]);
@@ -244,7 +245,7 @@ export function ProductStage({
       {modelUrl && <ProductAssetHints modelUrl={modelUrl} />}
       {/* The room, fixed behind the page. It appears for the last chapter and stays, blurred and dark, under everything after. */}
       <motion.div className={styles.scene} style={{ clipPath: sceneClip, y: sceneY, visibility: sceneVisibility }} aria-hidden="true">
-        <motion.div className={styles.sceneVisual} style={{ filter: sceneBlur, scale: sceneScale }}>
+        <motion.div className={styles.sceneVisual} style={{ scale: sceneScale }}>
           {/* The existing extended shoulders sit behind the unchanged live portrait. */}
           <div className={styles.sceneExtensionTail} style={{ borderImageSource: `url(${listeningExtension.src})` }} />
           <div className={styles.sceneExtension}>
@@ -253,6 +254,17 @@ export function ProductStage({
           <motion.div ref={portrait} className={styles.sceneFrame} style={{ borderRadius: mobilePortrait ? 0 : portraitRadius, "--portrait-feather": mobilePortrait ? "16px" : portraitFeather } as MotionStyle}>
             <Image src={scene.image} alt="" fill loading="eager" sizes="(min-width: 1248px) 540px, (min-width: 1024px) calc((94vw - 96px) / 2), 100vw" quality={95} className={styles.sceneImage} />
           </motion.div>
+        </motion.div>
+        {/* The same room, already blurred; it fades in by opacity so no frame re-blurs the picture. */}
+        <motion.div className={`${styles.sceneVisual} ${styles.sceneBlurred}`} style={{ opacity: sceneBlurOpacity }}>
+          <div className={styles.sceneExtensionTail} style={{ borderImageSource: `url(${listeningExtension.src})` }} />
+          <div className={styles.sceneExtension}>
+            <Image src={listeningExtension} alt="" fill sizes="1600px" quality={75} className={styles.extensionImage} />
+          </div>
+          <div className={styles.sceneFrame} style={{ borderRadius: 0, "--portrait-feather": mobilePortrait ? "16px" : "56px" } as CSSProperties}>
+            {/* Eager, like the sharp copy: a lazily loaded image behind a transparent layer never shows before the fade. */}
+            <Image src={scene.image} alt="" fill loading="eager" sizes="(min-width: 1248px) 540px, (min-width: 1024px) calc((94vw - 96px) / 2), 100vw" quality={75} className={styles.sceneImage} />
+          </div>
         </motion.div>
         <motion.div className={styles.sceneShade} style={{ opacity: mobilePortrait ? mobileSceneShade : sceneShade }} />
         <motion.div className={styles.sceneDark} style={{ opacity: sceneDark }} />

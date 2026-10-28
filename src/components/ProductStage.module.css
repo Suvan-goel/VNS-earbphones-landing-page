@@ -151,7 +151,14 @@
 .sceneVisual {
   position: absolute;
   inset: 0;
-  will-change: filter, transform;
+  will-change: transform;
+}
+/* The blurred room is a second, never-changing copy that fades in over the sharp one,
+   so the blur is rasterised once instead of at every new radius while scrolling. */
+.sceneBlurred {
+  filter: blur(18px);
+  scale: 1.06;
+  will-change: opacity;
 }
 .sceneExtension {
   /* Match both shoulder contours to the portrait; offset scales with its width. */
@@ -433,6 +440,10 @@
   .closingReveal { will-change: clip-path; }
   .scene .sceneFrame { will-change: transform; }
   .sceneShade { will-change: opacity; }
+  /* The full-bleed portrait covers the shoulder extension entirely; drawing its filtered copies
+     behind it was the main cost of the expansion on phones. */
+  .sceneExtension,
+  .sceneExtensionTail { display: none; }
   /* Keep the static backdrop full bleed; the scrolling portrait rests as a centered card. */
   .sceneFrame {
     left: 0;
