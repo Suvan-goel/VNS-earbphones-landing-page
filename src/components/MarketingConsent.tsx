@@ -110,12 +110,12 @@ export function MarketingConsent() {
   }, [panelOpen, shown]);
 
   useEffect(() => {
-    if (settingsOpen && panelOpen) panelRef.current?.focus({ preventScroll: true });
-    if (!panelOpen && restoreFocus.current) {
+    if (settingsOpen && panelOpen && shown) panelRef.current?.focus({ preventScroll: true });
+    if (!panelOpen && !shown && restoreFocus.current) {
       restoreFocus.current = false;
       settingsRef.current?.focus({ preventScroll: true });
     }
-  }, [settingsOpen, panelOpen]);
+  }, [settingsOpen, panelOpen, shown]);
 
   function closeSettings() {
     restoreFocus.current = true;

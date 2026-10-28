@@ -21,7 +21,7 @@ export function AppPreview() {
           <Image
             src={appMockup}
             alt="cymba app concept on a laptop and phone, showing a work session timer, brain and pulse signals, stimulation activity and recent sessions."
-            sizes="(min-width: 1440px) 1000px, (min-width: 1024px) 68vw, (min-width: 768px) 90vw, 100vw"
+            sizes="(min-width: 1440px) 860px, (min-width: 1024px) 58vw, (min-width: 768px) 90vw, 100vw"
             quality={90}
             className={styles.image}
           />
