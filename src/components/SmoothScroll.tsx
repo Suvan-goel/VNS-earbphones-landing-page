@@ -88,6 +88,12 @@ export function SmoothScroll() {
     const onResize = () => {
       target = Math.min(target, maxScroll());
     };
+    // A header link or in-page anchor scrolls the page itself; a glide still
+    // settling after the last wheel tick would otherwise snap it back each frame.
+    const onLinkClick = (event: MouseEvent) => {
+      const node = event.target instanceof Element ? event.target : null;
+      if (node?.closest('a[href*="#"]')) stopGlide();
+    };
 
     // Hero parallax: copy drifts and fades while the picture settles.
     const hero = document.querySelector<HTMLElement>("[data-hero]");
@@ -112,6 +118,7 @@ export function SmoothScroll() {
     window.addEventListener("scroll", scheduleHero, { passive: true });
     window.addEventListener("resize", onResize);
     window.addEventListener("resize", scheduleHero);
+    window.addEventListener("click", onLinkClick, true);
     scrubHero();
 
     return () => {
@@ -123,6 +130,7 @@ export function SmoothScroll() {
       window.removeEventListener("scroll", scheduleHero);
       window.removeEventListener("resize", onResize);
       window.removeEventListener("resize", scheduleHero);
+      window.removeEventListener("click", onLinkClick, true);
     };
   }, []);
 

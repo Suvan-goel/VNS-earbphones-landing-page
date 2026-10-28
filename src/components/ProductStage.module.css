@@ -401,7 +401,9 @@
     right: 20px;
     /* Lift above the cookie panel while it is open, so the first screen always shows the form. */
     --form-inset: max(32px, env(safe-area-inset-bottom));
-    bottom: calc(var(--form-inset) + var(--consent-height, 0px));
+    bottom: var(--form-inset);
+    translate: 0 calc(-1 * var(--consent-height, 0px));
+    transition: translate 250ms var(--ease-out-expo);
     width: auto;
     max-width: 28rem;
     margin-inline: auto;
@@ -546,4 +548,20 @@
     max-width: 32rem;
     --form-inset: 48px;
   }
+}
+
+/* While the compact cookie panel lifts the form, shrink the band from its top so the cable tips stay clear of the field. */
+@media (max-width: 639px) {
+  .flight {
+    transform-origin: 50% 0;
+    scale: calc(1 - var(--consent-lift, 0) / 800);
+    transition: scale 250ms var(--ease-out-expo);
+  }
+}
+
+/* The loading still only stands in for the hero pose; once the story has moved on it steps aside. */
+.posterLayer {
+  position: absolute;
+  inset: 0;
+  transition: opacity 300ms ease;
 }

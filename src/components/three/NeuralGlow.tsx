@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { type MotionValue } from "motion/react";
 import * as THREE from "three";
@@ -131,9 +131,13 @@ function DesktopNeuralGlow({ progress }: { progress: MotionValue<number> }) {
     pipeline.quad.dispose();
   }, [pipeline]);
 
+  const frames = useRef(0);
   useFrame(({ gl: renderer, scene, camera }) => {
-    // The initial product hero needs no postprocessing at all.
-    if (progress.get() < 0.57) {
+    // The initial product hero needs no postprocessing at all. The pipeline
+    // still runs once on an early frame, so its shaders and targets exist
+    // before the signal chapter; nothing glows yet, so the picture is the same.
+    frames.current++;
+    if (progress.get() < 0.57 && frames.current !== 3) {
       renderer.render(scene, camera);
       return;
     }

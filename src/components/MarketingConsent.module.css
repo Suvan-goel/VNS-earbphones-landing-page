@@ -21,6 +21,20 @@
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   box-shadow: 0 4px 24px #0000000a;
+  /* No fill: a held keyframe would override the exit transition. */
+  animation: consent-in 250ms ease;
+  transition: opacity 200ms ease, translate 200ms ease;
+}
+.panel[data-closing] {
+  opacity: 0;
+  translate: 0 8px;
+  pointer-events: none;
+}
+@keyframes consent-in {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
 }
 
 .heading {

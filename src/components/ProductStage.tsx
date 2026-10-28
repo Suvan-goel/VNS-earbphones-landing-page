@@ -44,7 +44,7 @@ const StageScene = dynamic(() => import("./three/StageScene").then((m) => m.Stag
 const scene = { image: listeningScene };
 
 const storyChapters = [
-  { copy: productStory.product, range: [0.17, 0.23, 0.4, 0.45] },
+  { copy: productStory.product, range: [0.15, 0.21, 0.4, 0.45] },
   { copy: productStory.personalisation, range: [0.46, 0.50, 0.69, 0.73] },
   { copy: productStory.evidence, range: [0.74, 0.77, 0.85, 0.86] },
 ] satisfies { copy: { headline: readonly string[]; description: string }; range: [number, number, number, number] }[];
@@ -206,6 +206,8 @@ export function ProductStage({
 
   /* Freeze the last model pose during entry; continued scroll immediately opens the backdrop. */
   const p = useTransform(() => productStageProgress(distance.get()));
+  /* On a slow connection the hero still should not sit under the later chapters. */
+  const posterOpacity = useTransform(p, (value) => (value > 0.14 ? 0 : 1));
   /* After the stage: the room blurs and darkens over one more screen, then stays behind the rest of the page. */
   const q = useTransform(() => Math.max(0, closingDistance.get() - CLOSING_SCROLL_SCREENS));
   const sceneBlur = useTransform(q, [0, 0.5], ["blur(0px)", "blur(18px)"]);
@@ -318,7 +320,11 @@ export function ProductStage({
                 <motion.div className={styles.media} data-product-model={failed || !modelUrl ? "fallback" : ready ? "loaded" : "loading"}>
                   {!failed && modelUrl && <StageScene progress={p} readProgress={readProgress} modelUrl={modelUrl} onReady={onReady} onLoading={onLoading} onError={onError} />}
                   {/* The poster covers loading; no label is needed over it. */}
-                  {posterUrl && <HeroPoster src={posterUrl} ready={ready} priority />}
+                  {posterUrl && (
+                    <motion.div className={styles.posterLayer} style={{ opacity: posterOpacity }}>
+                      <HeroPoster src={posterUrl} ready={ready} priority />
+                    </motion.div>
+                  )}
                   {failed && modelUrl && <ModelRecoveryNotice onRetry={retry} />}
                 </motion.div>
               </div>

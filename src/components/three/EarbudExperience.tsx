@@ -324,7 +324,19 @@ function DeferredMannequin({ progress, reveal, stimulation, mannequinGate }: {
     {mannequinGate}
     <Mannequin reveal={reveal} stimulation={stimulation} />
     <EarSensingCue progress={progress} reveal={reveal} />
+    <ShaderWarmUp />
   </Suspense>;
+}
+
+/** Compile every material once the head has arrived, so the first scroll through the chapters never waits on a shader. */
+function ShaderWarmUp() {
+  const done = useRef(false);
+  useFrame(({ gl, scene, camera }) => {
+    if (done.current) return;
+    done.current = true;
+    gl.compile(scene, camera);
+  });
+  return null;
 }
 
 export function EarbudExperience({ modelUrl, progress, mannequinGate }: {
@@ -361,8 +373,9 @@ export function EarbudExperience({ modelUrl, progress, mannequinGate }: {
       shadowProgress.current = p;
     }
     const worn = THREE.MathUtils.smootherstep(p, 0.1, 0.46);
-    // Let the product lead the turn before bringing in the mannequin.
-    reveal.set(ease(0.27, 0.46, p));
+    // Let the product lead the turn, then bring the mannequin in quickly enough
+    // that the head is solid by the time the earbuds seat.
+    reveal.set(ease(0.30, 0.42, p));
     // Give sensing its own quiet beat, then grow the signal toward the crown.
     // Hold the completed signal while the research chapter is shown.
     stimulation.set(ease(0.57, 0.71, p));

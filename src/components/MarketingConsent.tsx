@@ -52,6 +52,8 @@ export function MarketingConsent() {
   const consent = useSyncExternalStore(subscribeMarketingConsent, getMarketingConsent, serverConsent);
   const hydrated = useSyncExternalStore(subscribeHydration, clientSnapshot, serverSnapshot);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [shown, setShown] = useState(false);
+  const [closing, setClosing] = useState(false);
   const panelRef = useRef<HTMLElement>(null);
   const settingsRef = useRef<HTMLButtonElement>(null);
   const restoreFocus = useRef(false);
@@ -69,19 +71,43 @@ export function MarketingConsent() {
   useEffect(() => {
     const root = document.documentElement;
     const panel = panelRef.current;
-    if (!panelOpen || !panel) {
+    // The panel mounts one render after it opens, so measure once it exists.
+    if (!panelOpen || !shown || !panel) {
       root.style.removeProperty("--consent-height");
+      root.style.removeProperty("--consent-lift");
       return;
     }
-    const update = () => root.style.setProperty("--consent-height", `${Math.ceil(panel.getBoundingClientRect().height)}px`);
+    const update = () => {
+      const height = Math.ceil(panel.getBoundingClientRect().height);
+      root.style.setProperty("--consent-height", `${height}px`);
+      // The same number without a unit, so the model band can scale by it.
+      root.style.setProperty("--consent-lift", `${height}`);
+    };
     update();
     const observer = new ResizeObserver(update);
     observer.observe(panel);
     return () => {
       observer.disconnect();
       root.style.removeProperty("--consent-height");
+      root.style.removeProperty("--consent-lift");
     };
-  }, [panelOpen]);
+  }, [panelOpen, shown]);
+
+  // Keep the panel mounted for a short fade-out instead of removing it in one frame.
+  useEffect(() => {
+    if (panelOpen) {
+      setShown(true);
+      setClosing(false);
+      return;
+    }
+    if (!shown) return;
+    setClosing(true);
+    const timer = window.setTimeout(() => {
+      setShown(false);
+      setClosing(false);
+    }, 200);
+    return () => window.clearTimeout(timer);
+  }, [panelOpen, shown]);
 
   useEffect(() => {
     if (settingsOpen && panelOpen) panelRef.current?.focus({ preventScroll: true });
@@ -106,11 +132,13 @@ export function MarketingConsent() {
 
   return (
     <>
-      {panelOpen ? (
+      {shown ? (
         <section
           ref={panelRef}
           id="marketing-cookie-settings"
           className={styles.panel}
+          data-closing={closing || undefined}
+          aria-hidden={closing || undefined}
           aria-labelledby="marketing-cookie-title"
           aria-describedby="marketing-cookie-description"
           tabIndex={-1}
