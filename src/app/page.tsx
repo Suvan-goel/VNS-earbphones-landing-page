@@ -19,7 +19,6 @@ import { Hero } from "@/components/sections/Hero";
 import { ProductReveal } from "@/components/sections/ProductReveal";
 import { Research } from "@/components/sections/Research";
 import { Glance } from "@/components/sections/Glance";
-import { Pricing } from "@/components/sections/Pricing";
 import { Worn } from "@/components/sections/Worn";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { Evidence } from "@/components/sections/Evidence";
@@ -92,8 +91,7 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
         {/* Everything after the stage scrolls over the room, so these sections take the dark treatment. */}
         <div className="on-scene">
           <Research />
-          <Glance />
-          <Pricing reservations={reservations} />
+          <Glance reservations={reservations} />
           <EarlyAccess mode={mode} v={v} reservations={reservations} />
           <Faq reservations={reservations} />
         </div>
