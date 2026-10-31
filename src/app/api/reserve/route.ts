@@ -6,7 +6,7 @@ import { defaultMarket, isMarket, markets } from "@/config/pricing";
 import { attachReservationSession, createReservation } from "@/lib/storage";
 import { CHECKOUT_INTEGRATION, PREVIEW_SESSION_PREFIX, RESERVATION_FLOW, inlineCheckoutEnabled, localReservationTestMode, previewMode, reservationsOpen, stripe, stripeLiveMode } from "@/lib/stripe";
 import { clientKey, rateLimit } from "@/lib/rate-limit";
-import { cleanAttribution, cleanVariant, normaliseEmail } from "@/lib/validation";
+import { cleanVariant, normaliseEmail } from "@/lib/validation";
 import { readJsonObject } from "@/lib/request-json";
 
 export const runtime = "nodejs";
@@ -71,12 +71,12 @@ export async function POST(req: Request) {
   // The page names the currency it displayed; the amount itself is never taken from the request.
   const market = body.market === undefined ? defaultMarket : body.market;
   if (!isMarket(market)) {
-    return NextResponse.json({ status: "error", message: "Please choose a currency and try again." }, { status: 422 });
+    return NextResponse.json({ status: "error", message: "We couldn't confirm the currency. Refresh this page and try again." }, { status: 422 });
   }
   const deposit = markets[market];
   const preview = previewMode();
   const stored = await createReservation({
-    attemptId: body.attemptId.toLowerCase(), email, variant: cleanVariant(body.variant), attribution: cleanAttribution(body.attribution),
+    attemptId: body.attemptId.toLowerCase(), email, variant: cleanVariant(body.variant), attribution: {},
     amount: deposit.deposit, currency: deposit.currency, termsVersion: reservation.termsVersion, livemode: !preview && stripeLiveMode(),
   });
   if (stored.status === "conflict") return retryAttempt("conflict", "Your reservation details changed. Please review them and try again.");

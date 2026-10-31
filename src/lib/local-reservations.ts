@@ -60,6 +60,7 @@ async function localDatabase(): Promise<PGlite> {
       // Execute the production schema and reducer, so local tests exercise the same transaction.
       const migration = await fs.readFile(path.join(process.cwd(), "supabase", "migrations", "20261025_paid_reservations.sql"), "utf8");
       await db.exec(migration);
+      await db.exec(await fs.readFile(path.join(process.cwd(), "supabase", "migrations", "20261030_reservation_numbers.sql"), "utf8"));
       return db;
     } catch (error) { await db.close().catch(() => undefined); throw error; }
   })().catch((error) => {

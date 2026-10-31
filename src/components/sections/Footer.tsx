@@ -3,10 +3,9 @@ import { Wordmark } from "../Wordmark";
 import { Container } from "../ui";
 
 const links = [
-  { href: `mailto:${site.contactEmail}`, label: "Contact" },
+  { href: "/contact", label: "Contact" },
   { href: "/privacy", label: "Privacy" },
   { href: "/terms", label: "Terms" },
-  { href: "/models/credits.txt", label: "3D credits" },
 ];
 
 /* One line of footer: wordmark, links, copyright. Small print beneath, in small print. */
@@ -32,8 +31,8 @@ export function Footer() {
           </nav>
         </div>
         <p className="mt-5 max-w-[60rem] text-[0.6875rem] leading-relaxed">
-          {site.product} is not yet shipping. It is not a medical device, and benefits for learning or memory have not been
-          independently demonstrated.
+          {site.product} is in development and is not yet shipping. It is not intended to diagnose, treat, cure or prevent disease.
+          Benefits for learning or memory have not been independently demonstrated for the finished product.
         </p>
       </Container>
     </footer>

@@ -1,0 +1,29 @@
+[
+  {
+    "source": "public/models/cymba-neural-mannequin-organic-detailed.glb",
+    "destination": "public/models/cymba-neural-mannequin-organic-detailed-desktop.glb",
+    "sourceSha256": "157a36c28e75df10c3ab52214d421033dcdaf4f10fec255356bedbb87335d687",
+    "sha256": "7d875f6bf1b902c0ec30d998ce3ee2ea74238417de379ec492090be09b79da64",
+    "versionKey": "7d875f6b",
+    "sourceBytes": 3880596,
+    "bytes": 1344324,
+    "removed": {
+      "references": 3,
+      "textures": 3,
+      "images": 3,
+      "samplers": 1,
+      "bytes": 2535602
+    },
+    "extensionsUsed": [
+      "KHR_draco_mesh_compression",
+      "KHR_materials_emissive_strength",
+      "KHR_materials_specular"
+    ],
+    "materials": [
+      "Clean ivory marble - subtle mineral grain",
+      "Purple neural fibres"
+    ],
+    "geometryByteIdentical": true,
+    "originalUnchanged": true
+  }
+]

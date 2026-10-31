@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import { site } from "@/config/site";
+import { shareCard } from "@/config/share-card";
 import { MarketingConsent } from "@/components/MarketingConsent";
 import "./globals.css";
 
@@ -17,9 +18,11 @@ export const metadata: Metadata = {
     title: site.seo.title,
     description: site.seo.description,
     url: "/",
+    images: [shareCard],
   },
   twitter: {
     card: "summary_large_image",
+    images: [shareCard],
     title: site.seo.title,
     description: site.seo.description,
   },
@@ -27,9 +30,9 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#ffffff",
   width: "device-width",
   initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

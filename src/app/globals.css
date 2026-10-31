@@ -233,6 +233,7 @@ body {
   position: fixed;
   inset: 0 0 auto;
   z-index: 40;
+  padding-top: env(safe-area-inset-top);
   background: #ffffffbf;
   color: var(--color-ivory);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
@@ -246,6 +247,12 @@ body {
   background: #17171999;
   color-scheme: dark;
 }
+/* Secondary pages keep the same glass bar in the document flow. */
+.site-header--sticky {
+  position: sticky;
+  top: 0;
+  flex-shrink: 0;
+}
 .site-header :focus-visible { outline-color: var(--color-ivory); }
 .site-nav__brand img { transition: filter 350ms ease; }
 .site-header[data-theme="dark"] .site-nav__brand img { filter: brightness(0) invert(1); }
@@ -256,7 +263,8 @@ body {
   max-width: 1330px;
   min-height: 48px;
   margin-inline: auto;
-  padding-inline: clamp(20px, 3.3vw, 48px);
+  padding-left: max(clamp(20px, 3.3vw, 48px), env(safe-area-inset-left));
+  padding-right: max(clamp(20px, 3.3vw, 48px), env(safe-area-inset-right));
 }
 .site-nav__brand {
   display: inline-flex;
@@ -264,6 +272,7 @@ body {
   justify-self: start;
   min-height: 44px;
 }
+.site-nav--simple { grid-template-columns: minmax(0, 1fr) auto; }
 .site-nav__wordmark {
   font-size: 0.875rem;
 }
@@ -359,13 +368,13 @@ body {
 }
 @media (min-width: 1024px) {
   .site-nav {
-    padding-inline: var(--desktop-gutter);
+    padding-left: max(var(--desktop-gutter), env(safe-area-inset-left));
+    padding-right: max(var(--desktop-gutter), env(safe-area-inset-right));
   }
 }
 @media (max-width: 767px) {
   .site-header {
     --mobile-menu-surface: #ffffff;
-    padding-top: env(safe-area-inset-top);
   }
   .site-header[data-theme="dark"] {
     --mobile-menu-surface: #171719;
@@ -403,6 +412,9 @@ body {
   }
   .site-nav__actions {
     gap: 8px;
+  }
+  .site-nav--simple {
+    padding-right: calc(20px + env(safe-area-inset-right));
   }
   .site-nav__cta {
     display: none;

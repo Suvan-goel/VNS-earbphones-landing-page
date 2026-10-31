@@ -1,0 +1,95 @@
+.layout { width: min(100%, 960px); margin-inline: auto; color: var(--color-ivory); --reservation-focus: var(--color-rose); }
+.layout svg { width: 19px; height: 19px; flex: 0 0 auto; }
+.panel { overflow: hidden; border: 1px solid var(--line); border-radius: 24px; background: var(--color-raised); box-shadow: 0 16px 60px #00000018; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+.previewNotice { margin-bottom: 18px; padding: 12px 16px; border: 1px solid var(--line); border-radius: 8px; background: #ffffff08; color: var(--color-muted); font-size: 12px; }
+.hero { display: grid; grid-template-columns: 1fr 1fr; align-items: stretch; }
+.intro { min-width: 0; padding: 34px 40px 38px; }
+.product { position: relative; height: 152px; margin: -12px 0 20px; overflow: hidden; }
+.product img { position: absolute; top: -70px; left: 50%; width: 340px; height: 380px; max-width: none; object-fit: contain; transform: translateX(-50%); mask-image: linear-gradient(#000 50%, transparent 85%); }
+.status { display: flex; align-items: center; gap: 9px; margin: 0 0 17px; color: var(--color-rose); font-size: 10px; font-weight: 500; letter-spacing: .09em; text-transform: uppercase; }
+.statusMark { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border: 1px solid #cfae7c66; border-radius: 50%; background: #cfae7c0a; }
+.statusMark svg { width: 15px; height: 15px; }
+.title { max-width: 13ch; margin: 0; color: var(--color-ivory); font-size: clamp(32px, 3.5vw, 40px); font-weight: 500; letter-spacing: -.04em; line-height: 1.12; text-wrap: balance; }
+.description { max-width: 40ch; margin: 15px 0 0; color: var(--color-muted); font-size: 13px; line-height: 1.75; text-wrap: pretty; }
+.record { display: flex; flex-direction: column; justify-content: center; min-width: 0; padding: 38px 36px; border-left: 1px solid var(--line); }
+.receiptHeading { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
+.receiptHeading h2 { color: var(--color-muted); font-size: 13px; font-weight: 400; }
+.number { color: var(--color-rose); font-size: 28px; font-weight: 400; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+.details { display: grid; gap: 12px; margin-top: 22px; font-size: 12px; line-height: 1.5; }
+.details > div { display: flex; justify-content: space-between; align-items: baseline; gap: 18px; }
+.details dt { color: var(--color-muted); }
+.details dd { margin: 0; color: var(--color-ivory); font-weight: 500; text-align: right; font-variant-numeric: tabular-nums; }
+.details .deposit { align-items: start; }
+.deposit dt { color: var(--color-ivory); font-size: 13px; font-weight: 500; padding-top: 5px; }
+.deposit dt span { display: block; max-width: 23ch; margin-top: 7px; color: var(--color-muted); font-size: 11px; font-weight: 400; line-height: 1.7; }
+.deposit dd { font-size: 30px; font-weight: 400; letter-spacing: -.035em; white-space: nowrap; }
+.primaryButton, .secondaryButton { display: inline-flex; min-height: 48px; align-items: center; justify-content: center; gap: 9px; padding: 12px 15px; border: 1px solid transparent; border-radius: 9px; background: var(--color-ivory); color: #1d1d1f; font-size: 12px; font-weight: 500; line-height: 1.5; text-decoration: none; transition: background 150ms; }
+.primaryButton:hover { background: #fff; }
+.receipt .primaryButton { width: 100%; }
+.secondaryButton { background: #ffffff08; color: var(--color-ivory); border-color: var(--line-strong); }
+.secondaryButton:hover { background: #ffffff14; }
+.textLink { display: inline-flex; min-height: 44px; align-items: center; gap: 9px; color: var(--color-muted); font-size: 12px; text-decoration: none; }
+.textLink:hover { color: var(--color-ivory); }
+.layout a:focus-visible, .layout summary:focus-visible { outline: 2px solid var(--color-rose); outline-offset: 4px; }
+.aftercare { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; padding: 26px 36px 24px 40px; border-top: 1px solid var(--line); }
+.sectionTitle { margin: 0; color: var(--color-ivory); font-size: 14px; font-weight: 500; line-height: 1.5; letter-spacing: -.01em; }
+.aftercareCopy { max-width: 43ch; margin-top: 9px; color: var(--color-muted); font-size: 12px; line-height: 1.8; }
+.disclosure { border-top: 1px solid var(--line); }
+.disclosure summary { display: flex; min-height: 46px; align-items: center; justify-content: space-between; gap: 16px; color: var(--color-ivory-soft); font-size: 11px; cursor: pointer; list-style: none; }
+.disclosure summary::-webkit-details-marker { display: none; }
+.disclosure summary svg { width: 15px; height: 15px; color: var(--color-muted); }
+.disclosure[open] summary svg { transform: rotate(45deg); }
+.disclosure p { margin: 0 0 14px; color: var(--color-muted); font-size: 12px; line-height: 1.8; }
+.savedBenefits { margin: 24px 0 18px; }
+.statusDetails { margin-bottom: 14px; }
+.referralActions { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 12px; margin: 5px 0 7px; color: var(--color-ivory-soft); }
+.referralActions > span { color: var(--color-muted); font-size: 11px; }
+.referralActions strong { margin-left: 4px; color: var(--color-rose); font-weight: 500; }
+.referral a, .closing p a { color: var(--color-ivory-soft); text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: 3px; overflow-wrap: anywhere; }
+.closing { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 16px 4px 0; }
+.closing p { color: var(--color-muted); font-size: 11px; line-height: 1.8; }
+.statusHero .title { font-size: clamp(30px, 3vw, 36px); }
+.statusHero .intro { padding-bottom: 34px; }
+.reference { margin-bottom: 15px; color: var(--color-muted); font-size: 13px; }
+.reference strong { margin-left: 8px; color: var(--color-rose); font-weight: 500; }
+.refundDetails { margin: 0 0 26px; padding: 20px 0; border-block: 1px solid var(--line); }
+.actions { display: grid; gap: 10px; }
+.actions .textLink { justify-content: center; }
+@media (max-width: 800px) and (min-width: 701px) {
+  .intro { padding-inline: 28px; }
+  .record { padding-inline: 28px; }
+  .aftercare { padding-inline: 28px; gap: 28px; }
+  .deposit dd { font-size: 26px; }
+}
+@media (max-width: 700px) {
+  .layout { max-width: 448px; }
+  .panel { border-radius: 16px; }
+  .hero, .aftercare { grid-template-columns: 1fr; }
+  .intro { padding: 22px 24px 26px; }
+  .product { height: 106px; margin: -8px 0 14px; }
+  .product img { top: -62px; width: 280px; height: 310px; }
+  .status { margin-bottom: 15px; }
+  .title { max-width: 14ch; font-size: 34px; }
+  .description { margin-top: 12px; font-size: 12px; }
+  .record { padding: 0 24px 24px; border: 0; }
+  .receiptHeading { padding: 20px 0 17px; border-top: 1px solid var(--line); }
+  .number { font-size: 26px; }
+  .details { margin-top: 18px; }
+  .deposit dd { font-size: 28px; }
+  .savedBenefits { margin-block: 20px 14px; }
+  .aftercare { gap: 22px; padding: 23px 24px 20px; }
+  .nextSteps { padding-bottom: 22px; border-bottom: 1px solid var(--line); }
+  .sectionTitle { font-size: 13px; }
+  .aftercareCopy { font-size: 12px; }
+  .closing { display: block; padding: 14px 4px 0; text-align: center; }
+  .closing .textLink { font-size: 11px; }
+}
+@media (max-width: 359px) {
+  .intro, .record, .aftercare { padding-inline: 20px; }
+  .title { font-size: 31px; }
+  .deposit dd { font-size: 25px; }
+  .details > div { gap: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .primaryButton, .secondaryButton { transition: none; }
+}

@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import { launch, site } from "@/config/site";
-import { MarketSwitchLink } from "../MarketToggle";
 import { Price } from "../Price";
 import { Container, Eyebrow } from "../ui";
 
@@ -14,7 +13,7 @@ function facts(reservations: boolean): { label: string; value: ReactNode; note: 
     { label: "Session", value: "Start and stop", note: "One press to start, one to stop." },
     { label: "Control", value: "Three-button control", note: "Volume, playback and stimulation." },
     { label: "In the box", value: `${site.product} earbuds`, note: "Three sizes of ear tips." },
-    { label: "Price", value: <Price of="retail" />, note: <>Plus <Price of="subscription" /> a month for the software.</> },
+    { label: "Price", value: <Price of="retail" />, note: <>Plus <Price of="subscription" suffix="/Month" /></> },
     { label: "Launch", value: launch.window, note: reservations ? <>Reserve for <Price of="deposit" />, fully refundable.</> : "Join the waitlist for first access." },
   ];
 }
@@ -39,7 +38,7 @@ export function Glance({ reservations = false }: { reservations?: boolean }) {
           ))}
         </dl>
         <p className="reveal mt-4 text-xs leading-relaxed text-muted">
-          <MarketSwitchLink /> Final pricing, taxes, shipping and specifications are confirmed before launch.
+          Final pricing, taxes, shipping and specifications are confirmed before launch.
         </p>
       </Container>
     </section>

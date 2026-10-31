@@ -13,10 +13,10 @@ export function ReservationShell({ children, home = "/", card = false }: { child
         <Image src={listeningScene} alt="" fill sizes="100vw" quality={75} className={styles.backdropImage} />
       </div>}
       <a href="#main" className={styles.skip}>Skip to content</a>
-      <header className={card ? "site-header" : styles.header} data-theme={card ? "dark" : undefined}>
-        <nav aria-label="Reservation" className={card ? `site-nav ${styles.reservationNav}` : styles.headerInner}>
-          <a href={home} className={card ? "site-nav__brand" : styles.brand} aria-label={`${site.brand}, back to site`}>
-            <Wordmark className={card ? "site-nav__wordmark" : ""} size={card ? "text-[1.125rem] sm:text-[1.375rem]" : "text-base sm:text-[1.0625rem]"} />
+      <header className={card ? "site-header" : "site-header site-header--sticky"} data-theme={card ? "dark" : "light"}>
+        <nav aria-label="Reservation" className={card ? `site-nav ${styles.reservationNav}` : "site-nav site-nav--simple"}>
+          <a href={home} className="site-nav__brand" aria-label={`${site.brand}, back to site`}>
+            <Wordmark className="site-nav__wordmark" size="text-[1.125rem] sm:text-[1.375rem]" />
           </a>
           <BackLink href={home} className={card ? styles.reservationBack : undefined} />
         </nav>
@@ -27,7 +27,7 @@ export function ReservationShell({ children, home = "/", card = false }: { child
         <nav aria-label="Reservation footer">
           <a href="/privacy">Privacy</a>
           <a href="/terms#reservations">Terms</a>
-          <a href={`mailto:${site.contactEmail}`}>Contact</a>
+          <a href="/contact">Contact</a>
         </nav>
       </footer>
     </div>

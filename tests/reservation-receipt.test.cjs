@@ -74,6 +74,7 @@ function app(options = {}) {
 function elements(tree, predicate) {
   if (Array.isArray(tree)) return tree.flatMap((node) => elements(node, predicate));
   if (!tree || typeof tree !== "object" || !tree.props) return [];
+  if (tree.type?.name === "ReservationStatusView") return elements(tree.type(tree.props), predicate);
   return [...(predicate(tree) ? [tree] : []), ...elements(tree.props.children, predicate)];
 }
 
@@ -154,6 +155,19 @@ test("pending, failed, refunded, demo, sandbox and malformed records never count
   }
 });
 
+test("a live paid confirmation has production copy and separate protected PDF and terms links", async () => {
+  const instance = app({ production: true, cookie: SESSION });
+  const tree = await instance.page({ receipt: HANDLE });
+  const rendered = elements(tree, (node) => typeof node.type === "string");
+  const text = rendered.flatMap((node) => [node.props.children].flat(Infinity).filter((child) => typeof child === "string")).join(" ");
+  assert.match(text, /Your place is reserved/);
+  assert.doesNotMatch(text, /Demo result|Demo deposit|Stripe test reservation|Test emails|Local preview|sample reservation/);
+  const links = rendered.filter((node) => node.type === "a").map((node) => node.props.href);
+  assert.ok(links.includes(`/reserve/complete/confirmation?receipt=${HANDLE}`));
+  assert.ok(links.includes(`/reserve/complete/confirmation?receipt=${HANDLE}&format=terms`));
+  assert.ok(links.every((href) => !href.includes(SESSION) && !href.includes("session_id")));
+});
+
 test("receipt validation prevents storage reads for missing, malformed and disabled demo credentials", async () => {
   for (const cookie of [undefined, "", "untrusted", `cs_${"a".repeat(256)}`, "cs_preview_example"]) {
     const instance = app({ cookie });
@@ -213,7 +227,7 @@ test("missing, malformed, duplicate or tampered receipt handles never select a s
     const tree = await instance.page(params);
     assert.equal(elements(tree, (node) => node.type?.name === "ReservationConversion").length, 0);
     const explanation = elements(tree, (node) => node.type === "p").map((node) => node.props.children).find((value) => typeof value === "string" && value.includes("saved receipt"));
-    assert.match(explanation, /expired.*different browser.*original checkout confirmation link/);
+    assert.match(explanation, /expired.*different browser.*browser where you paid.*checkout email address.*payment reference or Stripe receipt/);
   }
   assert.equal(instance.calls.lookups.length, 0);
   const tampered = app({ cookies: { [`cymba-reservation-receipt-${HANDLE}`]: "cs_live_other_receipt" } });

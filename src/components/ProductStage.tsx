@@ -19,6 +19,8 @@ import styles from "./ProductStage.module.css";
 
 /* The 3D stage only runs in the browser. */
 const StageScene = dynamic(() => import("./three/StageScene").then((m) => m.StageScene), { ssr: false });
+/* Start downloading its code with the page, rather than once hydration reaches the stage. A failure surfaces where the stage renders. */
+if (typeof window !== "undefined") import("./three/StageScene").catch(() => undefined);
 
 /*
  * One object, one scroll. The product stays pinned while four chapters of
@@ -215,6 +217,11 @@ export function ProductStage({
   const sceneScale = useTransform(q, [0, 0.5], [1, 1.06]);
   const sceneDark = useTransform(q, [0, 0.5], [0, 0.72]);
   const sceneShade = useTransform(q, [0, 0.3], [1, 0]);
+  /* A fully transparent layer still costs a composited surface on phones; hide it until it has something to show. */
+  const sceneDarkVisibility = useTransform(sceneDark, (value) => (value > 0.001 ? "visible" : "hidden"));
+  const sceneShadeVisibility = useTransform(sceneShade, (value) => (value > 0.001 ? "visible" : "hidden"));
+  // The blurred room appears a little before its fade starts, once the portrait is fully open, so its one-time rasterisation never lands inside the expansion.
+  const sceneBlurVisibility = useTransform(closingDistance, (value) => (value > CLOSING_SCROLL_SCREENS - 0.12 ? "visible" : "hidden"));
 
   /* Four times the previous scroll distance, with no wait or ease-in dead zone. */
   const expansion = useTransform(closingDistance, [0, STORY_SCROLL_SCREENS * (0.97 - PORTRAIT_ENTRY_START)], [0, 1]);
@@ -224,50 +231,72 @@ export function ProductStage({
   // A fixed mobile gradient can be composited by opacity, rather than painted
   // again for every scroll position. Its final shading matches the desktop art.
   const mobileSceneShade = useTransform(() => expansion.get() * sceneShade.get());
-  /* Open from the live portrait's exact frame, keeping the photograph stationary. */
-  const sceneClip = useTransform(() => {
+  const mobileSceneShadeVisibility = useTransform(mobileSceneShade, (value) => (value > 0.001 ? "visible" : "hidden"));
+  /*
+   * Open from the live portrait's exact frame, keeping the photograph stationary.
+   * The opening is a plain overflow box whose size and position follow the scroll,
+   * with the room inside it translated the opposite way so it never moves. A box clip
+   * is applied by the compositor; an animated clip-path made Chrome rasterise the whole
+   * room, and a mask for its corners, again on every frame of the expansion.
+   */
+  // Whole pixels: the box is laid out at a snapped position while the room's counter-move is exact,
+  // so a fractional offset would shift the photograph by the remainder as the opening grows.
+  const windowTop = useTransform(() => Math.round(portraitBounds.get().top * (1 - expansion.get())));
+  const windowLeft = useTransform(() => Math.round(portraitBounds.get().left * (1 - expansion.get())));
+  const windowWidth = useTransform(() => {
     const remaining = 1 - expansion.get();
     const bounds = portraitBounds.get();
-    return `inset(${bounds.top * remaining}px ${bounds.right * remaining}px ${bounds.bottom * remaining}px ${bounds.left * remaining}px round ${12 * remaining}px)`;
+    return Math.max(0, bounds.width - (bounds.left + bounds.right) * remaining);
   });
-  const closingClip = useTransform(() => {
+  const windowHeight = useTransform(() => {
+    const remaining = 1 - expansion.get();
+    const bounds = portraitBounds.get();
+    return Math.max(0, bounds.height - (bounds.top + bounds.bottom) * remaining);
+  });
+  const windowRadius = useTransform(expansion, [0, 1], [12, 0]);
+  const roomX = useTransform(windowLeft, (value) => -value);
+  const roomY = useTransform(windowTop, (value) => -value);
+  /* The same opening inside the 100svh stage, whose top edge the fixed room shares. Mobile browser chrome can make the room taller than the stage. */
+  const revealHeight = useTransform(() => {
     const remaining = 1 - expansion.get();
     const bounds = portraitBounds.get();
     const size = trackGeometry.get();
-    /* Mobile browser chrome can make the fixed image taller than the 100svh stage. */
-    const right = bounds.right * remaining + size.width - bounds.width;
-    const bottom = bounds.bottom * remaining + size.height - bounds.height;
-    return `inset(${bounds.top * remaining}px ${right}px ${bottom}px ${bounds.left * remaining}px round ${12 * remaining}px)`;
+    const bottom = Math.max(0, bounds.bottom * remaining + size.height - bounds.height);
+    return Math.max(0, size.height - bounds.top * remaining - bottom);
   });
 
   return (
     <>
       {modelUrl && <ProductAssetHints modelUrl={modelUrl} />}
       {/* The room, fixed behind the page. It appears for the last chapter and stays, blurred and dark, under everything after. */}
-      <motion.div className={styles.scene} style={{ clipPath: sceneClip, y: sceneY, visibility: sceneVisibility }} aria-hidden="true">
-        <motion.div className={styles.sceneVisual} style={{ scale: sceneScale }}>
-          {/* The existing extended shoulders sit behind the unchanged live portrait. */}
-          <div className={styles.sceneExtensionTail} style={{ borderImageSource: `url(${listeningExtension.src})` }} />
-          <div className={styles.sceneExtension}>
-            <Image src={listeningExtension} alt="" fill sizes="1600px" quality={95} className={styles.extensionImage} />
-          </div>
-          <motion.div ref={portrait} className={styles.sceneFrame} style={{ borderRadius: mobilePortrait ? 0 : portraitRadius, "--portrait-feather": mobilePortrait ? "16px" : portraitFeather } as MotionStyle}>
-            <Image src={scene.image} alt="" fill loading="eager" sizes="(min-width: 1248px) 540px, (min-width: 1024px) calc((94vw - 96px) / 2), 100vw" quality={95} className={styles.sceneImage} />
+      <motion.div className={styles.scene} style={{ y: sceneY, visibility: sceneVisibility }} aria-hidden="true">
+        <motion.div className={styles.sceneWindow} style={{ top: windowTop, left: windowLeft, width: windowWidth, height: windowHeight, borderRadius: windowRadius }}>
+          <motion.div className={styles.sceneRoom} style={{ x: roomX, y: roomY }}>
+            <motion.div className={styles.sceneVisual} style={{ scale: sceneScale }}>
+              {/* The existing extended shoulders sit behind the unchanged live portrait. */}
+              <div className={styles.sceneExtensionTail} style={{ borderImageSource: `url(${listeningExtension.src})` }} />
+              <div className={styles.sceneExtension}>
+                <Image src={listeningExtension} alt="" fill sizes="1600px" quality={95} className={styles.extensionImage} />
+              </div>
+              <motion.div ref={portrait} className={styles.sceneFrame} style={{ borderRadius: mobilePortrait ? 0 : portraitRadius, "--portrait-feather": mobilePortrait ? "16px" : portraitFeather } as MotionStyle}>
+                <Image src={scene.image} alt="" fill loading="eager" sizes="(min-width: 1248px) 540px, (min-width: 1024px) calc((94vw - 96px) / 2), 100vw" quality={95} className={styles.sceneImage} />
+              </motion.div>
+            </motion.div>
+            {/* The same room, already blurred; it fades in by opacity so no frame re-blurs the picture. */}
+            <motion.div className={`${styles.sceneVisual} ${styles.sceneBlurred}`} style={{ opacity: sceneBlurOpacity, visibility: sceneBlurVisibility }}>
+              <div className={styles.sceneExtensionTail} style={{ borderImageSource: `url(${listeningExtension.src})` }} />
+              <div className={styles.sceneExtension}>
+                <Image src={listeningExtension} alt="" fill sizes="1600px" quality={75} className={styles.extensionImage} />
+              </div>
+              <div className={styles.sceneFrame} style={{ borderRadius: 0, "--portrait-feather": mobilePortrait ? "16px" : "56px" } as CSSProperties}>
+                {/* Eager, like the sharp copy: a lazily loaded image behind a transparent layer never shows before the fade. */}
+                <Image src={scene.image} alt="" fill loading="eager" sizes="(min-width: 1248px) 540px, (min-width: 1024px) calc((94vw - 96px) / 2), 100vw" quality={75} className={styles.sceneImage} />
+              </div>
+            </motion.div>
+            <motion.div className={styles.sceneShade} style={{ opacity: mobilePortrait ? mobileSceneShade : sceneShade, visibility: mobilePortrait ? mobileSceneShadeVisibility : sceneShadeVisibility }} />
+            <motion.div className={styles.sceneDark} style={{ opacity: sceneDark, visibility: sceneDarkVisibility }} />
           </motion.div>
         </motion.div>
-        {/* The same room, already blurred; it fades in by opacity so no frame re-blurs the picture. */}
-        <motion.div className={`${styles.sceneVisual} ${styles.sceneBlurred}`} style={{ opacity: sceneBlurOpacity }}>
-          <div className={styles.sceneExtensionTail} style={{ borderImageSource: `url(${listeningExtension.src})` }} />
-          <div className={styles.sceneExtension}>
-            <Image src={listeningExtension} alt="" fill sizes="1600px" quality={75} className={styles.extensionImage} />
-          </div>
-          <div className={styles.sceneFrame} style={{ borderRadius: 0, "--portrait-feather": mobilePortrait ? "16px" : "56px" } as CSSProperties}>
-            {/* Eager, like the sharp copy: a lazily loaded image behind a transparent layer never shows before the fade. */}
-            <Image src={scene.image} alt="" fill loading="eager" sizes="(min-width: 1248px) 540px, (min-width: 1024px) calc((94vw - 96px) / 2), 100vw" quality={75} className={styles.sceneImage} />
-          </div>
-        </motion.div>
-        <motion.div className={styles.sceneShade} style={{ opacity: mobilePortrait ? mobileSceneShade : sceneShade }} />
-        <motion.div className={styles.sceneDark} style={{ opacity: sceneDark }} />
       </motion.div>
       {/* Phones and reduced motion get the same room, already blurred, behind the sections after the stacked ones. */}
       <div className={styles.sceneStatic} aria-hidden="true">
@@ -330,7 +359,9 @@ export function ProductStage({
               {/* The pair moves onto the mannequin; further scrolling progressively lights the surface fibres. */}
               <div className={styles.flight}>
                 <motion.div className={styles.media} data-product-model={failed || !modelUrl ? "fallback" : ready ? "loaded" : "loading"}>
-                  {!failed && modelUrl && <StageScene progress={p} readProgress={readProgress} modelUrl={modelUrl} onReady={onReady} onLoading={onLoading} onError={onError} />}
+                  {!failed && modelUrl && <div className={styles.modelWindow}>
+                    <StageScene progress={p} readProgress={readProgress} modelUrl={modelUrl} onReady={onReady} onLoading={onLoading} onError={onError} verticalOverscan={0.12} />
+                  </div>}
                   {/* The poster covers loading; no label is needed over it. */}
                   {posterUrl && (
                     <motion.div className={styles.posterLayer} style={{ opacity: posterOpacity }}>
@@ -354,8 +385,10 @@ export function ProductStage({
             {/* Only the portrait pins here; the app above remains in normal flow. */}
             <div className={styles.closingPane}>
               <ClosingCopy variant={v.id} />
-              <motion.div className={styles.closingReveal} style={{ clipPath: closingClip }} aria-hidden="true" inert>
-                <ClosingCopy variant={v.id} visualOnly />
+              <motion.div className={styles.closingReveal} style={{ top: windowTop, left: windowLeft, width: windowWidth, height: revealHeight, borderRadius: windowRadius }} aria-hidden="true" inert>
+                <motion.div className={styles.closingRevealContent} style={{ x: roomX, y: roomY }}>
+                  <ClosingCopy variant={v.id} visualOnly />
+                </motion.div>
               </motion.div>
             </div>
           </div>

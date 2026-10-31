@@ -18,21 +18,20 @@ const vertexShader = `
 /** A small, selective HDR bloom. White marble and metal never feed the halo. */
 export function NeuralGlow({ progress }: { progress: MotionValue<number> }) {
   const { mobile } = useSceneQuality();
-  // The fibres already emit their own light. Keep their crisp material on
-  // phones without an HDR scene copy and six full-screen processing passes.
-  return mobile ? null : <DesktopNeuralGlow progress={progress} />;
+  // Phones use one small halo pass; desktop retains the layered soft falloff.
+  return <CorticalGlow progress={progress} mobile={mobile} />;
 }
 
-function DesktopNeuralGlow({ progress }: { progress: MotionValue<number> }) {
+function CorticalGlow({ progress, mobile }: { progress: MotionValue<number>; mobile: boolean }) {
   const { size, viewport, gl } = useThree();
   const pipeline = useMemo(() => {
     const target = (depthBuffer = false) => new THREE.WebGLRenderTarget(1, 1, {
       type: THREE.HalfFloatType, depthBuffer,
     });
     const beauty = target(true);
-    beauty.samples = Math.min(4, gl.capabilities.maxSamples);
+    beauty.samples = Math.min(mobile ? 2 : 4, gl.capabilities.maxSamples);
     const source = target();
-    const levels = Array.from({ length: 3 }, () => ({ scratch: target(), output: target() }));
+    const levels = Array.from({ length: mobile ? 1 : 3 }, () => ({ scratch: target(), output: target() }));
     const extract = new THREE.ShaderMaterial({
       vertexShader, depthTest: false, depthWrite: false, toneMapped: false,
       uniforms: { inputTexture: { value: beauty.texture } },
@@ -41,11 +40,12 @@ function DesktopNeuralGlow({ progress }: { progress: MotionValue<number> }) {
         varying vec2 vUv;
         void main() {
           vec3 radiance = texture2D(inputTexture, vUv).rgb;
-          float violet = smoothstep(0.10, 0.50, radiance.b - max(radiance.r, radiance.g));
+          float magenta = smoothstep(0.10, 0.50, min(radiance.r, radiance.b) - radiance.g);
           float peak = max(radiance.r, max(radiance.g, radiance.b));
-          // Only light above the display range blooms; quiet fibres stay crisp.
-          float excess = max(peak - 1.0, 0.0) / max(peak, 0.001);
-          gl_FragColor = vec4(min(radiance, vec3(6.0)) * violet * excess, 1.0);
+          // Emitted cortical light feeds the glow; the ivory sculpture stays
+          // below the magenta threshold, which accepts both pink and violet.
+          float excess = max(peak - 1.35, 0.0) / max(peak, 0.001);
+          gl_FragColor = vec4(min(radiance, vec3(6.0)) * magenta * excess, 1.0);
         }
       `,
     });
@@ -74,9 +74,10 @@ function DesktopNeuralGlow({ progress }: { progress: MotionValue<number> }) {
       uniforms: {
         beauty: { value: beauty.texture },
         tightHalo: { value: levels[0].output.texture },
-        softHalo: { value: levels[1].output.texture },
+        softHalo: { value: levels[Math.min(1, levels.length - 1)].output.texture },
         wideHalo: { value: levels[levels.length - 1].output.texture },
-        wideStrength: { value: 0.06 },
+        wideStrength: { value: mobile ? 0 : 0.025 },
+        glowStrength: { value: 0 },
       },
       fragmentShader: `
         uniform sampler2D beauty;
@@ -84,17 +85,18 @@ function DesktopNeuralGlow({ progress }: { progress: MotionValue<number> }) {
         uniform sampler2D softHalo;
         uniform sampler2D wideHalo;
         uniform float wideStrength;
+        uniform float glowStrength;
         varying vec2 vUv;
         void main() {
           vec4 base = texture2D(beauty, vUv);
-          vec3 nearLight = texture2D(tightHalo, vUv).rgb;
-          vec3 softLight = texture2D(softHalo, vUv).rgb;
-          vec3 wideLight = texture2D(wideHalo, vUv).rgb;
-          vec3 glow = nearLight * 0.65 + softLight * 0.22 + wideLight * wideStrength;
+          vec3 nearLight = texture2D(tightHalo, vUv).rgb * glowStrength;
+          vec3 softLight = texture2D(softHalo, vUv).rgb * glowStrength;
+          vec3 wideLight = texture2D(wideHalo, vUv).rgb * glowStrength;
+          vec3 glow = nearLight * 0.35 + softLight * 0.12 + wideLight * wideStrength;
           // A restrained tint within the tight halo keeps light legible on
           // white stone without staining broad patches of the sculpture.
-          float localScatter = (1.0 - exp(-nearLight.b * 0.8)) * 0.20 * base.a;
-          base.rgb *= vec3(1.0 - localScatter * 0.10, 1.0 - localScatter * 0.55, 1.0);
+          float localScatter = (1.0 - exp(-max(nearLight.r,nearLight.b) * 0.8)) * 0.06 * base.a;
+          base.rgb *= vec3(1.0, 1.0 - localScatter * 0.55, 1.0 - localScatter * 0.08);
           float haloAlpha = clamp(max(glow.r, max(glow.g, glow.b)) * 0.12, 0.0, 1.0);
           float alpha = base.a + (1.0 - base.a) * haloAlpha;
           gl_FragColor = vec4((base.rgb + glow) / max(alpha, 0.0001), alpha);
@@ -106,14 +108,14 @@ function DesktopNeuralGlow({ progress }: { progress: MotionValue<number> }) {
       `,
     });
     return { beauty, source, levels, extract, blur, composite, quad: new FullScreenQuad(extract) };
-  }, [gl]);
+  }, [gl, mobile]);
 
   useEffect(() => {
     const width = Math.max(1, Math.round(size.width * viewport.dpr));
     const height = Math.max(1, Math.round(size.height * viewport.dpr));
     pipeline.beauty.setSize(width, height);
     // Soft glow needs only half resolution, with a cap for large Retina displays.
-    const scale = Math.min(0.5, 960 / Math.max(width, height));
+    const scale = Math.min(mobile ? 0.33 : 0.5, (mobile ? 400 : 960) / Math.max(width, height));
     pipeline.source.setSize(Math.max(1, Math.round(width * scale)), Math.max(1, Math.round(height * scale)));
     pipeline.levels.forEach((level, index) => {
       const levelScale = scale / 2 ** index;
@@ -121,7 +123,7 @@ function DesktopNeuralGlow({ progress }: { progress: MotionValue<number> }) {
         target.setSize(Math.max(1, Math.round(width * levelScale)), Math.max(1, Math.round(height * levelScale)));
       }
     });
-  }, [pipeline, size.width, size.height, viewport.dpr]);
+  }, [pipeline, size.width, size.height, viewport.dpr, mobile]);
 
   useEffect(() => () => {
     for (const target of [pipeline.beauty, pipeline.source, ...pipeline.levels.flatMap((level) => [level.scratch, level.output])]) target.dispose();
@@ -133,16 +135,13 @@ function DesktopNeuralGlow({ progress }: { progress: MotionValue<number> }) {
 
   const frames = useRef(0);
   useFrame(({ gl: renderer, scene, camera }) => {
-    // The initial product hero needs no postprocessing at all. The pipeline
-    // still runs once on an early frame, so its shaders and targets exist
-    // before the signal chapter; nothing glows yet, so the picture is the same.
+    // Keep the base colour/alpha conversion identical on every frame. Switching
+    // between direct and HDR rendering flashes the translucent head on rewind.
     frames.current++;
-    if (progress.get() < 0.57 && frames.current !== 3) {
-      renderer.render(scene, camera);
-      return;
-    }
     const previousTarget = renderer.getRenderTarget();
     const { beauty, source, levels, quad, extract, blur, composite } = pipeline;
+    const glowStrength = THREE.MathUtils.smoothstep(progress.get(), 0.42, 0.50);
+    composite.uniforms.glowStrength.value = glowStrength;
     try {
       renderer.setRenderTarget(beauty);
       renderer.clear();
@@ -152,7 +151,6 @@ function DesktopNeuralGlow({ progress }: { progress: MotionValue<number> }) {
         renderer.setRenderTarget(destination);
         quad.render(renderer);
       };
-      pass(extract, source);
       const soften = (input: THREE.WebGLRenderTarget, output: THREE.WebGLRenderTarget, scratch: THREE.WebGLRenderTarget) => {
         blur.uniforms.inputTexture.value = input.texture;
         blur.uniforms.direction.value.set(1 / output.width, 0);
@@ -163,10 +161,15 @@ function DesktopNeuralGlow({ progress }: { progress: MotionValue<number> }) {
       };
       // Successive half-size blurs keep samples adjacent. Enlarging a single
       // kernel's stride created repeated purple bands around the silhouette.
-      let input = source;
-      for (const level of levels) {
-        soften(input, level.output, level.scratch);
-        input = level.output;
+      // Prepare the halo shaders once without showing them. Outside the signal
+      // chapter only the shared scene/composite passes run; cached glow is zeroed.
+      if (glowStrength > 0 || frames.current === 3) {
+        pass(extract, source);
+        let input = source;
+        for (const level of levels) {
+          soften(input, level.output, level.scratch);
+          input = level.output;
+        }
       }
       pass(composite, previousTarget);
     } finally {

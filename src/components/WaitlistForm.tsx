@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { defaultVariant, heroVariants, reservation, survey } from "@/config/site";
-import { getAttribution, track } from "@/lib/analytics";
-import { trackMetaLead } from "@/lib/meta-pixel";
+import { track } from "@/lib/analytics";
+import { getMetaClickIdForReservation, trackMetaLead } from "@/lib/meta-pixel";
 import styles from "./WaitlistForm.module.css";
 
 type Mode = "supabase" | "file" | "demo";
@@ -31,19 +32,29 @@ export function WaitlistForm({
   /** Continue to the reservation page after a saved signup. */
   redirectToReservation?: boolean;
 }) {
+  const router = useRouter();
   const compact = placement === "hero";
   const [phase, setPhase] = useState<Phase>({ k: "idle" });
   const [email, setEmail] = useState("");
   const [touched, setTouched] = useState(false);
   const startedAt = useRef(0);
   const inFlight = useRef(false);
+  const continuedToReservation = useRef(false);
   const statusRef = useRef<HTMLDivElement>(null);
   const id = useId();
 
   useEffect(() => {
+    // Activity may preserve this form while hiding it during client navigation.
+    // Returning from our completed continuation must make it usable again.
+    if (continuedToReservation.current) {
+      continuedToReservation.current = false;
+      inFlight.current = false;
+      setPhase({ k: "idle" });
+    }
     startedAt.current = Date.now();
     const restore = (event: PageTransitionEvent) => {
       if (event.persisted) {
+        continuedToReservation.current = false;
         inFlight.current = false;
         setPhase({ k: "idle" });
       }
@@ -63,7 +74,13 @@ export function WaitlistForm({
     }
     const selectedVariant = Object.hasOwn(heroVariants, variant) ? variant : defaultVariant;
     setPhase({ k: "redirecting" });
-    window.location.assign(`${reservation.path}?v=${encodeURIComponent(selectedVariant)}`);
+    const destination = new URL(reservation.path, window.location.origin);
+    destination.searchParams.set("v", selectedVariant);
+    const clickId = getMetaClickIdForReservation();
+    if (clickId) destination.searchParams.set("fbclid", clickId);
+    // Keep this document alive so a consented conversion can finish loading.
+    continuedToReservation.current = true;
+    router.push(`${destination.pathname}${destination.search}`);
   }
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -89,15 +106,14 @@ export function WaitlistForm({
           company,
           startedAt: startedAt.current,
           variant,
-          attribution: getAttribution(),
         }),
       });
       const data = (await res.json().catch(() => ({}))) as { status?: string; message?: string; surveyToken?: string };
       if (res.ok && data.status === "created" && data.surveyToken) {
         track("waitlist_signup_success", { location: placement, research_opt_in: false });
-        // Give a consented conversion a bounded opportunity to dispatch before
-        // leaving this document. Tracking failure must never block signup.
-        await trackMetaLead(res.status, data);
+        // The existing bounded wait never delays signup by more than 800 ms.
+        // A slow SDK can finish during the same-document reservation continuation.
+        await trackMetaLead(res.status, data, redirectToReservation ? { continuationPath: "/reserve" } : {});
         if (redirectToReservation) {
           openReservation();
           return;

@@ -1,7 +1,7 @@
 "use client";
 
 import { defaultVariant, heroVariants, reservation, site } from "@/config/site";
-import { formatPrice } from "@/config/pricing";
+import { formatPrice, foundersOffer } from "@/config/pricing";
 import { useMarket } from "./MarketProvider";
 
 /** Optional next step after joining. Personal information never goes in a link. */
@@ -26,8 +26,12 @@ export function ReserveStep({ email, variant = defaultVariant, compact = false }
         A place in line for {site.product}.
       </p>
       <p className="mt-2 text-sm leading-relaxed text-muted">
-        Reserve with a {deposit} deposit, fully refundable before shipping and taken off the {formatPrice(market, "retail")} price.
-        Joining the free list is enough to receive launch updates; reserving is optional.
+        The first {foundersOffer.limit} paid reservations receive {formatPrice(market, "founderDiscount")} off the launch retail price,
+        {" "}{foundersOffer.freeMonths} months of subscription free and limited-edition Founders Buds.
+      </p>
+      <p className="mt-2 text-sm leading-relaxed text-muted">
+        Your {deposit} deposit is fully refundable before shipping and comes off your purchase price.
+        You’re already on the free list for launch updates; reserving is optional.
       </p>
       <a href={href} onClick={rememberEmail} data-cta="reserve_step" className="btn-primary mt-4">
         Reserve for {deposit}

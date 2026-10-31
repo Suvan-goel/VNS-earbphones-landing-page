@@ -33,6 +33,21 @@
   color: inherit;
 }
 
+.offer {
+  max-width: 26rem;
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.offerLimit {
+  color: var(--color-rose-deep);
+  font-weight: 500;
+}
+
 .reserve:focus-visible {
   outline: 2px solid var(--color-ivory);
   outline-offset: 4px;

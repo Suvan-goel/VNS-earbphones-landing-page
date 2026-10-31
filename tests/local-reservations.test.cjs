@@ -9,6 +9,7 @@ const ts = require("typescript");
 const Stripe = require("stripe");
 
 const ROOT = path.resolve(__dirname, "..");
+const currentTermsVersion = "2026-10-29-launch-q3";
 const secret = "whsec_local_reservations_test_only";
 const verifier = new Stripe("sk_test_local_reservations_test_only");
 
@@ -93,11 +94,12 @@ function temporarySite() {
   const migrations = path.join(cwd, "supabase/migrations");
   fs.mkdirSync(migrations, { recursive: true });
   fs.copyFileSync(path.join(ROOT, "supabase/migrations/20261025_paid_reservations.sql"), path.join(migrations, "20261025_paid_reservations.sql"));
+  fs.copyFileSync(path.join(ROOT, "supabase/migrations/20261030_reservation_numbers.sql"), path.join(migrations, "20261030_reservation_numbers.sql"));
   return cwd;
 }
 const input = (changes = {}) => ({
   attemptId: randomUUID(), email: "local-test@example.com", variant: "learn", termsAccepted: true,
-  termsVersion: "2026-10-28", company: "", startedAt: Date.now() - 5000, ...changes,
+  termsVersion: currentTermsVersion, company: "", startedAt: Date.now() - 5000, ...changes,
 });
 const request = (body) => new Request("http://localhost:3010/api/reserve", {
   method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body),
@@ -183,7 +185,7 @@ test("local Elements checkout keeps its secret ephemeral and only signed webhook
     assert.equal((await app.route("stripe/webhook")(webhook("checkout.session.completed", cs))).status, 200);
     saved = (await app.storage().lookupReservation(result.sessionId)).reservation;
     assert.equal(saved.status, "paid");
-    assert.equal(saved.founder_number, 1);
+    assert.equal(saved.founder_number, 16);
     const refund = { id: "re_elements_test", payment_intent: pi.id, amount: 5000, currency: "usd", status: "succeeded" };
     app.refunds.set(pi.id, [refund]);
     assert.equal((await app.route("stripe/webhook")(webhook("refund.updated", refund))).status, 200);
@@ -217,7 +219,7 @@ test("real local PostgreSQL records Checkout, signed webhook payments, refunds, 
       saved = (await app.storage().lookupReservation(sessionId)).reservation;
       assert.equal(saved.status, "pending");
       assert.equal(saved.attempt_id, body.attemptId);
-      assert.equal(saved.terms_version, "2026-10-28");
+      assert.equal(saved.terms_version, currentTermsVersion);
       assert.equal(typeof saved.terms_accepted_at, "string");
       assert.equal(saved.livemode, false);
       assert.equal(fs.existsSync(path.join(cwd, ".data/reservations-test-db/PG_VERSION")), true);
@@ -238,7 +240,7 @@ test("real local PostgreSQL records Checkout, signed webhook payments, refunds, 
       }
       const value = (await app.storage().lookupReservation(sessionId)).reservation;
       assert.equal(value.status, "paid");
-      assert.equal(value.founder_number, 1);
+      assert.equal(value.founder_number, 16);
       assert.equal(value.stripe_payment_intent, pi.id);
       assert.equal(typeof value.paid_at, "string");
     });
@@ -257,7 +259,7 @@ test("real local PostgreSQL records Checkout, signed webhook payments, refunds, 
       const value = (await app.storage().lookupReservation(sessionId)).reservation;
       assert.equal(value.status, "refund_review");
       assert.equal(value.amount_refunded, 5000);
-      assert.equal(value.founder_number, 1);
+      assert.equal(value.founder_number, 16);
     });
     await t.test("HMR shares the open database, another owner is refused, and restart preserves state", async () => {
       app.reload();
@@ -268,7 +270,7 @@ test("real local PostgreSQL records Checkout, signed webhook payments, refunds, 
       assert.equal(fs.existsSync(path.join(cwd, ".data/reservations-test-db.lock")), false);
       const reopened = (await app.storage().lookupReservation(sessionId)).reservation;
       assert.equal(reopened.status, "refund_review");
-      assert.equal(reopened.founder_number, 1);
+      assert.equal(reopened.founder_number, 16);
       const event = { eventId: "evt_local_payment", eventType: "checkout.session.completed", reservationId: reopened.id,
         attemptId: reopened.attempt_id, termsVersion: reopened.terms_version, sessionId, paymentIntent: pi.id,
         customer: pi.customer, status: "paid", amount: 5000, currency: "usd", amountRefunded: 0,
@@ -292,7 +294,7 @@ test("real local PostgreSQL records Checkout, signed webhook payments, refunds, 
       assert.ok(results.every((result) => result === "applied"));
       const numbers = await Promise.all(events.map(async (event) => (await app.storage().lookupReservation(event.sessionId)).reservation.founder_number));
       assert.equal(new Set(numbers).size, numbers.length);
-      assert.ok(numbers.every((number) => number > 1));
+      assert.ok(numbers.every((number) => number > 16));
       const failedAttempt = await app.storage().createReservation({
         attemptId: randomUUID(), email: "retry-local@example.com", variant: "learn", attribution: {},
         amount: 5000, currency: "usd", termsVersion: "2026-10-28", livemode: false,
