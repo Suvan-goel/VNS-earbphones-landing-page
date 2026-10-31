@@ -2,14 +2,14 @@
  * Launch pricing, in the two currencies the site quotes. Amounts are in the
  * smallest currency unit so one set of numbers drives the copy, the FAQ, the
  * terms and the Stripe checkout. UK visitors see pounds, US visitors see
- * dollars, and everyone else sees dollars until they switch.
+ * dollars, and everyone else sees dollars as the default.
  */
 
 export type Market = "uk" | "us";
 
 export type MarketPricing = {
   id: Market;
-  /** ISO 4217 code shown on the currency switch. */
+  /** ISO 4217 currency code. */
   code: "GBP" | "USD";
   /** Lower-case Stripe currency. */
   currency: "gbp" | "usd";
@@ -26,7 +26,15 @@ export type MarketPricing = {
 
 export const launch = {
   /** The planned launch window shown across the site. */
-  window: "Q4 2027",
+  window: "Q3 2027",
+} as const;
+
+/** Benefits for the first paid reservations, fulfilled with the finished product. */
+export const foundersOffer = {
+  limit: 50,
+  discount: 5000,
+  freeMonths: 3,
+  referralMonths: 1,
 } as const;
 
 export const markets: Record<Market, MarketPricing> = {
@@ -38,10 +46,6 @@ export const marketIds = Object.keys(markets) as Market[];
 
 /** Visitors outside the UK and US see US dollars, matching the US merchant of record. */
 export const defaultMarket: Market = "us";
-
-/** A chosen currency is remembered for a year. */
-export const MARKET_COOKIE = "cymba_market";
-export const MARKET_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 
 export function isMarket(value: unknown): value is Market {
   return typeof value === "string" && Object.hasOwn(markets, value);
@@ -58,7 +62,7 @@ export function marketForCountry(country: string | null | undefined): Market | n
   return COUNTRY_MARKETS[country.trim().toUpperCase()] ?? null;
 }
 
-export type PriceKind = "retail" | "subscription" | "deposit" | "balance";
+export type PriceKind = "retail" | "subscription" | "deposit" | "balance" | "founderDiscount" | "founderRetail" | "founderBalance";
 
 /** The price left to pay at launch after the deposit is credited. */
 export function balanceFor(market: Market | MarketPricing): number {
@@ -68,6 +72,9 @@ export function balanceFor(market: Market | MarketPricing): number {
 
 export function amountFor(market: Market | MarketPricing, kind: PriceKind): number {
   const m = typeof market === "string" ? markets[market] : market;
+  if (kind === "founderDiscount") return foundersOffer.discount;
+  if (kind === "founderRetail") return m.retail - foundersOffer.discount;
+  if (kind === "founderBalance") return m.retail - foundersOffer.discount - m.deposit;
   return kind === "balance" ? balanceFor(m) : m[kind];
 }
 

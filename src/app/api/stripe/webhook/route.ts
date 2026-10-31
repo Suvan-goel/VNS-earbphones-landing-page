@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { applyReservationEvent, lookupReservationById, type ReservationRow, type ReservationStatus } from "@/lib/storage";
 import { RESERVATION_FLOW, stripe, stripeLiveMode } from "@/lib/stripe";
+import { deliverReservationEmails } from "@/lib/reservation-email-delivery";
 
 export const runtime = "nodejs";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -75,6 +76,9 @@ async function saveEvent(event: Stripe.Event, row: ReservationRow, sessionId: st
     livemode: event.livemode, occurredAt: new Date(event.created * 1000).toISOString(),
   });
   if (result !== "applied" && result !== "duplicate") throw new Error("Event not committed");
+  // The outbox committed with the reservation. Duplicate events also retry mail
+  // after an earlier provider failure, without applying the payment twice.
+  await deliverReservationEmails(row.id, row.livemode);
 }
 
 async function handleSession(s: Stripe, event: Stripe.Event, sessionId: string) {
@@ -147,7 +151,7 @@ export async function POST(req: Request) {
     }
     return NextResponse.json({ received: true });
   } catch {
-    console.error("[stripe webhook] event not committed", { eventId: event.id, type: event.type });
+    console.error("[stripe webhook] processing incomplete", { eventId: event.id, type: event.type });
     return NextResponse.json({ error: "Event processing failed. Please retry." }, { status: 500 });
   }
 }

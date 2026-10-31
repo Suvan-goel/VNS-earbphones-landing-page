@@ -1,7 +1,7 @@
 "use client";
 
 import { useMotionValue } from "motion/react";
-import { Scene } from "./Scene";
+import { RedrawOnChange, Scene } from "./Scene";
 import { EarbudExperience } from "./EarbudExperience";
 import { useCallback, useEffect } from "react";
 import { clearProductAssets } from "./productAssets";
@@ -27,6 +27,7 @@ export function HeroScene({ modelUrl, pose = "hero", onReady, onLoading, onError
   useEffect(() => { progress.set(POSE_PROGRESS[pose]); }, [pose, progress]);
   const resetAssets = useCallback(() => clearProductAssets(modelUrl), [modelUrl]);
   return <Scene shadows={false} sculptureShadows camera={{ position: [0, -0.2, 10], fov: 28 }} shadowY={-2.4} onReady={onReady} onLoading={onLoading} onError={onError} onResetAssets={resetAssets}>
+    <RedrawOnChange value={progress} />
     {modelUrl && <EarbudExperience modelUrl={modelUrl} progress={progress} />}
   </Scene>;
 }

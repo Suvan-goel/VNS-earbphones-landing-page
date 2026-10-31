@@ -128,6 +128,19 @@
   inset: 0;
   will-change: transform;
 }
+.modelWindow { position: absolute; inset: 0; }
+/* A faint pool of grey behind the model, so the head sits in a space rather than on the page. */
+.media::before {
+  content: "";
+  position: absolute;
+  inset: -4% 0;
+  /* A faint pool of grey behind the sculpture, deep enough that the lit crown edge still reads against it, soft enough not to read as a disc. */
+  background: radial-gradient(ellipse 50% 50% at 50% 46%, #e2e2e0 0%, rgba(226, 226, 224, 0.75) 55%, rgba(226, 226, 224, 0) 100%);
+  /* The pool fades out under the translucent header and at the band's edges, so it never ends in a line. */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 9%, #000 18%, #000 84%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 9%, #000 18%, #000 84%, transparent 100%);
+  pointer-events: none;
+}
 
 /* The room: fixed behind the page. The frame is scaled a little so the blur has no soft edges. */
 .scene,
@@ -140,14 +153,34 @@
   --portrait-top: max(80px, calc((100svh + 48px - var(--portrait-height)) / 2));
   container-type: inline-size;
   position: fixed;
-  inset: 0;
+  /* Mobile browsers resize a fixed box only after their toolbar has finished collapsing;
+     sized to the largest viewport, the room already covers the strip that reveals. */
+  inset: 0 0 auto;
+  height: 100vh;
+  height: 100lvh;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
   background: #0b0a09;
 }
-.scene { background: linear-gradient(180deg, #8e8f93 0%, #979b9e 60%, #94999e 100%); }
+.scene { background: none; }
 .sceneStatic { display: none; }
+/* The opening: a box the compositor clips to; its corners round only while it is a card. */
+.sceneWindow {
+  position: absolute;
+  overflow: hidden;
+}
+/* The room itself never changes size or position, so nothing in it is drawn again as the opening grows. */
+.sceneRoom {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100cqw;
+  height: 100vh;
+  height: 100lvh;
+  background: linear-gradient(180deg, #8e8f93 0%, #979b9e 60%, #94999e 100%);
+  will-change: transform;
+}
 .sceneVisual {
   position: absolute;
   inset: 0;
@@ -208,25 +241,42 @@
   inset: 0;
   z-index: 1;
   background: linear-gradient(90deg, #0b0a0900 calc(var(--portrait-left) + var(--portrait-width)), #0b0a0966 75%, #0b0a0999 100%);
+  will-change: opacity;
 }
+/* Faded by opacity on its own layer: repainting a screen of black for each step of the fade was the cost of that stretch. */
 .sceneDark {
   position: absolute;
   inset: 0;
   z-index: 2;
   background: #0b0a09;
+  will-change: opacity;
 }
 .sceneStatic .sceneImage {
   filter: blur(18px);
   scale: 1.06;
   opacity: 0.28;
 }
-.closingPane,
-.closingReveal {
+.closingPane {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  will-change: transform;
+  container-type: inline-size;
 }
-.closingPane { will-change: transform; }
+/* The light copy shows through the same opening as the room, by the same box clip. */
+.closingReveal {
+  position: absolute;
+  overflow: hidden;
+  pointer-events: none;
+}
+.closingRevealContent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100cqw;
+  height: 100svh;
+  will-change: transform;
+}
 .closingCopy {
   left: auto;
   right: clamp(20px, 3.3vw, 48px);
@@ -364,6 +414,9 @@
 
 /* Text, a fixed-size model frame and actions occupy consistent areas on phones. */
 @media (max-width: 1023px), (max-height: 639px) {
+  /* Extend the canvas without changing the model or moving text/actions.
+     Keep these insets in sync with StageScene's verticalOverscan. */
+  .modelWindow { top: -12%; bottom: -12%; }
   .storyPane { --mobile-model-top: calc((100svh - var(--mobile-model-height)) / 2 + 4px); }
   .technologyAnchor { top: calc(var(--story-scroll-screens) * 0.51 * 100svh); }
   .flight {
@@ -376,7 +429,7 @@
   .heroCopy {
     left: 20px;
     right: 20px;
-    top: 96px;
+    top: calc(96px + env(safe-area-inset-top));
     width: auto;
     translate: none;
   }
@@ -385,7 +438,7 @@
     letter-spacing: -0.03em;
   }
   .heroCopy {
-    top: 96px;
+    top: calc(96px + env(safe-area-inset-top));
   }
   .heroIntro {
     position: relative;
@@ -406,11 +459,8 @@
   .storySignup {
     left: 20px;
     right: 20px;
-    /* Lift above the cookie panel while it is open, so the first screen always shows the form. */
     --form-inset: max(32px, env(safe-area-inset-bottom));
     bottom: var(--form-inset);
-    translate: 0 calc(-1 * var(--consent-height, 0px));
-    transition: translate 250ms var(--ease-out-expo);
     width: auto;
     max-width: 28rem;
     margin-inline: auto;
@@ -426,18 +476,16 @@
   }
   .scene,
   .closingPane {
-    --portrait-nav-height: 48px;
+    --portrait-nav-height: calc(48px + env(safe-area-inset-top));
     /* Reserve space for the introduction, navigation and separate action. */
     --portrait-width: min(calc(100cqw - 48px), 320px, calc((100svh - 400px) * 0.8));
     --portrait-height: calc(var(--portrait-width) * 1.25);
     --portrait-left: calc((100cqw - var(--portrait-width)) / 2);
     --portrait-top: calc((100svh + var(--portrait-nav-height) - var(--portrait-height)) / 2);
   }
-  .closingPane { container-type: inline-size; }
   /* Keep masks and shading stable as the portrait opens. The backdrop blurs
      only during the half-screen transition into the sections below. */
-  .scene { will-change: clip-path, transform; }
-  .closingReveal { will-change: clip-path; }
+  .scene { will-change: transform; }
   .scene .sceneFrame { will-change: transform; }
   .sceneShade { will-change: opacity; }
   /* The shoulders continue below the portrait here too, but without live filters: re-rendering
@@ -480,12 +528,14 @@
     inset: 0;
     width: auto;
     translate: none;
+    /* The closing copy never fades or moves here; two screen-sized layers for it are two too many on a phone. */
+    will-change: auto;
   }
   .closingIntro {
     position: absolute;
     left: max(24px, calc((100% - 320px) / 2));
     right: max(24px, calc((100% - 320px) / 2));
-    top: 96px;
+    top: calc(96px + env(safe-area-inset-top));
   }
   .closingIntro .title {
     margin-top: 0;
@@ -511,7 +561,7 @@
 
 @media (max-width: 767px) {
   .scene,
-  .closingPane { --portrait-nav-height: 64px; }
+  .closingPane { --portrait-nav-height: calc(64px + env(safe-area-inset-top)); }
 }
 
 /* Short desktop windows keep the stacked story with the wider side margins. */
@@ -525,14 +575,14 @@
 /* Keep the scroll experience on compact phones while leaving room for both hero actions. */
 @media (max-width: 1023px) and (min-height: 640px) and (max-height: 759px) {
   .closingIntro .title { font-size: 1.5rem; }
-  .copy, .heroCopy, .closingIntro { top: 80px; }
+  .copy, .heroCopy, .closingIntro { top: calc(80px + env(safe-area-inset-top)); }
   .heroTitle { font-size: clamp(2.125rem, 9.2vw, 2.75rem); }
   .heroText { margin-top: 10px; font-size: 0.9375rem; }
 }
 
 /* Browser controls can leave a portrait phone with less than 700px of page height. */
 @media (max-width: 1023px) and (min-height: 640px) and (max-height: 699px) {
-  .copy, .heroCopy, .closingIntro { top: 72px; }
+  .copy, .heroCopy, .closingIntro { top: calc(72px + env(safe-area-inset-top)); }
   .heroTitle { font-size: clamp(1.875rem, 8.6vw, 2.5rem); }
   .lede { margin-top: 10px; font-size: 0.875rem; line-height: 1.45; }
   .storySignup { --form-inset: max(20px, env(safe-area-inset-bottom)); }
@@ -559,15 +609,6 @@
   .storySignup {
     max-width: 32rem;
     --form-inset: 48px;
-  }
-}
-
-/* While the compact cookie panel lifts the form, shrink the band from its top so the cable tips stay clear of the field. */
-@media (max-width: 639px) {
-  .flight {
-    transform-origin: 50% 0;
-    scale: calc(1 - var(--consent-lift, 0) / 800);
-    transition: scale 250ms var(--ease-out-expo);
   }
 }
 

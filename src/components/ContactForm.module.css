@@ -1,0 +1,52 @@
+.form { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 18px; }
+.group { min-width: 0; }
+.group:nth-child(3), .button, .privacy, .error { grid-column: 1 / -1; }
+.label { display: block; color: var(--color-ivory); font-size: 0.8125rem; font-weight: 500; line-height: 1.5; }
+.label span { margin-left: 3px; color: var(--color-muted); font-size: 0.75rem; font-weight: 400; }
+.field {
+  display: block;
+  width: 100%;
+  min-height: 52px;
+  margin-top: 9px;
+  padding: 13px 14px;
+  border: 1px solid #dedee3;
+  border-radius: 12px;
+  background: #fafafb;
+  color: var(--color-ivory);
+  color-scheme: light;
+  font: inherit;
+  font-size: 1rem;
+  line-height: 1.5;
+  transition: border-color 160ms, box-shadow 160ms, background-color 160ms;
+}
+.field:hover { border-color: #b5b5be; }
+.field:focus-visible { border-color: var(--color-rose); outline: none; background: #fff; box-shadow: 0 0 0 3px #9c7b4a18; }
+.field:disabled { opacity: 0.65; }
+.field[aria-invalid="true"] { border-color: #b34234; }
+.field[aria-invalid="true"]:focus-visible { box-shadow: 0 0 0 3px #b3423414; }
+.message { min-height: 172px; resize: vertical; }
+.button { width: 100%; min-height: 52px; cursor: pointer; }
+.button svg { width: 18px; height: 18px; }
+.button:disabled { opacity: 0.7; cursor: wait; }
+.privacy { margin-top: -8px; color: var(--color-muted); font-size: 0.6875rem; line-height: 1.7; text-align: center; text-wrap: pretty; }
+.privacy a, .error a { text-decoration: underline; text-underline-offset: 3px; }
+.privacy a { color: var(--color-ivory-soft); text-decoration-color: #b6b6bb; white-space: nowrap; }
+.privacy a:hover { text-decoration-color: currentColor; }
+.fieldError, .error { color: #a33225; font-size: 0.8125rem; line-height: 1.6; }
+.fieldError { margin-top: 6px; }
+.error a { display: inline-block; margin-top: 4px; overflow-wrap: anywhere; }
+.success { display: flex; min-height: 380px; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.successIcon { display: grid; width: 52px; height: 52px; margin-bottom: 22px; place-items: center; border: 1px solid #9c7b4a30; border-radius: 50%; background: #9c7b4a0a; color: var(--color-rose); }
+.successIcon svg { width: 24px; height: 24px; }
+.success h2 { font-size: 1.5rem; font-weight: 500; letter-spacing: -0.025em; }
+.success p { max-width: 30ch; margin-top: 10px; color: var(--color-muted); font-size: 0.9375rem; line-height: 1.6; }
+.honeypot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+@media (max-width: 479px) {
+  .form { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .message { min-height: 148px; }
+  .privacy { font-size: 0.75rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .field, .button { transition: none; }
+}

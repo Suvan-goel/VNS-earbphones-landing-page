@@ -1,0 +1,76 @@
+[
+  {
+    "variant": "desktop",
+    "filename": "public/models/cymba-stimulated-mannequin-desktop.glb",
+    "sha256": "e0809890cd9c3db600485c1096dee9af291790b36c5dc52bd825c04c6e397b6e",
+    "bytes": 2440372,
+    "addedBytes": 1146490,
+    "arbors": 84,
+    "paths": 1344,
+    "inputPaths": 38,
+    "minInputHeadClearance": 0.055191479883441405,
+    "brainstem": {
+      "source": "brain-atlas-source.glb",
+      "region": "brain-stem",
+      "sourceSha256": "ce761741d866e32d7a5b7638f4cacd5ec03e2b582e72c8218aba483ac28125e8",
+      "sourceTriangles": 16000,
+      "triangles": 16000,
+      "bounds": {
+        "min": [
+          -0.25493642687797546,
+          0.1119227483868599,
+          -0.4064466953277588
+        ],
+        "max": [
+          0.2832915782928467,
+          0.8468555808067322,
+          0.04627751186490059
+        ]
+      }
+    },
+    "triangles": 343120,
+    "maxSurfaceGap": 0.005999827652354501,
+    "originalGeometryPreserved": true,
+    "originalBufferHashes": [
+      "4b50934d4c439509a9d491cc9f7cdade29bdbf04862b41ba4e3ba1fba017238d",
+      "c3f683891db6549447bdd926bc56c962e7b50c249f8d78510fb4c2c877f88793"
+    ]
+  },
+  {
+    "variant": "mobile",
+    "filename": "public/models/cymba-stimulated-mannequin-mobile.glb",
+    "sha256": "c52cce015f7e344f34ba3b01da6690af7273f7838053dbd6fbc2fefd9be7c7f2",
+    "bytes": 1209388,
+    "addedBytes": 608330,
+    "arbors": 84,
+    "paths": 924,
+    "inputPaths": 38,
+    "minInputHeadClearance": 0.05510496939783212,
+    "brainstem": {
+      "source": "brain-atlas-source.glb",
+      "region": "brain-stem",
+      "sourceSha256": "ce761741d866e32d7a5b7638f4cacd5ec03e2b582e72c8218aba483ac28125e8",
+      "sourceTriangles": 16000,
+      "triangles": 7392,
+      "bounds": {
+        "min": [
+          -0.25493642687797546,
+          0.1119227483868599,
+          -0.4064466953277588
+        ],
+        "max": [
+          0.2832915782928467,
+          0.8468555808067322,
+          0.04627751186490059
+        ]
+      }
+    },
+    "triangles": 161048,
+    "maxSurfaceGap": 0.0059997549597889995,
+    "originalGeometryPreserved": true,
+    "originalBufferHashes": [
+      "c01a2d03f5a86ac0f6f2df1388678557cc130d9388d372187cbc6b23b0c065ff",
+      "1faf5ba6fed4449646593c93cf227aecb6439e78ff6cd940b4d9a5ca6ef62a58"
+    ]
+  }
+]

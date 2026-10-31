@@ -1,0 +1,7 @@
+.share { margin-top: 0; }
+.link { display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 4px 0; border: 0; background: none; color: inherit; font-size: 0.75rem; font-weight: 400; line-height: 1.5; text-align: left; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.link svg { width: 17px; height: 17px; flex-shrink: 0; }
+.link:disabled { cursor: progress; }
+.link:focus-visible, .fallback a:focus-visible { outline: 2px solid var(--reservation-focus, currentColor); outline-offset: 4px; border-radius: 3px; }
+.fallback { margin-top: 6px; color: inherit; font-size: 0.75rem; line-height: 1.6; }
+.fallback a { color: inherit; text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }

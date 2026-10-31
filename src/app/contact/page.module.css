@@ -1,0 +1,51 @@
+.page { background: #f7f7f8; }
+
+.main {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  align-content: center;
+  align-items: center;
+  gap: clamp(48px, 7vw, 100px);
+  flex: 1;
+  width: min(calc(100% - 80px), 1080px);
+  margin-inline: auto;
+  padding-block: 72px;
+  scroll-margin-top: 80px;
+}
+
+.copy { min-width: 0; padding-block: 16px; }
+.accent { width: 40px; height: 3px; margin-bottom: 28px; border-radius: 2px; background: var(--color-rose); }
+.title { font-size: clamp(3rem, 4.6vw, 4rem); }
+.intro { max-width: 28ch; margin-top: 20px; color: var(--color-muted); font-size: 1.0625rem; line-height: 1.65; text-wrap: pretty; }
+.email { margin-top: 44px; font-size: 0.875rem; line-height: 1.6; }
+.email p { color: var(--color-muted); }
+.email a { display: inline-flex; min-height: 44px; align-items: center; gap: 12px; color: var(--color-ivory); font-size: 1rem; font-weight: 500; text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: 5px; overflow-wrap: anywhere; transition: text-decoration-color 160ms; }
+.email a:hover { text-decoration-color: currentColor; }
+.email svg { width: 17px; height: 17px; flex-shrink: 0; color: var(--color-rose); }
+.panel { min-width: 0; padding: 36px; border: 1px solid var(--line); border-radius: 24px; background: var(--color-raised); box-shadow: 0 16px 48px -32px #1d1d1f28; }
+.page .footer { width: min(calc(100% - 80px), 1080px); border-top-color: var(--line); }
+
+@media (max-width: 899px) {
+  .main { grid-template-columns: minmax(0, 1fr); gap: 32px; width: min(calc(100% - 48px), 560px); padding-block: 48px; }
+  .copy { padding: 0; }
+  .accent { margin-bottom: 20px; }
+  .title { font-size: clamp(2.75rem, 7vw, 3.5rem); }
+  .intro { max-width: none; margin-top: 14px; }
+  .email { margin-top: 20px; }
+  .email p { display: inline; margin-right: 8px; }
+  .email a { font-size: 0.875rem; }
+  .page .footer { width: min(calc(100% - 48px), 560px); }
+}
+
+@media (max-width: 479px) {
+  .main { width: calc(100% - 40px); gap: 28px; padding-block: 36px 40px; }
+  .intro { font-size: 1rem; }
+  .panel { padding: 24px 20px; border-radius: 16px; }
+  .email { margin-top: 16px; font-size: 0.8125rem; }
+  .email a { gap: 6px; }
+  .page .footer { width: calc(100% - 40px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .email a { transition: none; }
+}

@@ -1,0 +1,250 @@
+[
+  {
+    "variant": "desktop",
+    "output": "public/models/cymba-mannequin-engraved-desktop.glb",
+    "sha256": "2fbfb0c4089a29c09aa4bba771acae92a922ad72e99ec7507040693c495cc85f",
+    "bytes": 777384,
+    "vertices": 21222,
+    "triangles": 37472,
+    "sculpturePreserved": true,
+    "minimumClearance": 0.0010003505367649878,
+    "routes": [
+      {
+        "id": "stem",
+        "side": 1,
+        "samples": 295,
+        "length": 2.2779815586908794,
+        "start": 0
+      },
+      {
+        "id": "front-low",
+        "side": 1,
+        "samples": 145,
+        "length": 1.2443421261459633,
+        "start": 0.7636132449231916
+      },
+      {
+        "id": "front-high",
+        "side": 1,
+        "samples": 160,
+        "length": 1.1778537941471978,
+        "start": 1.2138157615051572
+      },
+      {
+        "id": "crown",
+        "side": 1,
+        "samples": 183,
+        "length": 1.012441813490916,
+        "start": 1.4307647990137262
+      },
+      {
+        "id": "rear",
+        "side": 1,
+        "samples": 215,
+        "length": 1.652522493679335,
+        "start": 0.3804580477207146
+      },
+      {
+        "id": "front-low-fork",
+        "side": 1,
+        "samples": 67,
+        "length": 0.565504107887347,
+        "start": 1.3846419973961002
+      },
+      {
+        "id": "front-high-fork",
+        "side": 1,
+        "samples": 47,
+        "length": 0.34439275076992193,
+        "start": 2.0055994621651827
+      },
+      {
+        "id": "rear-fork",
+        "side": 1,
+        "samples": 67,
+        "length": 0.4705758680997727,
+        "start": 1.42014916563072
+      },
+      {
+        "id": "stem",
+        "side": -1,
+        "samples": 295,
+        "length": 2.280620628994602,
+        "start": 0
+      },
+      {
+        "id": "front-low",
+        "side": -1,
+        "samples": 145,
+        "length": 1.2459501425417439,
+        "start": 0.7644623948059447
+      },
+      {
+        "id": "front-high",
+        "side": -1,
+        "samples": 160,
+        "length": 1.178714502328744,
+        "start": 1.2154283617086268
+      },
+      {
+        "id": "crown",
+        "side": -1,
+        "samples": 183,
+        "length": 1.0138658645933991,
+        "start": 1.432734166008853
+      },
+      {
+        "id": "rear",
+        "side": -1,
+        "samples": 215,
+        "length": 1.6557603832994727,
+        "start": 0.3805093792600911
+      },
+      {
+        "id": "front-low-fork",
+        "side": -1,
+        "samples": 67,
+        "length": 0.5660397888059955,
+        "start": 1.3864869786979783
+      },
+      {
+        "id": "front-high-fork",
+        "side": -1,
+        "samples": 47,
+        "length": 0.34441471690875997,
+        "start": 2.0080689703034107
+      },
+      {
+        "id": "rear-fork",
+        "side": -1,
+        "samples": 67,
+        "length": 0.47109253488165137,
+        "start": 1.4224189882418334
+      }
+    ]
+  },
+  {
+    "variant": "mobile",
+    "output": "public/models/cymba-mannequin-engraved-mobile.glb",
+    "sha256": "043569770440404dcaf05d9b9c77cab9cbc327b8e6bd7ec15696d669a458122f",
+    "bytes": 332204,
+    "vertices": 12852,
+    "triangles": 22592,
+    "sculpturePreserved": true,
+    "minimumClearance": 0.00045594450299990937,
+    "routes": [
+      {
+        "id": "stem",
+        "side": 1,
+        "samples": 178,
+        "length": 2.2727246920318134,
+        "start": 0
+      },
+      {
+        "id": "front-low",
+        "side": 1,
+        "samples": 88,
+        "length": 1.244064445986792,
+        "start": 0.7585082717688807
+      },
+      {
+        "id": "front-high",
+        "side": 1,
+        "samples": 97,
+        "length": 1.1776753836054796,
+        "start": 1.2085808253355137
+      },
+      {
+        "id": "crown",
+        "side": 1,
+        "samples": 110,
+        "length": 1.011648522903783,
+        "start": 1.4255347873019433
+      },
+      {
+        "id": "rear",
+        "side": 1,
+        "samples": 130,
+        "length": 1.6520515740123467,
+        "start": 0.3754109550815152
+      },
+      {
+        "id": "front-low-fork",
+        "side": 1,
+        "samples": 41,
+        "length": 0.5654434068579793,
+        "start": 1.3793592278246498
+      },
+      {
+        "id": "front-high-fork",
+        "side": 1,
+        "samples": 29,
+        "length": 0.34424238926727796,
+        "start": 2.000279202343412
+      },
+      {
+        "id": "rear-fork",
+        "side": 1,
+        "samples": 41,
+        "length": 0.470212342088262,
+        "start": 1.4148757346229188
+      },
+      {
+        "id": "stem",
+        "side": -1,
+        "samples": 178,
+        "length": 2.278477207089795,
+        "start": 0
+      },
+      {
+        "id": "front-low",
+        "side": -1,
+        "samples": 88,
+        "length": 1.2457315791378727,
+        "start": 0.7624331127812924
+      },
+      {
+        "id": "front-high",
+        "side": -1,
+        "samples": 97,
+        "length": 1.17853821462682,
+        "start": 1.2132784126833105
+      },
+      {
+        "id": "crown",
+        "side": -1,
+        "samples": 110,
+        "length": 1.0131428072653865,
+        "start": 1.4306393570508757
+      },
+      {
+        "id": "rear",
+        "side": -1,
+        "samples": 130,
+        "length": 1.655464971480885,
+        "start": 0.37853662920018594
+      },
+      {
+        "id": "front-low-fork",
+        "side": -1,
+        "samples": 41,
+        "length": 0.5659015652464939,
+        "start": 1.384262565052276
+      },
+      {
+        "id": "front-high-fork",
+        "side": -1,
+        "samples": 29,
+        "length": 0.34437352667883536,
+        "start": 2.005900495532067
+      },
+      {
+        "id": "rear-fork",
+        "side": -1,
+        "samples": 41,
+        "length": 0.47079414371587275,
+        "start": 1.4202187100684303
+      }
+    ]
+  }
+]

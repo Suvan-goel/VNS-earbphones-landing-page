@@ -6,10 +6,9 @@ import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useMotionValue, type MotionValue } from "motion/react";
 import { Mannequin } from "./Mannequin";
-import { EarSensingCue } from "./EarSensingCue";
 import { smoothEarbudNormals } from "./smoothEarbudNormals";
 import sleeveRim from "./earbudSleeveRim.json";
-import { EARBUD_MOBILE_MODEL_URL, preloadMannequin } from "./productAssets";
+import { EARBUD_MOBILE_MODEL_URL, hintMannequinAssets, preloadMannequin } from "./productAssets";
 import { AssetLoading } from "./Scene";
 import { useSceneQuality } from "./sceneQuality";
 
@@ -222,6 +221,9 @@ function EarbudPair({ modelUrl, progress }: { modelUrl: string; progress: Motion
   const right = useMemo(() => prepareEarbud(scene, "R", mobile), [scene, mobile]);
   const leftGroup = useRef<THREE.Group>(null);
   const rightGroup = useRef<THREE.Group>(null);
+  // The earbuds have arrived: the head's bytes can download now, while the hero
+  // compiles and draws, and are parsed only once the hero has had its first frames.
+  useEffect(() => hintMannequinAssets(mobile), [mobile]);
   useEffect(() => () => {
     [left, right].forEach((bud) => bud.traverse((object) => {
       const mesh = object as THREE.Mesh;
@@ -245,19 +247,22 @@ function EarbudPair({ modelUrl, progress }: { modelUrl: string; progress: Motion
     const drift = wake >= 1 ? Math.sin(((since - WAKE_SECONDS) * 2 * Math.PI) / DRIFT_PERIOD) : 0;
     const lift = (Math.sin(wake * Math.PI) * 0.07 + drift * 0.012) * resting;
     const wakeTurn = (Math.sin(wake * Math.PI) * 0.05 + drift * 0.02) * resting;
-    // Start and finish with zero acceleration. The move begins while the
-    // headline is still fading, so the first scroll never meets a still frame.
-    // Overlap the final approach with the flight so the earbuds glide into place.
-    const shrink = THREE.MathUtils.smootherstep(p, 0.1, 0.39);
-    const travel = THREE.MathUtils.smootherstep(p, 0.1, 0.42);
-    const seat = THREE.MathUtils.smootherstep(p, 0.35, 0.46);
-    // Begin with a small hero turn, carry most of the rotation through the
-    // flight, then finish aligning the nozzles as the earbuds slide into place.
-    const lead = Math.sin(THREE.MathUtils.clamp(p / 0.16, 0, 1) * Math.PI / 2);
-    const turn = 0.16 * lead + 0.70 * travel + 0.14 * seat;
     [leftGroup.current, rightGroup.current].forEach((group, index) => {
       if (!group) return;
       const sign = index === 0 ? -1 : 1;
+      // The second bud leads by a beat once the flight is under way, so the
+      // pair reads as placed one after the other rather than snapped on.
+      const pb = index === 1 ? p + 0.03 * THREE.MathUtils.smootherstep(p, 0.06, 0.12) : p;
+      // Start and finish with zero acceleration. The move begins while the
+      // headline is still fading, so the first scroll never meets a still frame.
+      // Overlap the final approach with the flight so the earbuds glide into place.
+      const shrink = THREE.MathUtils.smootherstep(pb, 0.1, 0.39);
+      const travel = THREE.MathUtils.smootherstep(pb, 0.1, 0.42);
+      const seat = THREE.MathUtils.smootherstep(pb, 0.35, 0.46);
+      // Begin with a small hero turn, carry most of the rotation through the
+      // flight, then finish aligning the nozzles as the earbuds slide into place.
+      const lead = Math.sin(THREE.MathUtils.clamp(pb / 0.16, 0, 1) * Math.PI / 2);
+      const turn = 0.16 * lead + 0.70 * travel + 0.14 * seat;
       const arc = Math.sin(Math.PI * travel);
       // Turn the mirrored pair in flight and exchange sides so the
       // silicone nozzles point into the canals as they settle. The two
@@ -267,7 +272,7 @@ function EarbudPair({ modelUrl, progress }: { modelUrl: string; progress: Motion
       // Finish lower, slightly inward, and toward the face (+Z) to seat the tips in the canals.
       group.position.set(
         sign * (THREE.MathUtils.lerp(0.60, -1.46, travel) + 0.34 * seat),
-        THREE.MathUtils.lerp(index === 0 ? 0.04 : 0.78, -0.06, travel) + arc * 0.12 - 0.06 * seat + lift,
+        THREE.MathUtils.lerp(index === 0 ? 0.04 : 0.78, -0.06, travel) + arc * (index === 0 ? 0.12 : 0.07) - 0.06 * seat + lift,
         THREE.MathUtils.lerp(
           THREE.MathUtils.lerp(index === 0 ? 0 : -0.05, 0.36, travel) + arc * (index === 0 ? 2.3 : 2.1),
           0.15, seat,
@@ -280,6 +285,9 @@ function EarbudPair({ modelUrl, progress }: { modelUrl: string; progress: Motion
         sign * THREE.MathUtils.lerp(0.09, 0, turn),
       );
     });
+    // The wake and the drift are the only motion that is not scroll-driven; keep
+    // drawing while they can still move the pair.
+    if (resting > 0) state.invalidate();
   }, -2);
   return <>
     <group ref={leftGroup}><primitive object={left} dispose={null} /><CableSleeve side="L" /></group>
@@ -301,8 +309,10 @@ function DeferredMannequin({ progress, reveal, stimulation, mannequinGate }: {
   const committedFrames = useRef(0);
   const heroReadyAt = useRef<number | null>(null);
 
-  useFrame(() => {
+  useFrame((state) => {
     if (requested.current) return;
+    // Frames are on demand: keep them coming until the head has been requested.
+    state.invalidate();
     // This callback mounts only once the sibling earbuds have resolved the
     // outer Suspense boundary. Two earlier frames have then drawn the hero.
     committedFrames.current++;
@@ -323,38 +333,52 @@ function DeferredMannequin({ progress, reveal, stimulation, mannequinGate }: {
   return <Suspense fallback={<AssetLoading />}>
     {mannequinGate}
     <Mannequin reveal={reveal} stimulation={stimulation} />
-    <EarSensingCue progress={progress} reveal={reveal} />
     <ShaderWarmUp />
   </Suspense>;
 }
 
-/** Compile every material once the head has arrived, so the first scroll through the chapters never waits on a shader. */
+/**
+ * Compile every material once the head has arrived, so the first scroll through
+ * the chapters never waits on a shader. One mesh per frame: the same programs
+ * as compiling the whole scene at once, without one long task holding a frame.
+ */
 function ShaderWarmUp() {
-  const done = useRef(false);
-  useFrame(({ gl, scene, camera }) => {
-    if (done.current) return;
-    done.current = true;
-    gl.compile(scene, camera);
+  const queue = useRef<THREE.Object3D[] | null>(null);
+  useFrame((state) => {
+    const { gl, scene, camera } = state;
+    if (queue.current === null) {
+      const meshes: THREE.Object3D[] = [];
+      scene.traverse((object) => { if ((object as THREE.Mesh).isMesh) meshes.push(object); });
+      queue.current = meshes;
+    }
+    const mesh = queue.current.shift();
+    if (!mesh) return;
+    // Lights and the environment come from the scene; only this mesh's materials are prepared.
+    gl.compile(mesh, camera, scene);
+    if (queue.current.length) state.invalidate();
   });
   return null;
 }
 
-export function EarbudExperience({ modelUrl, progress, mannequinGate }: {
+export function EarbudExperience({ modelUrl, progress, mannequinGate, verticalOverscan = 0 }: {
   modelUrl: string;
   progress: MotionValue<number>;
   /** Used by the development fixture to hold only the mannequin's loading. */
   mannequinGate?: ReactNode;
+  /** Extra canvas height on each edge, relative to the original mobile frame. */
+  verticalOverscan?: number;
 }) {
   const presentation = useRef<THREE.Group>(null);
   const reveal = useMotionValue(0);
   const stimulation = useMotionValue(0);
   const target = useRef(new THREE.Vector3());
   const framingZoom = useRef(1);
+  const mobileFraming = useRef(false);
   const shadowProgress = useRef<number | null>(null);
   useEffect(() => {
     // Use the page breakpoint: desktop canvases also occupy a narrow column.
     const mobile = window.matchMedia("(max-width: 1023px)");
-    const updateFraming = () => { framingZoom.current = mobile.matches ? 1.15 : 1; };
+    const updateFraming = () => { mobileFraming.current = mobile.matches; framingZoom.current = mobile.matches ? 1.15 : 1; };
     updateFraming();
     mobile.addEventListener("change", updateFraming);
     return () => mobile.removeEventListener("change", updateFraming);
@@ -373,21 +397,37 @@ export function EarbudExperience({ modelUrl, progress, mannequinGate }: {
       shadowProgress.current = p;
     }
     const worn = THREE.MathUtils.smootherstep(p, 0.1, 0.46);
-    // Let the product lead the turn, then bring the mannequin in quickly enough
-    // that the head is solid by the time the earbuds seat.
-    reveal.set(ease(0.30, 0.42, p));
-    // Give sensing its own quiet beat, then grow the signal toward the crown.
-    // Hold the completed signal while the research chapter is shown.
-    stimulation.set(ease(0.57, 0.71, p));
+    // The wearer arrives first: the head is solid before the pair reaches the ears.
+    reveal.set(ease(0.22, 0.32, p));
+    // Begin translucency during the final seating of the earbuds, and finish
+    // with the 45-degree rotation. The material smooths this linear target;
+    // another easing curve here would delay the first visible transparency.
+    stimulation.set(THREE.MathUtils.clamp((p - 0.42) / (0.74 - 0.42), 0, 1));
     if (presentation.current) {
       // Rotate only 45 degrees in total, then hold that pose.
       // The slower opening keeps the face visible while the pair settles in.
       presentation.current.rotation.y = -THREE.MathUtils.degToRad(45) * ease(0.28, 0.74, p) ** 1.7;
     }
-    const frameHeight = THREE.MathUtils.lerp(4.7, 5.9, worn);
-    const frameWidth = THREE.MathUtils.lerp(4.2, 4.5, worn);
-    const distance = Math.max(frameHeight, frameWidth / (size.width / size.height)) / (2 * Math.tan(THREE.MathUtils.degToRad((camera as THREE.PerspectiveCamera).fov / 2)));
-    const targetY = THREE.MathUtils.lerp(-0.2, -0.12, worn);
+    // A slow push-in of about 7% during the growth gives the final pose depth.
+    const push = ease(0.57, 0.74, p);
+    const frameHeight = THREE.MathUtils.lerp(4.7, 5.9, worn) - 0.4 * push;
+    const frameWidth = THREE.MathUtils.lerp(4.2, 4.5, worn) - 0.3 * push;
+    const padding = mobileFraming.current ? verticalOverscan : 0;
+    const originalHeight = size.height / (1 + 2 * padding);
+    const perspective = camera as THREE.PerspectiveCamera;
+    // Extend the viewing window above and below the original frame. A view
+    // offset preserves every model pixel's size and position, unlike zooming out.
+    const view = perspective.view;
+    const offsetY = -originalHeight * padding;
+    if (padding > 0 && (!view?.enabled || perspective.aspect !== size.width / originalHeight || view.fullWidth !== size.width || view.fullHeight !== originalHeight || view.height !== size.height || view.offsetY !== offsetY)) {
+      perspective.setViewOffset(size.width, originalHeight, 0, offsetY, size.width, size.height);
+    } else if (padding === 0 && view?.enabled) {
+      perspective.clearViewOffset();
+      perspective.aspect = size.width / size.height;
+      perspective.updateProjectionMatrix();
+    }
+    const distance = Math.max(frameHeight, frameWidth / (size.width / originalHeight)) / (2 * Math.tan(THREE.MathUtils.degToRad(perspective.fov / 2)));
+    const targetY = THREE.MathUtils.lerp(-0.2, -0.12, worn) + (mobileFraming.current ? -0.07 : 0.08) * push;
     camera.position.set(0, targetY + worn * 0.12, distance);
     camera.lookAt(target.current.set(0, targetY, 0));
   }, -2.5);

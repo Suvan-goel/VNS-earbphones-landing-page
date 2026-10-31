@@ -18,11 +18,11 @@ export const site = {
   /** Public business label; this does not assert a registered legal entity. */
   legalName: brand,
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://trycymba.com",
-  contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "support@muraband.com",
+  contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "support@trycymba.com",
   /** Add real destinations only. Empty entries are not rendered. */
   social: [] as { label: string; href: string }[],
   seo: {
-    title: `${product} — The earbuds for deep work`,
+    title: `${product} — Earbuds built for learning.`,
     description:
       `${product}: gentle nerve stimulation built into everyday earbuds, for longer focus. Launching ${launch.window} at ${formatCompactMarkets("retail")}. Reserve for ${formatCompactMarkets("deposit")}, fully refundable, or join the waitlist.`,
   },
@@ -47,7 +47,7 @@ export const heroVariants: Record<HeroVariant["id"], HeroVariant> = {
     id: "learn",
     hypothesis: "A. Cognitive outcomes",
     eyebrow: `Coming ${launch.window}`,
-    headline: ["The earbuds", "for deep work."],
+    headline: ["Earbuds built", "for learning."],
     subhead: "Focus on the tasks you care about for longer.",
     primaryCta: "Join the waitlist",
   },

@@ -238,7 +238,7 @@ function PaymentForm({ sessionId, email, expected, onEditDetails, onRetry, onCon
             {submitting && <p className="sr-only">Confirming your reservation payment.</p>}
           </div>
           <button type="submit" className={styles.button} disabled={submitting || !paymentReady || !readyToConfirm}>
-            {submitting ? <><span className={styles.spinner} aria-hidden="true" />Confirming…</> : `Reserve for ${amountLabel}`}
+            {submitting ? <><span className={styles.spinner} aria-hidden="true" />Confirming…</> : "Reserve now"}
           </button>
           <p className={styles.secureNote}>
             <svg aria-hidden="true" viewBox="0 0 16 16" fill="none"><rect x="3.5" y="7" width="9" height="6.5" rx="1.5" stroke="currentColor" /><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" stroke="currentColor" strokeLinecap="round" /></svg>
