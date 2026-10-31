@@ -44,7 +44,8 @@ function pickVariant(raw: string | string[] | undefined): HeroVariant {
 function findProductModel(): { modelUrl: string | null; posterUrl: string | null } {
   const dir = join(process.cwd(), "public/models");
   // The version key changes whenever the optimized file is regenerated, so no browser keeps a stale copy.
-  const modelUrl = existsSync(join(dir, "cymba-earbuds-hero.glb")) ? "/models/cymba-earbuds-hero.glb?v=839174eb" : null;
+  // The compact copy (scripts/build-compact-models.mjs) carries the same meshes and textures in fewer bytes.
+  const modelUrl = existsSync(join(dir, "cymba-earbuds-hero-compact.glb")) ? "/models/cymba-earbuds-hero-compact.glb?v=8d33f1ec" : null;
   // A content-hashed URL invalidates both browser and Next image caches
   // whenever the live-rendered loading still changes.
   const posterUrl = heroPoster.src;

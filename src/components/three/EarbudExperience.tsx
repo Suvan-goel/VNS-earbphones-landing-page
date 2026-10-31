@@ -221,6 +221,8 @@ function EarbudPair({ modelUrl, progress }: { modelUrl: string; progress: Motion
   const right = useMemo(() => prepareEarbud(scene, "R", mobile), [scene, mobile]);
   const leftGroup = useRef<THREE.Group>(null);
   const rightGroup = useRef<THREE.Group>(null);
+  const nextDriftFrame = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => { if (nextDriftFrame.current !== null) clearTimeout(nextDriftFrame.current); }, []);
   // The earbuds have arrived: the head's bytes can download now, while the hero
   // compiles and draws, and are parsed only once the hero has had its first frames.
   useEffect(() => hintMannequinAssets(mobile), [mobile]);
@@ -286,8 +288,15 @@ function EarbudPair({ modelUrl, progress }: { modelUrl: string; progress: Motion
       );
     });
     // The wake and the drift are the only motion that is not scroll-driven; keep
-    // drawing while they can still move the pair.
-    if (resting > 0) state.invalidate();
+    // drawing while they can still move the pair. The wake is drawn at full rate. The
+    // drift moves the pair a couple of pixels over six seconds, so, like the settled
+    // head's idle signal, it is drawn at 30 fps: a frame every 16 ms shows nothing more
+    // and costs the phone twice the GPU work while the page rests at the top.
+    if (nextDriftFrame.current !== null) { clearTimeout(nextDriftFrame.current); nextDriftFrame.current = null; }
+    if (resting > 0) {
+      if (wake < 1) state.invalidate();
+      else nextDriftFrame.current = setTimeout(() => { nextDriftFrame.current = null; state.invalidate(); }, 1000 / 30);
+    }
   }, -2);
   return <>
     <group ref={leftGroup}><primitive object={left} dispose={null} /><CableSleeve side="L" /></group>

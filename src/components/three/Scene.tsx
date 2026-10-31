@@ -1,9 +1,9 @@
 "use client";
 
-import { Component, Suspense, useCallback, useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
+import { Component, Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
 import * as THREE from "three";
-import { Canvas, useFrame, useStore, useThree } from "@react-three/fiber";
-import { ContactShadows, Environment, Lightformer } from "@react-three/drei";
+import { Canvas, createPortal, useFrame, useStore, useThree } from "@react-three/fiber";
+import { ContactShadows, Lightformer } from "@react-three/drei";
 import type { MotionValue } from "motion/react";
 import { estimateDownlinkMbps, loadingBudgetMs, sceneRecoveryReason, type SceneHealth } from "@/lib/scene-health";
 import { SceneQualityContext } from "./sceneQuality";
@@ -50,15 +50,46 @@ class SceneBoundary extends Component<
   }
 }
 
+/**
+ * The studio's light: four softboxes over a grey backdrop, rendered once into a cube map
+ * that lights every material. This is drei's Environment for the children case, written
+ * out: that component also carries the HDR, EXR and gain-map loaders and the ground
+ * projection, which the page never uses and would otherwise download and parse.
+ */
 function StudioEnvironment() {
-  return (
-    <Environment resolution={256} frames={1} environmentIntensity={1.1}>
+  const gl = useThree((state) => state.gl);
+  const scene = useThree((state) => state.scene);
+  const camera = useRef<THREE.CubeCamera>(null);
+  const [virtualScene] = useState(() => new THREE.Scene());
+  const target = useMemo(() => {
+    const target = new THREE.WebGLCubeRenderTarget(256);
+    target.texture.type = THREE.HalfFloatType;
+    return target;
+  }, []);
+  useEffect(() => () => target.dispose(), [target]);
+  useLayoutEffect(() => {
+    const autoClear = gl.autoClear;
+    gl.autoClear = true;
+    camera.current?.update(gl, virtualScene);
+    gl.autoClear = autoClear;
+    const previous = { environment: scene.environment, environmentIntensity: scene.environmentIntensity };
+    scene.environment = target.texture;
+    scene.environmentIntensity = 1.1;
+    return () => {
+      scene.environment = previous.environment;
+      scene.environmentIntensity = previous.environmentIntensity;
+    };
+  }, [gl, scene, target, virtualScene]);
+  return createPortal(
+    <>
       <color attach="background" args={["#777779"]} />
       <Lightformer position={[0, 5, 3]} scale={[8, 5]} intensity={2.5} />
       <Lightformer position={[-5, 1, 2]} scale={[3, 7]} intensity={2} />
       <Lightformer position={[5, 2, -3]} scale={[3, 6]} intensity={1.5} color="#dfe6ff" />
       <Lightformer position={[0, -3, 5]} scale={[6, 2]} intensity={0.6} />
-    </Environment>
+      <cubeCamera ref={camera} args={[0.1, 1000, target]} />
+    </>,
+    virtualScene,
   );
 }
 
@@ -180,6 +211,7 @@ export function Scene({
   shadowY = -3.1,
   shadows = true,
   sculptureShadows = false,
+  antialias = true,
   onReady,
   onLoading,
   onError,
@@ -191,6 +223,8 @@ export function Scene({
   shadowY?: number;
   shadows?: boolean;
   sculptureShadows?: boolean;
+  /** Off when a post-process composites every frame: the canvas then only ever receives a full-screen quad, which multisampling cannot improve. */
+  antialias?: boolean;
   onReady?: () => void;
   onLoading?: () => void;
   onError?: (error: Error) => void;
@@ -374,7 +408,7 @@ export function Scene({
             shadows={sculptureShadows && !mobile ? "percentage" : false}
             frameloop={visible && pageVisible && !recovering ? "demand" : "never"}
             camera={camera}
-            gl={{ antialias: true, alpha: true, powerPreference: "high-performance", toneMapping: THREE.NeutralToneMapping, toneMappingExposure: 1.05 }}
+            gl={{ antialias, alpha: true, powerPreference: "high-performance", toneMapping: THREE.NeutralToneMapping, toneMappingExposure: 1.05 }}
             fallback={null}
             style={{ background: "transparent" }}
           >

@@ -1,0 +1,241 @@
+{
+  "generated": "2026-10-31T17:46:57.131Z",
+  "quantization": {
+    "POSITION": 14,
+    "NORMAL": 11,
+    "TEX_COORD": 16
+  },
+  "webpQuality": 90,
+  "models": [
+    {
+      "source": "cymba-earbuds-hero.glb",
+      "output": "cymba-earbuds-hero-compact.glb",
+      "sourceBytes": 1553052,
+      "meshes": [
+        {
+          "name": "Mesh_0.001",
+          "sourceBytes": 313498,
+          "bytes": 249053,
+          "sourceTriangles": 55435,
+          "triangles": 55435,
+          "sourceVertices": 35919,
+          "vertices": 35919,
+          "simplification": null
+        },
+        {
+          "name": "Mesh_0.002",
+          "sourceBytes": 313477,
+          "bytes": 250289,
+          "sourceTriangles": 55435,
+          "triangles": 55435,
+          "sourceVertices": 35919,
+          "vertices": 35919,
+          "simplification": null
+        }
+      ],
+      "textures": [
+        {
+          "image": 0,
+          "size": "2048x2048",
+          "sourceFormat": "jpeg",
+          "sourceBytes": 432255,
+          "bytes": 432255,
+          "converted": false,
+          "meanTexelDelta": 0,
+          "maxTexelDelta": 0
+        },
+        {
+          "image": 1,
+          "size": "2048x2048",
+          "sourceFormat": "jpeg",
+          "sourceBytes": 491001,
+          "bytes": 224884,
+          "converted": true,
+          "meanTexelDelta": 1.031,
+          "maxTexelDelta": 46
+        }
+      ],
+      "bytes": 1159376,
+      "versionKey": "8d33f1ec"
+    },
+    {
+      "source": "cymba-earbuds-hero-mobile.glb",
+      "output": "cymba-earbuds-hero-mobile-compact.glb",
+      "sourceBytes": 972812,
+      "meshes": [
+        {
+          "name": "Mesh_0.001",
+          "sourceBytes": 197537,
+          "bytes": 133871,
+          "sourceTriangles": 19327,
+          "triangles": 19327,
+          "sourceVertices": 17439,
+          "vertices": 17439,
+          "simplification": null
+        },
+        {
+          "name": "Mesh_0.002",
+          "sourceBytes": 198035,
+          "bytes": 134296,
+          "sourceTriangles": 19393,
+          "triangles": 19393,
+          "sourceVertices": 17466,
+          "vertices": 17466,
+          "simplification": null
+        }
+      ],
+      "textures": [
+        {
+          "image": 0,
+          "size": "1024x1024",
+          "sourceFormat": "jpeg",
+          "sourceBytes": 247215,
+          "bytes": 146816,
+          "converted": true,
+          "meanTexelDelta": 1.177,
+          "maxTexelDelta": 17
+        },
+        {
+          "image": 1,
+          "size": "1536x1536",
+          "sourceFormat": "jpeg",
+          "sourceBytes": 327184,
+          "bytes": 153702,
+          "converted": true,
+          "meanTexelDelta": 1.266,
+          "maxTexelDelta": 40
+        }
+      ],
+      "bytes": 571636,
+      "versionKey": "53b40e2d"
+    },
+    {
+      "source": "cymba-stimulated-mannequin-desktop.glb",
+      "output": "cymba-stimulated-mannequin-desktop-compact.glb",
+      "sourceBytes": 2440372,
+      "meshes": [
+        {
+          "name": "Mesh_0.002",
+          "sourceBytes": 573619,
+          "bytes": 431410,
+          "sourceTriangles": 115923,
+          "triangles": 115923,
+          "sourceVertices": 68767,
+          "vertices": 68762,
+          "simplification": null
+        },
+        {
+          "name": "Cortical_Brain",
+          "sourceBytes": 714858,
+          "bytes": 530710,
+          "sourceTriangles": 118000,
+          "triangles": 118000,
+          "sourceVertices": 59004,
+          "vertices": 59004,
+          "simplification": null
+        },
+        {
+          "name": "Cortical_Neural_Arbors",
+          "sourceBytes": 1043689,
+          "bytes": 527291,
+          "sourceTriangles": 314160,
+          "triangles": 157078,
+          "sourceVertices": 85260,
+          "vertices": 85854,
+          "simplification": {
+            "ratio": 0.5,
+            "error": 0.0005,
+            "measuredError": 0.0003955443680752069
+          }
+        },
+        {
+          "name": "Brainstem",
+          "sourceBytes": 53377,
+          "bytes": 41897,
+          "sourceTriangles": 16000,
+          "triangles": 16000,
+          "sourceVertices": 7998,
+          "vertices": 7998,
+          "simplification": null
+        },
+        {
+          "name": "Ear_to_Cortex_Signal",
+          "sourceBytes": 49424,
+          "bytes": 33553,
+          "sourceTriangles": 12960,
+          "triangles": 12960,
+          "sourceVertices": 6708,
+          "vertices": 6708,
+          "simplification": null
+        }
+      ],
+      "textures": [],
+      "bytes": 1570264,
+      "versionKey": "dccbfec0"
+    },
+    {
+      "source": "cymba-stimulated-mannequin-mobile.glb",
+      "output": "cymba-stimulated-mannequin-mobile-compact.glb",
+      "sourceBytes": 1209388,
+      "meshes": [
+        {
+          "name": "Mesh_0.002",
+          "sourceBytes": 201854,
+          "bytes": 140963,
+          "sourceTriangles": 28973,
+          "triangles": 28973,
+          "sourceVertices": 22626,
+          "vertices": 22627,
+          "simplification": null
+        },
+        {
+          "name": "Cortical_Brain",
+          "sourceBytes": 393803,
+          "bytes": 305807,
+          "sourceTriangles": 62000,
+          "triangles": 62000,
+          "sourceVertices": 31004,
+          "vertices": 31004,
+          "simplification": null
+        },
+        {
+          "name": "Cortical_Neural_Arbors",
+          "sourceBytes": 549963,
+          "bytes": 279262,
+          "sourceTriangles": 146496,
+          "triangles": 73032,
+          "sourceVertices": 40322,
+          "vertices": 41605,
+          "simplification": {
+            "ratio": 0.5,
+            "error": 0.0008,
+            "measuredError": 0.0007323645404540002
+          }
+        },
+        {
+          "name": "Brainstem",
+          "sourceBytes": 27605,
+          "bytes": 23145,
+          "sourceTriangles": 7392,
+          "triangles": 7392,
+          "sourceVertices": 3694,
+          "vertices": 3694,
+          "simplification": null
+        },
+        {
+          "name": "Ear_to_Cortex_Signal",
+          "sourceBytes": 30762,
+          "bytes": 22202,
+          "sourceTriangles": 7160,
+          "triangles": 7160,
+          "sourceVertices": 3770,
+          "vertices": 3770,
+          "simplification": null
+        }
+      ],
+      "textures": [],
+      "bytes": 776776,
+      "versionKey": "71a0880c"
+    }
+  ]
+}

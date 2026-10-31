@@ -35,7 +35,9 @@ export function StageScene({ progress, readProgress, modelUrl, onReady, onLoadin
 }) {
   const renderProgress = useMotionValue(progress.get());
   const resetAssets = useCallback(() => clearProductAssets(modelUrl), [modelUrl]);
-  return <Scene shadows={false} sculptureShadows camera={{ position: [0, -0.2, 10], fov: 28 }} shadowY={-2.4} onReady={onReady} onLoading={onLoading} onError={onError} onResetAssets={resetAssets}>
+  // NeuralGlow draws the scene into its own multisampled buffer and writes the canvas with one
+  // full-screen quad per frame, so a multisampled canvas would only add a resolve of the same pixels.
+  return <Scene shadows={false} sculptureShadows antialias={false} camera={{ position: [0, -0.2, 10], fov: 28 }} shadowY={-2.4} onReady={onReady} onLoading={onLoading} onError={onError} onResetAssets={resetAssets}>
     <RedrawOnChange value={progress} />
     <ScrollProgressSync source={progress} progress={renderProgress} readProgress={readProgress} />
     {modelUrl && <EarbudExperience modelUrl={modelUrl} progress={renderProgress} verticalOverscan={verticalOverscan} />}
