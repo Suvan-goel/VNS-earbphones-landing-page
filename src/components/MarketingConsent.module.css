@@ -51,18 +51,61 @@
   line-height: 1.4;
 }
 
-.current {
-  color: var(--consent-muted, #68686d);
-  font-size: 0.6875rem;
-  line-height: 1.4;
-}
-
 .description {
   margin-top: 6px;
   color: var(--consent-muted, #636368);
   font-size: 0.8125rem;
   line-height: 1.5;
 }
+
+.choices {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.choice {
+  display: flex;
+  min-height: 44px;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.choice input {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: var(--consent-focus, #1d1d1f);
+}
+
+.choice strong,
+.choice small {
+  display: block;
+  line-height: 1.4;
+}
+
+.choice strong {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.choice small {
+  margin-top: 2px;
+  color: var(--consent-muted, #636368);
+  font-size: 0.6875rem;
+}
+
+.withdrawal {
+  color: var(--consent-muted, #636368);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+.withdrawal[data-active] { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--consent-border, #1d1d1f12); }
+.withdrawal a, .withdrawal button { color: var(--consent-text, #1d1d1f); text-decoration: underline; text-underline-offset: 3px; }
+.withdrawal button { display: inline-flex; min-height: 44px; align-items: center; cursor: pointer; }
+.withdrawal button:disabled { cursor: wait; opacity: 0.7; }
 
 .footer {
   display: flex;
@@ -162,7 +205,7 @@
   .actions button { transition: none; }
 }
 
-/* Phones: one compact row at the very bottom, so it costs the least screen while the question is open. */
+/* Keep both permissions together in the same compact panel on phones. */
 @media (max-width: 639px) {
   .panel {
     left: 0;

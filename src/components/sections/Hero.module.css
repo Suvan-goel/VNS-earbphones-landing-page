@@ -7,7 +7,7 @@
   flex-direction: column;
   align-items: center;
   gap: 24px;
-  padding-top: 104px;
+  padding-top: calc(104px + env(safe-area-inset-top));
   padding-bottom: 32px;
 }
 
@@ -81,7 +81,7 @@
 @media (max-width: 639px) {
   .layout {
     gap: 24px;
-    padding-top: 96px;
+    padding-top: calc(96px + env(safe-area-inset-top));
     padding-bottom: 32px;
   }
 
@@ -120,7 +120,7 @@
 
 @media (max-width: 479px) {
   .layout {
-    padding-top: 88px;
+    padding-top: calc(88px + env(safe-area-inset-top));
     gap: 22px;
   }
 }

@@ -1,6 +1,6 @@
 import { site } from "./site";
 import { reservation } from "./reservation";
-import { formatBothMarkets, launch } from "./pricing";
+import { formatBothMarkets, foundersOffer, launch } from "./pricing";
 
 type FaqLink = {
   label: string;
@@ -90,13 +90,25 @@ export function getFaqGroups(reservations = false): FaqGroup[] {
       {
         id: "when",
         q: "When will it launch, and what will it cost?",
-        a: `We're launching in ${launch.window}. The earbuds will be ${formatBothMarkets("retail")}, paid once, and the ${P} software subscription will be ${formatBothMarkets("subscription", " a month")}. The site shows pounds to UK visitors and US dollars to US visitors; you can switch currency at any time. We'll confirm final pricing, taxes and shipping with the launch list before orders open, and if you reserve you'll see them before deciding whether to complete your purchase.`,
+        a: `We're planning to launch in ${launch.window}. The planned price of the earbuds is ${formatBothMarkets("retail")}, paid once, and the ${P} software subscription is planned at ${formatBothMarkets("subscription", " a month")}. The first ${foundersOffer.limit} paid reservations qualify for the Founding ${foundersOffer.limit} offer. Currency is set automatically by location: pounds for UK visitors and US dollars elsewhere. We'll confirm final pricing, taxes and shipping with the launch list before orders open, and if you reserve you'll see them before deciding whether to complete your purchase.`,
       },
       {
         id: "reservation",
         q: "How does the reservation deposit work?",
-        a: `${reservations ? "Reservations are open." : "Paid reservations are coming soon; deposits are not being taken yet."} Your one-time deposit of ${formatBothMarkets("deposit")} holds your place and comes off the ${formatBothMarkets("retail")} price of the earbuds. It is fully refundable before your pair ships, with no subscription or automatic charge for the balance. Your founder number is assigned once we record payment confirmation. The first 50 paid reservations qualify for limited-edition Founders Buds at no extra cost when they buy the finished product.`,
+        a: `${reservations ? "Reservations are open." : "Paid reservations are coming soon; deposits are not being taken yet."} Your one-time deposit of ${formatBothMarkets("deposit")} holds your place and is credited in full against the price of the earbuds if you choose to buy. It is fully refundable before your pair ships, with no subscription or automatic charge for the balance. Your reservation number is assigned once we record payment confirmation. Any Founding ${foundersOffer.limit} discount is applied in addition to your deposit credit.`,
         links: [{ label: "Reservation details", href: reservation.path }],
+      },
+      {
+        id: "founding-offer",
+        q: `What is included in the Founding ${foundersOffer.limit} offer?`,
+        a: `The first ${foundersOffer.limit} paid reservations receive ${formatBothMarkets("founderDiscount")} off the launch recommended retail price, the first ${foundersOffer.freeMonths} months of the software subscription free, and limited-edition Founders Buds at no extra cost when they buy the finished product. The discount is in addition to the full credit for your reservation deposit. The free months begin when you activate your delivered product. After the free period, the planned standard subscription price is ${formatBothMarkets("subscription", " a month")}; we'll confirm the final subscription terms before activation. Founders Buds differ from the standard product in finish only. Places are allocated in the order we record successful payment confirmations. If a qualifying reservation is cancelled, its place passes to the next confirmed paid reservation.`,
+        links: [{ label: "Founding offer details", href: "/terms#founding-offer" }],
+      },
+      {
+        id: "referrals",
+        q: "Can I earn more free subscription months by referring friends?",
+        a: `Yes. All paid reservation holders can earn ${foundersOffer.referralMonths} extra month of the software subscription free for each additional friend they refer who completes a paid reservation. Each friend counts once. After paying, your friend emails ${site.contactEmail} from their reservation email address and includes your reservation number. Our support team verifies their paid reservation and records the free month for you. These months are added to your free subscription period when you activate your delivered product. Referral rewards are separate from the first-${foundersOffer.limit} limit. Your friend's own reservation benefits, including eligibility for the Founding ${foundersOffer.limit} offer, are determined independently by their reservation.`,
+        links: [{ label: "Referral reward details", href: "/terms#referrals" }],
       },
       {
         id: "refund",

@@ -1,5 +1,7 @@
 import { reservation, type HeroVariant } from "@/config/site";
+import { foundersOffer } from "@/config/pricing";
 import type { StorageMode } from "@/lib/storage";
+import { Price } from "./Price";
 import { WaitlistForm } from "./WaitlistForm";
 import styles from "./HeroSignup.module.css";
 
@@ -17,6 +19,10 @@ export function HeroSignup({
         <a href={`${reservation.path}?v=${v.id}`} data-cta="hero_reserve" className={styles.reserve}>
           Reserve yours <span aria-hidden="true" className={styles.arrow}>→</span>
         </a>
+        <p className={styles.offer}>
+          <span className={styles.offerLimit}>First {foundersOffer.limit} reservations:</span>{" "}
+          <Price of="founderDiscount" /> off + {foundersOffer.freeMonths} months free + Founders Buds
+        </p>
       </div>
     </div>
   );

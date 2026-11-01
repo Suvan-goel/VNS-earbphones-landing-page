@@ -1,10 +1,11 @@
 "use client";
 
-import { Component, Suspense, useCallback, useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
+import { Component, Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
 import * as THREE from "three";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { ContactShadows, Environment, Lightformer } from "@react-three/drei";
-import { sceneRecoveryReason, type SceneHealth } from "@/lib/scene-health";
+import { Canvas, createPortal, useFrame, useStore, useThree } from "@react-three/fiber";
+import { ContactShadows, Lightformer } from "@react-three/drei";
+import type { MotionValue } from "motion/react";
+import { estimateDownlinkMbps, loadingBudgetMs, sceneRecoveryReason, type SceneHealth } from "@/lib/scene-health";
 import { SceneQualityContext } from "./sceneQuality";
 import { ScenePerformanceDiagnostics } from "./ScenePerformanceDiagnostics";
 
@@ -17,7 +18,7 @@ export function AssetLoading() {
     let timer: ReturnType<typeof setTimeout> | undefined;
     const start = () => {
       clearTimeout(timer);
-      if (!document.hidden) timer = setTimeout(() => setExpired(true), 30000);
+      if (!document.hidden) timer = setTimeout(() => setExpired(true), loadingBudgetMs(estimateDownlinkMbps()));
     };
     start();
     document.addEventListener("visibilitychange", start);
@@ -49,15 +50,46 @@ class SceneBoundary extends Component<
   }
 }
 
+/**
+ * The studio's light: four softboxes over a grey backdrop, rendered once into a cube map
+ * that lights every material. This is drei's Environment for the children case, written
+ * out: that component also carries the HDR, EXR and gain-map loaders and the ground
+ * projection, which the page never uses and would otherwise download and parse.
+ */
 function StudioEnvironment() {
-  return (
-    <Environment resolution={256} frames={1} environmentIntensity={1.1}>
+  const gl = useThree((state) => state.gl);
+  const scene = useThree((state) => state.scene);
+  const camera = useRef<THREE.CubeCamera>(null);
+  const [virtualScene] = useState(() => new THREE.Scene());
+  const target = useMemo(() => {
+    const target = new THREE.WebGLCubeRenderTarget(256);
+    target.texture.type = THREE.HalfFloatType;
+    return target;
+  }, []);
+  useEffect(() => () => target.dispose(), [target]);
+  useLayoutEffect(() => {
+    const autoClear = gl.autoClear;
+    gl.autoClear = true;
+    camera.current?.update(gl, virtualScene);
+    gl.autoClear = autoClear;
+    const previous = { environment: scene.environment, environmentIntensity: scene.environmentIntensity };
+    scene.environment = target.texture;
+    scene.environmentIntensity = 1.1;
+    return () => {
+      scene.environment = previous.environment;
+      scene.environmentIntensity = previous.environmentIntensity;
+    };
+  }, [gl, scene, target, virtualScene]);
+  return createPortal(
+    <>
       <color attach="background" args={["#777779"]} />
       <Lightformer position={[0, 5, 3]} scale={[8, 5]} intensity={2.5} />
       <Lightformer position={[-5, 1, 2]} scale={[3, 7]} intensity={2} />
       <Lightformer position={[5, 2, -3]} scale={[3, 6]} intensity={1.5} color="#dfe6ff" />
       <Lightformer position={[0, -3, 5]} scale={[6, 2]} intensity={0.6} />
-    </Environment>
+      <cubeCamera ref={camera} args={[0.1, 1000, target]} />
+    </>,
+    virtualScene,
   );
 }
 
@@ -87,6 +119,7 @@ function RendererGuard({ onLost, onRestored, onError, health }: {
         // Count completed screen draws, not frame callbacks or offscreen passes.
         if (gl.getRenderTarget() === null && !gl.getContext().isContextLost()) {
           health.current.lastDrawAt = performance.now();
+          health.current.pendingSince = null;
           health.current.draws++;
         }
       } catch (error) {
@@ -117,19 +150,58 @@ function ContentReady({ onReady, health }: { onReady: () => void; health: RefObj
     start.current = health.current.draws;
     reported.current = false;
   }, [health, onReady]);
-  useFrame(() => {
-    if (!reported.current && health.current.draws - start.current >= 2) {
+  useFrame((state) => {
+    if (reported.current) return;
+    if (health.current.draws - start.current >= 2) {
       reported.current = true;
       onReady();
+    } else {
+      state.invalidate();
     }
   });
+  return null;
+}
+
+/**
+ * Frames are drawn on demand: scrolling, resizing and React updates request
+ * one here, and running animations request their own from inside useFrame.
+ * Each request is noted, so the heartbeat can tell a renderer that has stopped
+ * answering from a scene that is simply still.
+ */
+function FrameDriver({ health }: { health: RefObject<DrawHealth> }) {
+  const store = useStore();
+  useEffect(() => {
+    const invalidate = store.getState().invalidate;
+    const request = (frames?: number) => {
+      if (store.getState().frameloop !== "never") health.current.pendingSince ??= performance.now();
+      invalidate(frames);
+    };
+    store.setState({ invalidate: request });
+    const redraw = () => request();
+    window.addEventListener("scroll", redraw, { passive: true });
+    window.addEventListener("resize", redraw);
+    return () => {
+      window.removeEventListener("scroll", redraw);
+      window.removeEventListener("resize", redraw);
+      store.setState({ invalidate });
+    };
+  }, [store, health]);
+  return null;
+}
+
+/** Request a frame whenever a motion value that drives the scene changes. */
+export function RedrawOnChange({ value }: { value: MotionValue<number> }) {
+  const invalidate = useThree((state) => state.invalidate);
+  useEffect(() => value.on("change", () => invalidate()), [value, invalidate]);
   return null;
 }
 
 /*
  * One studio for every 3D moment on the page: the same light, the same
  * exposure, the same floor shadow, so the product looks like the same object
- * wherever it appears. Rendering pauses while the canvas is off screen, and
+ * wherever it appears. Neutral tone mapping keeps white stone white and the
+ * champagne trim bronze rather than orange. Frames are drawn only when scrolling or an
+ * animation asks for one, rendering pauses while the canvas is off screen, and
  * resolution is capped on small screens.
  */
 export function Scene({
@@ -139,6 +211,7 @@ export function Scene({
   shadowY = -3.1,
   shadows = true,
   sculptureShadows = false,
+  antialias = true,
   onReady,
   onLoading,
   onError,
@@ -150,6 +223,8 @@ export function Scene({
   shadowY?: number;
   shadows?: boolean;
   sculptureShadows?: boolean;
+  /** Off when a post-process composites every frame: the canvas then only ever receives a full-screen quad, which multisampling cannot improve. */
+  antialias?: boolean;
   onReady?: () => void;
   onLoading?: () => void;
   onError?: (error: Error) => void;
@@ -164,7 +239,7 @@ export function Scene({
   readyCallback.current = onReady;
   const resetAssetsCallback = useRef(onResetAssets);
   resetAssetsCallback.current = onResetAssets;
-  const health = useRef<DrawHealth>({ lastDrawAt: 0, loadingSince: 0, ready: false, draws: 0 });
+  const health = useRef<DrawHealth>({ lastDrawAt: 0, loadingSince: 0, ready: false, pendingSince: null, draws: 0 });
   const failed = useRef(false);
   const recoveryTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const recoveryAttempts = useRef(0);
@@ -194,6 +269,7 @@ export function Scene({
     setRecovering(false);
     health.current.ready = false;
     health.current.lastDrawAt = health.current.loadingSince = performance.now();
+    health.current.pendingSince = null;
     // Progress lives outside the canvas, so recreating GPU resources resumes
     // the current chapter instead of resetting the product to the hero pose.
     setCanvasVersion((version) => version + 1);
@@ -221,7 +297,9 @@ export function Scene({
   useEffect(() => {
     if (!activated || unavailable || recovering || !visible || !pageVisible) return;
     // Background tabs and offscreen pauses get a fresh grace period on return.
-    health.current.lastDrawAt = health.current.loadingSince = performance.now();
+    // A new or resumed canvas draws a first frame on its own, which must arrive.
+    health.current.lastDrawAt = health.current.loadingSince = health.current.pendingSince = performance.now();
+    const loadingBudget = loadingBudgetMs(estimateDownlinkMbps());
     // A browser that is not running animation frames (a covered window, a throttled view) draws
     // nothing without anything being wrong. Only count stalled time while frames are flowing.
     let lastFrameAt = performance.now();
@@ -233,9 +311,10 @@ export function Scene({
       const now = performance.now();
       if (now - lastFrameAt > 1500) {
         health.current.lastDrawAt = health.current.loadingSince = now;
+        if (health.current.pendingSince !== null) health.current.pendingSince = now;
         return;
       }
-      const reason = sceneRecoveryReason(health.current, now, !document.hidden);
+      const reason = sceneRecoveryReason(health.current, now, !document.hidden, loadingBudget);
       if (!reason || failed.current) return;
       loadingCallback.current?.();
       if (++recoveryAttempts.current > 2) {
@@ -323,15 +402,18 @@ export function Scene({
           <SceneQualityContext.Provider value={{ mobile }}>
           <Canvas
             key={canvasVersion}
-            dpr={[1, 2]}
+            // Phones commonly have 2.6–3.5 device pixels per CSS pixel; a cap of 2 left the
+            // product upscaled and soft there. Desktop keeps 2: its canvas is far larger.
+            dpr={mobile ? [1, 3] : [1, 2]}
             shadows={sculptureShadows && !mobile ? "percentage" : false}
-            frameloop={visible && pageVisible && !recovering ? "always" : "never"}
+            frameloop={visible && pageVisible && !recovering ? "demand" : "never"}
             camera={camera}
-            gl={{ antialias: true, alpha: true, powerPreference: "high-performance", toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1 }}
+            gl={{ antialias, alpha: true, powerPreference: "high-performance", toneMapping: THREE.NeutralToneMapping, toneMappingExposure: 1.05 }}
             fallback={null}
             style={{ background: "transparent" }}
           >
             <RendererGuard onLost={handleContextLost} onRestored={restart} onError={handleError} health={health} />
+            <FrameDriver health={health} />
             {process.env.NODE_ENV === "development" && <ScenePerformanceDiagnostics />}
             <RenderBudget mobile={mobile} sculptureShadows={sculptureShadows} />
             <Suspense fallback={<AssetLoading />}>
@@ -347,6 +429,8 @@ export function Scene({
                 shadow-radius={3}
               />
               <directionalLight position={[-5, 2, -3]} intensity={0.5} color="#dfe6ff" />
+              {/* A cool rim from behind separates the stone from the page; kept low so the lit edge stays darker than the page. */}
+              <directionalLight position={[-3, 3, -6]} intensity={0.8} color="#eef2ff" />
               <directionalLight position={[0, -2, 6]} intensity={0.3} />
               {children}
               <ContentReady onReady={handleReady} health={health} />

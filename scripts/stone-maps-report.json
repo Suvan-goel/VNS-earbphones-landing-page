@@ -1,0 +1,85 @@
+{
+  "source": "public/models/cymba-neural-mannequin-organic.glb (old fibre network) and the PNG bakes",
+  "oldFibreVerticesPainted": 156345,
+  "occlusion": {
+    "baseline": 241.56,
+    "haloProfileByDistance": [
+      7.29,
+      5.69,
+      4.68,
+      3.31,
+      2.97,
+      2.24,
+      1.18,
+      0.72,
+      0.04,
+      0.41
+    ],
+    "texelsAdjusted": 288221,
+    "meanLowering": 2.74,
+    "residualByDistanceAfter": [
+      2.88,
+      3.29,
+      3.9,
+      4.37,
+      4.25,
+      4.73,
+      5.13,
+      4.9,
+      5.4,
+      5.34,
+      5.26,
+      4.85,
+      4.46,
+      4.33,
+      4.21,
+      4.32,
+      4.56,
+      4.63,
+      4.08,
+      3.97
+    ],
+    "padding": {
+      "rings": 48,
+      "gutterTexels": 36652,
+      "filledByIslandMean": 0
+    },
+    "scalpPits": {
+      "scalpTexels": 72828,
+      "blurRadiusTexels": 12,
+      "tolerance": 6,
+      "toleranceElsewhere": 20,
+      "texelsLifted": 64308,
+      "meanLift": 61.06,
+      "darkestScalpTexelBefore": 8,
+      "darkestScalpTexelAfter": 54
+    }
+  },
+  "sourcesUnchanged": true,
+  "outputs": [
+    {
+      "file": "public/models/cymba-sculpture-ao.webp",
+      "bytes": 48348,
+      "width": 1024,
+      "height": 1024,
+      "sha256": "5f78635c9eddd827cd12522cf8a3cd059433d2d3ecd01754ed49594bfcb4437d",
+      "note": "cavity occlusion, old fibre halo subtracted, scalp pits lifted, islands padded; both layouts"
+    },
+    {
+      "file": "public/models/cymba-sculpture-stone-normal.webp",
+      "bytes": 101298,
+      "width": 1024,
+      "height": 1024,
+      "sha256": "f943ea63b3ca4d46f00fdbc46ff6fd3a39b8606bdd3d89f1df3fbf3ee0f7f3ba",
+      "note": "stone grain normal, 2048 to 1024 px, islands padded; desktop only"
+    },
+    {
+      "file": "public/models/cymba-sculpture-stone-roughness.webp",
+      "bytes": 47466,
+      "width": 1024,
+      "height": 1024,
+      "sha256": "f35ec6cedf348c1906dfea895bf3a2407e4778889b2a25d1d908efac032fc1a7",
+      "note": "honed roughness, islands padded; desktop only"
+    }
+  ]
+}

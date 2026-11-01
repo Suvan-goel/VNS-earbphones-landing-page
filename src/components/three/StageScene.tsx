@@ -2,7 +2,7 @@
 
 import { useMotionValue, type MotionValue } from "motion/react";
 import { useFrame } from "@react-three/fiber";
-import { Scene } from "./Scene";
+import { RedrawOnChange, Scene } from "./Scene";
 import { EarbudExperience } from "./EarbudExperience";
 import { NeuralGlow } from "./NeuralGlow";
 import { useCallback } from "react";
@@ -24,19 +24,23 @@ function ScrollProgressSync({ source, progress, readProgress }: {
   return null;
 }
 
-export function StageScene({ progress, readProgress, modelUrl, onReady, onLoading, onError }: {
+export function StageScene({ progress, readProgress, modelUrl, onReady, onLoading, onError, verticalOverscan = 0 }: {
   progress: MotionValue<number>;
   readProgress: () => number | null;
   modelUrl: string | null;
+  verticalOverscan?: number;
   onReady?: () => void;
   onLoading?: () => void;
   onError?: () => void;
 }) {
   const renderProgress = useMotionValue(progress.get());
   const resetAssets = useCallback(() => clearProductAssets(modelUrl), [modelUrl]);
-  return <Scene shadows={false} sculptureShadows camera={{ position: [0, -0.2, 10], fov: 28 }} shadowY={-2.4} onReady={onReady} onLoading={onLoading} onError={onError} onResetAssets={resetAssets}>
+  // NeuralGlow draws the scene into its own multisampled buffer and writes the canvas with one
+  // full-screen quad per frame, so a multisampled canvas would only add a resolve of the same pixels.
+  return <Scene shadows={false} sculptureShadows antialias={false} camera={{ position: [0, -0.2, 10], fov: 28 }} shadowY={-2.4} onReady={onReady} onLoading={onLoading} onError={onError} onResetAssets={resetAssets}>
+    <RedrawOnChange value={progress} />
     <ScrollProgressSync source={progress} progress={renderProgress} readProgress={readProgress} />
-    {modelUrl && <EarbudExperience modelUrl={modelUrl} progress={renderProgress} />}
+    {modelUrl && <EarbudExperience modelUrl={modelUrl} progress={renderProgress} verticalOverscan={verticalOverscan} />}
     <NeuralGlow progress={renderProgress} />
   </Scene>;
 }

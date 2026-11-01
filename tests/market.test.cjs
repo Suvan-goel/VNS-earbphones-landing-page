@@ -35,7 +35,7 @@ const pricing = load("src/config/pricing.ts");
 const marketLib = (headers) => load("src/lib/market.ts", headers);
 
 test("launch prices are fixed per market and formatted in the local style", () => {
-  assert.equal(pricing.launch.window, "Q4 2027");
+  assert.equal(pricing.launch.window, "Q3 2027");
   assert.deepEqual([pricing.markets.uk.retail, pricing.markets.uk.subscription, pricing.markets.uk.deposit], [40000, 1500, 3500]);
   assert.deepEqual([pricing.markets.us.retail, pricing.markets.us.subscription, pricing.markets.us.deposit], [44900, 1500, 5000]);
   assert.equal(pricing.markets.uk.currency, "gbp");
@@ -61,7 +61,7 @@ test("only the two markets are accepted and countries map to them", () => {
   for (const value of ["UK", "gb", "eu", "", null, undefined, 0, {}, "__proto__", "constructor", "toString"]) {
     assert.equal(pricing.isMarket(value), false, String(value));
   }
-  assert.equal(pricing.marketForCountry("GB"), "uk");
+  for (const country of ["GB", "GG", "JE", "IM"]) assert.equal(pricing.marketForCountry(country), "uk", country);
   assert.equal(pricing.marketForCountry("gb"), "uk");
   assert.equal(pricing.marketForCountry(" JE "), "uk");
   assert.equal(pricing.marketForCountry("US"), "us");
@@ -71,26 +71,59 @@ test("only the two markets are accepted and countries map to them", () => {
   }
 });
 
-test("a saved choice wins over geolocation, which wins over the dollar default", async () => {
+test("Founders savings and deposit credits are distinct in both currencies", () => {
+  assert.equal(pricing.formatPrice("uk", "founderDiscount"), "£50");
+  assert.equal(pricing.formatPrice("us", "founderDiscount"), "$50");
+  assert.equal(pricing.formatPrice("uk", "founderRetail"), "£350");
+  assert.equal(pricing.formatPrice("us", "founderRetail"), "$399");
+  assert.equal(pricing.formatPrice("uk", "founderBalance"), "£315");
+  assert.equal(pricing.formatPrice("us", "founderBalance"), "$349");
+  for (const market of ["uk", "us"]) {
+    assert.equal(pricing.amountFor(market, "founderBalance") + pricing.amountFor(market, "deposit") + pricing.amountFor(market, "founderDiscount"), pricing.amountFor(market, "retail"));
+  }
+});
+
+test("visitor country determines currency, with dollars for unsupported or unavailable locations", async () => {
   const cases = [
     [{}, { market: "us", source: "default", country: null }],
     [{ "cf-ipcountry": "GB" }, { market: "uk", source: "geo", country: "GB" }],
+    ...["GG", "JE", "IM"].map((country) => [{ "cf-ipcountry": country }, { market: "uk", source: "geo", country }]),
     [{ "cf-ipcountry": "US" }, { market: "us", source: "geo", country: "US" }],
     [{ "cf-ipcountry": "DE" }, { market: "us", source: "default", country: "DE" }],
     [{ "cf-ipcountry": "XX" }, { market: "us", source: "default", country: null }],
     [{ "cf-ipcountry": "T1" }, { market: "us", source: "default", country: null }],
     [{ "x-vercel-ip-country": "gb" }, { market: "uk", source: "geo", country: "GB" }],
     [{ "cloudfront-viewer-country": "GB" }, { market: "uk", source: "geo", country: "GB" }],
-    [{ "cf-ipcountry": "GB", cookie: "cymba_market=us" }, { market: "us", source: "cookie", country: "GB" }],
-    [{ "cf-ipcountry": "US", cookie: "other=1; cymba_market=uk; more=2" }, { market: "uk", source: "cookie", country: "US" }],
-    [{ "cf-ipcountry": "US", cookie: "cymba_market=eu" }, { market: "us", source: "geo", country: "US" }],
-    [{ cookie: "cymba_market=__proto__" }, { market: "us", source: "default", country: null }],
-    [{ "cf-ipcountry": "GB", cookie: "cymba_market=" }, { market: "uk", source: "geo", country: "GB" }],
+    [{ "x-country-code": "GB" }, { market: "uk", source: "geo", country: "GB" }],
+    [{ "x-geo-country": "GB" }, { market: "uk", source: "geo", country: "GB" }],
+    [{ "cf-ipcountry": "US", "x-vercel-ip-country": "GB" }, { market: "us", source: "geo", country: "US" }],
+    [{ "cf-ipcountry": "XX", "x-vercel-ip-country": "GB" }, { market: "uk", source: "geo", country: "GB" }],
+    [{ "cf-ipcountry": "GB,US" }, { market: "us", source: "default", country: null }],
   ];
   for (const [headers, expected] of cases) {
     const lib = marketLib(headers);
     // Results come from the vm realm, so they are copied before the prototype-aware comparison.
     assert.deepEqual({ ...lib.resolveMarket((name) => headers[name.toLowerCase()] ?? null) }, expected, JSON.stringify(headers));
     assert.deepEqual({ ...await lib.detectMarket() }, expected, JSON.stringify(headers));
+  }
+});
+
+test("legacy currency cookies never override location or break detection", async () => {
+  for (const cookie of [
+    "cymba_market=uk", "cymba_market=us", "other=1; cymba_market=uk; more=2",
+    "cymba_market=eu", "cymba_market=__proto__", "cymba_market=", "cymba_market=%",
+    "cymba_market=%E0%A4%A", "cymba_market=uk; cymba_market=us",
+  ]) {
+    for (const [location, expected] of [
+      [{ "cf-ipcountry": "GB" }, { market: "uk", source: "geo", country: "GB" }],
+      [{ "cf-ipcountry": "US" }, { market: "us", source: "geo", country: "US" }],
+      [{ "cf-ipcountry": "DE" }, { market: "us", source: "default", country: "DE" }],
+      [{}, { market: "us", source: "default", country: null }],
+    ]) {
+      const headers = { ...location, cookie };
+      const lib = marketLib(headers);
+      assert.deepEqual({ ...lib.resolveMarket((name) => headers[name.toLowerCase()] ?? null) }, expected, JSON.stringify(headers));
+      assert.deepEqual({ ...await lib.detectMarket() }, expected, JSON.stringify(headers));
+    }
   }
 });

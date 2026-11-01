@@ -1,10 +1,14 @@
 import { NextResponse } from "next/server";
-import { storeEvents, storageMode, storageUnavailable, type EventRow } from "@/lib/storage";
+import { storeConsentedEvents, storageUnavailable, type EventRow } from "@/lib/storage";
 import { clientKey, rateLimit } from "@/lib/rate-limit";
 import { cleanAttribution, cleanVariant } from "@/lib/validation";
 import { readJsonObject } from "@/lib/request-json";
+import { analyticsSessionHash, sameOriginAnalyticsRequest } from "@/lib/analytics-session";
+import { ANALYTICS_CONSENT_VERSION, consentChoice, type ConsentRecord } from "@/lib/consent-record";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+const json = (body: unknown, status = 200) => NextResponse.json(body, { status, headers: { "Cache-Control": "private, no-store" } });
 
 /** Allow-list of event names the client may send. */
 const EVENTS = new Set([
@@ -18,6 +22,9 @@ const EVENTS = new Set([
   "survey_skipped",
   "faq_open",
   "section_view",
+  "reserve_click",
+  "reserve_checkout_started",
+  "reserve_error",
 ]);
 
 type Incoming = { name?: unknown; props?: unknown; sessionId?: unknown; variant?: unknown; path?: unknown; attribution?: unknown };
@@ -34,30 +41,39 @@ function cleanProps(raw: unknown): EventRow["props"] {
 }
 
 export async function POST(req: Request) {
-  if (!rateLimit(`events:${clientKey(req)}`, 120, 60 * 1000)) return new NextResponse(null, { status: 429 });
+  if (!sameOriginAnalyticsRequest(req)) return json({ stored: false, count: 0 }, 403);
+  if (!rateLimit(`events:${clientKey(req)}`, 120, 60 * 1000)) return json({ stored: false, count: 0 }, 429);
   const parsed = await readJsonObject(req, 64 * 1024);
-  if (parsed.response) return parsed.response;
+  if (parsed.response) {
+    parsed.response.headers.set("Cache-Control", "private, no-store");
+    return parsed.response;
+  }
   const { body } = parsed;
   if (!Array.isArray(body.events) || body.events.some((event) => !event || typeof event !== "object" || Array.isArray(event))) {
-    return NextResponse.json({ status: "error", message: "Invalid events." }, { status: 400 });
+    return json({ status: "error", message: "Invalid events." }, 400);
   }
+  const sessionHash = analyticsSessionHash(body.token);
+  if (!sessionHash || consentChoice(JSON.stringify(body.consent), ANALYTICS_CONSENT_VERSION) !== "granted") {
+    return json({ stored: false, count: 0 }, 401);
+  }
+  const consent = body.consent as ConsentRecord;
   const rows: EventRow[] = (body.events as Incoming[])
     .slice(0, 25)
     .filter((e) => typeof e.name === "string" && EVENTS.has(e.name))
     .map((e) => ({
       name: e.name as string,
-      session_id: typeof e.sessionId === "string" ? e.sessionId.slice(0, 64) : null,
+      session_id: sessionHash,
       variant: cleanVariant(e.variant),
       path: typeof e.path === "string" ? e.path.slice(0, 200) : null,
-      props: cleanProps(e.props),
+      props: { ...cleanProps(e.props), consent_version: consent.version, consent_recorded_at: consent.recordedAt },
       attribution: cleanAttribution(e.attribution),
     }));
   if (storageUnavailable()) {
-    return NextResponse.json({ stored: false, count: 0 }, { status: 503 });
+    return json({ stored: false, count: 0 }, 503);
   }
-  const stored = await storeEvents(rows);
-  if (rows.length > 0 && !stored && storageMode() !== "demo") {
-    return NextResponse.json({ stored: false, count: 0 }, { status: 502 });
-  }
-  return NextResponse.json({ stored, count: rows.length });
+  if (!rows.length) return json({ stored: false, count: 0 });
+  const result = await storeConsentedEvents(sessionHash, rows);
+  if (result === "failed") return json({ stored: false, count: 0 }, 502);
+  if (result === "withdrawn") return json({ stored: false, count: 0, withdrawn: true }, 409);
+  return json({ stored: result === "stored", count: rows.length });
 }

@@ -202,27 +202,59 @@ export type EventRow = {
   attribution: Attribution;
 };
 
-export async function storeEvents(events: EventRow[]): Promise<boolean> {
-  if (storageUnavailable()) return false;
+const ANALYTICS_WITHDRAWN = "analytics_withdrawn";
+let eventFileQueue: Promise<unknown> = Promise.resolve();
+
+/** Local file storage is development-only and single-process. Every analytics
+ * mutation shares this queue so a stale write cannot restore erased records. */
+function withEventFileLock<T>(operation: () => Promise<T>): Promise<T> {
+  const result = eventFileQueue.then(operation);
+  eventFileQueue = result.catch(() => {});
+  return result;
+}
+
+export async function withdrawAnalyticsSession(sessionHash: string): Promise<boolean> {
+  if (!/^[a-f0-9]{64}$/.test(sessionHash) || storageUnavailable()) return false;
   const mode = storageMode();
-  if (mode === "demo" || events.length === 0) return false;
-  if (mode === "file") {
-    const rows = await readFile<unknown[]>("events.json", []);
-    rows.push(...events.map((e) => ({ ...e, created_at: new Date().toISOString() })));
-    await writeFile("events.json", rows.slice(-5000));
-    return true;
-  }
-  try {
-    const res = await sb("events", { method: "POST", body: JSON.stringify(events), prefer: "return=minimal" });
-    if (!res.ok) {
-      const error = await databaseError(res);
-      console.error("[events] supabase insert failed", { status: res.status, code: error.code });
+  if (mode === "demo") return true;
+  if (mode === "file") return withEventFileLock(async () => {
+    const rows = await readFile<EventRow[]>("events.json", []);
+    const remaining = rows.filter((row) => row.session_id !== sessionHash || row.name === ANALYTICS_WITHDRAWN);
+    if (!remaining.some((row) => row.session_id === sessionHash && row.name === ANALYTICS_WITHDRAWN)) {
+      remaining.push({ name: ANALYTICS_WITHDRAWN, session_id: sessionHash, variant: null, path: null, props: {}, attribution: {} });
     }
-    return res.ok;
-  } catch {
-    console.error("[events] supabase request failed or timed out");
-    return false;
-  }
+    await writeFile("events.json", remaining);
+    return true;
+  }).catch(() => false);
+  try {
+    const response = await sb("rpc/withdraw_analytics_session", {
+      method: "POST", body: JSON.stringify({ p_session_hash: sessionHash }),
+    });
+    return response.ok && await response.json() === true;
+  } catch { return false; }
+}
+
+/** Ingest and withdrawal use the same database transaction lock. A missing RPC
+ * fails closed; there is deliberately no direct-insert or best-effort fallback. */
+export async function storeConsentedEvents(sessionHash: string, events: EventRow[]): Promise<"stored" | "withdrawn" | "failed" | "demo"> {
+  if (!/^[a-f0-9]{64}$/.test(sessionHash) || storageUnavailable()) return "failed";
+  const mode = storageMode();
+  if (mode === "demo") return "demo";
+  if (mode === "file") return withEventFileLock(async () => {
+    const rows = await readFile<(EventRow & { created_at?: string })[]>("events.json", []);
+    if (rows.some((row) => row.session_id === sessionHash && row.name === ANALYTICS_WITHDRAWN)) return "withdrawn" as const;
+    rows.push(...events.map((event) => ({ ...event, session_id: sessionHash, created_at: new Date().toISOString() })));
+    await writeFile("events.json", rows);
+    return "stored" as const;
+  }).catch(() => "failed" as const);
+  try {
+    const response = await sb("rpc/ingest_consented_analytics", {
+      method: "POST", body: JSON.stringify({ p_session_hash: sessionHash, p_events: events }),
+    });
+    if (!response.ok) return "failed";
+    const result: unknown = await response.json();
+    return result === "stored" || result === "withdrawn" ? result : "failed";
+  } catch { return "failed"; }
 }
 
 /* ----------------------------- Reservations ------------------------------ */
@@ -264,6 +296,8 @@ export type ReservationRow = {
   amount_refunded: number;
   status: ReservationStatus;
   founder_number: number | null;
+  /** Qualification order is separate from the public reservation reference. */
+  founder_position?: number | null;
   paid_at: string | null;
   refunded_at: string | null;
   terms_version: string;
@@ -515,7 +549,9 @@ export async function updatePreviewReservation(sessionId: string, action: "pay" 
     if (action === "cancel") row.status = "expired";
     else {
       row.status = "paid";
-      row.founder_number = rows.reduce((last, r) => Math.max(last, r.founder_number ?? 0), 0) + 1;
+      const position = rows.reduce((last, r) => Math.max(last, r.founder_position ?? r.founder_number ?? 0), 0) + 1;
+      row.founder_number = rows.reduce((last, r) => Math.max(last, r.founder_number ?? 0), 15) + 1;
+      row.founder_position = position;
       row.paid_at = new Date().toISOString();
       row.stripe_payment_intent = `pi_preview_${row.id}`;
     }

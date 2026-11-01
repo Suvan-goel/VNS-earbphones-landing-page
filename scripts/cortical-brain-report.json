@@ -1,0 +1,904 @@
+[
+  {
+    "variant": "desktop",
+    "filename": "public/models/cymba-cortical-mannequin-desktop.glb",
+    "bytes": 1290992,
+    "sha256": "e0c3da40f3a5b141196f4465f6b88be4809a6301c3aa9e0ea13285374701e09c",
+    "cortex": {
+      "triangles": 118000,
+      "vertices": 59004,
+      "bounds": {
+        "min": [
+          -0.9825408458709717,
+          0.2645281255245209,
+          -1.0875743627548218
+        ],
+        "max": [
+          0.9969311952590942,
+          1.6392090320587158,
+          1.0922030210494995
+        ]
+      },
+      "topology": {
+        "components": 2,
+        "eulerNumber": 4,
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "inconsistentWindingEdges": 0,
+        "minimumNormalLength": 0.9999998464866856,
+        "maximumNormalLength": 1.0000001484208947
+      },
+      "sourceTriangles": 150256,
+      "refinedTriangles": 601024,
+      "posteriorFairing": {
+        "cycles": 34,
+        "posteriorVertices": 28816,
+        "meanPosteriorDisplacement": 0.0820813833940666,
+        "p95PosteriorDisplacement": 0.18542541126951217,
+        "maximumDisplacement": 0.21955978222338923,
+        "posteriorRoughnessBefore": 0.33763745088842323,
+        "posteriorRoughnessAfter": 0.17929810598386448,
+        "fairingMidlineProtected": true,
+        "deepSulciAnchored": true,
+        "orientationProtectedVertices": 326,
+        "minimumStepSignedAreaRatio": 0.12186197753020754,
+        "continuousOrientationValidated": true,
+        "posteriorTaper": {
+          "maximumUpperDrop": 0.2,
+          "maximumInwardFraction": 0.055,
+          "transitionZ": [
+            0.35,
+            -0.9
+          ],
+          "crownProfileBefore": [
+            {
+              "z": 1,
+              "maximumY": 1.3055181503295898
+            },
+            {
+              "z": 0.8,
+              "maximumY": 1.4559472799301147
+            },
+            {
+              "z": 0.6,
+              "maximumY": 1.536849021911621
+            },
+            {
+              "z": 0.4,
+              "maximumY": 1.601523995399475
+            },
+            {
+              "z": 0.2,
+              "maximumY": 1.6511106491088867
+            },
+            {
+              "z": 0,
+              "maximumY": 1.6517095565795898
+            },
+            {
+              "z": -0.2,
+              "maximumY": 1.686480164527893
+            },
+            {
+              "z": -0.4,
+              "maximumY": 1.6880676746368408
+            },
+            {
+              "z": -0.6,
+              "maximumY": 1.6100523471832275
+            },
+            {
+              "z": -0.8,
+              "maximumY": 1.4935967922210693
+            },
+            {
+              "z": -1,
+              "maximumY": 1.2495139837265015
+            }
+          ],
+          "crownProfileAfter": [
+            {
+              "z": 1,
+              "maximumY": 1.3055181503295898
+            },
+            {
+              "z": 0.8,
+              "maximumY": 1.4559472799301147
+            },
+            {
+              "z": 0.6,
+              "maximumY": 1.536849021911621
+            },
+            {
+              "z": 0.4,
+              "maximumY": 1.601523995399475
+            },
+            {
+              "z": 0.2,
+              "maximumY": 1.640901803970337
+            },
+            {
+              "z": 0,
+              "maximumY": 1.628096342086792
+            },
+            {
+              "z": -0.2,
+              "maximumY": 1.5866392850875854
+            },
+            {
+              "z": -0.4,
+              "maximumY": 1.5829836130142212
+            },
+            {
+              "z": -0.6,
+              "maximumY": 1.4604593515396118
+            },
+            {
+              "z": -0.8,
+              "maximumY": 1.3065625429153442
+            },
+            {
+              "z": -1,
+              "maximumY": 1.0484455823898315
+            }
+          ]
+        }
+      },
+      "simplificationError": 0.002847135066986084,
+      "simplificationPasses": 1,
+      "protectedSulcalVertices": 0,
+      "boundsRestorationScale": [
+        1.0021811520832702,
+        1.0015449826326335,
+        1.0011834134340103
+      ],
+      "highResolutionNormalsPreserved": true,
+      "sourceBounds": {
+        "min": [
+          -0.9963771104812622,
+          0.2644033133983612,
+          -1.0895887613296509
+        ],
+        "max": [
+          1.009827733039856,
+          1.6880676746368408,
+          1.0923444032669067
+        ]
+      },
+      "sourceSurfaceDeviation": {
+        "samples": 11801,
+        "mean": 0.011222620646648604,
+        "p95": 0.0457584215856559,
+        "maximum": 0.1324169396689639,
+        "maximumFractionOfBrainDiagonal": 0.04026987457869151,
+        "stage": "before local rear corrections"
+      },
+      "localRearCorrection": {
+        "centre": [
+          0.55,
+          0.83,
+          -0.875
+        ],
+        "radii": [
+          0.28,
+          0.2,
+          0.27
+        ],
+        "amplitude": 0.03,
+        "coordinateSpace": "xyz",
+        "direction": "inward",
+        "affectedVertices": 2068,
+        "totalVertices": 59004,
+        "maximumDisplacement": 0.02908596926008455,
+        "maximumChangedY": 1.0215483903884888,
+        "minimumJacobian": 0.8126217196072921,
+        "minimumFaceOrientation": 0.5835774514549011,
+        "flippedFaces": 0,
+        "upperHalfUnchanged": true
+      },
+      "localAboveEarSmoothing": {
+        "centre": [
+          0.53,
+          0.84,
+          -0.85
+        ],
+        "radii": [
+          0.25,
+          0.18,
+          0.24
+        ],
+        "amplitude": 0.016,
+        "coordinateSpace": "xyz",
+        "direction": "inward",
+        "affectedVertices": 1791,
+        "totalVertices": 59004,
+        "maximumDisplacement": 0.015068439014194879,
+        "maximumChangedY": 1.011941909790039,
+        "minimumJacobian": 0.888330396285594,
+        "minimumFaceOrientation": 0.8580376093801868,
+        "flippedFaces": 0,
+        "upperHalfUnchanged": true
+      },
+      "localLowerTipSmoothing": {
+        "centre": [
+          1.03,
+          0.69,
+          -0.19
+        ],
+        "radii": [
+          0.22,
+          0.22,
+          0.5
+        ],
+        "amplitude": 0.055,
+        "coordinateSpace": "rim",
+        "direction": "inward",
+        "affectedVertices": 2595,
+        "totalVertices": 59004,
+        "maximumDisplacement": 0.054946201940969275,
+        "maximumChangedY": 0.9075193405151367,
+        "minimumJacobian": 0.5769318661281475,
+        "minimumFaceOrientation": 0.4598038761261928,
+        "flippedFaces": 0,
+        "sliverSafeguard": {
+          "guardedVertices": 3,
+          "guardPasses": 1,
+          "maximumGuardAdjustment": 0.00033237004735691035
+        },
+        "upperHalfUnchanged": true,
+        "encodedMinimumFaceOrientation": 0.46153489273489096,
+        "encodedFlippedFaces": 0,
+        "projectedProfile": [
+          {
+            "y": 0.55,
+            "before": 0.9608421467243791,
+            "after": 0.9531867196014059,
+            "reduction": 0.00765542712297318
+          },
+          {
+            "y": 0.5750000000000001,
+            "before": 1.0029000653849152,
+            "after": 0.9821915063970269,
+            "reduction": 0.02070855898788826
+          },
+          {
+            "y": 0.6000000000000001,
+            "before": 1.0165528204635945,
+            "after": 0.9870834911036864,
+            "reduction": 0.029469329359908092
+          },
+          {
+            "y": 0.625,
+            "before": 1.0265542254683813,
+            "after": 0.9873598479893724,
+            "reduction": 0.03919437747900889
+          },
+          {
+            "y": 0.65,
+            "before": 1.0311816544069379,
+            "after": 0.9836144261496033,
+            "reduction": 0.047567228257334615
+          },
+          {
+            "y": 0.675,
+            "before": 1.0284063687261924,
+            "after": 0.9854900873488835,
+            "reduction": 0.04291628137730885
+          },
+          {
+            "y": 0.7000000000000001,
+            "before": 1.029476477209884,
+            "after": 0.9852313899927236,
+            "reduction": 0.04424508721716047
+          },
+          {
+            "y": 0.7250000000000001,
+            "before": 1.022773568863257,
+            "after": 0.9851078997265867,
+            "reduction": 0.037665669136670354
+          },
+          {
+            "y": 0.75,
+            "before": 1.0072040594079992,
+            "after": 0.9781992304655295,
+            "reduction": 0.029004828942469696
+          },
+          {
+            "y": 0.775,
+            "before": 1.0113256840175764,
+            "after": 0.9904702432626278,
+            "reduction": 0.020855440754948606
+          },
+          {
+            "y": 0.8,
+            "before": 0.9909288431212748,
+            "after": 0.9805393077885514,
+            "reduction": 0.010389535332723465
+          },
+          {
+            "y": 0.8250000000000001,
+            "before": 0.9705438033425563,
+            "after": 0.9659928287871984,
+            "reduction": 0.004550974555357912
+          },
+          {
+            "y": 0.8500000000000001,
+            "before": 0.9718608502116732,
+            "after": 0.9700263243365395,
+            "reduction": 0.0018345258751337745
+          }
+        ]
+      },
+      "localRearRounding": {
+        "centre": [
+          0.91,
+          1.06,
+          -0.05
+        ],
+        "radii": [
+          0.2,
+          0.28,
+          0.5
+        ],
+        "amplitude": 0.026,
+        "coordinateSpace": "rim",
+        "direction": "outward",
+        "affectedVertices": 2947,
+        "totalVertices": 59004,
+        "maximumDisplacement": 0.02539997245866266,
+        "maximumChangedY": 1.2601596117019653,
+        "minimumJacobian": 0.7782614420464026,
+        "minimumFaceOrientation": 0.8156969375270333,
+        "flippedFaces": 0,
+        "sliverSafeguard": {
+          "guardedVertices": 0,
+          "guardPasses": 0,
+          "maximumGuardAdjustment": 0
+        },
+        "upperHalfUnchanged": false,
+        "encodedMinimumFaceOrientation": 0.8153763029353837,
+        "encodedFlippedFaces": 0,
+        "projectedProfile": [
+          {
+            "y": 0.75,
+            "before": 0.9886416600931341,
+            "after": 0.9886416600931341,
+            "reduction": 0
+          },
+          {
+            "y": 0.8,
+            "before": 0.9904702432626278,
+            "after": 0.9904702432626278,
+            "reduction": 0
+          },
+          {
+            "y": 0.85,
+            "before": 0.9700263243365395,
+            "after": 0.9711669866446383,
+            "reduction": -0.0011406623080988387
+          },
+          {
+            "y": 0.9,
+            "before": 0.9581668755151501,
+            "after": 0.962588501392428,
+            "reduction": -0.004421625877277902
+          },
+          {
+            "y": 0.95,
+            "before": 0.939116499988226,
+            "after": 0.951311100548974,
+            "reduction": -0.012194600560748059
+          },
+          {
+            "y": 1,
+            "before": 0.9331721084742495,
+            "after": 0.950399759243623,
+            "reduction": -0.017227650769373493
+          },
+          {
+            "y": 1.05,
+            "before": 0.9111465026172444,
+            "after": 0.9350301101440037,
+            "reduction": -0.023883607526759332
+          },
+          {
+            "y": 1.1,
+            "before": 0.9057254485212276,
+            "after": 0.9276098202888727,
+            "reduction": -0.021884371767645128
+          },
+          {
+            "y": 1.15,
+            "before": 0.8940188241725388,
+            "after": 0.913245584260481,
+            "reduction": -0.01922676008794222
+          },
+          {
+            "y": 1.2,
+            "before": 0.8487565227665679,
+            "after": 0.8580347299977561,
+            "reduction": -0.009278207231188218
+          },
+          {
+            "y": 1.25,
+            "before": 0.8168940953482112,
+            "after": 0.8169999682316705,
+            "reduction": -0.00010587288345931256
+          },
+          {
+            "y": 1.3,
+            "before": 0.7647231246811831,
+            "after": 0.7647231246811831,
+            "reduction": 0
+          },
+          {
+            "y": 1.35,
+            "before": 0.72798645637939,
+            "after": 0.72798645637939,
+            "reduction": 0
+          },
+          {
+            "y": 1.4,
+            "before": 0.6465165982078318,
+            "after": 0.6465165982078318,
+            "reduction": 0
+          }
+        ]
+      }
+    },
+    "networkRemoved": true,
+    "sculpturePreserved": true,
+    "sculptureGeometrySha256": "4b50934d4c439509a9d491cc9f7cdade29bdbf04862b41ba4e3ba1fba017238d"
+  },
+  {
+    "variant": "mobile",
+    "filename": "public/models/cymba-cortical-mannequin-mobile.glb",
+    "bytes": 598168,
+    "sha256": "a37c31e919fc84c2ec12569c23d9b19df79f024fc764f4db9e611497fa4883b5",
+    "cortex": {
+      "triangles": 62000,
+      "vertices": 31004,
+      "bounds": {
+        "min": [
+          -0.9810846447944641,
+          0.2645281255245209,
+          -1.0875660181045532
+        ],
+        "max": [
+          0.9969274401664734,
+          1.6392042636871338,
+          1.090530514717102
+        ]
+      },
+      "topology": {
+        "components": 2,
+        "eulerNumber": 4,
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "inconsistentWindingEdges": 0,
+        "minimumNormalLength": 0.9999998464866856,
+        "maximumNormalLength": 1.0000001484164807
+      },
+      "sourceTriangles": 150256,
+      "refinedTriangles": 601024,
+      "posteriorFairing": {
+        "cycles": 34,
+        "posteriorVertices": 28816,
+        "meanPosteriorDisplacement": 0.0820813833940666,
+        "p95PosteriorDisplacement": 0.18542541126951217,
+        "maximumDisplacement": 0.21955978222338923,
+        "posteriorRoughnessBefore": 0.33763745088842323,
+        "posteriorRoughnessAfter": 0.17929810598386448,
+        "fairingMidlineProtected": true,
+        "deepSulciAnchored": true,
+        "orientationProtectedVertices": 326,
+        "minimumStepSignedAreaRatio": 0.12186197753020754,
+        "continuousOrientationValidated": true,
+        "posteriorTaper": {
+          "maximumUpperDrop": 0.2,
+          "maximumInwardFraction": 0.055,
+          "transitionZ": [
+            0.35,
+            -0.9
+          ],
+          "crownProfileBefore": [
+            {
+              "z": 1,
+              "maximumY": 1.3055181503295898
+            },
+            {
+              "z": 0.8,
+              "maximumY": 1.4559472799301147
+            },
+            {
+              "z": 0.6,
+              "maximumY": 1.536849021911621
+            },
+            {
+              "z": 0.4,
+              "maximumY": 1.601523995399475
+            },
+            {
+              "z": 0.2,
+              "maximumY": 1.6511106491088867
+            },
+            {
+              "z": 0,
+              "maximumY": 1.6517095565795898
+            },
+            {
+              "z": -0.2,
+              "maximumY": 1.686480164527893
+            },
+            {
+              "z": -0.4,
+              "maximumY": 1.6880676746368408
+            },
+            {
+              "z": -0.6,
+              "maximumY": 1.6100523471832275
+            },
+            {
+              "z": -0.8,
+              "maximumY": 1.4935967922210693
+            },
+            {
+              "z": -1,
+              "maximumY": 1.2495139837265015
+            }
+          ],
+          "crownProfileAfter": [
+            {
+              "z": 1,
+              "maximumY": 1.3055181503295898
+            },
+            {
+              "z": 0.8,
+              "maximumY": 1.4559472799301147
+            },
+            {
+              "z": 0.6,
+              "maximumY": 1.536849021911621
+            },
+            {
+              "z": 0.4,
+              "maximumY": 1.601523995399475
+            },
+            {
+              "z": 0.2,
+              "maximumY": 1.640901803970337
+            },
+            {
+              "z": 0,
+              "maximumY": 1.628096342086792
+            },
+            {
+              "z": -0.2,
+              "maximumY": 1.5866392850875854
+            },
+            {
+              "z": -0.4,
+              "maximumY": 1.5829836130142212
+            },
+            {
+              "z": -0.6,
+              "maximumY": 1.4604593515396118
+            },
+            {
+              "z": -0.8,
+              "maximumY": 1.3065625429153442
+            },
+            {
+              "z": -1,
+              "maximumY": 1.0484455823898315
+            }
+          ]
+        }
+      },
+      "simplificationError": 0.006327384151518345,
+      "simplificationPasses": 2,
+      "protectedSulcalVertices": 30,
+      "boundsRestorationScale": [
+        1.0021811520832702,
+        1.0015449826326335,
+        1.0011834134340103
+      ],
+      "highResolutionNormalsPreserved": true,
+      "sourceBounds": {
+        "min": [
+          -0.9963771104812622,
+          0.2644033133983612,
+          -1.0895887613296509
+        ],
+        "max": [
+          1.009827733039856,
+          1.6880676746368408,
+          1.0923444032669067
+        ]
+      },
+      "sourceSurfaceDeviation": {
+        "samples": 10335,
+        "mean": 0.011197241901448912,
+        "p95": 0.046229001920524745,
+        "maximum": 0.13590679285998242,
+        "maximumFractionOfBrainDiagonal": 0.04133118856655209,
+        "stage": "before local rear corrections"
+      },
+      "localRearCorrection": {
+        "centre": [
+          0.55,
+          0.83,
+          -0.875
+        ],
+        "radii": [
+          0.28,
+          0.2,
+          0.27
+        ],
+        "amplitude": 0.03,
+        "coordinateSpace": "xyz",
+        "direction": "inward",
+        "affectedVertices": 1089,
+        "totalVertices": 31004,
+        "maximumDisplacement": 0.029041685459064433,
+        "maximumChangedY": 1.0119457244873047,
+        "minimumJacobian": 0.8126217196072921,
+        "minimumFaceOrientation": 0.47564819764273164,
+        "flippedFaces": 0,
+        "upperHalfUnchanged": true
+      },
+      "localAboveEarSmoothing": {
+        "centre": [
+          0.53,
+          0.84,
+          -0.85
+        ],
+        "radii": [
+          0.25,
+          0.18,
+          0.24
+        ],
+        "amplitude": 0.016,
+        "coordinateSpace": "xyz",
+        "direction": "inward",
+        "affectedVertices": 937,
+        "totalVertices": 31004,
+        "maximumDisplacement": 0.015068926596000754,
+        "maximumChangedY": 1.0119471549987793,
+        "minimumJacobian": 0.8883310560472988,
+        "minimumFaceOrientation": 0.7239051361703409,
+        "flippedFaces": 0,
+        "upperHalfUnchanged": true
+      },
+      "localLowerTipSmoothing": {
+        "centre": [
+          1.03,
+          0.69,
+          -0.19
+        ],
+        "radii": [
+          0.22,
+          0.22,
+          0.5
+        ],
+        "amplitude": 0.055,
+        "coordinateSpace": "rim",
+        "direction": "inward",
+        "affectedVertices": 1372,
+        "totalVertices": 31004,
+        "maximumDisplacement": 0.054946247985162205,
+        "maximumChangedY": 0.9067326784133911,
+        "minimumJacobian": 0.5770760806241866,
+        "minimumFaceOrientation": 0.4086733501018828,
+        "flippedFaces": 0,
+        "sliverSafeguard": {
+          "guardedVertices": 3,
+          "guardPasses": 1,
+          "maximumGuardAdjustment": 0.00033321298432712826
+        },
+        "upperHalfUnchanged": true,
+        "encodedMinimumFaceOrientation": 0.4129265636933372,
+        "encodedFlippedFaces": 0,
+        "projectedProfile": [
+          {
+            "y": 0.55,
+            "before": 0.9608415566684999,
+            "after": 0.9531920722511668,
+            "reduction": 0.007649484417333152
+          },
+          {
+            "y": 0.5750000000000001,
+            "before": 0.9919449193451755,
+            "after": 0.9756823049661559,
+            "reduction": 0.016262614379019547
+          },
+          {
+            "y": 0.6000000000000001,
+            "before": 1.0165562343583239,
+            "after": 0.9870861463551426,
+            "reduction": 0.029470088003181294
+          },
+          {
+            "y": 0.625,
+            "before": 1.0213621552003243,
+            "after": 0.9834728970323037,
+            "reduction": 0.03788925816802058
+          },
+          {
+            "y": 0.65,
+            "before": 1.0185303084488773,
+            "after": 0.9790076913136655,
+            "reduction": 0.03952261713521177
+          },
+          {
+            "y": 0.675,
+            "before": 1.0284065794604351,
+            "after": 0.9790841035500157,
+            "reduction": 0.04932247591041938
+          },
+          {
+            "y": 0.7000000000000001,
+            "before": 1.029475802860308,
+            "after": 0.9849181967614392,
+            "reduction": 0.04455760609886872
+          },
+          {
+            "y": 0.7250000000000001,
+            "before": 1.0227780364291992,
+            "after": 0.9791017630795418,
+            "reduction": 0.0436762733496574
+          },
+          {
+            "y": 0.75,
+            "before": 1.0065565995211747,
+            "after": 0.9739609012324255,
+            "reduction": 0.0325956982887492
+          },
+          {
+            "y": 0.775,
+            "before": 1.0113273277446684,
+            "after": 0.9902410908472741,
+            "reduction": 0.021086236897394306
+          },
+          {
+            "y": 0.8,
+            "before": 0.9835552098274454,
+            "after": 0.9707413456215268,
+            "reduction": 0.012813864205918568
+          },
+          {
+            "y": 0.8250000000000001,
+            "before": 0.970324176114966,
+            "after": 0.9653772319178483,
+            "reduction": 0.00494694419711772
+          },
+          {
+            "y": 0.8500000000000001,
+            "before": 0.9718634633162808,
+            "after": 0.9700304125808451,
+            "reduction": 0.001833050735435715
+          }
+        ]
+      },
+      "localRearRounding": {
+        "centre": [
+          0.91,
+          1.06,
+          -0.05
+        ],
+        "radii": [
+          0.2,
+          0.28,
+          0.5
+        ],
+        "amplitude": 0.026,
+        "coordinateSpace": "rim",
+        "direction": "outward",
+        "affectedVertices": 1567,
+        "totalVertices": 31004,
+        "maximumDisplacement": 0.02543362446070169,
+        "maximumChangedY": 1.260480284690857,
+        "minimumJacobian": 0.7783781653144881,
+        "minimumFaceOrientation": 0.6500419892851611,
+        "flippedFaces": 0,
+        "sliverSafeguard": {
+          "guardedVertices": 3,
+          "guardPasses": 1,
+          "maximumGuardAdjustment": 0.00033816523968377394
+        },
+        "upperHalfUnchanged": false,
+        "encodedMinimumFaceOrientation": 0.6449561806229819,
+        "encodedFlippedFaces": 0,
+        "projectedProfile": [
+          {
+            "y": 0.75,
+            "before": 0.9886372346740405,
+            "after": 0.9886372346740405,
+            "reduction": 0
+          },
+          {
+            "y": 0.8,
+            "before": 0.9902410908472741,
+            "after": 0.9902410908472741,
+            "reduction": 0
+          },
+          {
+            "y": 0.85,
+            "before": 0.9700304125808451,
+            "after": 0.9711701898051252,
+            "reduction": -0.0011397772242800475
+          },
+          {
+            "y": 0.9,
+            "before": 0.952498798740011,
+            "after": 0.9555069036119306,
+            "reduction": -0.0030081048719196035
+          },
+          {
+            "y": 0.95,
+            "before": 0.9391150248485282,
+            "after": 0.9513119856327927,
+            "reduction": -0.012196960784264577
+          },
+          {
+            "y": 1,
+            "before": 0.9234164617431299,
+            "after": 0.9436212815976158,
+            "reduction": -0.020204819854485967
+          },
+          {
+            "y": 1.05,
+            "before": 0.9111431308693635,
+            "after": 0.9350200370472096,
+            "reduction": -0.023876906177846102
+          },
+          {
+            "y": 1.1,
+            "before": 0.9057203066057093,
+            "after": 0.9276113797222677,
+            "reduction": -0.021891073116558357
+          },
+          {
+            "y": 1.15,
+            "before": 0.8940168854175072,
+            "after": 0.9132405687855081,
+            "reduction": -0.019223683368000843
+          },
+          {
+            "y": 1.2,
+            "before": 0.8487601052486914,
+            "after": 0.8580428643395187,
+            "reduction": -0.00928275909082732
+          },
+          {
+            "y": 1.25,
+            "before": 0.8168987315015473,
+            "after": 0.8170044779444612,
+            "reduction": -0.00010574644291383439
+          },
+          {
+            "y": 1.3,
+            "before": 0.7560139420517406,
+            "after": 0.7560139420517406,
+            "reduction": 0
+          },
+          {
+            "y": 1.35,
+            "before": 0.7279832532189032,
+            "after": 0.7279832532189032,
+            "reduction": 0
+          },
+          {
+            "y": 1.4,
+            "before": 0.6399430806861333,
+            "after": 0.6399430806861333,
+            "reduction": 0
+          }
+        ]
+      }
+    },
+    "networkRemoved": true,
+    "sculpturePreserved": true,
+    "sculptureGeometrySha256": "c01a2d03f5a86ac0f6f2df1388678557cc130d9388d372187cbc6b23b0c065ff"
+  }
+]

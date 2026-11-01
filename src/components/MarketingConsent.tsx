@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { usePathname } from "next/navigation";
+import { consentRequired, getAnalyticsWithdrawalStatus, getConsent, retryAnalyticsWithdrawal, setConsent, subscribeAnalyticsWithdrawal, subscribeConsent } from "@/lib/analytics";
+import { site } from "@/config/site";
 import {
   getMarketingConsent,
   isMetaLeadTrackingEnabled,
@@ -12,12 +14,13 @@ import {
   trackMetaPageView,
 } from "@/lib/meta-pixel";
 import styles from "./MarketingConsent.module.css";
+import { OPEN_COOKIE_SETTINGS_EVENT } from "./CookieSettingsLink";
 
-const consentRoutes = new Set(["/", "/reserve", "/reserve/complete", "/privacy"]);
 const subscribeHydration = () => () => {};
 const clientSnapshot = () => true;
 const serverSnapshot = () => false;
 const serverConsent = () => null;
+const serverWithdrawalStatus = () => "idle" as const;
 
 function measuredConversions(concise = false) {
   const lead = isMetaLeadTrackingEnabled();
@@ -50,48 +53,49 @@ export function MetaMeasurementDescription() {
 export function MarketingConsent() {
   const pathname = usePathname();
   const consent = useSyncExternalStore(subscribeMarketingConsent, getMarketingConsent, serverConsent);
+  const analyticsConsent = useSyncExternalStore(subscribeConsent, getConsent, serverConsent);
+  const withdrawalStatus = useSyncExternalStore(subscribeAnalyticsWithdrawal, getAnalyticsWithdrawalStatus, serverWithdrawalStatus);
   const hydrated = useSyncExternalStore(subscribeHydration, clientSnapshot, serverSnapshot);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [analyticsChoice, setAnalyticsChoice] = useState(false);
+  const [marketingChoice, setMarketingChoice] = useState(false);
   const [shown, setShown] = useState(false);
   const [closing, setClosing] = useState(false);
+  const [retryingWithdrawal, setRetryingWithdrawal] = useState(false);
   const panelRef = useRef<HTMLElement>(null);
   const settingsRef = useRef<HTMLButtonElement>(null);
+  const returnFocusTarget = useRef<HTMLElement | null>(null);
   const restoreFocus = useRef(false);
   const configured = isMetaPixelConfigured();
-  const visible = hydrated && configured && consentRoutes.has(pathname);
-  const panelOpen = visible && (consent === null || settingsOpen);
+  const internalRoute = pathname === "/reserve/preview" || pathname === "/dev" || pathname.startsWith("/dev/") || pathname === "/api" || pathname.startsWith("/api/");
+  const visible = hydrated && (configured || consentRequired) && !internalRoute;
+  // Open only after a visitor requests settings, including on their first visit.
+  const panelOpen = visible && settingsOpen;
+  const showWithdrawal = analyticsConsent !== "granted" && withdrawalStatus !== "idle";
+
+  useEffect(() => {
+    const openSettings = (event: Event) => {
+      if (!visible) return;
+      const trigger = event instanceof CustomEvent ? event.detail?.trigger : null;
+      returnFocusTarget.current = trigger instanceof HTMLElement ? trigger : null;
+      setSettingsOpen(true);
+      panelRef.current?.focus({ preventScroll: true });
+    };
+    window.addEventListener(OPEN_COOKIE_SETTINGS_EVENT, openSettings);
+    return () => window.removeEventListener(OPEN_COOKIE_SETTINGS_EVENT, openSettings);
+  }, [visible]);
+
+  useEffect(() => {
+    // Existing marketing permission never implies analytics permission (or vice versa).
+    setAnalyticsChoice(analyticsConsent === "granted");
+    setMarketingChoice(consent === "granted");
+  }, [panelOpen, analyticsConsent, consent]);
 
   useEffect(() => {
     // The library checks the production origin, route and current permission,
     // and deduplicates repeated effects before loading or sending anything.
     trackMetaPageView();
   }, [pathname, consent]);
-
-  // Tell the page how tall the open panel is, so the pinned hero form can sit above it on phones.
-  useEffect(() => {
-    const root = document.documentElement;
-    const panel = panelRef.current;
-    // The panel mounts one render after it opens, so measure once it exists.
-    if (!panelOpen || !shown || !panel) {
-      root.style.removeProperty("--consent-height");
-      root.style.removeProperty("--consent-lift");
-      return;
-    }
-    const update = () => {
-      const height = Math.ceil(panel.getBoundingClientRect().height);
-      root.style.setProperty("--consent-height", `${height}px`);
-      // The same number without a unit, so the model band can scale by it.
-      root.style.setProperty("--consent-lift", `${height}`);
-    };
-    update();
-    const observer = new ResizeObserver(update);
-    observer.observe(panel);
-    return () => {
-      observer.disconnect();
-      root.style.removeProperty("--consent-height");
-      root.style.removeProperty("--consent-lift");
-    };
-  }, [panelOpen, shown]);
 
   // Keep the panel mounted for a short fade-out instead of removing it in one frame.
   useEffect(() => {
@@ -113,7 +117,9 @@ export function MarketingConsent() {
     if (settingsOpen && panelOpen && shown) panelRef.current?.focus({ preventScroll: true });
     if (!panelOpen && !shown && restoreFocus.current) {
       restoreFocus.current = false;
-      settingsRef.current?.focus({ preventScroll: true });
+      const target = returnFocusTarget.current;
+      (target?.isConnected ? target : settingsRef.current)?.focus({ preventScroll: true });
+      returnFocusTarget.current = null;
     }
   }, [settingsOpen, panelOpen, shown]);
 
@@ -122,10 +128,19 @@ export function MarketingConsent() {
     setSettingsOpen(false);
   }
 
-  function choose(choice: "granted" | "denied") {
+  function saveChoices(declineAll = false) {
     restoreFocus.current = true;
-    setMarketingConsent(choice);
-    setSettingsOpen(false);
+    if (consentRequired) setConsent(!declineAll && analyticsChoice ? "granted" : "denied");
+    if (configured) setMarketingConsent(!declineAll && marketingChoice ? "granted" : "denied");
+    const withdrawal = getAnalyticsWithdrawalStatus();
+    setSettingsOpen(consentRequired && (declineAll || !analyticsChoice) && (withdrawal === "pending" || withdrawal === "unavailable"));
+  }
+
+  async function retryWithdrawal() {
+    setRetryingWithdrawal(true);
+    try { await retryAnalyticsWithdrawal(); }
+    catch { /* The withdrawal status retains any unresolved deletion. */ }
+    finally { setRetryingWithdrawal(false); }
   }
 
   if (!visible) return null;
@@ -143,30 +158,51 @@ export function MarketingConsent() {
           aria-describedby="marketing-cookie-description"
           tabIndex={-1}
           onKeyDown={(event) => {
-            if (event.key === "Escape" && consent !== null) closeSettings();
+            if (event.key === "Escape") closeSettings();
           }}
         >
           <div className={styles.heading}>
-            <h2 id="marketing-cookie-title">Advertising cookies</h2>
-            {consent !== null && (
-              <span className={styles.current}>{consent === "granted" ? "Allowed" : "Declined"}</span>
-            )}
-            {consent !== null && (
-              <button type="button" className={styles.close} onClick={closeSettings} aria-label="Close cookie settings">
-                <svg aria-hidden="true" viewBox="0 0 20 20" fill="none">
-                  <path d="m5 5 10 10M15 5 5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                </svg>
-              </button>
-            )}
+            <h2 id="marketing-cookie-title">Cookie settings</h2>
+            <button type="button" className={styles.close} onClick={closeSettings} aria-label="Close cookie settings">
+              <svg aria-hidden="true" viewBox="0 0 20 20" fill="none">
+                <path d="m5 5 10 10M15 5 5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            </button>
           </div>
           <p id="marketing-cookie-description" className={styles.description}>
-            Allow Meta cookies to measure ad visits{measuredConversions(true)}?
+            Choose what to allow. Both are optional.
           </p>
+          <div className={styles.choices}>
+            {consentRequired && (
+              <label className={styles.choice}>
+                <input type="checkbox" checked={analyticsChoice} onChange={(event) => setAnalyticsChoice(event.target.checked)} />
+                <span><strong>Website analytics</strong><small>Help us understand visits, signups and checkout steps.</small></span>
+              </label>
+            )}
+            {configured && (
+              <label className={styles.choice}>
+                <input type="checkbox" checked={marketingChoice} onChange={(event) => setMarketingChoice(event.target.checked)} />
+                <span><strong>Advertising cookies</strong><small>Allow Meta to measure ad visits{measuredConversions(true)}.</small></span>
+              </label>
+            )}
+          </div>
+          <div className={styles.withdrawal} data-active={showWithdrawal || undefined}>
+            <p role="status" aria-live="polite" aria-atomic="true">
+              {showWithdrawal ? withdrawalStatus === "complete"
+                ? "Analytics is off. Records for this analytics session have been deleted."
+                : withdrawalStatus === "pending"
+                  ? "Analytics is off. Deletion of records for this analytics session is pending."
+                  : <>Analytics is off. We could not confirm automatic deletion. <a href={`mailto:${site.contactEmail}`}>Contact us</a> for help with a deletion request.</> : null}
+            </p>
+            {showWithdrawal && (withdrawalStatus === "pending" || withdrawalStatus === "unavailable") && <button type="button" disabled={retryingWithdrawal} onClick={retryWithdrawal}>
+              {retryingWithdrawal ? "Trying again…" : "Try deletion again"}
+            </button>}
+          </div>
           <div className={styles.footer}>
-            <a className={styles.privacy} href="/privacy#advertising-cookies">Privacy</a>
+            <a className={styles.privacy} href="/privacy#website-analytics">Privacy</a>
             <div className={styles.actions}>
-              <button type="button" onClick={() => choose("denied")}>Decline</button>
-              <button type="button" onClick={() => choose("granted")}>Accept</button>
+              <button type="button" onClick={() => saveChoices(true)}>Decline all</button>
+              <button type="button" onClick={() => saveChoices()}>Save choices</button>
             </div>
           </div>
         </section>
@@ -179,7 +215,10 @@ export function MarketingConsent() {
           title="Cookie settings"
           aria-controls="marketing-cookie-settings"
           aria-expanded={false}
-          onClick={() => setSettingsOpen(true)}
+          onClick={() => {
+            returnFocusTarget.current = null;
+            setSettingsOpen(true);
+          }}
         >
           <span aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" focusable="false">

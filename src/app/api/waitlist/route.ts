@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createSignup } from "@/lib/storage";
 import { clientKey, rateLimit } from "@/lib/rate-limit";
-import { cleanAttribution, cleanVariant, normaliseEmail } from "@/lib/validation";
+import { cleanVariant, normaliseEmail } from "@/lib/validation";
 import { readJsonObject } from "@/lib/request-json";
 
 export const runtime = "nodejs";
@@ -33,7 +33,9 @@ export async function POST(req: Request) {
     email,
     researchOptIn: body.researchOptIn === true,
     variant: cleanVariant(body.variant),
-    attribution: cleanAttribution(body.attribution),
+    // Campaign measurement stays in the separately consented analytics system.
+    // Do not attach browser tracking information to an email-address record.
+    attribution: {},
   });
 
   switch (result.status) {

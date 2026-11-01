@@ -101,6 +101,15 @@ function pixel({ id = PIXEL_ID, leadEnabled, purchaseEnabled, origin = "https://
   const module = { exports: {} };
   vm.runInContext(`(function(require, module, exports) {${source}\n})`, context, { filename })((name) => {
     if (name === "client-only") return {};
+    if (name === "./consent-record") {
+      const dependency = { exports: {} };
+      const filename = path.resolve(__dirname, "../src/lib/consent-record.ts");
+      const source = ts.transpileModule(fs.readFileSync(filename, "utf8"), {
+        compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 },
+      }).outputText;
+      vm.runInContext(`(function(module, exports) {${source}\n})`, context, { filename })(dependency, dependency.exports);
+      return dependency.exports;
+    }
     throw new Error(`Unexpected import: ${name}`);
   }, module, module.exports);
   const queue = () => Array.from(window.fbq?.queue ?? [], (args) => Array.from(args));
@@ -538,7 +547,126 @@ test("signup navigation waits briefly after dispatch but never more than 800 ms 
   await timeout;
   assert.equal(timedOut, true);
   blocked.load();
-  assert.equal(events(blocked, "Lead").length, 0, "Timed-out events cannot be sent later with a different navigation context");
+  assert.equal(events(blocked, "Lead").length, 1, "Releasing navigation does not erase an eligible event in the same document");
+});
+
+test("a 1600 ms SDK can deliver a Lead after the 800 ms wait and explicit SPA continuation", async () => {
+  const app = pixel({ leadEnabled: "true", search: "?fbclid=IwAR_valid-ad_click_123&utm_campaign=launch" });
+  app.api.setMarketingConsent("granted");
+  const valuesBefore = [...app.values];
+  const result = created();
+  app.api.trackMetaPageView();
+  let released = false;
+  const waiting = app.api.trackMetaLead(201, result, { continuationPath: "/reserve" }).then(() => { released = true; });
+  app.advance(799);
+  await Promise.resolve();
+  assert.equal(released, false);
+  app.advance(1);
+  await waiting;
+  assert.equal(released, true);
+  assert.equal(events(app, "Lead").length, 0);
+  const clickId = app.api.getMetaClickIdForReservation();
+  app.window.location.href = `https://trycymba.com/reserve?v=default&fbclid=${clickId}`;
+  app.api.trackMetaPageView();
+  app.advance(800);
+  app.load();
+  assert.deepEqual(events(app, "Lead"), [["trackSingle", PIXEL_ID, "Lead"]]);
+  assert.deepEqual([...app.values], valuesBefore, "No conversion marker or form response is persisted");
+  assert.equal(JSON.stringify(app.calls).includes("private"), false);
+  assert.equal(app.scripts.length, 1);
+  app.api.trackMetaLead(201, result, { continuationPath: "/reserve" });
+  app.api.trackMetaPageView();
+  assert.equal(events(app, "Lead").length, 1);
+});
+
+test("continuation never permits a fresh Lead to originate on the reservation page", () => {
+  const app = pixel({ leadEnabled: "true", pathname: "/reserve" });
+  app.api.setMarketingConsent("granted");
+  app.api.trackMetaLead(201, created(), { continuationPath: "/reserve" });
+  assert.equal(app.scripts.length, 0);
+  assert.equal(events(app, "Lead").length, 0);
+});
+
+test("a pending Lead expires after ten seconds without keeping signup waiting", async () => {
+  const app = pixel({ leadEnabled: "true" });
+  app.api.setMarketingConsent("granted");
+  const result = created();
+  const waiting = app.api.trackMetaLead(201, result, { continuationPath: "/reserve" });
+  app.advance(800);
+  await waiting;
+  app.window.location.pathname = "/reserve";
+  app.api.trackMetaPageView();
+  app.advance(9_200);
+  app.load();
+  assert.equal(events(app, "Lead").length, 0);
+  app.window.location.pathname = "/";
+  app.api.trackMetaLead(201, result, { continuationPath: "/reserve" });
+  assert.equal(events(app, "Lead").length, 0, "An expired observation cannot be replayed");
+});
+
+test("withdrawal, pagehide, SDK failure and invalid navigation permanently discard a waiting continuation", async () => {
+  for (const reason of ["withdrawal", "pagehide", "sdk-error", "private-query", "privacy", "completion", "other-origin"]) {
+    const app = pixel({ leadEnabled: "true" });
+    app.api.setMarketingConsent("granted");
+    const result = created();
+    const waiting = app.api.trackMetaLead(201, result, { continuationPath: "/reserve" });
+    app.advance(800);
+    await waiting;
+    app.window.location.pathname = "/reserve";
+    app.api.trackMetaPageView();
+    if (reason === "withdrawal") app.api.setMarketingConsent("denied");
+    else if (reason === "pagehide") app.window.dispatchEvent(new Event("pagehide"));
+    else if (reason === "sdk-error") app.fail();
+    else {
+      if (reason === "private-query") app.window.location.search = "?email=private%40example.com";
+      if (reason === "privacy") app.window.location.pathname = "/privacy";
+      if (reason === "completion") app.window.location.pathname = "/reserve/complete";
+      if (reason === "other-origin") app.window.location.href = "https://www.trycymba.com/reserve";
+      app.api.trackMetaPageView();
+    }
+    // Returning to an eligible page or granting again cannot resurrect the event.
+    app.window.location.href = "https://trycymba.com/";
+    if (reason === "withdrawal") app.api.setMarketingConsent("granted");
+    app.advance(800);
+    if (reason !== "sdk-error") app.load();
+    app.api.trackMetaLead(201, result, { continuationPath: "/reserve" });
+    assert.equal(events(app, "Lead").length, 0, reason);
+  }
+});
+
+test("the current private URL is checked again when a delayed SDK finishes", async () => {
+  const app = pixel({ leadEnabled: "true" });
+  app.api.setMarketingConsent("granted");
+  const waiting = app.api.trackMetaLead(201, created(), { continuationPath: "/reserve" });
+  app.advance(800);
+  await waiting;
+  app.window.location.href = "https://trycymba.com/reserve?token=private";
+  app.advance(800);
+  app.load();
+  assert.equal(events(app).length, 0);
+  assert.equal(app.calls.some((args) => args[0] === "init"), false);
+});
+
+test("only a single bounded ad click ID is eligible for a consented internal continuation", () => {
+  const valid = "IwAR_valid-ad_click_123";
+  const app = pixel({ search: `?fbclid=${valid}&utm_campaign=launch` });
+  assert.equal(app.api.getMetaClickIdForReservation(), null);
+  app.api.setMarketingConsent("granted");
+  assert.equal(app.api.getMetaClickIdForReservation(), valid);
+  for (const search of [
+    "", "?fbclid=", "?fbclid=first&fbclid=second", `?fbclid=${"a".repeat(513)}`,
+    "?fbclid=private%40example.com", "?fbclid=has%20spaces", "?fbclid=a%2Fb", "?fbclid=%3Cscript%3E",
+    `?fbclid=${valid}&email=private%40example.com`, `?fbclid=${valid}&session_id=private`,
+  ]) {
+    app.window.location.search = search;
+    assert.equal(app.api.getMetaClickIdForReservation(), null, search);
+  }
+  app.window.location.search = `?fbclid=${valid}`;
+  app.window.location.pathname = "/reserve";
+  assert.equal(app.api.getMetaClickIdForReservation(), null);
+  app.window.location.pathname = "/";
+  app.api.setMarketingConsent("denied");
+  assert.equal(app.api.getMetaClickIdForReservation(), null);
 });
 
 test("revocation and SDK failure release signup navigation immediately", async () => {
@@ -644,4 +772,24 @@ test("Purchase tracking works without storage and never breaks the reservation p
   app.load();
   app.api.trackMetaPurchase(purchase());
   assert.equal(events(app, "Purchase").length, 1);
+});
+
+
+test("legacy advertising grants require a fresh choice and refusal retains no purchase cache", () => {
+  const old = pixel({ stored: { [CONSENT_KEY]: "granted" } });
+  assert.equal(old.api.getMarketingConsent(), null);
+  old.api.trackMetaPageView();
+  assert.equal(old.scripts.length, 0);
+  const historyKey = `cymba-meta-purchases-v1:${PIXEL_ID}`;
+  const app = pixel({ stored: { [CONSENT_KEY]: "denied", [historyKey]: JSON.stringify(["a".repeat(64)]) } });
+  assert.equal(app.api.getMarketingConsent(), "denied");
+  app.api.setMarketingConsent("granted");
+  const record = JSON.parse(app.values.get(CONSENT_KEY));
+  assert.equal(record.choice, "granted");
+  assert.equal(record.version, "advertising-2026-10-29-v2");
+  assert.equal(typeof record.recordedAt, "number");
+  app.api.setMarketingConsent("denied");
+  assert.equal(app.values.has(historyKey), false);
+  assert.equal(app.cookies.has("_fbp"), false);
+  assert.equal(app.cookies.has("_fbc"), false);
 });

@@ -1,5 +1,7 @@
 "use client";
 
+import { ADVERTISING_CONSENT_VERSION, consentChoice, newConsentRecord } from "./consent-record";
+
 // Marketing permission is separate from first-party analytics permission.
 export const MARKETING_CONSENT_KEY = "cymba-marketing-consent-v1";
 export type MarketingConsent = "granted" | "denied" | null;
@@ -13,6 +15,7 @@ const ALLOWED_PATHS = new Set(["/", "/reserve", "/reserve/complete"]);
 const PRIVATE_QUERY_KEYS = /^(?:session_id|checkout_session_id|client_secret|payment_intent_client_secret|token|survey_token|surveyToken|email)$/i;
 const PURCHASE_HISTORY_KEY = `cymba-meta-purchases-v1:${PIXEL_ID}`;
 const NAVIGATION_WAIT_MS = 800;
+const LEAD_PENDING_MS = 10_000;
 const DISPATCH_GRACE_MS = 150;
 
 type PixelCommand = unknown[];
@@ -34,13 +37,16 @@ declare global {
 }
 
 export type MetaPurchase = { eventId: string; value: number; currency: string };
+export type MetaLeadOptions = { continuationPath?: "/reserve" };
 type PendingEvent = {
   name: "PageView" | "Lead" | "Purchase";
   path: string;
+  origin?: string;
+  continuationPath?: "/reserve";
   purchase?: MetaPurchase;
   finish?: (dispatched: boolean) => void;
 };
-let memoryConsent: MarketingConsent | undefined;
+let memoryConsent: string | undefined;
 let library: "idle" | "loading" | "ready" | "failed" = "idle";
 let initialized = false;
 let pending: PendingEvent[] = [];
@@ -63,12 +69,12 @@ export function isMetaPurchaseTrackingEnabled() {
 }
 
 function parseConsent(value: string | null): MarketingConsent {
-  return value === "granted" || value === "denied" ? value : null;
+  return consentChoice(value, ADVERTISING_CONSENT_VERSION);
 }
 
 export function getMarketingConsent(): MarketingConsent {
   if (typeof window === "undefined") return null;
-  if (memoryConsent !== undefined) return memoryConsent;
+  if (memoryConsent !== undefined) return parseConsent(memoryConsent);
   try {
     return parseConsent(window.localStorage.getItem(MARKETING_CONSENT_KEY));
   } catch {
@@ -86,6 +92,8 @@ function removeMarketingCookies() {
       document.cookie = `${name}=; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/${domain}; SameSite=Lax`;
     }
   }
+  try { window.localStorage.removeItem(PURCHASE_HISTORY_KEY); }
+  catch { /* unavailable browser storage */ }
 }
 
 function dropPending() {
@@ -108,9 +116,9 @@ function revoke() {
 }
 
 export function setMarketingConsent(choice: "granted" | "denied") {
-  memoryConsent = choice;
+  memoryConsent = newConsentRecord(choice, ADVERTISING_CONSENT_VERSION);
   try {
-    window.localStorage.setItem(MARKETING_CONSENT_KEY, choice);
+    window.localStorage.setItem(MARKETING_CONSENT_KEY, memoryConsent);
   } catch {
     // The visitor's choice still applies for this page when storage is unavailable.
   }
@@ -120,8 +128,8 @@ export function setMarketingConsent(choice: "granted" | "denied") {
 
 function onStorage(event: StorageEvent) {
   if (event.key !== MARKETING_CONSENT_KEY && event.key !== null) return;
-  memoryConsent = parseConsent(event.newValue);
-  if (memoryConsent !== "granted") revoke();
+  memoryConsent = event.newValue ?? undefined;
+  if (getMarketingConsent() !== "granted") revoke();
   for (const listener of listeners) listener();
 }
 
@@ -141,6 +149,27 @@ function permitted() {
   // The SDK includes the page URL itself. Never initialize it on a receipt URL
   // containing a Stripe session reference or another form/access credential.
   return !Array.from(new URLSearchParams(location.search).keys()).some((key) => PRIVATE_QUERY_KEYS.test(key));
+}
+
+/** Only carry the current consented ad click ID into the public signup continuation. */
+export function getMetaClickIdForReservation(): string | null {
+  if (!permitted() || window.location.pathname !== "/") return null;
+  const values = new URLSearchParams(window.location.search).getAll("fbclid");
+  return values.length === 1 && /^[A-Za-z0-9_-]{1,512}$/.test(values[0]) ? values[0] : null;
+}
+
+function matchesCurrentLocation(event: PendingEvent) {
+  if (event.origin && event.origin !== window.location.origin) return false;
+  return event.path === window.location.pathname
+    || (event.name === "Lead" && event.continuationPath === "/reserve" && window.location.pathname === "/reserve");
+}
+
+function discardEventsOutsideCurrentLocation() {
+  const previous = pending;
+  pending = previous.filter(matchesCurrentLocation);
+  for (const event of previous) {
+    if (!pending.includes(event)) event.finish?.(false);
+  }
 }
 
 function purchaseHistory(): string[] {
@@ -183,7 +212,7 @@ function flush() {
       initialized = true;
     }
     for (const event of events) {
-      if (!permitted() || event.path !== window.location.pathname) {
+      if (!permitted() || !matchesCurrentLocation(event)) {
         event.finish?.(false);
         continue;
       }
@@ -212,6 +241,8 @@ function loadLibrary() {
   if (library === "ready") return flush();
   if (library !== "idle" || !permitted()) return;
   library = "loading";
+  // A restored document must never replay conversions from before it was left.
+  window.addEventListener("pagehide", dropPending);
   try {
     if (!window.fbq) {
       const pixel: Pixel = Object.assign(function (...args: unknown[]) {
@@ -250,6 +281,7 @@ export function trackMetaPageView() {
     dropPending();
     return;
   }
+  discardEventsOutsideCurrentLocation();
   const path = window.location.pathname;
   if (library === "failed") return;
   if (pageViewsSent.has(path)) {
@@ -264,7 +296,7 @@ export function trackMetaPageView() {
 }
 
 /** Only a confirmed, new signup is eligible; observing one without consent drops it. */
-export function trackMetaLead(httpStatus: number, result: unknown): Promise<void> {
+export function trackMetaLead(httpStatus: number, result: unknown, options: MetaLeadOptions = {}): Promise<void> {
   if (httpStatus !== 201 || !result || typeof result !== "object") return Promise.resolve();
   const response = result as { status?: unknown; surveyToken?: unknown };
   if (response.status !== "created" || typeof response.surveyToken !== "string" || !response.surveyToken.trim()) return Promise.resolve();
@@ -272,25 +304,33 @@ export function trackMetaLead(httpStatus: number, result: unknown): Promise<void
   observedLeadResponses.add(result);
   if (library === "failed" || !isMetaLeadTrackingEnabled() || !permitted() || window.location.pathname !== "/") return Promise.resolve();
 
-  // Give a consented event a bounded chance to dispatch before the signup flow
-  // performs a full-page redirect. An unavailable SDK can never block navigation.
+  // Signup waits at most 800 ms. A slow SDK may finish in this same document
+  // for up to 10 seconds, including the explicitly authorised public continuation.
+  // No form data or conversion marker is persisted for replay after navigation.
   return new Promise((resolve) => {
-    let finished = false;
+    let released = false;
+    let settled = false;
     let grace: ReturnType<typeof setTimeout> | undefined;
-    const event: PendingEvent = { name: "Lead", path: "/" };
-    const done = () => {
-      if (finished) return;
-      finished = true;
-      clearTimeout(timeout);
+    const event: PendingEvent = {
+      name: "Lead", path: "/", origin: window.location.origin,
+      continuationPath: options.continuationPath === "/reserve" ? "/reserve" : undefined,
+    };
+    const releaseNavigation = () => {
+      if (released) return;
+      released = true;
+      clearTimeout(navigationTimeout);
       clearTimeout(grace);
-      pending = pending.filter((item) => item !== event);
       resolve();
     };
-    const timeout = setTimeout(done, NAVIGATION_WAIT_MS);
+    const navigationTimeout = setTimeout(releaseNavigation, NAVIGATION_WAIT_MS);
+    const expiry = setTimeout(() => event.finish?.(false), LEAD_PENDING_MS);
     event.finish = (dispatched) => {
-      if (finished) return;
-      if (dispatched) grace ??= setTimeout(done, DISPATCH_GRACE_MS);
-      else done();
+      if (settled) return;
+      settled = true;
+      clearTimeout(expiry);
+      pending = pending.filter((item) => item !== event);
+      if (dispatched && !released) grace = setTimeout(releaseNavigation, DISPATCH_GRACE_MS);
+      else releaseNavigation();
     };
     pending.push(event);
     loadLibrary();

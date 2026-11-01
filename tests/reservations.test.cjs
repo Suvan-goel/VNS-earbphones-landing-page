@@ -17,13 +17,14 @@ const env = {
 const reservationId = "23f44412-32e8-4e1d-a06f-b615f9ff1491";
 const attemptId = "39ba9645-6135-42f3-92a1-66c6c2f29b8e";
 const flow = "cymba_reservation_v1";
+const currentTermsVersion = "2026-10-29-launch-q3";
 const clone = (value) => JSON.parse(JSON.stringify(value));
-const metadata = () => ({ flow, reservation_id: reservationId, attempt_id: attemptId, terms_version: "2026-10-28" });
+const metadata = () => ({ flow, reservation_id: reservationId, attempt_id: attemptId, terms_version: currentTermsVersion });
 const row = (overrides = {}) => ({
   id: reservationId, attempt_id: attemptId, created_at: new Date().toISOString(), email: "person@example.com", variant: "learn",
   stripe_session_id: "cs_test_reservation", stripe_payment_intent: null, stripe_customer: null, checkout_expires_at: null,
   amount: 5000, currency: "usd", amount_refunded: 0, status: "pending", founder_number: null, paid_at: null, refunded_at: null,
-  terms_version: "2026-10-28", terms_accepted_at: new Date().toISOString(), livemode: false, ...overrides,
+  terms_version: currentTermsVersion, terms_accepted_at: new Date().toISOString(), livemode: false, ...overrides,
 });
 const payment = (overrides = {}) => ({
   id: "pi_reservation", object: "payment_intent", amount: 5000, amount_received: 5000, currency: "usd", livemode: false,
@@ -42,7 +43,7 @@ const request = (body) => new Request("http://localhost/api/reserve", {
   method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body),
 });
 const submission = (overrides = {}) => ({
-  email: "person@example.com", variant: "learn", attemptId, termsAccepted: true, termsVersion: "2026-10-28",
+  email: "person@example.com", variant: "learn", attemptId, termsAccepted: true, termsVersion: currentTermsVersion,
   startedAt: Date.now() - 5000, company: "", ...overrides,
 });
 function webhookRequest(value, raw = JSON.stringify(value), signingSecret = secret) {
@@ -143,6 +144,7 @@ function backend(options = {}) {
     }).outputText;
     const localRequire = (specifier) => {
       if (specifier === "server-only") return {};
+      if (specifier === "@/lib/reservation-email-delivery" && options.emailDelivery) return { deliverReservationEmails: options.emailDelivery };
       if (specifier === "stripe") return StripeMock;
       if (specifier.startsWith("@/")) return load(path.resolve(ROOT, "src", `${specifier.slice(2)}.ts`));
       if (specifier.startsWith(".")) return load(path.resolve(path.dirname(filename), `${specifier}.ts`));
@@ -221,7 +223,7 @@ test("hosted handoff never overrides closure, configured checkout, or a broken p
 
 test("consent, current terms and attempt UUID are required before a payment attempt", async () => {
   for (const [input, status] of [
-    [{ termsAccepted: false }, 422], [{ termsAccepted: "true" }, 422], [{ termsVersion: "old" }, 409],
+    [{ termsAccepted: false }, 422], [{ termsAccepted: "true" }, 422], [{ termsVersion: "2026-10-28" }, 409], [{ termsVersion: "2026-10-29-contact-email" }, 409],
     [{ attemptId: "not-a-uuid" }, 422], [{ email: "invalid" }, 422], [{ startedAt: Date.now() }, 400],
   ]) {
     const app = backend();
@@ -243,7 +245,7 @@ test("checkout stores consent first and derives the exact price server-side with
   assert.equal(created.opts.idempotencyKey, `reservation:${attemptId}`);
   assert.equal(created.params.metadata.reservation_id, app.rows[0].id);
   assert.equal(created.params.payment_intent_data.metadata.attempt_id, attemptId);
-  assert.equal(app.rows[0].terms_version, "2026-10-28");
+  assert.equal(app.rows[0].terms_version, currentTermsVersion);
   assert.ok(app.rows[0].terms_accepted_at);
   assert.equal(app.rows[0].stripe_session_id, "cs_test_reservation");
   assert.equal(app.calls.db.some((c) => /waitlist/.test(c.url)), false);
@@ -251,6 +253,26 @@ test("checkout stores consent first and derives the exact price server-side with
   const unavailable = backend({ insertError: true });
   assert.equal((await unavailable.route("reserve")(request(submission()))).status, 503);
   assert.equal(unavailable.calls.create.length, 0);
+});
+
+test("reservation ignores campaign attribution supplied by obsolete or modified clients", async () => {
+  const attribution = {
+    utm_source: "private-campaign-source", utm_medium: "private-campaign-medium",
+    utm_campaign: "private-campaign-name", utm_term: "private-campaign-term",
+    utm_content: "private-campaign-content", referrer: "private-referrer.example",
+    landing_path: "/private-campaign-landing",
+  };
+  for (const analyticsConsent of ["granted", "denied"]) {
+    const app = backend();
+    const response = await app.route("reserve")(request(submission({ attribution, analyticsConsent })));
+    assert.equal(response.status, 200);
+    assert.equal(app.rows.length, 1);
+    for (const field of Object.keys(attribution)) assert.equal(app.rows[0][field], null, field);
+    const persistedAndPaymentData = JSON.stringify({ rows: app.rows, checkout: app.calls.create });
+    for (const value of Object.values(attribution)) assert.ok(!persistedAndPaymentData.includes(value));
+    assert.equal(app.rows[0].email, "person@example.com");
+    assert.equal(app.rows[0].terms_version, currentTermsVersion);
+  }
 });
 
 test("inline Checkout requires a valid publishable key matching the server credential mode", () => {
@@ -671,7 +693,8 @@ test("local preview cannot reach production storage or rewrite the reservation e
     const found = await app.storage().lookupReservation(sessionId);
     assert.equal(found.reservation.email, "person@example.com");
     assert.equal(found.reservation.status, "paid");
-    assert.equal(found.reservation.founder_number, 1);
+    assert.equal(found.reservation.founder_number, 16);
+    assert.equal(found.reservation.founder_position, 1);
     assert.equal(app.calls.db.length, 0);
     assert.equal(app.calls.create.length, 0);
     const production = backend({ env: { NODE_ENV: "production", RESERVATIONS_PREVIEW: "true", WAITLIST_STORAGE: "file" } });
@@ -810,4 +833,25 @@ test("Postgres migration and atomic payment transactions", async (t) => {
       } finally { await legacy.close(); }
     });
   } finally { await db.close(); }
+});
+
+
+test("signed webhook commits before email delivery and duplicate events retry failed email", async () => {
+  let deliveries = 0;
+  let fail = true;
+  const app = backend({ rows: [row()], emailDelivery: async (id, live) => {
+    assert.equal(id, reservationId);
+    assert.equal(live, false);
+    assert.ok(app.calls.rpc.length > 0);
+    deliveries++;
+    if (fail) throw new Error("Email temporarily unavailable");
+  } });
+  const post = app.route("stripe/webhook");
+  assert.equal((await post(webhookRequest(event(), JSON.stringify(event()), "wrong"))).status, 400);
+  assert.equal(deliveries, 0);
+  assert.equal((await post(webhookRequest(event()))).status, 500);
+  app.setRpcResult("duplicate");
+  fail = false;
+  assert.equal((await post(webhookRequest(event()))).status, 200);
+  assert.equal(deliveries, 2);
 });
